@@ -1,0 +1,184 @@
+body {
+    color: rgb(51, 51, 51);
+}
+
+.left-btn,
+.right-btn,
+.z-i-100 {
+    z-index: 100;
+}
+.btn-show {
+    width: 100%;
+    text-align: center;
+}
+
+.header-hero {
+    top: -120px;
+    z-index: -1;
+    /* background-image: url('../img/hero\ bg.png');
+    background-size: cover;
+    background-position: center; */
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.tab-active {
+    border-bottom: 3px solid #f97316;
+    color: #f97316;
+}
+
+.nav-items > a,
+.nav-items .group button {
+    transition: all 0.3s ease-in-out;
+}
+
+.nav-items>a:hover,
+.nav-items .group button:hover {
+    border-bottom: #b73439;
+    background-color: #fff;
+    color: #b73439
+}
+
+#nav-mod {
+    height: 0 !important;
+}
+
+
+.car-engines {
+    max-width: 100vw;
+    padding: 3rem 7rem;
+    margin: 0 auto;
+    margin-top: -75px;
+}
+.car-engines h2{
+    font-weight: bold;
+    /* font-size: 2rem; */
+}
+.car-engines .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    /* padding: 0 5rem; */
+    gap: 3rem;
+}
+.car-engines .container a {
+    width: 146px;
+    padding: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.car-engines .container a img {
+    width: 65px;
+    height: 65px;
+}
+/* .car-engines .container a p {
+    text-align: center;
+} */
+
+
+
+
+
+
+
+.s-top {
+    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 5px;
+    height: 150px;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+}
+.s-top .box-1,
+.s-top .box-2,
+.s-top .box-4,
+.s-top .box-5,
+.s-top .box-7,
+.s-top .box-8 {
+    border-right: 1px solid rgba(128, 128, 128, 0.495);
+}
+
+.s-category ul{
+    /* margin-top: 2rem; */
+    height: 200px;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+}
+.s-category ul li:hover {
+    height: auto;
+}
+.s-category ul li {
+    padding: 5px;
+}
+.s-category button:hover {
+    color: blue;
+}
+
+
+.main-con {
+    padding: 1rem;
+    display: grid; 
+    grid-template-columns: 1fr 4fr;
+    gap: 1.5rem;
+}
+.current-sold-items {
+    grid-row: span 2;
+}
+
+section {
+    max-width: 78vw;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 1200px) {
+    .hide-12 {
+        display: none;
+    }
+}
+@media (max-width: 1024px) {
+    aside {
+        display: none;
+    }
+    .main-con {
+        display: flex;
+        flex-direction: column;
+    }
+    section {
+        max-width: 85vw;
+    }
+    section a.w-\[17vw\] {
+        width: 18vw;
+    }
+}
+@media (max-width: 850px) {
+    .hide-85 {
+        display: none;
+    }
+    section a.w-\[17vw\] {
+        width: 25vw;
+    }
+}
+@media (max-width: 512px) {
+    section a.w-\[17vw\] {
+        width: 35vw;
+    }
+}

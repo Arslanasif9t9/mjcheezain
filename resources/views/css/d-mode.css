@@ -1,0 +1,12 @@
+:root {
+    --bg-color: black;
+    --text-color: white;
+}
+.d-mod {
+    background-color: var(--bg-color) !important;
+    color: var(--text-color) !important;
+}
+.l-mod {
+    background-color: var(--text-color);
+    color: var(--bg-color);
+}

@@ -1,0 +1,16 @@
+.v-stats div {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+    justify-content: center;
+}
+
+.noti-num {
+    position: absolute;
+    top: 0.5rem;
+    left: 50%;
+    font-size: 10px;
+    width: 15px;
+    line-height: 15px;
+    border-radius: 50%;
+}

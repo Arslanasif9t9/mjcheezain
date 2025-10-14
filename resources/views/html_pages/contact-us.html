@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - MJCheezain | Get in Touch</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .header-front {
+            background: black;
+            background-position: center;
+            background-size: cover;
+        }
+
+        .header-front .container {
+            grid-template-columns: 1fr;
+        }
+
+        .header-front .container .text-left {
+            justify-self: start;
+        }
+        
+        .contact-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 max-w-5xl">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <!-- Title Section -->
+            <div class="bg-gradient-to-r from-orange-500 to-orange-400 p-6 text-white">
+                <h1 class="text-3xl font-bold">Contact Us</h1>
+                <p class="mt-2 opacity-90">Get in Touch with MJCheezain</p>
+            </div>
+
+            <!-- Content Section -->
+            <div class="p-6 md:p-8">
+                <!-- Introduction -->
+                <div class="mb-12 text-center">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">We're Here to Help</h2>
+                    <p class="text-lg text-gray-700 max-w-3xl mx-auto">
+                        We value every customer, vendor, and visitor. If you have questions, feedback, or need help with orders or seller registration — our support team is ready to assist you.
+                    </p>
+                </div>
+
+                <!-- Contact Methods Grid -->
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <!-- Phone Support -->
+                    <div class="contact-card bg-white p-8 rounded-lg shadow-md border border-gray-200 text-center">
+                        <div class="contact-icon bg-orange-100 text-orange-500">
+                            <i class="fas fa-phone-alt text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Phone Support</h3>
+                        <p class="text-gray-600 mb-4">
+                            Call us directly for general inquiries, order updates, or vendor assistance
+                        </p>
+                        <div class="bg-gray-100 p-3 rounded-lg inline-block">
+                            <a href="tel:03XX-XXXXXXX" class="text-orange-600 font-bold text-lg hover:text-orange-700 transition">
+                                <i class="fas fa-phone mr-2"></i> 03XX-XXXXXXX
+                            </a>
+                        </div>
+                        <p class="text-gray-500 text-sm mt-3">
+                            <i class="far fa-clock mr-1"></i> 10:00 AM to 6:00 PM, Monday to Saturday
+                        </p>
+                    </div>
+
+                    <!-- Email Support -->
+                    <div class="contact-card bg-white p-8 rounded-lg shadow-md border border-gray-200 text-center">
+                        <div class="contact-icon bg-orange-100 text-orange-500">
+                            <i class="fas fa-envelope text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Email Support</h3>
+                        <p class="text-gray-600 mb-4">
+                            For product inquiries, return/refund support, or business proposals
+                        </p>
+                        <div class="bg-gray-100 p-3 rounded-lg inline-block">
+                            <a href="mailto:support@mjcheezain.com" class="text-orange-600 font-bold text-lg hover:text-orange-700 transition">
+                                <i class="fas fa-envelope mr-2"></i> support@mjcheezain.com
+                            </a>
+                        </div>
+                        <p class="text-gray-500 text-sm mt-3">
+                            <i class="fas fa-reply mr-1"></i> We respond within 24–48 hours
+                        </p>
+                    </div>
+
+                    <!-- Office Address -->
+                    <div class="contact-card bg-white p-8 rounded-lg shadow-md border border-gray-200 text-center">
+                        <div class="contact-icon bg-orange-100 text-orange-500">
+                            <i class="fas fa-building text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Office Address</h3>
+                        <p class="text-gray-600 mb-4">
+                            MJCheezain Headquarters
+                        </p>
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <p class="text-gray-700">
+                                [Street Address, City, Pakistan]
+                            </p>
+                            <p class="text-orange-500 font-medium mt-2">
+                                Coming Soon
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- WhatsApp Support -->
+                    <div class="contact-card bg-white p-8 rounded-lg shadow-md border border-gray-200 text-center">
+                        <div class="contact-icon bg-orange-100 text-orange-500">
+                            <i class="fab fa-whatsapp text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">WhatsApp Support</h3>
+                        <p class="text-gray-600 mb-4">
+                            Chat with us instantly on WhatsApp for quick queries and support
+                        </p>
+                        <a href="https://wa.me/923XXXXXXXXX" class="inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+                            <i class="fab fa-whatsapp mr-2"></i> Click to Chat on WhatsApp
+                        </a>
+                        <p class="text-gray-500 text-sm mt-3">
+                            <i class="fas fa-clock mr-1"></i> Available 24/7
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="bg-orange-50 p-8 rounded-lg">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-orange-500 text-white p-3 rounded-full mr-4">
+                            <i class="fas fa-paper-plane text-xl"></i>
+                        </div>
+                        <h2 class="text-xl font-bold text-gray-800">Send Us a Message</h2>
+                    </div>
+                    
+                    <form class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="name" class="block text-gray-700 font-medium mb-2">Your Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-gray-700 font-medium mb-2">Email Address</label>
+                            <input type="email" id="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="subject" class="block text-gray-700 font-medium mb-2">Subject</label>
+                            <input type="text" id="subject" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="message" class="block text-gray-700 font-medium mb-2">Your Message</label>
+                            <textarea id="message" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"></textarea>
+                        </div>
+                        <div class="md:col-span-2">
+                            <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+                                Send Message <i class="fas fa-paper-plane ml-2"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer" data-message="../"></div>
+    <script>
+    const footerElement = document.getElementById('footer');
+    const message = footerElement.dataset.message;
+
+    fetch('../mycomp/footer.html')
+        .then(res => res.text())
+        .then(data => {
+            footerElement.innerHTML = data.replace(/{{message}}/g, message);
+        }); 
+    </script>
+
+</body>
+
+</html>

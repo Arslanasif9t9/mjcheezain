@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs - MJCheezain | Frequently Asked Questions</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .header-front {
+            background: black;
+            background-position: center;
+            background-size: cover;
+        }
+
+        .header-front .container {
+            grid-template-columns: 1fr;
+        }
+
+        .header-front .container .text-left {
+            justify-self: start;
+        }
+        
+        .faq-category {
+            scroll-margin-top: 100px;
+        }
+        
+        .faq-item {
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .faq-item:hover {
+            border-left-color: #f97316;
+        }
+        
+        .faq-question {
+            cursor: pointer;
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+        
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 max-w-5xl">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <!-- Title Section -->
+            <div class="bg-gradient-to-r from-orange-500 to-orange-400 p-6 text-white">
+                <h1 class="text-3xl font-bold">FAQs</h1>
+                <p class="mt-2 opacity-90">Frequently Asked Questions</p>
+            </div>
+
+            <!-- Content Section -->
+            <div class="p-6 md:p-8">
+                <!-- Introduction -->
+                <div class="mb-12 text-center">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Welcome to the MJCheezain Help Center</h2>
+                    <p class="text-lg text-gray-700 max-w-3xl mx-auto">
+                        Here you'll find answers to the most commonly asked questions related to ordering, payments, shipping, and returns.
+                    </p>
+                </div>
+
+                <!-- Quick Navigation -->
+                <div class="mb-8 bg-orange-50 p-4 rounded-lg sticky top-4 z-10 shadow-sm">
+                    <h3 class="font-bold text-gray-800 mb-3">Jump to Section:</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <a href="#orders" class="bg-white hover:bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm font-medium border border-orange-200 transition">
+                            <i class="fas fa-box mr-1"></i> Orders
+                        </a>
+                        <a href="#payments" class="bg-white hover:bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm font-medium border border-orange-200 transition">
+                            <i class="fas fa-money-bill-wave mr-1"></i> Payments
+                        </a>
+                        <a href="#shipping" class="bg-white hover:bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm font-medium border border-orange-200 transition">
+                            <i class="fas fa-truck mr-1"></i> Shipping
+                        </a>
+                        <a href="#returns" class="bg-white hover:bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm font-medium border border-orange-200 transition">
+                            <i class="fas fa-exchange-alt mr-1"></i> Returns
+                        </a>
+                    </div>
+                </div>
+
+                <!-- FAQ Sections -->
+                <div class="space-y-12">
+                    <!-- Orders Section -->
+                    <section id="orders" class="faq-category">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-orange-500 text-white p-3 rounded-full mr-4">
+                                <i class="fas fa-box text-xl"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800">Questions Related to Orders</h2>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <!-- Question 1 -->
+                            <div class="faq-item bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                                <div class="faq-question flex justify-between items-center" onclick="toggleFAQ(this)">
+                                    <h3 class="font-bold text-gray-800">1. How do I place an order?</h3>
+                                    <i class="fas fa-chevron-down text-orange-500 transition-transform"></i>
+                                </div>
+                                <div class="faq-answer mt-3 text-gray-700">
+                                    <p>To place an order on MJCheezain.com:</p>
+                                    <ol class="list-decimal pl-5 space-y-2 mt-2">
+                                        <li>Browse the product categories or use the search bar to find the item you want.</li>
+                                        <li>Click on the product to view details.</li>
+                                        <li>Select the quantity or variant (if applicable), then click "Add to Cart."</li>
+                                        <li>Go to your cart and click "Checkout."</li>
+                                        <li>Enter your shipping address and select your preferred payment method.</li>
+                                        <li>Confirm your order.</li>
+                                    </ol>
+                                    <p class="mt-2">Once your order is placed, you'll receive a confirmation via SMS and email.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Question 2 -->
+                            <div class="faq-item bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                                <div class="faq-question flex justify-between items-center" onclick="toggleFAQ(this)">
+                                    <h3 class="font-bold text-gray-800">2. Will I receive an SMS or email confirmation for my order?</h3>
+                                    <i class="fas fa-chevron-down text-orange-500 transition-transform"></i>
+                                </div>
+                                <div class="faq-answer mt-3 text-gray-700">
+                                    <p>Yes. Once your order is successfully placed and confirmed, you will receive:</p>
+                                    <ul class="list-disc pl-5 space-y-1 mt-2">
+                                        <li>An SMS confirmation with your order ID.</li>
+                                        <li>An email receipt with product details, payment method, and estimated delivery time.</li>
+                                    </ul>
+                                    <p class="mt-2">Please make sure your phone number and email address are entered correctly during checkout.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Question 3 -->
+                            <div class="faq-item bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                                <div class="faq-question flex justify-between items-center" onclick="toggleFAQ(this)">
+                                    <h3 class="font-bold text-gray-800">3. How can I track my order?</h3>
+                                    <i class="fas fa-chevron-down text-orange-500 transition-transform"></i>
+                                </div>
+                                <div class="faq-answer mt-3 text-gray-700">
+                                    <p>To track your order:</p>
+                                    <ol class="list-decimal pl-5 space-y-2 mt-2">
+                                        <li>Go to the "Track Your Order" page on our website.</li>
+                                        <li>Enter your Order ID and registered email or phone number.</li>
+                                        <li>You'll see real-time updates including "Processing," "Shipped," and "Out for Delivery."</li>
+                                    </ol>
+                                    <p class="mt-2">If you face any issues, contact our support team.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Payments Section -->
+                    <section id="payments" class="faq-category">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-orange-500 text-white p-3 rounded-full mr-4">
+                                <i class="fas fa-money-bill-wave text-xl"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800">Questions Related to Payments</h2>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <!-- Question 4 -->
+                            <div class="faq-item bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                                <div class="faq-question flex justify-between items-center" onclick="toggleFAQ(this)">
+                                    <h3 class="font-bold text-gray-800">4. Can I pay using JazzCash or Easypaisa?</h3>
+                                    <i class="fas fa-chevron-down text-orange-500 transition-transform"></i>
+                                </div>
+                                <div class="faq-answer mt-3 text-gray-700">
+                                    <p>Yes. MJCheezain supports multiple payment methods including:</p>
+                                    <ul class="list-disc pl-5 space-y-1 mt-2">
+                                        <li>JazzCash</li>
+                                        <li>Easypaisa</li>
+                                        <li>Bank Transfer</li>
+                                        <li>Cash on Delivery (COD)</li>
+                                    </ul>
+                                    <p class="mt-2">You'll be given full instructions at checkout based on the method you select.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Question 5 -->
+                            <div class="faq-item bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                                <div class="faq-question flex justify-between items-center" onclick="toggleFAQ(this)">
+                                    <h3 class="font-bold text-gray-800">5. My payment failed, but the amount was deducted. What should I do?</h3>
+                                    <i class="fas fa-chevron-down text-orange-500 transition-transform"></i>
+                                </div>
+                                <div class="faq-answer mt-3 text-gray-700">
+                                    <p>If your transaction failed but the amount was deducted:</p>
+                                    <ul class="list-disc pl-5 space-y-1 mt-2">
+                                        <li>Don't worry — in most cases, the payment gateway auto-refunds the amount within 24 hours.</li>
+                                        <li>If the amount is not refunded automatically, please:
+                                            <ol class="list-decimal pl-5 mt-1 space-y-1">
+                                                <li>Take a screenshot of the deduction.</li>
+                                                <li>Contact our support team via WhatsApp or email with proof.</li>
+                                            </ol>
+                                        </li>
+                                    </ul>
+                                    <p class="mt-2">We will verify and issue the refund manually if required.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Question 6 -->
+                            <div class="faq-item bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                                <div class="faq-question flex justify-between items-center" onclick="toggleFAQ(this)">
+                                    <h3 class="font-bold text-gray-800">6. Do I get a payment confirmation?</h3>
+                                    <i class="fas fa-chevron-down text-orange-500 transition-transform"></i>
+                                </div>
+                                <div class="faq-answer mt-3 text-gray-700">
+                                    <p>Yes, after your payment is successfully processed:</p>
+                                    <ul class="list-disc pl-5 space-y-1 mt-2">
+                                        <li>You'll receive an instant SMS.</li>
+                                        <li>An email receipt will also be sent to your registered email address.</li>
+                                    </ul>
+                                    <p class="mt-2">This confirmation includes the order ID, payment amount, and method used.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Shipping Section -->
+                    <section id="shipping" class="faq-category">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-orange-500 text-white p-3 rounded-full mr-4">
+                                <i class="fas fa-truck text-xl"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800">Questions Related to Shipping & Delivery</h2>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <!-- Question 7 -->
+                            <div class="faq-item bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                                <div class="faq-question flex justify-between items-center" onclick="toggleFAQ(this)">
+                                    <h3 class="font-bold text-gray-800">7. How many days does delivery take?</h3>
+                                    <i class="fas fa-chevron-down text-orange-500 transition-transform"></i>
+                                </div>
+                                <div class="faq-answer mt-3 text-gray-700">
+                                    <p>Our standard delivery timeframe is:</p>
+                                    <ul class="list-disc pl-5 space-y-1 mt-2">
+                                        <li>2–5 working days for major cities.</li>
+                                        <li>Up to 7 days for remote or rural areas.</li>
+                                    </ul>
+                                    <p class="mt-2">We always strive for faster deliveries via trusted courier partners.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Question 8 -->
+                            <div class="faq-item bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                                <div class="faq-question flex justify-between items-center" onclick="toggleFAQ(this)">
+                                    <h3 class="font-bold text-gray-800">8. Is Cash on Delivery (COD) available?</h3>
+                                    <i class="fas fa-chevron-down text-orange-500 transition-transform"></i>
+                                </div>
+                                <div class="faq-answer mt-3 text-gray-700">
+                                    <p>Yes, COD is available in most areas across Pakistan.</p>
+                                    <p class="mt-2">You can choose COD during checkout if you prefer to pay after receiving the item.</p>
+                                    <p class="mt-2 font-medium">Note: For high-value orders or customized items, partial advance payment may be requested.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Question 9 -->
+                            <div class="faq-item bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                                <div class="faq-question flex justify-between items-center" onclick="toggleFAQ(this)">
+                                    <h3 class="font-bold text-gray-800">9. What are the delivery charges?</h3>
+                                    <i class="fas fa-chevron-down text-orange-500 transition-transform"></i>
+                                </div>
+                                <div class="faq-answer mt-3 text-gray-700">
+                                    <p>Delivery charges are calculated based on:</p>
+                                    <ul class="list-disc pl-5 space-y-1 mt-2">
+                                        <li>Your location</li>
+                                        <li>The size and weight of the product</li>
+                                    </ul>
+                                    <p class="mt-2">You'll see the exact delivery cost at the checkout before confirming your order.</p>
+                                    <p class="mt-2">Occasionally, we offer free delivery promotions, so keep an eye out!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Returns Section -->
+                    <section id="returns" class="faq-category">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-orange-500 text-white p-3 rounded-full mr-4">
+                                <i class="fas fa-exchange-alt text-xl"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-800">Questions Related to Returns & Refunds</h2>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <!-- Question 10 -->
+                            <div class="faq-item bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                                <div class="faq-question flex justify-between items-center" onclick="toggleFAQ(this)">
+                                    <h3 class="font-bold text-gray-800">10. What is your return policy?</h3>
+                                    <i class="fas fa-chevron-down text-orange-500 transition-transform"></i>
+                                </div>
+                                <div class="faq-answer mt-3 text-gray-700">
+                                    <p>We want you to be 100% satisfied. You can request a return within 7 days of receiving your order if:</p>
+                                    <ul class="list-disc pl-5 space-y-1 mt-2">
+                                        <li>The product is damaged, faulty, or not as described</li>
+                                        <li>You received the wrong item</li>
+                                    </ul>
+                                    <p class="mt-2">To initiate a return:</p>
+                                    <ol class="list-decimal pl-5 space-y-1 mt-2">
+                                        <li>Go to "My Orders"</li>
+                                        <li>Select the item and click "Request Return"</li>
+                                        <li>Provide a reason and upload photos if required</li>
+                                    </ol>
+                                    <p class="mt-2 font-medium">Returns are not accepted for:</p>
+                                    <ul class="list-disc pl-5 space-y-1 mt-1">
+                                        <li>Used products</li>
+                                        <li>Items without original packaging</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <!-- Question 11 -->
+                            <div class="faq-item bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                                <div class="faq-question flex justify-between items-center" onclick="toggleFAQ(this)">
+                                    <h3 class="font-bold text-gray-800">11. When will I receive my refund?</h3>
+                                    <i class="fas fa-chevron-down text-orange-500 transition-transform"></i>
+                                </div>
+                                <div class="faq-answer mt-3 text-gray-700">
+                                    <p>Once your returned product is approved and received:</p>
+                                    <ul class="list-disc pl-5 space-y-1 mt-2">
+                                        <li>Your refund will be processed within 3–5 working days</li>
+                                        <li>Refund will be sent to your JazzCash, Easypaisa, or bank account</li>
+                                        <li>You'll be notified via SMS and email when your refund is released.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <!-- Question 12 -->
+                            <div class="faq-item bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                                <div class="faq-question flex justify-between items-center" onclick="toggleFAQ(this)">
+                                    <h3 class="font-bold text-gray-800">12. What if the product is damaged?</h3>
+                                    <i class="fas fa-chevron-down text-orange-500 transition-transform"></i>
+                                </div>
+                                <div class="faq-answer mt-3 text-gray-700">
+                                    <p>If you receive a product that is:</p>
+                                    <ul class="list-disc pl-5 space-y-1 mt-2">
+                                        <li>Broken</li>
+                                        <li>Malfunctioning</li>
+                                        <li>Physically damaged during transit</li>
+                                    </ul>
+                                    <p class="mt-2">Please:</p>
+                                    <ol class="list-decimal pl-5 space-y-1 mt-2">
+                                        <li>Take clear photos or a short video of the issue</li>
+                                        <li>Send it via WhatsApp or email to our support team</li>
+                                    </ol>
+                                    <p class="mt-2">Our team will assist with a replacement or full refund, depending on the situation.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                
+                <!-- Still Need Help Section -->
+                <div class="mt-16 text-center bg-gray-100 p-8 rounded-lg">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Still Need Help?</h2>
+                    <p class="text-gray-700 mb-6 max-w-2xl mx-auto">
+                        If your question isn't listed here, feel free to reach out to us directly:
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <a href="mailto:support@mjcheezain.com" class="bg-white hover:bg-gray-50 text-orange-600 font-bold py-3 px-6 rounded-lg border border-orange-200 transition flex items-center justify-center">
+                            <i class="fas fa-envelope mr-2"></i> support@mjcheezain.com
+                        </a>
+                        <a href="https://wa.me/923XXXXXXXXX" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition flex items-center justify-center">
+                            <i class="fab fa-whatsapp mr-2"></i> Click to Chat
+                        </a>
+                        <a href="tel:03XX-XXXXXXX" class="bg-white hover:bg-gray-50 text-orange-600 font-bold py-3 px-6 rounded-lg border border-orange-200 transition flex items-center justify-center">
+                            <i class="fas fa-phone mr-2"></i> 03XX-XXXXXXX
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer" data-message="../"></div>
+    <script>
+    const footerElement = document.getElementById('footer');
+    const message = footerElement.dataset.message;
+
+    fetch('../mycomp/footer.html')
+        .then(res => res.text())
+        .then(data => {
+            footerElement.innerHTML = data.replace(/{{message}}/g, message);
+        });
+        
+    // FAQ toggle functionality
+    function toggleFAQ(element) {
+        const faqItem = element.closest('.faq-item');
+        faqItem.classList.toggle('active');
+    }
+    </script>
+
+</body>
+
+</html>
