@@ -44,7 +44,7 @@
     z-index: 1010;
     height: 100%;
     width: 100%;
-    /* opacity: 0; */
+    opacity: 0;
     pointer-events: none;
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto Parts & Perfume</title>
+    <title>Auto Parts & Cosmetics</title>
     
     <!-- SEO Meta Tags -->
     <meta name="description" content="MJCheezain.com – Discover unique and quality products with excellent customer support. Visit our online store today.">

@@ -18,11 +18,11 @@
             onmouseout="keepDropdown(this, false)"
         >
             <a href="#" 
-               class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 text-left"
+               class="login-btn block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 text-left"
                onclick="userType('customer')">Customer Sign Up</a>
 
             <a href="#" 
-               class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 text-left"
+               class="login-btn block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 text-left"
                onclick="userType('vendor')">Vendor Sign Up</a>
         </div>
     </div>
@@ -46,10 +46,10 @@
             onmouseout="keepDropdown(this, false)"
         >
             <a href="#" 
-               class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 text-left">Customer Login</a>
+               class="login-btn block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 text-left">Customer Login</a>
 
             <a href="#" 
-               class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 text-left">Vendor Login</a>
+               class="login-btn block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 text-left">Vendor Login</a>
         </div>
     </div>
 </div>

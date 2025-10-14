@@ -2,7 +2,7 @@ const showPopupBtn = document.querySelectorAll(".login-btn");
 const formPopup = document.querySelector(".form-popup");
 const hidePopupBtn = formPopup.querySelector(".close-btn");
 const signupLoginLink = formPopup.querySelectorAll(".bottom-link a");
-// console.log(showPopupBtn)
+// alert(formPopup.innerText)
 
 // function showSignupPopup() {
 //     document.body.classList.toggle("show-popup");
