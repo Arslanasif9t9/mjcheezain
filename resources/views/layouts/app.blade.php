@@ -66,6 +66,7 @@
 
     <main>
         @yield('content')
+        {{-- <script src="{{ asset('js/search_product.js') }}"></script> --}}
     </main>
 
     <!-- Login/Signup Modal -->
