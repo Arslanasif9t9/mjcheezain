@@ -70,7 +70,22 @@
         @yield('content')
         {{-- <script src="{{ asset('js/search_product.js') }}"></script> --}}
         <x-Banner />
+        <x-categories />
+        @include('products.biggest-savings')
+        @include('products.category', ['category' => 'Fitness & Gym Equipment'])
+        <x-popular-brands :brands="[
+            ['image' => 'img/nike sho.jpg', 'name' => 'Nike', 'link' => '#'],
+            ['image' => 'img/adidas.jpeg', 'name' => 'Adidas', 'link' => '#'],
+            ['image' => 'img/gucci.jpeg', 'name' => 'Gucci', 'link' => '#'],
+            ['image' => 'img/honda.jpeg', 'name' => 'Honda', 'link' => '#'],
+            ['image' => 'img/toyota.jpeg', 'name' => 'Toyota', 'link' => '#'],
+            ['image' => 'img/levis.jpeg', 'name' => 'Levis', 'link' => '#'],
+        ]" />
+        @include('products.category', ['category' => 'Auto Parts & Accessories'])
+        @include('products.category', ['category' => 'Car Tools & Maintenance'])
     </main>
+
+    <x-footer />
 
     <!-- Login/Signup Modal -->
     {{-- <x-auth-modal /> --}}
