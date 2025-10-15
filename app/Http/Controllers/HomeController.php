@@ -15,21 +15,22 @@ class HomeController extends Controller
         $profile = null;
         $dashboardPage = null;
         $imgPath = 'img/default_profile.webp';
-
+        
         if (Auth::check()) {
             $user = Auth::user();
-
+            
             if ($user->type == 'vendor') {
                 $profile = $user->vendorProfile;
                 $imgPath = $profile && $profile->profile_picture 
-                    ? "vendor/{$profile->profile_picture}" 
-                    : "img/default_profile.webp";
+                ? "vendor/{$profile->profile_picture}" 
+                : "img/default_profile.webp";
                 $dashboardPage = route('vendor.dashboard');
             } else {
                 $profile = $user->customerProfile;
                 $imgPath = $profile && $profile->profile_image 
-                    ? "customer/{$profile->profile_image}" 
-                    : "img/default_profile.webp";
+                ? "customer/{$profile->profile_image}" 
+                : "img/default_profile.webp";
+                // dd($profile->profile_image);  
                 $dashboardPage = route('customer.dashboard');
             }
         }

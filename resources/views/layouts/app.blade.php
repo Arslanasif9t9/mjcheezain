@@ -52,6 +52,15 @@
 </head>
 <body class="bg-gray-100">
     <!-- Display Session Messages -->
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     @if(session('error'))
         <x-alert type="error" message="{{ session('error') }}" />
     @endif
