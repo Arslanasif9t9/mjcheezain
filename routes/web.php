@@ -33,9 +33,27 @@ Route::get('/search-products', [SearchController::class, 'searchProducts'])->nam
 Route::get('/products/savings', [ProductController::class, 'biggestSavings']);
 Route::get('/products/category/{category}', [ProductController::class, 'byCategory']);
 
+
+
 Route::middleware(['auth'])->group(function () {
-    Route::get('/customer/dashboard', [CustomerController::class, 'dashboard'])
-        ->name('customer.dashboard');
-    Route::get('/vendor/dashboard', [VendorController::class, 'dashboard'])
-        ->name('vendor.dashboard');
+    // ----------------------------
+    // 🟢 CUSTOMER ROUTES
+    // ----------------------------
+    Route::prefix('customer')->name('customer.')->group(function () {
+        Route::get('/dashboard', [CustomerController::class, 'dashboard'])->name('dashboard');
+        // Add other customer routes here
+        // Example: Route::get('/orders', [CustomerController::class, 'orders'])->name('orders');
+    });
+
+    // ----------------------------
+    // 🔵 VENDOR ROUTES
+    // ----------------------------
+    Route::prefix('vendor')->name('vendor.')->group(function () {
+        Route::get('/dashboard', [VendorController::class, 'dashboard'])->name('dashboard');
+        Route::get('/products', [VendorController::class, 'products'])->name('products');
+        Route::get('/orders', [VendorController::class, 'orders'])->name('orders');
+        Route::get('/withdraw', [VendorController::class, 'withdraw'])->name('withdraw');
+        Route::get('/profile', [VendorController::class, 'profile'])->name('profile');
+    });
+
 });

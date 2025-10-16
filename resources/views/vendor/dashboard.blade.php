@@ -1,4 +1,7 @@
 @extends('layouts.structure')
+@section('title')
+    Dashboard UI
+@endsection
 
 @section('style')
     <style>
@@ -26,10 +29,6 @@
 @section('body')
 <body class="bg-gray-50 font-sans">
     <div class="flex min-h-screen">
-        <!-- Sidebar Toggle Button -->
-        <button id="btn-side" onclick="navbarToggle(this)">
-            <i class="fas fa-bars m-4"></i>
-        </button>
         <!-- Sidebar Component -->
         <x-vendor.sidebar 
             :profilePicture="$vendorBasicInfo->profile_picture"
@@ -69,14 +68,8 @@
         </main>
     </div>
 
-    <!-- Logout Modal -->
-    <div id="logoutModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-        <!-- Modal content remains the same -->
-    </div>
-
-    <form id="logoutForm" action="../logout.php" method="POST" style="display: none;">
-        <input type="hidden" name="logout" value="1">
-    </form>
+    <!-- Logout Modal Component -->
+    <x-logout-modal />
 
     <script src="../script/logout.js"></script>
     <script src="../script/vendor_navbar.js"></script>
