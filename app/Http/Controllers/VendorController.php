@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 
-class CustomerController extends Controller
+class VendorController extends Controller
 {
     public function dashboard()
     {
