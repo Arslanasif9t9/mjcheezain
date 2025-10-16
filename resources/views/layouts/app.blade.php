@@ -53,15 +53,19 @@
 <body class="bg-gray-100">
     <!-- Display Session Messages -->
     @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+        <div class="alert alert-danger mb-0 alert-dismissible fade show d-flex align-items-center" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <div class="flex-grow-1">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-    @if(session('error'))
+    {{-- @if(session('error'))
         <x-alert type="error" message="{{ session('error') }}" />
     @endif
 
@@ -71,7 +75,7 @@
 
     @if(session('success'))
         <x-alert type="success" message="{{ session('success') }}" />
-    @endif
+    @endif --}}
 
     <x-header :user="$user ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
 
@@ -106,8 +110,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        function userType(type) {
-            document.getElementById('userType').value = type;
+        function userType(type, x) {
+            if (x == 'sign') {
+                document.getElementById('userTypeSign').value = type;
+            }
+            else if (x == 'log') {
+                document.getElementById('userTypeLog').value = type;
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function() {

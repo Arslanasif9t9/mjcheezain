@@ -12,9 +12,6 @@ class CustomerController extends Controller
     {
         $user = Auth::user();
 
-        // Example: Fetch customer orders
-        // $orders = Order::where('user_id', $user->id)->latest()->get();
-
-        return view('customer.dashboard', compact('user', 'orders'));
+        return view('vendor.dashboard');
     }
 }

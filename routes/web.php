@@ -17,7 +17,7 @@ Route::get('/brands/cosmetics', [ProductController::class, 'cosmetics'])->name('
 // Authentication routes
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/signup', [AuthController::class, 'signup'])->name('signup');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Search route
 // Route::get('/search', [ProductController::class, 'search'])->name('products.search');
@@ -29,4 +29,6 @@ Route::get('/products/category/{category}', [ProductController::class, 'byCatego
 Route::middleware(['auth'])->group(function () {
     Route::get('/customer/dashboard', [CustomerController::class, 'dashboard'])
         ->name('customer.dashboard');
+    Route::get('/vendor/dashboard', [VendorController::class, 'dashboard'])
+        ->name('vendor.dashboard');
 });

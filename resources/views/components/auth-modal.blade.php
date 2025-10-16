@@ -10,6 +10,7 @@
             <h2>LOGIN</h2>
             <form action="{{ route('login') }}" method="POST">
                 @csrf
+                <input id="userTypeLog" type="hidden" name="type" value="">
                 <div class="input-field">
                     <input type="text" name="id" required>
                     <label>Email or username</label>
@@ -36,7 +37,7 @@
             <h2>SIGNUP</h2>
             <form action="{{ route('signup') }}" method="POST">
                 @csrf
-                <input id="userType" type="hidden" name="type" value="">
+                <input id="userTypeSign" type="hidden" name="type" value="">
                 <div class="input-field">
                     <input type="text" name="name" required>
                     <label>Full Name</label>

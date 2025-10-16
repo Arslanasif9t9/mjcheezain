@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\VendorBasicInfo;
 use App\Models\CustomerProfile;
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
@@ -18,12 +19,28 @@ class AuthController extends Controller
             $validated = $request->validate([
                 'type' => 'required|in:vendor,customer',
                 'name' => 'required|string|max:255',
-                'email' => 'required|email|unique:users,email',
-                'phone' => 'required|string|unique:users,phone',
+                'email' => [
+                    'required',
+                    'email',
+                    Rule::unique('users')->where(function ($query) use ($request) {
+                        return $query->where('type', $request->type);
+                    }),
+                ],
+                'phone' => [
+                    'required',
+                    'string',
+                    Rule::unique('users')->where(function ($query) use ($request) {
+                        return $query->where('type', $request->type);
+                    }),
+                ],
                 'password' => 'required|min:6|confirmed',
             ]);
+
         } catch (\Illuminate\Validation\ValidationException $e) {
-            dd('Validation failed', $e->errors());
+            // dd('Validation failed', $e->errors());
+            return redirect('/')
+            ->withErrors($e->validator)
+            ->withInput();
         }
 
         // Generate unique username
@@ -49,6 +66,7 @@ class AuthController extends Controller
             VendorBasicInfo::create([
                 'user_id' => $user->user_id,
                 'full_name' => $request->name,
+                'store_name' => $request->name,
                 'phone' => $request->phone,
                 'email' => $request->email,
             ]);
@@ -97,9 +115,13 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
+        
         $user = User::where('email', $credentials['id'])
-                    ->orWhere('username', $credentials['id'])
-                    ->first();
+        // ->orWhere('username', $credentials['id'])
+        ->where('type', $request->type) // Add type condition
+        ->first();
+        // dd($request->type, $user->type);
+        // dd(Hash::check($credentials['password'], $user->password));
 
         if ($user && Hash::check($credentials['password'], $user->password)) {
             Auth::login($user);
@@ -111,7 +133,7 @@ class AuthController extends Controller
             }
         }
 
-        return back()->withErrors(['loginError' => 'Invalid credentials.']);
+        return back()->withErrors(['loginError' => 'Invalid email or password.']);
     }
 
     public function logout()
