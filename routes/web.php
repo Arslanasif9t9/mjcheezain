@@ -18,6 +18,12 @@ Route::get('/brands/cosmetics', [ProductController::class, 'cosmetics'])->name('
 // Authentication routes
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/signup', [AuthController::class, 'signup'])->name('signup');
+Route::get('/login', function () {
+    return redirect('/');
+});
+Route::get('/signup', function () {
+    return redirect('/');
+});
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Search route
