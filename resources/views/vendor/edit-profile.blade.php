@@ -1,27 +1,97 @@
 @extends('layouts.structure')
 
 @section('title')
-    Profile
+    Profile Edit
 @endsection
 
 @section('style')
     <style>
-    .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-    }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
 
-    .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
 
-    .verified-badge {
-        background-color: #22c55e;
-        color: white;
-        font-size: 12px;
-        padding: 2px 8px;
-        border-radius: 8px;
-    }
+        /* Custom styles for file upload previews and toggle switch */
+        .preview-container img {
+            max-width: 200px;
+            max-height: 200px;
+            display: none;
+            margin-bottom: 10px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            margin-left: 15px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #4CAF50;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(26px);
+        }
+
+        #map-preview {
+            height: 200px;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+
+        /* Custom animation for modal */
+        #logoutModal {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 @endsection
 

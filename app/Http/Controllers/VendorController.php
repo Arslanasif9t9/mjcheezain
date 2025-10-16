@@ -139,4 +139,46 @@ class VendorController extends Controller
             'topCategories'
         ));
     }
+
+
+    public function profile()
+    {
+        $user = Auth::user();
+        $vendor_id = $user->user_id;
+
+        // Get vendor basic info
+        $vendorBasicInfo = DB::table('vendor_basic_info')
+            ->where('user_id', $vendor_id)
+            ->first();
+
+        // Get store info
+        $storeInfo = DB::table('vendor_store_details')
+            ->where('user_id', $vendor_id)
+            ->first();
+
+        return view('vendor.profile', [
+            'profile_picture' => $vendorBasicInfo->profile_picture ?? asset('img/default-avatar.jpg'),
+            'full_name' => $user->full_name ?? $user->username,
+            'user_email' => $user->email,
+            'phone' => $user->phone,
+            'store_logo' => $storeInfo->store_logo ?? asset('img/default-store.png'),
+            'store_name' => $storeInfo->store_name ?? 'My Store',
+            'rating' => $storeInfo->rating ?? 0,
+            'verified' => $storeInfo->verified ?? false,
+            'city' => $storeInfo->city ?? 'Not specified',
+            'country' => $storeInfo->country ?? 'Not specified',
+            'store_banner' => $storeInfo->store_banner ?? asset('img/default-banner.jpg'),
+            'pickup_address' => $storeInfo->pickup_address ?? 'Not specified',
+            'business_type' => $storeInfo->business_type ?? 'Not specified',
+            'store_category' => $storeInfo->store_category ?? 'Not specified',
+            'return_policy' => $storeInfo->return_policy ?? 'Not avaliable',
+            'return_policy_file' => $storeInfo->return_policy_file ?? 'Not avaliable',
+            'shipping_policy' => $storeInfo->shipping_policy ?? 'Not avaliable',
+            'shipping_policy_file' => $storeInfo->shipping_policy_file ?? 'Not avaliable',
+            'store_description' => $storeInfo->store_description ?? 'No description provided.',
+            'area' => $storeInfo->area ?? 'Not specified',
+            'postal_code' => $storeInfo->postal_code ?? 'Not specified',
+            'vendorBasicInfo' => $vendorBasicInfo,
+        ]);
+    }
 }

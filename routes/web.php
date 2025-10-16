@@ -54,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/orders', [VendorController::class, 'orders'])->name('orders');
         Route::get('/withdraw', [VendorController::class, 'withdraw'])->name('withdraw');
         Route::get('/profile', [VendorController::class, 'profile'])->name('profile');
+        Route::get('/profile-edit', [VendorController::class, 'profileEdit'])->name('profile.edit');
     });
 
 });

@@ -34,6 +34,7 @@
             :profilePicture="$vendorBasicInfo->profile_picture"
             :fullName="$vendorBasicInfo->full_name"
             :profile_visibility="$vendorBasicInfo->profile_visibility"
+            page='Dashboard'
         />
 
         <!-- Main Content -->
@@ -74,11 +75,5 @@
     <script src="../script/logout.js"></script>
     <script src="../script/vendor_navbar.js"></script>
     <script src="../script/notification.js"></script>
-
-    <script>
-        document.getElementById("confirmLogoutBtn").addEventListener("click", function () {
-            document.getElementById("logoutForm").submit();
-        });
-    </script>
 </body>
 @endsection
