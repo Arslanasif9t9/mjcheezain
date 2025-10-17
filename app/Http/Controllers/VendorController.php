@@ -280,4 +280,84 @@ class VendorController extends Controller
         }
     }
 
+    public function updateStoreDetail(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $vendor_id = $user->user_id;
+
+            // Validate fields
+            $validated = $request->validate([
+                'business_type' => 'nullable|string|max:100',
+                'store_category' => 'nullable|string|max:100',
+                'store_description' => 'nullable|string',
+                'return_policy' => 'nullable|string',
+                'shipping_policy' => 'nullable|string',
+                'store_logo' => 'nullable',
+                'store_banner' => 'nullable',
+                'return_policy_file' => 'nullable',
+                'shipping_policy_file' => 'nullable',
+            ]);
+
+            // Find vendor store record
+            $vendor = DB::table('vendor_store_details')->where('user_id', $vendor_id)->first();
+            if (!$vendor) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Vendor store details not found.'
+                ], 404);
+            }
+
+            // Define base storage paths
+            $basePath = 'public/vendor/store';
+
+            // Handle each file upload
+            if ($request->hasFile('store_logo')) {
+                $file = $request->file('store_logo');
+                $filename = 'logo_' . $vendor_id . '_' . time() . '.' . $file->getClientOriginalExtension();
+                $file->storeAs($basePath, $filename);
+                $validated['store_logo'] = $filename;
+            }
+
+            if ($request->hasFile('store_banner')) {
+                $file = $request->file('store_banner');
+                $filename = 'banner_' . $vendor_id . '_' . time() . '.' . $file->getClientOriginalExtension();
+                $file->storeAs($basePath, $filename);
+                $validated['store_banner'] = $filename;
+            }
+
+            if ($request->hasFile('return_policy_file')) {
+                $file = $request->file('return_policy_file');
+                $filename = 'return_policy_' . $vendor_id . '_' . time() . '.' . $file->getClientOriginalExtension();
+                $file->storeAs($basePath, $filename);
+                $validated['return_policy_file'] = $filename;
+            }
+
+            if ($request->hasFile('shipping_policy_file')) {
+                $file = $request->file('shipping_policy_file');
+                $filename = 'shipping_policy_' . $vendor_id . '_' . time() . '.' . $file->getClientOriginalExtension();
+                $file->storeAs($basePath, $filename);
+                $validated['shipping_policy_file'] = $filename;
+            }
+
+            // Update record
+            DB::table('vendor_store_details')
+                ->where('user_id', $vendor_id)
+                ->update($validated);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Store details updated successfully',
+                'logo_url' => isset($validated['store_logo']) ? asset('storage/vendor/store/' . $validated['store_logo']) : null,
+                'banner_url' => isset($validated['store_banner']) ? asset('storage/vendor/store/' . $validated['store_banner']) : null,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating store details: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+
 }

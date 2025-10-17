@@ -103,3 +103,84 @@
             data-next-tab="address">Save & Continue</button>
     </div>
 </div>
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const saveBtn = document.querySelector(".btn-next[data-next-tab='address']");
+    if (!saveBtn) return;
+
+    // Directly get Laravel CSRF token
+    const csrfToken = "{{ csrf_token() }}";
+
+    saveBtn.addEventListener("click", function () {
+        const formData = new FormData();
+
+        // Collect text & select inputs
+        formData.append("business_type", document.querySelector("#business-type")?.value || "");
+        formData.append("store_category", document.querySelector("#store-category")?.value || "");
+        formData.append("store_description", document.querySelector("#store-description")?.value || "");
+        formData.append("return_policy", document.querySelector("#return-policy")?.value || "");
+        formData.append("shipping_policy", document.querySelector("#shipping-policy")?.value || "");
+
+        // Collect files if present
+        const logo = document.querySelector("#store-logo");
+        if (logo && logo.files.length > 0) {
+            formData.append("store_logo", logo.files[0]);
+        }
+
+        const banner = document.querySelector("#store-banner");
+        if (banner && banner.files.length > 0) {
+            formData.append("store_banner", banner.files[0]);
+        }
+
+        const returnPolicyFile = document.querySelector("#return-policy-file");
+        if (returnPolicyFile && returnPolicyFile.files.length > 0) {
+            formData.append("return_policy_file", returnPolicyFile.files[0]);
+        }
+
+        const shippingPolicyFile = document.querySelector("#shipping-policy-file");
+        if (shippingPolicyFile && shippingPolicyFile.files.length > 0) {
+            formData.append("shipping_policy_file", shippingPolicyFile.files[0]);
+        }
+
+        // Send request to Laravel route
+        fetch("{{ route('vendor.store.update') }}", {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+            },
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            if (data.success) {
+                showSuccess('Store details updated successfully!');
+                
+                // ✅ Update logo/banner previews if returned
+                if (data.logo_url) {
+                    const logoPreview = document.getElementById('logo-preview');
+                    logoPreview.src = data.logo_url + '?t=' + new Date().getTime();
+                    logoPreview.style.display = 'block';
+                }
+                if (data.banner_url) {
+                    const bannerPreview = document.getElementById('banner-preview');
+                    bannerPreview.src = data.banner_url + '?t=' + new Date().getTime();
+                    bannerPreview.style.display = 'block';
+                }
+
+                // Optionally move to next tab
+                // document.querySelector(`[data-tab='address']`)?.click();
+            } else {
+                showError(data.message || 'Failed to update store details.');
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            showError('Something went wrong while saving store details.');
+        });
+    });
+});
+</script>

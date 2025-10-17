@@ -57,6 +57,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/profile-edit', [VendorController::class, 'profileEdit'])->name('profile.edit');
         
         Route::post('/profile-edit/basic-info', [VendorController::class, 'updateBasicInfo'])->name('basic.update');
+        Route::post('/profile-edit/store-detail', [VendorController::class, 'updateStoreDetail'])->name('store.update');
+        Route::post('/profile-edit/address', [VendorController::class, 'updateAdress'])->name('address.update');
     });
 
 });

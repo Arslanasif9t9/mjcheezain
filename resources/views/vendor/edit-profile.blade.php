@@ -133,7 +133,7 @@
                         'store_name' => $vendorBasicInfo->store_name,
                         'email' => $vendorBasicInfo->email,
                         'phone' => $vendorBasicInfo->phone,
-                        'profile_visibility' => $vendorBasicInfo->profile_visibility
+                        'profile_visibility' => $vendorBasicInfo->profile_visibility,
                         'profile_picture' => $vendorBasicInfo->profile_picture
                     ]"
                     :storeDetails="[
