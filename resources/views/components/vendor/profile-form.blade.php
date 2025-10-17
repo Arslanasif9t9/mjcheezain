@@ -11,14 +11,15 @@
     
     {{-- <x-progress-bar :current-step="$currentStep" /> --}}
     {{-- <x-tab-navigation :active-tab="$activeTab" /> --}}
+    {{-- {{dd($basicInfo)}} --}}
 
     <x-vendor.basic-info-tab 
-        :basic-info="$basicInfo" 
+        :basicInfo="$basicInfo" 
         class="{{ $activeTab == 'basic-info' ? 'active' : 'hidden' }}" 
     />
     
     <x-vendor.store-detail-tab 
-        :store-details="$storeDetails" 
+        :storeDetails="$storeDetails" 
         class="{{ $activeTab == 'store-details' ? 'active' : 'hidden' }}" 
     />
     

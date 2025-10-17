@@ -13,7 +13,7 @@
             file:bg-green-100 file:text-green-700
             hover:file:bg-green-100">
             <div class="mt-2 text-center">
-                <img id="profile-preview" src="" alt="Profile Preview" class="mx-auto" style="display: none; width: 120px !important;">
+                <img id="profile-preview" src="{{asset('storage/vendor/profile/' . $basicInfo['profile_picture'])}}" alt="Profile Preview" class="mx-auto" style="display: none; width: 120px !important;">
                 <span class="text-gray-500 text-sm">No image selected</span>
             </div>
         </div>
@@ -35,7 +35,7 @@
         <label class="block text-gray-700 font-bold mb-2" for="email">Email Address</label>
         <div class="relative">
             <input type="email" id="email" value="{{ $basicInfo['email'] ?? '' }}"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 bg-gray-100" readonly>
+                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 bg-gray-100">
         </div>
     </div>
 
@@ -71,11 +71,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     saveBtn.addEventListener("click", function () {
         const formData = new FormData();
-
+        
         const profilePicture = document.querySelector("#profile-picture");
         if (profilePicture && profilePicture.files.length > 0) {
             formData.append("profile_picture", profilePicture.files[0]);
         }
+        // console.log(profilePicture.files[0]);
 
         formData.append("full_name", document.querySelector("#full-name")?.value || "");
         formData.append("store_name", document.querySelector("#store-name")?.value || "");
@@ -92,12 +93,12 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(response => response.json())
         .then(data => {
-            // console.log(data);
+            console.log(data);
             if (data.success) {
                 showSuccess('Profile updated successfully!')
                 // document.querySelector(`[data-tab='store-details']`)?.click();
             } else {
-                showError('Something went wrong!')
+                showError('Something')
             }
         })
         .catch(error => {

@@ -126,16 +126,17 @@
                 
                 <x-vendor.progress-bar />
                 <x-vendor.tab-navigation />
-
+{{-- {{dd($vendorBasicInfo)}} --}}
                 <x-vendor.profile-form 
-                    :basic-info="[
+                    :basicInfo="[
                         'full_name' => $vendorBasicInfo->full_name,
                         'store_name' => $vendorBasicInfo->store_name,
                         'email' => $vendorBasicInfo->email,
                         'phone' => $vendorBasicInfo->phone,
                         'profile_visibility' => $vendorBasicInfo->profile_visibility
+                        'profile_picture' => $vendorBasicInfo->profile_picture
                     ]"
-                    :store-details="[
+                    :storeDetails="[
                         'business_type' => $storeDetail->business_type,
                         'store_category' => $storeDetail->store_category,
                         'store_description' => $storeDetail->store_description,

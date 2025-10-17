@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class VendorController extends Controller
 {
@@ -196,6 +198,8 @@ class VendorController extends Controller
             ->where('user_id', $vendor_id)
             ->first();
 
+        // dd($vendorBasicInfo);
+
 
         return view('vendor.edit-profile', compact(
             'vendorBasicInfo',
@@ -204,10 +208,76 @@ class VendorController extends Controller
         ));
     }
 
-    public function updateBasicInfo(Request $request) {
-        $user = Auth::user();
-        $vendor_id = $user->user_id;
-        // dd($request->all());
-        // return response()->json(['success' => true]);
+    public function updateBasicInfo(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $vendor_id = $user->user_id;
+            
+            // Validate the request
+            $validated = $request->validate([
+                'full_name' => 'required|string|max:255',
+                'store_name' => 'required|string|max:255',
+                'phone' => 'required|string|max:20',
+                'profile_visibility' => 'nullable|boolean',
+                'profile_picture' => 'nullable'
+            ]);
+
+            // Find the vendor
+            $vendor = db::table('vendor_basic_info')
+            ->where('user_id', $vendor_id)->first();
+            
+            if (!$vendor) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Vendor not found'
+                ], 404);
+            }
+
+            // Handle profile picture upload
+            if ($request->hasFile('profile_picture')) {
+                $profilePicture = $request->file('profile_picture');
+                
+                // Delete old profile picture if exists
+                if ($vendor->profile_picture) {
+                    Storage::delete('public/vendor/profile/' . $vendor->profile_picture);
+                }
+                
+                // Generate unique filename
+                $filename = 'vendor_' . $vendor_id . '_' . time() . '.' . $profilePicture->getClientOriginalExtension();
+                
+                // Store the image
+                $path = $profilePicture->storeAs('public/vendor/profile', $filename);
+                
+                // Update filename in validated data
+                $validated['profile_picture'] = $filename;
+            } else {
+                // Remove profile_picture from validated data if no new file uploaded
+                unset($validated['profile_picture']);
+            }
+            
+            // Convert profile_visibility to boolean
+            $validated['profile_visibility'] = $request->boolean('profile_visibility');
+            
+            // Update vendor record
+            DB::table('vendor_basic_info')
+            ->where('user_id', $vendor_id)
+            ->update($validated);
+            // return response()->json(['success' => true]);
+            
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Basic information updated successfully',
+                'data' => $vendor
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating basic information: ' . $e->getMessage()
+            ], 500);
+        }
     }
+
 }
