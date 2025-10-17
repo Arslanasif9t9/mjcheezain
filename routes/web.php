@@ -55,6 +55,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/withdraw', [VendorController::class, 'withdraw'])->name('withdraw');
         Route::get('/profile', [VendorController::class, 'profile'])->name('profile');
         Route::get('/profile-edit', [VendorController::class, 'profileEdit'])->name('profile.edit');
+        
+        Route::post('/profile-edit/basic-info', [VendorController::class, 'updateBasicInfo'])->name('basic.update');
     });
 
 });

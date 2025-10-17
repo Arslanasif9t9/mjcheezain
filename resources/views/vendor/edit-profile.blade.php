@@ -97,6 +97,20 @@
 
 @section('body')
 <body class="bg-gray-50 font-sans">
+<!-- In your Blade template -->
+@if(session('success'))
+    <x-toast type="success" message="{{ session('success') }}" />
+@endif
+
+@if(session('error'))
+    <x-toast type="error" message="{{ session('error') }}" />
+@endif
+
+@if(session('warning'))
+    <x-toast type="warning" message="{{ session('warning') }}" />
+@endif
+<x-toast />
+
     <div class="flex min-h-screen">
         <!-- Sidebar Component -->
         <x-vendor.sidebar 
@@ -112,7 +126,7 @@
                 
                 <x-vendor.progress-bar />
                 <x-vendor.tab-navigation />
-f
+
                 <x-vendor.profile-form 
                     :basic-info="[
                         'full_name' => $vendorBasicInfo->full_name,

@@ -59,3 +59,51 @@
             data-next-tab="store-details">Save & Continue</button>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const saveBtn = document.querySelector(".btn-next[data-next-tab='store-details']");
+
+    if (!saveBtn) return;
+
+    // CSRF token directly from Laravel Blade
+    const csrfToken = "{{ csrf_token() }}";
+
+    saveBtn.addEventListener("click", function () {
+        const formData = new FormData();
+
+        const profilePicture = document.querySelector("#profile-picture");
+        if (profilePicture && profilePicture.files.length > 0) {
+            formData.append("profile_picture", profilePicture.files[0]);
+        }
+
+        formData.append("full_name", document.querySelector("#full-name")?.value || "");
+        formData.append("store_name", document.querySelector("#store-name")?.value || "");
+        formData.append("email", document.querySelector("#email")?.value || "");
+        formData.append("phone", document.querySelector("#phone")?.value || "");
+        formData.append("profile_visibility", document.querySelector("#profile-visibility")?.checked ? 1 : 0);
+
+        fetch("{{ route('vendor.basic.update') }}", {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+            },
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            // console.log(data);
+            if (data.success) {
+                showSuccess('Profile updated successfully!')
+                // document.querySelector(`[data-tab='store-details']`)?.click();
+            } else {
+                showError('Something went wrong!')
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            showError('Something went wrong!')
+        });
+    });
+});
+</script>

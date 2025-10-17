@@ -203,4 +203,11 @@ class VendorController extends Controller
             'address'
         ));
     }
+
+    public function updateBasicInfo(Request $request) {
+        $user = Auth::user();
+        $vendor_id = $user->user_id;
+        // dd($request->all());
+        // return response()->json(['success' => true]);
+    }
 }

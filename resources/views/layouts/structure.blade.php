@@ -24,6 +24,8 @@
     <link rel="stylesheet" href="../css/vendor_chat.css">
     <link rel="stylesheet" href="../css/vendor_navbar.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- In your layout file -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
     @yield('style')
     
