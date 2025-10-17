@@ -35,7 +35,7 @@
     <div class="mb-5">
         <label class="block text-gray-700 font-bold mb-2" for="country">Country</label>
         <input type="text" id="country" value="Pakistan" 
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100" readonly>
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100">
     </div>
 
     <div class="mb-5">
@@ -52,3 +52,54 @@
             class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Submit</button>
     </div>
 </div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const saveBtn = document.querySelector(".tab-content#address button[type='submit']");
+    if (!saveBtn) return;
+
+    const csrfToken = "{{ csrf_token() }}";
+
+    saveBtn.addEventListener("click", function (e) {
+        e.preventDefault(); // Stop normal form submit
+
+        const formData = new FormData();
+        formData.append("pickup_address", document.querySelector("#pickup-address")?.value || "");
+        formData.append("city", document.querySelector("#city")?.value || "");
+        formData.append("area", document.querySelector("#area")?.value || "");
+        formData.append("country", document.querySelector("#country")?.value || "");
+        formData.append("postal_code", document.querySelector("#postal-code")?.value || "");
+        
+//         console.log(document.querySelector("#area")?.value)
+//         // Check if data exists by iterating
+// for (const [key, value] of formData.entries()) {
+//     console.log(key, value); // This WILL show: "a" "b"
+// }
+
+        fetch("{{ route('vendor.address.update') }}", {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+            },
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            if (data.success) {
+                showSuccess('Address updated successfully! ✅');
+                setInterval(() => {
+                    location.href = "/vendor/profile";
+                }, 1000);
+            } else {
+                showError(data.message || 'Failed to update address.');
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            showError('Something went wrong while saving address.');
+        });
+    });
+});
+</script>

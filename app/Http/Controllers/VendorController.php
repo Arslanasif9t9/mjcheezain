@@ -359,5 +359,49 @@ class VendorController extends Controller
         }
     }
 
+    public function updateAddress(Request $request)
+    {
+        // return response()->json([
+        //         'success' => true,
+        //         'message' => 'Address updated successfully!',
+        //     ]);
+        try {
+            $user = Auth::user();
+            $vendor_id = $user->user_id;
+
+            // Validate form inputs
+            $validated = $request->validate([
+                'pickup_address' => 'required|string|max:255',
+                'city' => 'required|string|max:100',
+                'area' => 'required|string|max:100',
+                'country' => 'required|string|max:100',
+                'postal_code' => 'required|string|max:20',
+            ]);
+
+
+            // Check if vendor record exists
+            $vendorAddress = DB::table('vendor_address')->where('user_id', $vendor_id)->first();
+
+            if ($vendorAddress) {
+                // Update existing record
+                DB::table('vendor_address')->where('user_id', $vendor_id)->update($validated);
+            } else {
+                // Insert new record if not found
+                $validated['user_id'] = $vendor_id;
+                DB::table('vendor_address')->insert($validated);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Address updated successfully!',
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating address: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
 
 }

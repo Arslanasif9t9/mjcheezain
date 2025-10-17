@@ -58,7 +58,7 @@ Route::middleware(['auth'])->group(function () {
         
         Route::post('/profile-edit/basic-info', [VendorController::class, 'updateBasicInfo'])->name('basic.update');
         Route::post('/profile-edit/store-detail', [VendorController::class, 'updateStoreDetail'])->name('store.update');
-        Route::post('/profile-edit/address', [VendorController::class, 'updateAdress'])->name('address.update');
+        Route::post('/profile-edit/address', [VendorController::class, 'updateAddress'])->name('address.update');
     });
 
 });
