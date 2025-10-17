@@ -112,7 +112,7 @@
                 
                 <x-vendor.progress-bar />
                 <x-vendor.tab-navigation />
-
+f
                 <x-vendor.profile-form 
                     :basic-info="[
                         'full_name' => $vendorBasicInfo->full_name,
