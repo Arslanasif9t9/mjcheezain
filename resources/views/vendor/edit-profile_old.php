@@ -556,7 +556,6 @@
             </div>
         </div>
     </div>
-    <script src="../script/logout.js"></script>
 
     <script src="../script/vendor_edit-profile.js"></script>
     <script src="../script/vendor_navbar.js"></script>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\VendorBasicInfo;
 use App\Models\CustomerProfile;
@@ -70,6 +71,13 @@ class AuthController extends Controller
                 'phone' => $request->phone,
                 'email' => $request->email,
             ]);
+            DB::table('vendor_store_details')->insert([
+                'user_id' => $user->user_id,
+            ]);
+            DB::table('vendor_address')->insert([
+                'user_id' => $user->user_id,
+            ]);
+
         } else {
             $nameParts = explode(' ', $request->name, 2);
             $customer = CustomerProfile::create([

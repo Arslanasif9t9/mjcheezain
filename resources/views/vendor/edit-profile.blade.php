@@ -100,55 +100,44 @@
     <div class="flex min-h-screen">
         <!-- Sidebar Component -->
         <x-vendor.sidebar 
-            :profilePicture="$profile_picture"
-            :fullName="$full_name"
+            :profilePicture="$vendorBasicInfo->profile_picture"
+            :fullName="$vendorBasicInfo->full_name"
             :profile_visibility="$vendorBasicInfo->profile_visibility"
             page='Profile'
         />
 
         <!-- Main Content -->
         <main class="bg-gray-100 flex-1 p-6 overflow-y-auto scrollbar-hide">
-            <!-- Profile Header Component -->
-            <x-vendor.profile-header 
-                :storeLogo="$store_logo"
-                :storeName="$store_name"
-                :rating="$rating"
-                :verified="$verified"
-                :city="$city"
-                :country="$country"
-                :storeBanner="$store_banner"
-            />
+            <div class="container mx-auto p-4 max-w-4xl">
+                
+                <x-vendor.progress-bar />
+                <x-vendor.tab-navigation />
 
-            <!-- Content Grid -->
-            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Personal Info Component -->
-                <x-vendor.personal-info 
-                    :fullName="$full_name"
-                    :email="$user_email"
-                    :phone="$phone"
-                    :address="$pickup_address"
+                <x-vendor.profile-form 
+                    :basic-info="[
+                        'full_name' => $vendorBasicInfo->full_name,
+                        'store_name' => $vendorBasicInfo->store_name,
+                        'email' => $vendorBasicInfo->email,
+                        'phone' => $vendorBasicInfo->phone,
+                        'profile_visibility' => $vendorBasicInfo->profile_visibility
+                    ]"
+                    :store-details="[
+                        'business_type' => $storeDetail->business_type,
+                        'store_category' => $storeDetail->store_category,
+                        'store_description' => $storeDetail->store_description,
+                        'return_policy' => $storeDetail->return_policy,
+                        'shipping_policy' => $storeDetail->shipping_policy
+                    ]"
+                    :address="[
+                        'pickup_address' => $address->pickup_address,
+                        'city' => $address->city,
+                        'area' => $address->area,
+                        'postal_code' => $address->postal_code
+                    ]"
+                    {{-- :current-step="$currentStep" --}}
+                    {{-- :active-tab="$activeTab" --}}
                 />
-                
-                <!-- Store Info Component -->
-                <x-vendor.store-info 
-                    :businessType="$business_type"
-                    :storeCategory="$store_category"
-                    :returnPolicy="$return_policy"
-                    :returnPolicyFile="$return_policy_file"
-                    :shippingPolicy="$shipping_policy"
-                    :shippingPolicyFile="$shipping_policy_file"
-                    :storeDescription="$store_description"
-                    :storeBanner="$store_banner"
-                />
-                
-                <!-- Profile Address Component -->
-                <x-vendor.profile-address 
-                    :pickupAddress="$pickup_address"
-                    :city="$city"
-                    :area="$area"
-                    :country="$country"
-                    :postalCode="$postal_code"
-                />
+
             </div>
         </main>
     </div>
@@ -156,7 +145,7 @@
     <!-- Logout Modal Component -->
     <x-logout-modal />
 
-    <script src="{{ asset('script/vendor_navbar.js') }}"></script>
-    <script src="{{ asset('script/notification.js') }}"></script>
+    <script src="{{ asset('js/vendor_edit-profile.js') }}"></script>
+    <script src="{{ asset('js/vendor_navbar.js') }}"></script>
 </body>
 @endsection

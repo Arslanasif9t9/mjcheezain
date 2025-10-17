@@ -181,4 +181,26 @@ class VendorController extends Controller
             'vendorBasicInfo' => $vendorBasicInfo,
         ]);
     }
+
+    public function profileEdit() {
+        $user = Auth::user();
+        $vendor_id = $user->user_id;
+
+        $vendorBasicInfo = DB::table('vendor_basic_info')
+            ->where('user_id', $vendor_id)
+            ->first();
+        $storeDetail = DB::table('vendor_store_details')
+            ->where('user_id', $vendor_id)
+            ->first();
+        $address = DB::table('vendor_address')
+            ->where('user_id', $vendor_id)
+            ->first();
+
+
+        return view('vendor.edit-profile', compact(
+            'vendorBasicInfo',
+            'storeDetail',
+            'address'
+        ));
+    }
 }
