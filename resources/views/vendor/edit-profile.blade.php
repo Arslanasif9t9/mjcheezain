@@ -97,7 +97,7 @@
 
 @section('body')
 <body class="bg-gray-50 font-sans">
-<!-- In your Blade template -->
+<!-- In your Blade template --> 
 @if(session('success'))
     <x-toast type="success" message="{{ session('success') }}" />
 @endif

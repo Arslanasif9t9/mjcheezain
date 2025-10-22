@@ -18,12 +18,12 @@ class User extends Authenticatable
         'username',
         'email',
         'phone',
-        'password',
+        'password'
     ];
 
     protected $hidden = [
         'password',
-        'remember_token',
+        'remember_token'
     ];
 
     public function vendorProfile()

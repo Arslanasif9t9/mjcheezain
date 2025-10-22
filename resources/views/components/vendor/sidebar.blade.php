@@ -10,7 +10,7 @@
     class="fixd top-0 left-0 h-[100vh] w-64 bg-gray-900 text-white p-4 transform -translate-x-full transition-transform duration-300 md:translate-x-0 z-40 shadow-lg">
     
     <div class="flex flex-col items-center">
-        <img class="w-24 h-24 rounded-full object-cover" src="{{ $profilePicture }}" alt="Profile" />
+        <img class="w-24 h-24 rounded-full object-cover" src="{{ asset("storage/vendor/profile/" . $profilePicture) }}" alt="Profile" />
         <h2 class="mt-4 font-semibold text-xl">{{ $fullName }}</h2>
 
         @if($profile_visibility)

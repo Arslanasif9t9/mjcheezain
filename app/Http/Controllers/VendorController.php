@@ -247,7 +247,8 @@ class VendorController extends Controller
                 $filename = 'vendor_' . $vendor_id . '_' . time() . '.' . $profilePicture->getClientOriginalExtension();
                 
                 // Store the image
-                $path = $profilePicture->storeAs('public/vendor/profile', $filename);
+                $path = $profilePicture->storeAs('vendor/profile', $filename);
+                // $path = $profilePicture->move(public_path('storage/vendor/profile'));
                 
                 // Update filename in validated data
                 $validated['profile_picture'] = $filename;
@@ -309,7 +310,7 @@ class VendorController extends Controller
             }
 
             // Define base storage paths
-            $basePath = 'public/vendor/store';
+            $basePath = 'vendor/store';
 
             // Handle each file upload
             if ($request->hasFile('store_logo')) {
@@ -358,7 +359,6 @@ class VendorController extends Controller
             ], 500);
         }
     }
-
     public function updateAddress(Request $request)
     {
         // return response()->json([
@@ -402,6 +402,11 @@ class VendorController extends Controller
                 'message' => 'Error updating address: ' . $e->getMessage(),
             ], 500);
         }
+    }
+
+
+    public function products() {
+        
     }
 
 }
