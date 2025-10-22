@@ -13,7 +13,6 @@ use App\Http\Controllers\VendorController;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/brands/cosmetics', [ProductController::class, 'cosmetics'])->name('brands.cosmetics');
 
 // Authentication routes
 Route::post('/login', [AuthController::class, 'login'])->name('login');
@@ -55,6 +54,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/withdraw', [VendorController::class, 'withdraw'])->name('withdraw');
         Route::get('/profile', [VendorController::class, 'profile'])->name('profile');
         Route::get('/profile-edit', [VendorController::class, 'profileEdit'])->name('profile.edit');
+
+        Route::post('/products', [VendorController::class, 'products'])->name('products');
+        Route::post('/products/create', [VendorController::class, 'productsCreate'])->name('products.create');
+        Route::post('/products/id', [VendorController::class, 'pr'])->name('products.index');
         
         Route::post('/profile-edit/basic-info', [VendorController::class, 'updateBasicInfo'])->name('basic.update');
         Route::post('/profile-edit/store-detail', [VendorController::class, 'updateStoreDetail'])->name('store.update');

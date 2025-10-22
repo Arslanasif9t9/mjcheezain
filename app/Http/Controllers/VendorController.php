@@ -405,8 +405,63 @@ class VendorController extends Controller
     }
 
 
-    public function products() {
+    public function products(Request $request) {
+        $user = Auth::user();
+        $vendor_id = $user->user_id;
         
+        // Get vendor basic info
+        $vendorBasicInfo = DB::table('vendor_basic_info')
+            ->where('user_id', $vendor_id)
+            ->first();
+        
+        // Default values if data doesn't exist
+        // $profile_picture = $vendorBasicInfo->profile_picture ?? 'img/default_profile.webp';
+        // $full_name = $vendorBasicInfo->full_name ?? 'Not specified';
+        
+        // Determine active tab from URL parameter
+        $active_tab = $request->get('tab', 'all');
+        
+        // Map tab names to position values
+        $tab_position_map = [
+            'online' => 'online',
+            'pending' => 'pending',
+            'offline' => 'offline',
+            'draft' => 'draft',
+            'all' => 'all'
+        ];
+        
+        // Get products based on active tab
+        $query = DB::table('vendor_products')
+        ->leftJoin('vendor_product_images as primaryImage', 'vendor_products.id', '=', 'primaryImage.product_id')
+        ->where('vendor_products.user_id', $vendor_id)
+        ->select('vendor_products.*', 'primaryImage.image_path as primary_image');
+
+        
+        if ($active_tab !== 'all') {
+            $position = $tab_position_map[$active_tab] ?? 'all';
+            $query->where('position', $position);
+        }
+        
+        $products = $query->get();
+        $total_products = $products->count();
+        $pending_products = $products->where('position', 'pending')->count();
+        
+        // Calculate completion percentage
+        $completion_percentage = $total_products > 0 
+            ? round(100 - (($pending_products / $total_products) * 100))
+            : 0;
+        
+        return view('vendor.products', compact(
+            'vendorBasicInfo',
+            'products',
+            'active_tab',
+            'total_products',
+            'pending_products',
+            'completion_percentage'
+        ));
     }
+
+    public function productsCreate () {}
+    public function pr ($pr = 1) {}
 
 }
