@@ -15,7 +15,7 @@
     
     <div class="text-left py-2 bg-gray-800 md:px-16 w-full">
         <p class="text-sm font-bold px-3">
-            <a href="{{ route('brands.cosmetics') }}" style="color: whitesmoke; text-decoration: none;">
+            <a href="/cosmatics" style="color: whitesmoke; text-decoration: none;">
                 <i class="fas fa-tools"></i> COSMETICS
             </a>
         </p>

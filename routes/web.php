@@ -9,10 +9,12 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\VendorController;
 
 
+Route::view('createDB', 'mydatabase/creation');
 
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::view('cosmetics', 'brands/cosmetics');
 
 // Authentication routes
 Route::post('/login', [AuthController::class, 'login'])->name('login');

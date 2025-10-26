@@ -308,9 +308,9 @@ if ($conn->query($sqlPayments)) {
     echo "Error creating payments table: " . $conn->error . "<br>";
 }
 
-$conn->query("ALTER TABLE users ADD COLUMN status ENUM('active', 'blocked', 'pending') DEFAULT 'pending';");
-$conn->query("ALTER TABLE users ADD COLUMN flagged BOOLEAN DEFAULT FALSE;");
-$conn->query("ALTER TABLE users ADD COLUMN last_login TIMESTAMP NULL;");
+// $conn->query("ALTER TABLE users ADD COLUMN status ENUM('active', 'blocked', 'pending') DEFAULT 'pending';");
+// $conn->query("ALTER TABLE users ADD COLUMN flagged BOOLEAN DEFAULT FALSE;");
+// $conn->query("ALTER TABLE users ADD COLUMN last_login TIMESTAMP NULL;");
 $conn->query("CREATE TABLE IF NOT EXISTS customer_notes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -321,7 +321,7 @@ $conn->query("CREATE TABLE IF NOT EXISTS customer_notes (
 );");
 
 
-$conn->query("ALTER TABLE users ADD COLUMN verified BOOLEAN DEFAULT FALSE;");
+// $conn->query("ALTER TABLE users ADD COLUMN verified BOOLEAN DEFAULT FALSE;");
 $conn->query("CREATE TABLE IF NOT EXISTS vendor_documents (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -345,26 +345,26 @@ $conn->query("CREATE TABLE IF NOT EXISTS vendor_payments (
 );");
 
 
-$conn->query("ALTER TABLE vendor_products ADD COLUMN views INT DEFAULT 0;");
-$conn->query("ALTER TABLE vendor_products ADD COLUMN admin_notes TEXT;");
-$conn->query("ALTER TABLE vendor_products ADD COLUMN approved_by INT;");
-$conn->query("ALTER TABLE vendor_products ADD COLUMN approved_at TIMESTAMP NULL;");
-$conn->query("CREATE TABLE vendor_balance (
-    user_id INT PRIMARY KEY,
-    total_balance DECIMAL(10,2) DEFAULT 0.00,
-    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);");
+// $conn->query("ALTER TABLE vendor_products ADD COLUMN views INT DEFAULT 0;");
+// $conn->query("ALTER TABLE vendor_products ADD COLUMN admin_notes TEXT;");
+// $conn->query("ALTER TABLE vendor_products ADD COLUMN approved_by INT;");
+// $conn->query("ALTER TABLE vendor_products ADD COLUMN approved_at TIMESTAMP NULL;");
+// $conn->query("CREATE TABLE vendor_balance (
+//     user_id INT PRIMARY KEY,
+//     total_balance DECIMAL(10,2) DEFAULT 0.00,
+//     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+// );");
 
 
-$conn->query("CREATE TABLE favorites (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    product_id INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE KEY unique_fav (user_id, product_id),
-    CONSTRAINT fk_fav_user FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-    CONSTRAINT fk_fav_product FOREIGN KEY (product_id) REFERENCES vendor_products(id) ON DELETE CASCADE
-)");
+// $conn->query("CREATE TABLE favorites (
+//     id INT AUTO_INCREMENT PRIMARY KEY,
+//     user_id INT NOT NULL,
+//     product_id INT NOT NULL,
+//     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//     UNIQUE KEY unique_fav (user_id, product_id),
+//     CONSTRAINT fk_fav_user FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+//     CONSTRAINT fk_fav_product FOREIGN KEY (product_id) REFERENCES vendor_products(id) ON DELETE CASCADE
+// )");
 
 // Add this to your database creation script
 $conn->query("CREATE TABLE IF NOT EXISTS withdrawal_requests (
@@ -383,8 +383,8 @@ $conn->query("CREATE TABLE IF NOT EXISTS withdrawal_requests (
 
 
 // add subcategory colume 
-$conn->query("ALTER TABLE vendor_products
-ADD COLUMN subcategory VARCHAR(255) AFTER category;");
+// $conn->query("ALTER TABLE vendor_products
+// ADD COLUMN subcategory VARCHAR(255) AFTER category;");
 
 
 
@@ -429,8 +429,8 @@ ADD COLUMN subcategory VARCHAR(255) AFTER category;");
         die("Error creating password_reset_tokens table: " . $conn->error);
     }
 
-$conn->query('ALTER TABLE `vendor_products`
-ADD COLUMN mrp DECIMAL(10,2) AFTER selling_price;');
+// $conn->query('ALTER TABLE `vendor_products`
+// ADD COLUMN mrp DECIMAL(10,2) AFTER selling_price;');
 
 $conn->close();
 ?>
