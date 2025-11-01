@@ -35,6 +35,10 @@
     <link rel="stylesheet" href="{{ asset('css/d-mode.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
+    {{-- google fonts  --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <style>
         .search-bar { border: 1px solid #ccc; border-radius: 4px; }
         .icon-button:hover { background-color: #444; }
@@ -48,9 +52,12 @@
         .header-front { background: url("{{ asset('img/front-header-bg.jpeg') }}"); background-position: center; background-size: cover; }
         .header-front .container { grid-template-columns: 1fr; }
         .header-front .container .text-left { justify-self: start; }
+        * {
+            font-family: "Poppins", sans-serif;
+        }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="">
     <!-- Display Session Messages -->
     @if ($errors->any())
         <div class="alert alert-danger mb-0 alert-dismissible fade show d-flex align-items-center" role="alert">
@@ -76,26 +83,27 @@
     @if(session('success'))
         <x-alert type="success" message="{{ session('success') }}" />
     @endif --}}
-
+`
     <x-header :user="$user ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
 
     <main>
         @yield('content')
         {{-- <script src="{{ asset('js/search_product.js') }}"></script> --}}
-        <x-Banner />
+        {{-- <x-Banner /> --}}
         <x-categories />
-        @include('products.biggest-savings')
-        @include('products.category', ['category' => 'Fitness & Gym Equipment'])
-        <x-popular-brands :brands="[
+        <x-vendors />
+        {{-- @include('products.biggest-savings') --}}
+        @include('products.category', ['category' => 'Fitness & Gym Equipment', 'id' => 'gym'])
+        {{-- <x-popular-brands :brands="[
             ['image' => 'img/nike sho.jpg', 'name' => 'Nike', 'link' => '#'],
             ['image' => 'img/adidas.jpeg', 'name' => 'Adidas', 'link' => '#'],
             ['image' => 'img/gucci.jpeg', 'name' => 'Gucci', 'link' => '#'],
             ['image' => 'img/honda.jpeg', 'name' => 'Honda', 'link' => '#'],
             ['image' => 'img/toyota.jpeg', 'name' => 'Toyota', 'link' => '#'],
             ['image' => 'img/levis.jpeg', 'name' => 'Levis', 'link' => '#'],
-        ]" />
-        @include('products.category', ['category' => 'Auto Parts & Accessories'])
-        @include('products.category', ['category' => 'Car Tools & Maintenance'])
+        ]" /> --}}
+        @include('products.category', ['category' => 'Auto Parts & Accessories', 'id' => 'auto'])
+        @include('products.category', ['category' => 'Car Tools & Maintenance', 'id' => 'car'])
     </main>
 
     <x-footer />
@@ -142,6 +150,7 @@
             }
         });
     </script>
+    <script src="{{ asset('js/category_fetch.js') }}"></script>
     
     @stack('scripts')
 </body>

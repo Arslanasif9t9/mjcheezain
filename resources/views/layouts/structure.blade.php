@@ -26,6 +26,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- In your layout file -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="{{ asset('css/login&signup.css') }}">
 
     @yield('style')
     

@@ -1,18 +1,14 @@
-<!-- resources/views/components/categories.blade.php -->
-
-
-<!-- Category Section -->
     <section class="py-20 px-8 sm:px-6 lg:px-8" style="max-width: 100vw">
         <div class="mx-auto text-center">
             
             <!-- Heading - Using font-serif utility class for an elegant look -->
             <h2 class="font-serif text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
-                Shop by Category
+                Shop by Beauty Category 
             </h2>
             
             <!-- Subtitle -->
             <p class="text-lg text-gray-600 mb-12">
-                Explore our selected collections from premium local and global brands.
+                MJ Whitening Cream — soft, smooth, and naturally bright skin
             </p>
 
             <!-- Category Grid -->
@@ -105,37 +101,3 @@
             
         </div>
     </section>
-
-
-
-
-
-
-{{-- <section class="popular-brands bg-white p-4 m-auto">
-    <h2 class="font-bold">Categories</h2>
-    <div class="pupular-con relative">
-        <div class="cat-con flex gap-8 overflow-x-auto">
-            @php
-                $categories = [
-                    ['name' => 'Fashion', 'img' => asset('img/fashion.png')],
-                    ['name' => 'Autoparts', 'img' => asset('img/auroparts.png')],
-                    ['name' => 'GYM', 'img' => asset('img/gym.png')],
-                    ['name' => 'Jewellery', 'img' => asset('img/Jewellery.jpeg')],
-                    ['name' => 'Fragrance', 'img' => asset('img/perfume.jpeg')],
-                    ['name' => 'Vehicles', 'img' => asset('img/vehicle.jpeg')],
-                    ['name' => 'Decoration', 'img' => asset('img/decoration.jpeg')],
-                    ['name' => 'Furniture', 'img' => asset('img/ferniture.png')],
-                    ['name' => 'Food', 'img' => asset('img/food.jpeg')],
-                    ['name' => 'Shoes', 'img' => asset('img/shoes.jpeg')],
-                ];
-            @endphp
-
-            @foreach ($categories as $cat)
-                <a href="#" class="w-32 flex flex-col items-center">
-                    <img src="{{ $cat['img'] }}" alt="{{ $cat['name'] }}" class="h-[80px] w-[80px] object-cover rounded-md">
-                    <span class="text-center mt-2">{{ $cat['name'] }}</span>
-                </a>
-            @endforeach
-        </div>
-    </div>
-</section> --}}

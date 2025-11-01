@@ -45,6 +45,7 @@ class HomeController extends Controller
             ->take(10)
             ->get();
 
+        // return view('home.index');
         return view('home.index', compact('user', 'profile', 'dashboardPage', 'imgPath', 'products'));
     }
 }
