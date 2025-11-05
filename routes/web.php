@@ -17,6 +17,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::view('cosmetics', 'brands/cosmetics');
 
 Route::view('/about', 'footer/about');
+Route::view('FAQs', 'footer/FAQs');
 
 
 

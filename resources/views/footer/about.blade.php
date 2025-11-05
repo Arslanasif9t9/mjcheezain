@@ -1,11 +1,11 @@
 @extends('layouts.structure')
 @section('title', 'About')
 @section('body')
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width: 100rem;">
 
         <!-- 1. WELCOME / HERO SECTION -->
         <section class="py-20 md:py-32 text-center">
-            <h1 class="text-4xl sm:text-6xl font-display font-medium tracking-wider mb-4">
+            <h1 class="text-3xl sm:text-6xl font-display font-medium tracking-wider mb-3">
                 Welcome to MJ CHEEZAIN
             </h1>
             <p class="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -14,7 +14,7 @@
         </section>
         
         <!-- Horizontal Divider -->
-        <div class="h-px bg-gray-200 max-w-4xl mx-auto my-12"></div>
+        {{-- <div class="h-px bg-gray-200 max-w-4xl mx-auto"></div> --}}
 
         <!-- 2. OUR JOURNEY SECTION -->
         <section class="pb-20 md:pb-32">
@@ -94,33 +94,33 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 
                 <!-- Category Card Template -->
-                <div class="p-8 bg-white rounded-xl shadow-md transition duration-300 hover:shadow-lg hover:ring-2 hover:ring-custom-gold/50 cursor-pointer flex flex-col items-center justify-center min-h-[160px] border border-gray-100">
-                    <i data-lucide="wrench" class="w-10 h-10 mb-3 text-custom-gold stroke-1"></i>
+                <div class="p-8 bg-white rounded-xl shadow-md transition duration-300 hover:shadow-lg hover:ring-2 hover:ring-[#d4af37]/50 cursor-pointer flex flex-col items-center justify-center min-h-[160px] border border-gray-100">
+                    <i data-lucide="wrench" class="w-10 h-10 mb-3 text-[#d4af37] stroke-1"></i>
                     <span class="text-lg font-medium text-gray-700">Auto Parts & Accessories</span>
                 </div>
 
-                <div class="p-8 bg-white rounded-xl shadow-md transition duration-300 hover:shadow-lg hover:ring-2 hover:ring-custom-gold/50 cursor-pointer flex flex-col items-center justify-center min-h-[160px] border border-gray-100">
-                    <i data-lucide="home" class="w-10 h-10 mb-3 text-custom-gold stroke-1"></i>
+                <div class="p-8 bg-white rounded-xl shadow-md transition duration-300 hover:shadow-lg hover:ring-2 hover:ring-[#d4af37]/50 cursor-pointer flex flex-col items-center justify-center min-h-[160px] border border-gray-100">
+                    <i data-lucide="home" class="w-10 h-10 mb-3 text-[#d4af37] stroke-1"></i>
                     <span class="text-lg font-medium text-gray-700">Home & Living</span>
                 </div>
 
-                <div class="p-8 bg-white rounded-xl shadow-md transition duration-300 hover:shadow-lg hover:ring-2 hover:ring-custom-gold/50 cursor-pointer flex flex-col items-center justify-center min-h-[160px] border border-gray-100">
-                    <i data-lucide="shirt" class="w-10 h-10 mb-3 text-custom-gold stroke-1"></i>
+                <div class="p-8 bg-white rounded-xl shadow-md transition duration-300 hover:shadow-lg hover:ring-2 hover:ring-[#d4af37]/50 cursor-pointer flex flex-col items-center justify-center min-h-[160px] border border-gray-100">
+                    <i data-lucide="shirt" class="w-10 h-10 mb-3 text-[#d4af37] stroke-1"></i>
                     <span class="text-lg font-medium text-gray-700">Fashion & Apparel</span>
                 </div>
 
-                <div class="p-8 bg-white rounded-xl shadow-md transition duration-300 hover:shadow-lg hover:ring-2 hover:ring-custom-gold/50 cursor-pointer flex flex-col items-center justify-center min-h-[160px] border border-gray-100">
-                    <i data-lucide="laptop" class="w-10 h-10 mb-3 text-custom-gold stroke-1"></i>
+                <div class="p-8 bg-white rounded-xl shadow-md transition duration-300 hover:shadow-lg hover:ring-2 hover:ring-[#d4af37]/50 cursor-pointer flex flex-col items-center justify-center min-h-[160px] border border-gray-100">
+                    <i data-lucide="laptop" class="w-10 h-10 mb-3 text-[#d4af37] stroke-1"></i>
                     <span class="text-lg font-medium text-gray-700">Electronics & Gadgets</span>
                 </div>
 
-                <div class="p-8 bg-white rounded-xl shadow-md transition duration-300 hover:shadow-lg hover:ring-2 hover:ring-custom-gold/50 cursor-pointer flex flex-col items-center justify-center min-h-[160px] border border-gray-100">
-                    <i data-lucide="utensils-crossed" class="w-10 h-10 mb-3 text-custom-gold stroke-1"></i>
+                <div class="p-8 bg-white rounded-xl shadow-md transition duration-300 hover:shadow-lg hover:ring-2 hover:ring-[#d4af37]/50 cursor-pointer flex flex-col items-center justify-center min-h-[160px] border border-gray-100">
+                    <i data-lucide="utensils-crossed" class="w-10 h-10 mb-3 text-[#d4af37] stroke-1"></i>
                     <span class="text-lg font-medium text-gray-700">Kitchen & Dining</span>
                 </div>
                 
-                <div class="p-8 bg-white rounded-xl shadow-md transition duration-300 hover:shadow-lg hover:ring-2 hover:ring-custom-gold/50 cursor-pointer flex flex-col items-center justify-center min-h-[160px] border border-gray-100">
-                    <i data-lucide="heart-handshake" class="w-10 h-10 mb-3 text-custom-gold stroke-1"></i>
+                <div class="p-8 bg-white rounded-xl shadow-md transition duration-300 hover:shadow-lg hover:ring-2 hover:ring-[#d4af37]/50 cursor-pointer flex flex-col items-center justify-center min-h-[160px] border border-gray-100">
+                    <i data-lucide="heart-handshake" class="w-10 h-10 mb-3 text-[#d4af37] stroke-1"></i>
                     <span class="text-lg font-medium text-gray-700">Health & Beauty</span>
                 </div>
 
@@ -132,10 +132,10 @@
     <!-- 5. GLOBAL EXPANSION VISION SECTION (Dark Section) -->
     <section class="bg-black py-24 md:py-32 text-center">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl sm:text-5xl font-display font-medium tracking-wide text-white mb-6">
+            <h2 class="text-4xl sm:text-5xl font-display font-medium tracking-wide text-[#d4af37] mb-6">
                 Global Expansion Vision
             </h2>
-            <p class="text-lg text-gray-400 max-w-3xl mx-auto">
+            <p class="text-lg text-white max-w-3xl mx-auto">
                 MJCheezain aims to become a leading international e-commerce platform, connecting vendors and customers from all corners of the globe. We are actively working to expand our presence in key markets, bringing our diverse product range and exceptional service to a worldwide audience.
             </p>
         </div>
@@ -143,14 +143,14 @@
 
     <!-- 6. VALUE PROPOSITIONS SECTION -->
     <section class="bg-off-white py-20 md:py-32">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width: 100rem;">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 
                 <!-- Card 1: Affordable Pricing -->
                 <div class="bg-white p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100 text-center flex flex-col items-center">
                     <!-- Icon: Dollar Sign / Pricing -->
-                    <div class="w-12 h-12 flex items-center justify-center rounded-full border border-custom-gold mb-5">
-                        <i data-lucide="dollar-sign" class="w-6 h-6 text-custom-gold stroke-[1.5]"></i>
+                    <div class="w-12 h-12 flex items-center justify-center rounded-full border border-[#d4af37] mb-5">
+                        <i data-lucide="dollar-sign" class="w-6 h-6 text-[#d4af37] stroke-[1.5]"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-2">
                         Affordable Pricing
@@ -163,8 +163,8 @@
                 <!-- Card 2: Diverse Selection -->
                 <div class="bg-white p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100 text-center flex flex-col items-center">
                     <!-- Icon: Grid / Diverse Selection -->
-                    <div class="w-12 h-12 flex items-center justify-center rounded-full border border-custom-gold mb-5">
-                        <i data-lucide="layout-grid" class="w-6 h-6 text-custom-gold stroke-[1.5]"></i>
+                    <div class="w-12 h-12 flex items-center justify-center rounded-full border border-[#d4af37] mb-5">
+                        <i data-lucide="layout-grid" class="w-6 h-6 text-[#d4af37] stroke-[1.5]"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-2">
                         Diverse Selection
@@ -177,8 +177,8 @@
                 <!-- Card 3: Smooth Experience -->
                 <div class="bg-white p-8 sm:p-10 rounded-xl shadow-lg border border-gray-100 text-center flex flex-col items-center">
                     <!-- Icon: Code / Experience -->
-                    <div class="w-12 h-12 flex items-center justify-center rounded-full border border-custom-gold mb-5">
-                        <i data-lucide="code" class="w-6 h-6 text-custom-gold stroke-[1.5]"></i>
+                    <div class="w-12 h-12 flex items-center justify-center rounded-full border border-[#d4af37] mb-5">
+                        <i data-lucide="code" class="w-6 h-6 text-[#d4af37] stroke-[1.5]"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-2">
                         Smooth Experience
@@ -194,27 +194,27 @@
 
     <!-- 7. OUR PROMISE SECTION (New Section) -->
     <section class="bg-off-white pt-20 pb-16 md:pb-32">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width: 100rem;">
             <h2 class="text-4xl sm:text-5xl font-display font-medium tracking-wide text-center mb-12">
                 Our Promise
             </h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 bg-white p-8 sm:p-12 rounded-xl shadow-lg border border-gray-100">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 p-8 sm:p-12 rounded-xl border border-gray-100">
                 
                 <!-- Column 1: For Customers -->
                 <div>
                     <h3 class="text-xl font-bold text-gray-900 mb-4">For Customers</h3>
                     <ul class="space-y-3">
                         <li class="flex items-start">
-                            <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-1 text-custom-gold flex-shrink-0"></i>
+                            <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-1 text-[#d4af37] flex-shrink-0"></i>
                             <span class="text-base text-gray-700">Genuine products with quality assurance</span>
                         </li>
                         <li class="flex items-start">
-                            <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-1 text-custom-gold flex-shrink-0"></i>
+                            <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-1 text-[#d4af37] flex-shrink-0"></i>
                             <span class="text-base text-gray-700">Competitive pricing across all categories</span>
                         </li>
                         <li class="flex items-start">
-                            <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-1 text-custom-gold flex-shrink-0"></i>
+                            <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-1 text-[#d4af37] flex-shrink-0"></i>
                             <span class="text-base text-gray-700">Secure payment options</span>
                         </li>
                     </ul>
@@ -225,15 +225,15 @@
                     <h3 class="text-xl font-bold text-gray-900 mb-4">For Sellers</h3>
                     <ul class="space-y-3">
                         <li class="flex items-start">
-                            <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-1 text-custom-gold flex-shrink-0"></i>
+                            <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-1 text-[#d4af37] flex-shrink-0"></i>
                             <span class="text-base text-gray-700">Low commission rates</span>
                         </li>
                         <li class="flex items-start">
-                            <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-1 text-custom-gold flex-shrink-0"></i>
+                            <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-1 text-[#d4af37] flex-shrink-0"></i>
                             <span class="text-base text-gray-700">Easy-to-use vendor dashboard</span>
                         </li>
                         <li class="flex items-start">
-                            <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-1 text-custom-gold flex-shrink-0"></i>
+                            <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-1 text-[#d4af37] flex-shrink-0"></i>
                             <span class="text-base text-gray-700">Marketing and promotional support</span>
                         </li>
                     </ul>
@@ -252,7 +252,7 @@
 
     <!-- 9. NEWSLETTER/FOOTER SECTION (New Section) -->
     <footer class="bg-off-white pt-10 pb-20 md:pb-32">
-        <div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="mx-auto px-4 sm:px-6 lg:px-8 text-center" style="max-width: 100rem;">
             
             <h3 class="text-3xl font-display font-medium mb-3">
                 Join Our Luxury Circle
@@ -261,19 +261,19 @@
                 Get exclusive offers & style updates from MJ CHEEZAIN.
             </p>
             
-            <form class="flex flex-col sm:flex-row gap-4 justify-center">
+            <form class="flex flex-col sm:flex-row gap-4 justify-center align-center max-w-md m-auto">
                 <!-- Email Input -->
                 <input 
                     type="email" 
                     placeholder="Enter your email address"
-                    class="w-full sm:w-auto flex-grow px-5 py-3 border border-gray-300 rounded-md text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-custom-gold"
+                    class="w-full sm:w-auto flex-grow px-5 border border-gray-300 rounded-md text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#d4af37] h-8"
                     aria-label="Email address for newsletter"
                 >
                 
                 <!-- Subscribe Button -->
                 <button 
                     type="submit"
-                    class="w-full sm:w-auto bg-custom-gold text-white font-semibold px-6 py-3 rounded-md shadow-md transition duration-300 hover:bg-custom-gold/90 focus:outline-none focus:ring-2 focus:ring-custom-gold focus:ring-offset-2"
+                    class="w-full sm:w-auto bg-white text-black px-6 py-0 rounded-md shadow-md transition duration-300 hover:bg-[#d4af37]/90 focus:outline-none focus:ring-2 focus:ring-[#d4af37] focus:ring-offset-2 h-8 m-0 border-2 shadow-[#d4af37]"
                 >
                     SUBSCRIBE
                 </button>

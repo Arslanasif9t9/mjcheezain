@@ -9,7 +9,7 @@
                 <h3 class="text-xl font-serif font-bold text-gray-900 mb-6">About MJ CHEEZAIN</h3>
                 <ul class="space-y-3">
                     <li><a href="/about" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">About Us</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Future Vision</a></li>
+                    <li><a href="/FAQs" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Future Vision</a></li>
                     <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Contact Us</a></li>
                 </ul>
             </div>
@@ -18,11 +18,11 @@
             <div>
                 <h3 class="text-xl font-serif font-bold text-gray-900 mb-6">Customer Service</h3>
                 <ul class="space-y-3">
-                    <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">FAQs</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Track Your Order</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Return & Refund Policy</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Shipping Policy</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Secure Payment Assurance</a></li>
+                    <li><a href="/FAQs" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">FAQs</a></li>
+                    <li><a href="/FAQs" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Track Your Order</a></li>
+                    <li><a href="/FAQs" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Return & Refund Policy</a></li>
+                    <li><a href="/FAQs" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Shipping Policy</a></li>
+                    <li><a href="/FAQs" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Secure Payment Assurance</a></li>
                 </ul>
             </div>
 

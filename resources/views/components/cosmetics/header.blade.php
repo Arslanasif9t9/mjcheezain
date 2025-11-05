@@ -6,8 +6,8 @@
                 <!-- Left Section: Logo/Brand -->
                 <div class="flex items-center flex-shrink-0">
                     <!-- Icon placeholder from the image (used Lucide 'Warehouse' for a store feel) -->
-                     <img src="{{ asset('img/short_logo.jpeg') }}" class="w-24 h-8">
-                    <span class="text-2xl font-extrabold text-gray-900 tracking-tight">MJ Cheezdin</span>
+                     <img src="{{ asset('img/short_logo.jpeg') }}" class="w-32 h-8" style="margin-top: -7px">
+                    <span class="text-3xl font-extrabold text-gray-900 tracking-tight">MJ Cheezain</span>
                 </div>
 
                 <!-- Center Section: Search Bar (Hidden on mobile for better space) -->

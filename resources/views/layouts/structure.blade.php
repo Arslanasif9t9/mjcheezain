@@ -14,6 +14,7 @@
     <script src="./CDN tailwind.js"></script>
     <!-- font-awesome  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Google font  -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,5 +46,7 @@
 </head>
 <body class="bg-gray-50 font-sans">
     @yield('body')
+
+    @yield('script')
 </body>
 </html>
