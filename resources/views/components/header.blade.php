@@ -107,7 +107,7 @@
             
             <!-- Title Section -->
             <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6 flex align-center">
-                <img src="{{ asset('img/short_logo.jpeg') }}" class="w-24 h-8">
+                <img src="{{ asset('img/short_logo.jpeg') }}" class="w-32 h-8" style="margin-top: -7px;">
                 <span>MJ Cheezain</span>
             </h1>
 
@@ -126,7 +126,7 @@
                 </script>
                 <div class="flex flex-wrap gap-2" x-init>
                     <button class="px-4 py-1 text-sm font-medium rounded-full bg-gray-900 text-white transition duration-200 shadow-sm">All</button>
-                    <a href="cosmetics"><button class="px-4 py-1 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm">Cosmetics</button></a>
+                    <a href="cosmetics"><button class="px-4 py-1 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm"><span class="PFDI">MJ</span>Cosmetics</button></a>
                     {{-- <button class="px-4 py-1 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm">New Arrivals</button>
                     <button class="px-4 py-1 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm">Collections</button>
                     <button class="px-4 py-1 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm">Followed</button>
@@ -140,8 +140,8 @@
                 <!-- 1. Large Featured Card (Spans 2 columns on large screens) -->
                 <div class="lg:col-span-2 relative h-[503px] rounded-2xl overflow-hidden shadow-xl group cursor-pointer transition transform duration-300">
                     <!-- Zoom Effect Applied Here -->
-                    <img src="https://placehold.co/1200x800/f5c3d4/9a5874?text=Luxury+Fragrance+Campaign" 
-                         alt="Luxury Fragrance" class="w-full h-full object-cover brightness-75 group-hover:brightness-90 group-hover:scale-125 transition duration-500">
+                    <img src="{{ asset('img/hero-1.jpeg') }}" 
+                         alt="Luxury Fragrance" class="w-full h-full object-cover brightness-100 group-hover:brightness-100 group-hover:scale-125 transition duration-500">
                     
                     <!-- Content Overlay -->
                     <div class="absolute inset-0 flex flex-col justify-end p-8 bg-gradient-to-t from-black/50 to-transparent">
@@ -160,8 +160,8 @@
                     <!-- Top Small Card: Lipstick -->
                     <div class="relative h-[240px] rounded-2xl overflow-hidden shadow-lg group cursor-pointer transition transform duration-300">
                          <!-- Zoom Effect Applied Here -->
-                        <img src="https://placehold.co/800x400/ffe65c/d9101c?text=Red+Lipstick+Collection" 
-                             alt="Red Lipstick" class="w-full h-full object-cover brightness-90 group-hover:brightness-100 group-hover:scale-125 transition duration-500">
+                        <img src="{{ asset('img/hero-2.jpeg') }}" 
+                             alt="Red Lipstick" class="w-full h-full object-cover brightness-100 group-hover:brightness-100 group-hover:scale-125 transition duration-500">
                         <!-- Optional Title Overlay -->
                         <div class="absolute top-0 left-0 p-5">
                             <h3 class="text-lg font-semibold text-gray-800 bg-white/70 backdrop-blur-sm px-3 py-1 rounded-lg">
@@ -173,8 +173,8 @@
                     <!-- Bottom Small Card: Apparel/Model -->
                     <div class="relative h-[240px] rounded-2xl overflow-hidden shadow-lg group cursor-pointer transition transform duration-300">
                          <!-- Zoom Effect Applied Here -->
-                        <img src="https://placehold.co/800x400/e9d0c2/6e4d3a?text=New+Summer+Apparel" 
-                             alt="Summer Apparel" class="w-full h-full object-cover brightness-75 group-hover:brightness-90 group-hover:scale-125 transition duration-500">
+                        <img src="{{ asset('img/hero-3.jpeg') }}" 
+                             alt="Summer Apparel" class="w-full h-full object-cover brightness-100 group-hover:brightness-100 group-hover:scale-125 transition duration-500">
                         <!-- Optional Title Overlay -->
                         <div class="absolute inset-x-0 bottom-0 p-5">
                             <h3 class="text-xl font-bold text-white drop-shadow-md">

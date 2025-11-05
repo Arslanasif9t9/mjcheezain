@@ -28,7 +28,7 @@
                          class="w-full h-full object-cover absolute inset-0 
                                 brightness-[.6] 
                                 transition duration-500 ease-in-out 
-                                group-hover:scale-105 
+                                group-hover:scale-125 
                                 group-hover:brightness-75">
                     <div class="absolute inset-0 flex flex-col justify-end p-6 text-left">
                         <h3 class="text-2xl font-bold text-white mb-2 drop-shadow-md">Cosmetics</h3>
@@ -44,7 +44,7 @@
                          class="w-full h-full object-cover absolute inset-0 
                                 brightness-[.7] 
                                 transition duration-500 ease-in-out 
-                                group-hover:scale-105 
+                                group-hover:scale-125 
                                 group-hover:brightness-80">
                     <div class="absolute inset-0 flex flex-col justify-end p-6 text-left">
                         <h3 class="text-2xl font-bold text-white mb-2 drop-shadow-md">Skincare</h3>
@@ -60,7 +60,7 @@
                          class="w-full h-full object-cover absolute inset-0 
                                 brightness-[.8] 
                                 transition duration-500 ease-in-out 
-                                group-hover:scale-105 
+                                group-hover:scale-125 
                                 group-hover:brightness-90">
                     <div class="absolute inset-0 flex flex-col justify-end p-6 text-left">
                         <h3 class="text-2xl font-bold text-gray-900 mb-2 drop-shadow-md">Haircare</h3>
@@ -76,7 +76,7 @@
                          class="w-full h-full object-cover absolute inset-0 
                                 brightness-[.6] 
                                 transition duration-500 ease-in-out 
-                                group-hover:scale-105 
+                                group-hover:scale-125 
                                 group-hover:brightness-75">
                     <div class="absolute inset-0 flex flex-col justify-end p-6 text-left">
                         <h3 class="text-2xl font-bold text-white mb-2 drop-shadow-md">Fragrances</h3>
@@ -92,7 +92,7 @@
                          class="w-full h-full object-cover absolute inset-0 
                                 brightness-[.7] 
                                 transition duration-500 ease-in-out 
-                                group-hover:scale-105 
+                                group-hover:scale-125 
                                 group-hover:brightness-80">
                     <div class="absolute inset-0 flex flex-col justify-end p-6 text-left">
                         <h3 class="text-2xl font-bold text-white mb-2 drop-shadow-md">Accessories</h3>

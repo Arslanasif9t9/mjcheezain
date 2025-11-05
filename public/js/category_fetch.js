@@ -112,7 +112,7 @@
                     card.innerHTML = `
                         <div class="relative overflow-hidden aspect-w-4 aspect-h-3">
                             <img src="${product.image_url}" alt="${product.name}" 
-                                 class="w-full h-full object-cover transition duration-300 ease-in-out group-hover:scale-105">
+                                 class="w-full h-full object-cover transition duration-300 ease-in-out group-hover:scale-125">
                         </div>
 
                         <div class="p-4">
@@ -121,7 +121,10 @@
                             
                             <div class="flex justify-between items-baseline my-3">
                                 <span class="text-xl font-extrabold text-gray-900">${product.price}</span>
-                                
+                                <div class="flex items-center">
+                                <span class="font-semibold">4.99 </span>
+                                    <span class="text-yellow-500 text-lg mr-1"> ★</span>
+                                </div>                          
                             </div>
                             <!-- Quick View Button -->
                             <button class="px-4 py-2 text-sm font-semibold text-white bg-gray-900 rounded-lg w-full 

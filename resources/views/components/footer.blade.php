@@ -8,7 +8,7 @@
             <div>
                 <h3 class="text-xl font-serif font-bold text-gray-900 mb-6">About MJ CHEEZAIN</h3>
                 <ul class="space-y-3">
-                    <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">About Us</a></li>
+                    <li><a href="/about" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">About Us</a></li>
                     <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Future Vision</a></li>
                     <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Contact Us</a></li>
                 </ul>

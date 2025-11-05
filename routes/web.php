@@ -16,6 +16,12 @@ Route::view('createDB', 'mydatabase/creation');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::view('cosmetics', 'brands/cosmetics');
 
+Route::view('/about', 'footer/about');
+
+
+
+
+
 // Authentication routes
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/signup', [AuthController::class, 'signup'])->name('signup');
