@@ -10,6 +10,6 @@
         </video>
 
         <!-- Video Overlay (Dark gradient for text readability) - z-10 is below the text -->
-        {{-- <div class="absolute inset-0 z-10 bg-black/40"></div> --}}
-        <div class="sticky top-20 z-20 text-center PFDI text-3xl text-white font-extrabold">MJ</div>
+        <div class="absolute inset-0 z-10 bg-black/40"></div>
+        <div class="sticky top-20 z-20 text-center PFDI text-5xl text-white font-extrabold">MJ</div>
     </div>

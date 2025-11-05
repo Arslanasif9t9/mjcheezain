@@ -107,7 +107,10 @@
             
             <!-- Title Section -->
             <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6 flex align-center">
-                <img src="{{ asset('img/short_logo.jpeg') }}" class="w-32 h-8" style="margin-top: -7px;">
+                <div>
+                    <img src="{{ asset('img/short_logo.jpeg') }}" class="w-32 h-8" style="margin-top: -7px;">
+                    <p class="" style="font-size: 0.6rem; font-weight: 400; margin-top: -10px;">Elegance in every choice</p>
+                </div>
                 <span>MJ Cheezain</span>
             </h1>
 

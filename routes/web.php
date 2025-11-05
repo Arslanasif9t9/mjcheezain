@@ -16,8 +16,13 @@ Route::view('createDB', 'mydatabase/creation');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::view('cosmetics', 'brands/cosmetics');
 
+Route::view('/register', 'home/login');
+Route::view('/cart', 'cart');
+Route::view('/product', 'product');
+
 Route::view('/about', 'footer/about');
-Route::view('FAQs', 'footer/FAQs');
+Route::view('/FAQs', 'footer/FAQs');
+Route::view('/legal-policies', 'footer/legal-policies');
 
 
 

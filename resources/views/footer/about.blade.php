@@ -5,7 +5,7 @@
 
         <!-- 1. WELCOME / HERO SECTION -->
         <section class="py-20 md:py-32 text-center">
-            <h1 class="text-3xl sm:text-6xl font-display font-medium tracking-wider mb-3">
+            <h1 class="text-3xl sm:text-6xl font-display font-medium tracking-wider mb-3 PFDI">
                 Welcome to MJ CHEEZAIN
             </h1>
             <p class="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -23,7 +23,7 @@
                 
                 <!-- LEFT COLUMN: Text Content -->
                 <div class="space-y-6">
-                    <h2 class="text-3xl sm:text-4xl font-bold border-b-2 border-gray-300 inline-block pb-2 mb-4">
+                    <h2 class="text-3xl sm:text-4xl font-bold border-b-2 border-gray-300 inline-block pb-2 mb-4 PFDI">
                         Our Journey
                     </h2>
                     <p class="text-base leading-relaxed text-gray-700">
@@ -71,7 +71,7 @@
                 <!-- RIGHT COLUMN (Order 2 on desktop): Text Content -->
                 <div class="order-1 lg:order-2 space-y-6">
                     <!-- The font-display class applies the stylized font -->
-                    <h2 class="text-4xl sm:text-5xl font-display font-medium leading-tight tracking-wide">
+                    <h2 class="text-4xl sm:text-5xl font-display font-medium leading-tight tracking-wide PFDI">
                         Expanding Beyond Auto Parts
                     </h2>
                     <p class="text-base leading-relaxed text-gray-700">
@@ -86,7 +86,7 @@
 
         <!-- 4. OUR PRODUCT CATEGORIES SECTION -->
         <section class="py-20 md:py-32 text-center">
-            <h2 class="text-4xl sm:text-5xl font-display font-medium tracking-wide mb-16">
+            <h2 class="text-4xl sm:text-5xl font-display font-medium tracking-wide mb-16 PFDI">
                 Our Product Categories
             </h2>
             
@@ -132,7 +132,7 @@
     <!-- 5. GLOBAL EXPANSION VISION SECTION (Dark Section) -->
     <section class="bg-black py-24 md:py-32 text-center">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl sm:text-5xl font-display font-medium tracking-wide text-[#d4af37] mb-6">
+            <h2 class="PFDI text-4xl sm:text-5xl font-display font-medium tracking-wide text-[#d4af37] mb-6">
                 Global Expansion Vision
             </h2>
             <p class="text-lg text-white max-w-3xl mx-auto">
@@ -195,7 +195,7 @@
     <!-- 7. OUR PROMISE SECTION (New Section) -->
     <section class="bg-off-white pt-20 pb-16 md:pb-32">
         <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width: 100rem;">
-            <h2 class="text-4xl sm:text-5xl font-display font-medium tracking-wide text-center mb-12">
+            <h2 class="PFDI text-4xl sm:text-5xl font-display font-medium tracking-wide text-center mb-12">
                 Our Promise
             </h2>
             
@@ -249,38 +249,6 @@
             MJ CHEEZAIN — Redefining Global Shopping with Trust, Quality & Style.
         </p>
     </div>
-
-    <!-- 9. NEWSLETTER/FOOTER SECTION (New Section) -->
-    <footer class="bg-off-white pt-10 pb-20 md:pb-32">
-        <div class="mx-auto px-4 sm:px-6 lg:px-8 text-center" style="max-width: 100rem;">
-            
-            <h3 class="text-3xl font-display font-medium mb-3">
-                Join Our Luxury Circle
-            </h3>
-            <p class="text-base text-gray-700 mb-6">
-                Get exclusive offers & style updates from MJ CHEEZAIN.
-            </p>
-            
-            <form class="flex flex-col sm:flex-row gap-4 justify-center align-center max-w-md m-auto">
-                <!-- Email Input -->
-                <input 
-                    type="email" 
-                    placeholder="Enter your email address"
-                    class="w-full sm:w-auto flex-grow px-5 border border-gray-300 rounded-md text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#d4af37] h-8"
-                    aria-label="Email address for newsletter"
-                >
-                
-                <!-- Subscribe Button -->
-                <button 
-                    type="submit"
-                    class="w-full sm:w-auto bg-white text-black px-6 py-0 rounded-md shadow-md transition duration-300 hover:bg-[#d4af37]/90 focus:outline-none focus:ring-2 focus:ring-[#d4af37] focus:ring-offset-2 h-8 m-0 border-2 shadow-[#d4af37]"
-                >
-                    SUBSCRIBE
-                </button>
-            </form>
-
-        </div>
-    </footer>
 
     <!-- Script to initialize Lucide Icons -->
     <script>

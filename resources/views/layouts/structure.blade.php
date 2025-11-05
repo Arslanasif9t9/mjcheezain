@@ -35,6 +35,7 @@
     <style>        
         .PFDI {
             font-family: "Playfair Display", serif;
+            font-weight: 900;
             font-optical-sizing: auto;
             font-weight: <weight>;
             font-style: italic;

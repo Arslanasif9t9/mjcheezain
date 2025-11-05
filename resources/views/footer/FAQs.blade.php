@@ -42,11 +42,11 @@
 @endsection
 
 @section('body')
-    <div class="mx-auto px-4 py-12 md:py-20" style="max-width: 100rem;">
+    <div class="max-w-5xl mx-auto px-4 py-12 md:py-20">
 
         <!-- Header Section -->
         <header class="text-center mb-10 md:mb-16">
-            <h1 class="font-script text-5xl md:text-6xl font-normal text-gray-900 mb-4">
+            <h1 class="font-script text-3xl md:text-5xl font-normal text-gray-900 mb-4 PFDI">
                 Welcome to the MJCheezain Help Center
             </h1>
             <p class="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -98,7 +98,14 @@
                         <span class="plus-icon text-xl transition-transform duration-300 transform">+</span>
                     </button>
                     <div class="accordion-content px-4 bg-gray-50 rounded-b-lg">
-                        <p class="text-gray-600">You can place an order by browsing our products, adding your desired items to the cart, and proceeding to checkout. Follow the simple steps to enter your shipping details and payment information.</p>
+                        <p>To place an order on MJCheezain.com:<br>
+                            &nbsp; 1. Browse the product categories or use the search bar to find the item you want.<br>
+                            &nbsp; 2. Click on the product to view details.<br>
+                            &nbsp; 3. Select the quantity or variant (if applicable), then click "Add to Cart."<br>
+                            &nbsp; 4. Go to your cart and click "Checkout."<br>
+                            &nbsp; 5. Enter your shipping address and select your preferred payment method.<br>
+                            &nbsp; 6. Confirm your order.<br>
+                            Once your order is placed, you'll receive a confirmation via SMS and email.</p>
                     </div>
                 </div>
                 <!-- FAQ Item 2 -->
@@ -108,7 +115,11 @@
                         <span class="plus-icon text-xl transition-transform duration-300 transform">+</span>
                     </button>
                     <div class="accordion-content px-4 bg-gray-50 rounded-b-lg">
-                        <p class="text-gray-600">Yes, you will receive both an email confirmation immediately after placing your order and an SMS notification when the order is dispatched for shipping.</p>
+                        <p>To place an order on MJCheezain.com:<br>
+                            <p>Yes. Once your order is successfully placed and confirmed, you will receive:<br>
+                            &nbsp; • An SMS confirmation with your order ID.<br>
+                            &nbsp; • An email receipt with product details, payment method, and estimated delivery time.<br>
+                            Please make sure your phone number and email address are entered correctly during checkout.</p>
                     </div>
                 </div>
                 <!-- FAQ Item 3 -->
@@ -118,7 +129,7 @@
                         <span class="plus-icon text-xl transition-transform duration-300 transform">+</span>
                     </button>
                     <div class="accordion-content px-4 bg-gray-50 rounded-b-lg">
-                        <p class="text-gray-600">Once your order is shipped, you will receive a tracking number via email and SMS. You can use this number on our partner courier's website to monitor the delivery status.</p>
+                        <p>To track your order:<br>&nbsp; 1. Go to the "Track Your Order" page on our website.<br>&nbsp; 2. Enter your Order ID and registered email or phone number.<br>&nbsp; 3. You'll see real-time updates including "Processing," "Shipped," and "Out for Delivery."<br>If you face any issues, contact our support team.</p>
                     </div>
                 </div>
             </div>
@@ -135,7 +146,7 @@
                         <span class="plus-icon text-xl transition-transform duration-300 transform">+</span>
                     </button>
                     <div class="accordion-content px-4 bg-gray-50 rounded-b-lg">
-                        <p class="text-gray-600">Currently, we support Cash on Delivery (COD), Credit/Debit Card payments, and select digital wallet options. Please check the checkout page for the latest available methods.</p>
+                        <p>Yes. MJCheezain supports multiple payment methods including:<br>&nbsp; • JazzCash<br>&nbsp; • Easypaisa<br>&nbsp; • Bank Transfer<br>&nbsp; • Cash on Delivery (COD)<br>You'll be given full instructions at checkout based on the method you select.</p>
                     </div>
                 </div>
                 <!-- FAQ Item 5 -->
@@ -145,7 +156,7 @@
                         <span class="plus-icon text-xl transition-transform duration-300 transform">+</span>
                     </button>
                     <div class="accordion-content px-4 bg-gray-50 rounded-b-lg">
-                        <p class="text-gray-600">Please wait for 24 hours. The deducted amount is usually reversed by your bank within this period. If the issue persists, please contact our support team with your transaction ID.</p>
+                        <p>If your transaction failed but the amount was deducted:<br>&nbsp; • Don’t worry — in most cases, the payment gateway auto-refunds the amount within 24 hours.<br>&nbsp; • If the amount is not refunded automatically, please:<br>&nbsp;&nbsp;&nbsp; 1. Take a screenshot of the deduction.<br>&nbsp;&nbsp;&nbsp; 2. Contact our support team via WhatsApp or email with proof.<br>We will verify and issue the refund manually if required.</p>
                     </div>
                 </div>
                 <!-- FAQ Item 6 -->
@@ -155,7 +166,7 @@
                         <span class="plus-icon text-xl transition-transform duration-300 transform">+</span>
                     </button>
                     <div class="accordion-content px-4 bg-gray-50 rounded-b-lg">
-                        <p class="text-gray-600">Yes, a payment confirmation email will be sent to your registered email address immediately upon successful transaction.</p>
+                        <p>Yes, after your payment is successfully processed:<br>&nbsp; • You'll receive an instant SMS.<br>&nbsp; • An email receipt will also be sent to your registered email address.<br>This confirmation includes the order ID, payment amount, and method used.</p>
                     </div>
                 </div>
             </div>
@@ -172,7 +183,7 @@
                         <span class="plus-icon text-xl transition-transform duration-300 transform">+</span>
                     </button>
                     <div class="accordion-content px-4 bg-gray-50 rounded-b-lg">
-                        <p class="text-gray-600">Standard delivery typically takes 3-5 business days depending on your location. Expedited options may be available at checkout.</p>
+                        <p>Our standard delivery timeframe is:<br>&nbsp; • 2–5 working days for major cities.<br>&nbsp; • Up to 7 days for remote or rural areas.<br>We always strive for faster deliveries via trusted courier partners.</p>
                     </div>
                 </div>
                 <!-- FAQ Item 8 -->
@@ -182,7 +193,7 @@
                         <span class="plus-icon text-xl transition-transform duration-300 transform">+</span>
                     </button>
                     <div class="accordion-content px-4 bg-gray-50 rounded-b-lg">
-                        <p class="text-gray-600">Yes, Cash on Delivery is available for most locations within the country.</p>
+                        <p>Yes, COD is available in most areas across Pakistan.<br><br>You can choose COD during checkout if you prefer to pay after receiving the item.<br><br>Note: For high-value orders or customized items, partial advance payment may be requested.</p>
                     </div>
                 </div>
                 <!-- FAQ Item 9 -->
@@ -192,7 +203,7 @@
                         <span class="plus-icon text-xl transition-transform duration-300 transform">+</span>
                     </button>
                     <div class="accordion-content px-4 bg-gray-50 rounded-b-lg">
-                        <p class="text-gray-600">Delivery charges are calculated based on your order weight and delivery location, and will be displayed clearly at the checkout page before you finalize your order.</p>
+                        <p>Delivery charges are calculated based on:<br>&nbsp; • Your location<br>&nbsp; • The size and weight of the product<br><br>You'll see the exact delivery cost at the checkout before confirming your order.<br><br>Occasionally, we offer free delivery promotions, so keep an eye out!</p>
                     </div>
                 </div>
             </div>
@@ -219,7 +230,7 @@
                         <span class="plus-icon text-xl transition-transform duration-300 transform">+</span>
                     </button>
                     <div class="accordion-content px-4 bg-gray-50 rounded-b-lg">
-                        <p class="text-gray-600">Once your returned item is received and inspected, the refund process will begin. It typically takes 5-10 business days for the amount to reflect in your bank account.</p>
+                        <p>Once your returned product is approved and received:<br>&nbsp; • Your refund will be processed within 3–5 working days<br>&nbsp; • Refund will be sent to your JazzCash, Easypaisa, or bank account<br>&nbsp; • You'll be notified via SMS and email when your refund is released.</p>
                     </div>
                 </div>
                 <!-- FAQ Item 12 -->
@@ -236,10 +247,10 @@
         </section>
 
     </div>
-@endsection
 
-@section('script')
-    <!-- JavaScript for Accordion and Tab Switching Functionality -->
+
+
+
     <script>
         // Function to toggle individual FAQ items (accordion)
         function toggleAccordion(header) {
@@ -305,5 +316,10 @@
             }
         };
     </script>
+@endsection
+
+@section('script')
+    <!-- JavaScript for Accordion and Tab Switching Functionality -->
+    
 
 @endsection

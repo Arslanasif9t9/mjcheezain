@@ -44,10 +44,10 @@
                 <div>
                     <h3 class="text-xl font-serif font-bold text-gray-900 mb-6 mt-0">Legal & Policies</h3>
                     <ul class="space-y-3">
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Terms & Conditions</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Privacy Policy</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Cookie Policy</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Disclaimer</a></li>
+                        <li><a href="/legal-policies" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Terms & Conditions</a></li>
+                        <li><a href="/legal-policies" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Privacy Policy</a></li>
+                        <li><a href="/legal-policies" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Cookie Policy</a></li>
+                        <li><a href="/legal-policies" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Disclaimer</a></li>
                     </ul>
                 </div>
             <div class="grid grid-cols-1 gap-10 md:col-span-2 lg:col-span-1">
