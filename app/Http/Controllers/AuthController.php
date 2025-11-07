@@ -27,21 +27,14 @@ class AuthController extends Controller
                         return $query->where('type', $request->type);
                     }),
                 ],
-                'phone' => [
-                    'required',
-                    'string',
-                    Rule::unique('users')->where(function ($query) use ($request) {
-                        return $query->where('type', $request->type);
-                    }),
-                ],
-                'password' => 'required|min:6|confirmed',
+                'password' => 'required|min:6',
             ]);
-
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // dd('Validation failed', $e->errors());
-            return redirect('/')
-            ->withErrors($e->validator)
-            ->withInput();
+            // ✅ Return JSON validation response correctly
+            return response()->json([
+                'errors' => $e->validator->errors(),
+                'old_input' => $request->all(),
+            ], 422);
         }
 
         // Generate unique username
@@ -54,50 +47,56 @@ class AuthController extends Controller
             'full_name' => $request->name,
             'username' => $tempUsername,
             'email' => $request->email,
-            'phone' => $request->phone,
+            'phone' => null,
             'password' => Hash::make($request->password),
         ]);
 
-        // Optional: Update username again with ID (for prettier look)
-        // $finalUsername = $firstName . $user->id;
-        // $user->update(['username' => $finalUsername]);
-
         // Create related profile
         if ($request->type === 'vendor') {
-            VendorBasicInfo::create([
-                'user_id' => $user->user_id,
-                'full_name' => $request->name,
-                'store_name' => $request->name,
-                'phone' => $request->phone,
-                'email' => $request->email,
-            ]);
-            DB::table('vendor_store_details')->insert([
-                'user_id' => $user->user_id,
-            ]);
-            DB::table('vendor_address')->insert([
-                'user_id' => $user->user_id,
-            ]);
+            // VendorBasicInfo::create([
+            //     'user_id' => $user->user_id,
+            //     'full_name' => $request->name,
+            //     'store_name' => $request->name,
+            //     'phone' => null,
+            //     'email' => $request->email,
+            // ]);
 
+            // DB::table('vendor_store_details')->insert([
+            //     'user_id' => $user->user_id,
+            // ]);
+
+            // DB::table('vendor_address')->insert([
+            //     'user_id' => $user->user_id,
+            // ]);
         } else {
             $nameParts = explode(' ', $request->name, 2);
-            $customer = CustomerProfile::create([
+            CustomerProfile::create([
                 'user_id' => $user->user_id,
                 'first_name' => $nameParts[0],
                 'last_name' => $nameParts[1] ?? '',
                 'email' => $request->email,
-                'phone' => $request->phone,
+                'phone' => null,
             ]);
-            // dd($customer->email);
         }
 
         // Auto login
         Auth::login($user);
 
-        // Redirect based on type
+        // Return success JSON response
         if ($user->type === 'vendor') {
-            return redirect('/vendor/dashboard')->with('success', 'Vendor account created successfully!');
+            return response()->json([
+                'success' => true,
+                'type' => 'vendor',
+                'message' => 'Vendor account created successfully!',
+                'redirect' => url('/vendor/dashboard'),
+            ]);
         } else {
-            return redirect('/customer/dashboard')->with('success', 'Customer account created successfully!');
+            return response()->json([
+                'success' => true,
+                'type' => 'customer',
+                'message' => 'Customer account created successfully!',
+                'redirect' => url('/customer/dashboard'),
+            ]);
         }
     }
 

@@ -7,6 +7,18 @@
     <title>
         @yield('title')
     </title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="MJCheezain.com – Discover unique and quality products with excellent customer support. Visit our online store today.">
+    <meta name="keywords" content="MJCheezain, mjcheezain.com, online store, unique items">
+    <meta name="author" content="MJCheezain">
+    <meta property="og:title" content="MJCheezain – Unique Items">
+    <meta property="og:description" content="Discover great products only at MJCheezain.com.">
+    <meta property="og:url" content="{{ url('/') }}">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="{{ asset('img/short_logo.jpeg') }}">
+    <link rel="icon" type="image/jpeg" href="{{ asset('img/short_logo.jpeg') }}">
+
     <!-- Tailwind CSS  -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">

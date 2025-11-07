@@ -13,7 +13,9 @@
     <meta property="og:description" content="Discover great products only at MJCheezain.com.">
     <meta property="og:url" content="{{ url('/') }}">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="{{ asset('img/logo.jpg') }}">
+    <meta property="og:image" content="{{ asset('img/short_logo.jpeg') }}">
+    <link rel="icon" type="image/jpeg" href="{{ asset('img/short_logo.jpeg') }}">
+
 
     <!-- CSS Links -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">

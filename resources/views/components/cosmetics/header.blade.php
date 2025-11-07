@@ -29,7 +29,7 @@
                 <!-- Right Section: Navigation Links (Flex-shrink to prioritize search on wider screens) -->
                 <nav class="hidden md:flex items-center space-x-6 flex-shrink-0">
                     <a href="/" class="text-gray-600 hover:text-primary font-semibold transition duration-200 p-2 rounded-lg">Home</a>
-                    <a href="#products" class="text-gray-600 hover:text-primary font-semibold transition duration-200 p-2 rounded-lg">Product Listings</a>
+                    <a href="/product-listing" class="text-gray-600 hover:text-primary font-semibold transition duration-200 p-2 rounded-lg">Product Listings</a>
                     @auth
                         <x-user-profile :user="$user" :profile="$profile" :dashboardPage="$dashboardPage" :imgPath="$imgPath" />
                     @else

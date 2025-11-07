@@ -15,6 +15,7 @@ Route::view('createDB', 'mydatabase/creation');
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::view('cosmetics', 'brands/cosmetics');
+Route::view('/product-listing', 'brands/product-listing');
 
 Route::view('/register', 'home/login');
 Route::view('/cart', 'cart');
