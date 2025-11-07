@@ -21,8 +21,15 @@ Route::view('/cart', 'cart');
 Route::view('/product', 'product');
 
 Route::view('/about', 'footer/about');
+Route::view('/future-vision', 'footer/future-vision');
+Route::view('/contact-us', 'footer/contact-us');
 Route::view('/FAQs', 'footer/FAQs');
+Route::view('/vendor-zone','footer/vendor-zone');
 Route::view('/legal-policies', 'footer/legal-policies');
+Route::view('/privacy-policy', 'footer/privacy-policy');
+Route::view('/cookie-policy', 'footer/privacy-policy');
+Route::view('/disclaimer', 'footer/privacy-policy');
+
 
 
 

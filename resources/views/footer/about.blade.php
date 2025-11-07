@@ -1,7 +1,7 @@
 @extends('layouts.structure')
 @section('title', 'About')
 @section('body')
-    <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width: 100rem;">
+    <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width: 70rem;">
 
         <!-- 1. WELCOME / HERO SECTION -->
         <section class="py-20 md:py-32 text-center">

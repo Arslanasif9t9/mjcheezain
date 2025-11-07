@@ -9,8 +9,8 @@
                 <h3 class="text-xl font-serif font-bold text-gray-900 mb-6">About MJ CHEEZAIN</h3>
                 <ul class="space-y-3">
                     <li><a href="/about" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">About Us</a></li>
-                    <li><a href="/FAQs" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Future Vision</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Contact Us</a></li>
+                    <li><a href="/future-vision" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Future Vision</a></li>
+                    <li><a href="/contact-us" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Contact Us</a></li>
                 </ul>
             </div>
 
@@ -19,10 +19,10 @@
                 <h3 class="text-xl font-serif font-bold text-gray-900 mb-6">Customer Service</h3>
                 <ul class="space-y-3">
                     <li><a href="/FAQs" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">FAQs</a></li>
-                    <li><a href="/FAQs" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Track Your Order</a></li>
-                    <li><a href="/FAQs" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Return & Refund Policy</a></li>
-                    <li><a href="/FAQs" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Shipping Policy</a></li>
-                    <li><a href="/FAQs" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Secure Payment Assurance</a></li>
+                    <li><a href="/FAQs?tab=track-your-order" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Track Your Order</a></li>
+                    <li><a href="/FAQs?tab=return-refund-policy" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Return & Refund Policy</a></li>
+                    <li><a href="/FAQs?tab=shipping-policy" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Shipping Policy</a></li>
+                    <li><a href="/FAQs?tab=secure-payment-assurance" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Secure Payment Assurance</a></li>
                 </ul>
             </div>
 
@@ -30,12 +30,12 @@
             <div>
                 <h3 class="text-xl font-serif font-bold text-gray-900 mb-6">Vendor Zone</h3>
                 <ul class="space-y-3">
-                    <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Become a Seller</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Vendor Login</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Vendor Dashboard Features</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Commission Policy</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Product Guidelines</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Vendor Terms & Conditions</a></li>
+                    <li><a href="/vendor-zone?tab=become-seller" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Become a Seller</a></li>
+                    <li><a href="/vendor-zone?tab=vendor-dashboard" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Vendor Dashboard Features</a></li>
+                    <li><a href="/vendor-zone?tab=vendor-login" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Vendor Login</a></li>
+                    <li><a href="/vendor-zone?tab=commission-policy" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Commission Policy</a></li>
+                    <li><a href="/vendor-zone?tab=product-guidelines" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Product Guidelines</a></li>
+                    {{-- <li><a href="/vendor-zone?tab=vendor-terms-consitions" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Vendor Terms & Conditions</a></li> --}}
                 </ul>
             </div>
             
@@ -45,9 +45,9 @@
                     <h3 class="text-xl font-serif font-bold text-gray-900 mb-6 mt-0">Legal & Policies</h3>
                     <ul class="space-y-3">
                         <li><a href="/legal-policies" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Terms & Conditions</a></li>
-                        <li><a href="/legal-policies" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Privacy Policy</a></li>
-                        <li><a href="/legal-policies" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Cookie Policy</a></li>
-                        <li><a href="/legal-policies" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Disclaimer</a></li>
+                        <li><a href="/privacy-policy" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Privacy Policy</a></li>
+                        <li><a href="/cookie-policy" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Cookie Policy</a></li>
+                        <li><a href="/disclaimer" class="text-gray-600 hover:text-gray-900 transition duration-150 text-sm">Disclaimer</a></li>
                     </ul>
                 </div>
             <div class="grid grid-cols-1 gap-10 md:col-span-2 lg:col-span-1">
@@ -97,12 +97,14 @@
             
         </div>
         
-        <!-- Bottom Section: Copyright (Not shown in image but good practice) -->
+        <!-- Bottom Section: Copyright & Developer Credit -->
         <div class="mt-12 pt-8 border-t border-gray-200">
             <p class="text-center text-gray-500 text-xs">
-                &copy; 2025 MJ Cheezain. All rights reserved.
+                &copy; 2025 MJ Cheezain. All rights reserved. | Developed by 
+                <a href="" class="text-custom-gold font-medium">Arslan Asif</a>.
             </p>
         </div>
+
         
     </div>
 </footer>

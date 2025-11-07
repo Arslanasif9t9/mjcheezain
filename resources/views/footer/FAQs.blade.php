@@ -46,7 +46,7 @@
 
         <!-- Header Section -->
         <header class="text-center mb-10 md:mb-16">
-            <h1 class="font-script text-3xl md:text-5xl font-normal text-gray-900 mb-4 PFDI">
+            <h1 class="font-script text-3xl md:text-5xl font-bold text-gray-900 mb-4 PFDI">
                 Welcome to the MJCheezain Help Center
             </h1>
             <p class="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -61,25 +61,25 @@
         <!-- Navigation Tabs -->
         <nav class="flex flex-wrap justify-center gap-4 mb-12 border-b border-gray-200 pb-8">
             <!-- Order Tab -->
-            <button id="nav-orders" class="nav-button flex items-center space-x-2 px-4 py-3 rounded-xl border border-accent-gold text-accent-gold hover:bg-yellow-50 transition duration-150 shadow-sm text-sm md:text-base" onclick="showSection('orders-section', this)">
+            <button id="nav-orders" class="nav-button flex items-center space-x-2 px-5 py- rounded-3xl border border-accent-gold text-accent-gold hover:bg-yellow-50 transition duration-150 shadow-sm text-sm md:text-base" onclick="showSection('orders-section', this)">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                 <span>Orders</span>
             </button>
             
             <!-- Payments Tab -->
-            <button id="nav-payments" class="nav-button flex items-center space-x-2 px-4 py-3 rounded-xl border border-accent-gold text-accent-gold hover:bg-yellow-50 transition duration-150 shadow-sm text-sm md:text-base" onclick="showSection('payments-section', this)">
+            <button id="nav-payments" class="nav-button flex items-center space-x-2 px-5 py-2 rounded-3xl border border-accent-gold text-accent-gold hover:bg-yellow-50 transition duration-150 shadow-sm text-sm md:text-base" onclick="showSection('payments-section', this)">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-9 5h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                 <span>Payments</span>
             </button>
             
             <!-- Shipping & Delivery Tab -->
-            <button id="nav-shipping" class="nav-button flex items-center space-x-2 px-4 py-3 rounded-xl border border-accent-gold text-accent-gold hover:bg-yellow-50 transition duration-150 shadow-sm text-sm md:text-base" onclick="showSection('shipping-section', this)">
+            <button id="nav-shipping" class="nav-button flex items-center space-x-2 px-5 py-2 rounded-3xl border border-accent-gold text-accent-gold hover:bg-yellow-50 transition duration-150 shadow-sm text-sm md:text-base" onclick="showSection('shipping-section', this)">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m4 4v10m0-2.857a4 4 0 014-4 4 4 0 014 4"></path></svg>
                 <span>Shipping & Delivery</span>
             </button>
             
             <!-- Returns & Refunds Tab -->
-            <button id="nav-returns" class="nav-button flex items-center space-x-2 px-4 py-3 rounded-xl border border-accent-gold text-accent-gold hover:bg-yellow-50 transition duration-150 shadow-sm text-sm md:text-base" onclick="showSection('returns-section', this)">
+            <button id="nav-returns" class="nav-button flex items-center space-x-2 px-5 py-2 rounded-3xl border border-accent-gold text-accent-gold hover:bg-yellow-50 transition duration-150 shadow-sm text-sm md:text-base" onclick="showSection('returns-section', this)">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.01 12.01 0 003 12c0 2.83 1.258 5.385 3.243 7.108a12 12 0 006.757 2.892 12 12 0 006.757-2.892C19.742 17.385 21 14.83 21 12a12.006 12.006 0 00-1.382-5.016z"></path></svg>
                 <span>Returns & Refunds</span>
             </button>
@@ -89,7 +89,7 @@
 
         <!-- Section 1: Orders -->
         <section id="orders-section" class="faq-section mb-10">
-            <h2 class="text-3xl font-script text-accent-gold mb-6 border-b border-accent-gold pb-2 inline-block">Orders</h2>
+            <h2 class="text-3xl font-bold font-script text-accent-gold mb-6 border-b border-accent-gold pb-2 inline-block">Orders</h2>
             <div id="orders-faq">
                 <!-- FAQ Item 1 -->
                 <div class="border-b border-gray-200">
@@ -137,7 +137,7 @@
 
         <!-- Section 2: Payments -->
         <section id="payments-section" class="faq-section mb-10 hidden">
-            <h2 class="text-3xl font-script text-accent-gold mb-6 border-b border-accent-gold pb-2 inline-block">Payments</h2>
+            <h2 class="text-3xl font-bold font-script text-accent-gold mb-6 border-b border-accent-gold pb-2 inline-block">Payments</h2>
             <div id="payments-faq">
                 <!-- FAQ Item 4 -->
                 <div class="border-b border-gray-200">
@@ -174,7 +174,7 @@
 
         <!-- Section 3: Shipping & Delivery -->
         <section id="shipping-section" class="faq-section mb-10 hidden">
-            <h2 class="text-3xl font-script text-accent-gold mb-6 border-b border-accent-gold pb-2 inline-block">Shipping & Delivery</h2>
+            <h2 class="text-3xl font-bold font-script text-accent-gold mb-6 border-b border-accent-gold pb-2 inline-block">Shipping & Delivery</h2>
             <div id="shipping-faq">
                 <!-- FAQ Item 7 -->
                 <div class="border-b border-gray-200">
@@ -211,7 +211,7 @@
         
         <!-- Section 4: Returns & Refunds (New Section) -->
         <section id="returns-section" class="faq-section mb-10 hidden">
-            <h2 class="text-3xl font-script text-accent-gold mb-6 border-b border-accent-gold pb-2 inline-block">Returns & Refunds</h2>
+            <h2 class="text-3xl font-bold font-script text-accent-gold mb-6 border-b border-accent-gold pb-2 inline-block">Returns & Refunds</h2>
             <div id="returns-faq">
                 <!-- FAQ Item 10 -->
                 <div class="border-b border-gray-200">
@@ -306,14 +306,58 @@
             buttonElement.classList.remove('text-accent-gold', 'hover:bg-yellow-50');
         }
 
-        // Initialize the page to show the "Orders" section on load
-        window.onload = function() {
-            // Get the button for the 'Orders' section
-            const initialButton = document.getElementById('nav-orders');
-            // Explicitly set initial state (simulating a click for initial setup)
-            if (initialButton) {
-                showSection('orders-section', initialButton);
+        // Function to handle tab & question opening based on URL
+        function handleURLTabs() {
+            const params = new URLSearchParams(window.location.search);
+            const tab = params.get('tab');
+
+            // Default to Orders if no tab provided
+            let sectionId = 'orders-section';
+            let buttonId = 'nav-orders';
+            let faqSelector = null;
+
+            switch (tab) {
+                case 'track-your-order':
+                    sectionId = 'orders-section';
+                    buttonId = 'nav-orders';
+                    faqSelector = '#orders-faq > div:nth-of-type(3) .accordion-header'; // ✅ fixed selector
+                    break;
+                case 'return-refund-policy':
+                    sectionId = 'returns-section';
+                    buttonId = 'nav-returns';
+                    faqSelector = '#returns-faq > div:nth-of-type(1) .accordion-header';
+                    break;
+                case 'shipping-policy':
+                    sectionId = 'shipping-section';
+                    buttonId = 'nav-shipping';
+                    faqSelector = '#shipping-faq > div:nth-of-type(1) .accordion-header';
+                    break;
+                case 'secure-payment-assurance':
+                    sectionId = 'payments-section';
+                    buttonId = 'nav-payments';
+                    faqSelector = '#payments-faq > div:nth-of-type(3) .accordion-header'; // ✅ fixed selector
+                    break;
+                default:
+                    sectionId = 'orders-section';
+                    buttonId = 'nav-orders';
             }
+
+            // Show correct section
+            const button = document.getElementById(buttonId);
+            if (button) showSection(sectionId, button);
+
+            // Automatically open a specific FAQ if defined
+            if (faqSelector) {
+                const question = document.querySelector(faqSelector);
+                if (question) {
+                    setTimeout(() => toggleAccordion(question), 300); // small delay ensures section visible
+                }
+            }
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            handleURLTabs();
         };
     </script>
 @endsection
