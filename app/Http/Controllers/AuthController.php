@@ -11,9 +11,44 @@ use Illuminate\Support\Str;
 use App\Models\VendorBasicInfo;
 use App\Models\CustomerProfile;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Cache;
 
 class AuthController extends Controller
 {
+    public function sendOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        $email = $request->email;
+        
+        // Generate 4-digit OTP
+        $otp = rand(1000, 9999);
+        
+        // Store OTP in cache for 10 minutes
+        Cache::put('otp_' . $email, $otp, 600);
+        // dd($otp);
+        
+        try {
+            // Send OTP via email
+            Mail::send('emails.otp', ['otp' => $otp], function($message) use ($email) {
+                $message->to($email)
+                        ->subject('Your OTP Code');
+            });
+            
+            return response()->json([
+                'message' => 'OTP sent successfully'
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to send OTP'
+            ], 500);
+        }
+    }
+
     public function signup(Request $request)
     {
         try {
@@ -27,6 +62,7 @@ class AuthController extends Controller
                         return $query->where('type', $request->type);
                     }),
                 ],
+                'otp' => 'required|digits:4',
                 'password' => 'required|min:6',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -34,6 +70,15 @@ class AuthController extends Controller
             return response()->json([
                 'errors' => $e->validator->errors(),
                 'old_input' => $request->all(),
+            ], 422);
+        }
+
+        // Verify OTP
+        $cachedOtp = Cache::get('otp_' . $request->email);
+        
+        if (!$cachedOtp || $cachedOtp != $request->otp) {
+            return response()->json([
+                'message' => 'Invalid or expired OTP'
             ], 422);
         }
 

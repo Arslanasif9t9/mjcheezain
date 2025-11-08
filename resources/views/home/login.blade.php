@@ -337,10 +337,11 @@
                 <div class="social-container">
                     <!-- Social buttons can be added here if needed -->
                 </div>
-                <select name="type" id="userTypeSign" required>
+                <input id="userTypeSign" type="hidden" name="type" value="">
+                {{-- <select name="type" id="userTypeSign" required>
                     <option value="customer">Customer</option>
                     <option value="vendor">Vendor</option>
-                </select>
+                </select> --}}
                 <input type="text" name="name" placeholder="Name" required/>
                 <div class="input-group">
                     <input type="email" name="email" id="email" placeholder="Email" required/>
@@ -354,15 +355,16 @@
                 <button type="submit" id="signupBtn">Sign Up</button>
             </form>
         </div>
-                <div class="form-container sign-in-container">
+        <div class="form-container sign-in-container">
             <form id="loginForm">
                 <h1>Sign in</h1>
                 <div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    {{-- <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a> --}}
                 </div>
-                <span>or use your account</span>
+                {{-- <span>or use your account</span> --}}
+                <input id="userTypeLog" type="hidden" name="type" value="">
                 <input type="email" name="email" placeholder="Email" required/>
                 <input type="password" name="password" placeholder="Password" required/>
                 <a href="#">Forgot your password?</a>
@@ -387,6 +389,33 @@
     </div>
 
     <script>
+        // Function to handle tab & question opening based on URL
+        function handleURLTabs() {
+            const params = new URLSearchParams(window.location.search);
+            const type = params.get('type');
+
+            switch(type) {
+                case "customer-signup": 
+                    document.getElementById('userTypeSign').value = "customer";
+                    break;
+                case "vendor-signup": 
+                    document.getElementById('userTypeSign').value = "vendor";
+                    break;
+                case "customer-login": 
+                    document.getElementById('userTypeLog').value = "customer";
+                    break;
+                case "vendor-login": 
+                    document.getElementById('userTypeLog').value = "vendor";
+                    break;
+            }        
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            handleURLTabs();
+        };
+
+
         const signUpButton = document.getElementById('signUp');
         const signInButton = document.getElementById('signIn');
         const container = document.getElementById('container');
@@ -450,7 +479,7 @@
             
             try {
                 // Send request to Laravel backend to generate and send OTP
-                const response = await fetch('/api/send-otp', {
+                const response = await fetch('/send-otp', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -459,10 +488,12 @@
                     body: JSON.stringify({ email: email })
                 });
                 
-                const result = await response.json();
+                // const result = await response.json();
+                const result = response;
                 
                 if (response.ok) {
                     showMessage(signupMessage, "OTP sent to your email successfully!", "success");
+                    getOtpBtn.innerHTML = '<span class=""></span> Send';
                     startOtpTimer();
                 } else {
                     const errorMessage = result.message || 'Failed to send OTP. Please try again.';
@@ -579,7 +610,7 @@
             
             try {
                 // Replace with your actual login API endpoint
-                const response = await fetch('/api/login', {
+                const response = await fetch('/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -599,7 +630,7 @@
                     // Redirect to dashboard after successful login
                     setTimeout(() => {
                         window.location.href = '/dashboard';
-                    }, 1500);
+                    }, 500);
                 } else {
                     // Handle errors from API
                     const errorMessage = result.message || 'Login failed. Please check your credentials.';

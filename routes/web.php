@@ -8,6 +8,20 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\VendorController;
 
+Route::get('/test-mail', function() {
+    try {
+        $email = "arslanahmadt58@gmail.com";
+        // Send OTP via email
+            Mail::send('emails.otp', ['otp' => '1234'], function($message) use ($email) {
+                $message->to($email)
+                        ->subject('Your OTP Code');
+            });
+            return "Email sent successfully!";
+    } catch (\Exception $e) {
+        return "Error: " . $e->getMessage();
+    }
+});
+
 
 Route::view('createDB', 'mydatabase/creation');
 
@@ -17,7 +31,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::view('cosmetics', 'brands/cosmetics');
 Route::view('/product-listing', 'brands/product-listing');
 
-Route::view('/register', 'home/login');
+Route::view('/login-user', 'home/login');
+Route::post('/send-otp', [AuthController::class, 'sendOtp']);
+
+
 Route::view('/cart', 'cart');
 Route::view('/product', 'product');
 
