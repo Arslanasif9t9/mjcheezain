@@ -33,6 +33,7 @@ Route::view('/product-listing', 'brands/product-listing');
 
 Route::view('/login-user', 'home/login');
 Route::post('/send-otp', [AuthController::class, 'sendOtp']);
+Route::view('/vendor-forgot-password', 'home/forgot');
 
 
 Route::view('/cart', 'cart');

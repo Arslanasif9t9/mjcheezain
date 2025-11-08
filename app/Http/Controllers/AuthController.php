@@ -166,6 +166,7 @@ class AuthController extends Controller
             'id' => 'required',
             'password' => 'required',
         ]);
+        // return response()->json($request);
 
         
         $user = User::where('email', $credentials['id'])
@@ -176,16 +177,32 @@ class AuthController extends Controller
         // dd(Hash::check($credentials['password'], $user->password));
 
         if ($user && Hash::check($credentials['password'], $user->password)) {
+            // Auto login
             Auth::login($user);
 
+            // Return success JSON response
             if ($user->type === 'vendor') {
-                return redirect('/vendor/dashboard');
+                return response()->json([
+                    'success' => true,
+                    'type' => 'vendor',
+                    'message' => 'Vendor account created successfully!',
+                    'redirect' => url('/vendor/dashboard'),
+                ]);
             } else {
-                return redirect('/customer/dashboard');
+                return response()->json([
+                    'success' => true,
+                    'type' => 'customer',
+                    'message' => 'Customer account created successfully!',
+                    'redirect' => url('/customer/dashboard'),
+                ]);
             }
         }
 
-        return back()->withErrors(['loginError' => 'Invalid email or password.']);
+        return response()->json([
+            'errors' => [
+                'loginError' => 'Invalid email or password.'
+            ]
+        ], 401);
     }
 
     public function logout()

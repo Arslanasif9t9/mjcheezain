@@ -365,9 +365,9 @@
                 </div>
                 {{-- <span>or use your account</span> --}}
                 <input id="userTypeLog" type="hidden" name="type" value="">
-                <input type="email" name="email" placeholder="Email" required/>
+                <input type="email" name="id" placeholder="Email" required/>
                 <input type="password" name="password" placeholder="Password" required/>
-                <a href="#">Forgot your password?</a>
+                <a id="forgot" href="#">Forgot your password?</a>
                 <div id="loginMessage" class="message"></div>
                 <button type="submit" id="loginBtn">Sign In</button>
             </form>
@@ -397,15 +397,23 @@
             switch(type) {
                 case "customer-signup": 
                     document.getElementById('userTypeSign').value = "customer";
+                    document.getElementById('userTypeLog').value = "customer";
+                    document.getElementById('forgot').href = "/customer-forgot=passowrd";
                     break;
                 case "vendor-signup": 
                     document.getElementById('userTypeSign').value = "vendor";
+                    document.getElementById('userTypeLog').value = "vendor";
+                    document.getElementById('forgot').href = "/vendor-forgot=passowrd";
                     break;
                 case "customer-login": 
+                    document.getElementById('userTypeSign').value = "customer";
                     document.getElementById('userTypeLog').value = "customer";
+                    document.getElementById('forgot').href = "/customer-forgot=passowrd";
                     break;
                 case "vendor-login": 
+                    document.getElementById('userTypeSign').value = "vendor";
                     document.getElementById('userTypeLog').value = "vendor";
+                    document.getElementById('forgot').href = "/vendor-forgot=passowrd";
                     break;
             }        
         }
@@ -622,6 +630,7 @@
                 const result = await response.json();
                 
                 if (response.ok) {
+                    console.log(result);
                     showMessage(loginMessage, "Login successful! Redirecting...", "success");
                     // Store token if provided
                     if (result.token) {
@@ -629,11 +638,11 @@
                     }
                     // Redirect to dashboard after successful login
                     setTimeout(() => {
-                        window.location.href = '/dashboard';
+                        window.location.href = `/${result.type}/dashboard`;
                     }, 500);
                 } else {
                     // Handle errors from API
-                    const errorMessage = result.message || 'Login failed. Please check your credentials.';
+                    const errorMessage = result.message || 'Login failed. Please check your information.';
                     showMessage(loginMessage, errorMessage, "error");
                 }
             } catch (error) {
