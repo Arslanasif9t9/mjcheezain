@@ -4,7 +4,6 @@
     <!-- Background Banner -->
     <div class="absolute inset-0 z-0">
         <img src="{{asset('storage/vendor/store/' . $storeBanner) ?: asset('img/default-banner.jpg') }}" 
-             alt="Store Banner" 
              class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-black bg-opacity-60"></div>
     </div>
@@ -12,7 +11,7 @@
     <div class="flex items-center space-x-6 relative z-10">
         <!-- Store Logo -->
         <div class="bg-green-400 p-1 rounded-full">
-            <img src="{{ asset('storage/vendor/store/' . $storeLogo }}" 
+            <img src="{{ asset('storage/vendor/store/' . $storeLogo) }}" 
                  alt="Store Logo" 
                  class="rounded-full w-20 h-20 object-cover border-4 border-white">
         </div>

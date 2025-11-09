@@ -170,9 +170,9 @@ class AuthController extends Controller
 
         
         $user = User::where('email', $credentials['id'])
-        // ->orWhere('username', $credentials['id'])
         ->where('type', $request->type) // Add type condition
         ->first();
+        // ->orWhere('username', $credentials['id'])
         // dd($request->type, $user->type);
         // dd(Hash::check($credentials['password'], $user->password));
 
@@ -204,6 +204,111 @@ class AuthController extends Controller
             ]
         ], 401);
     }
+
+
+
+
+
+
+
+
+
+    
+    public function sendPasswordResetOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email'
+        ]);
+
+        $email = $request->email;
+        
+        // Generate 4-digit OTP
+        $otp = rand(1000, 9999);
+        
+        // Store OTP in cache for 10 minutes
+        Cache::put('password_reset_otp_' . $email, $otp, 600);
+        
+        try {
+            // Send OTP via email
+            Mail::send('emails.otp', ['otp' => $otp], function($message) use ($email) {
+                $message->to($email)
+                        ->subject('Password Reset OTP');
+            });
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'OTP sent successfully'
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send OTP'
+            ], 500);
+        }
+    }
+
+    public function verifyPasswordResetOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'otp' => 'required|digits:4'
+        ]);
+
+        $cachedOtp = Cache::get('password_reset_otp_' . $request->email);
+        
+        if (!$cachedOtp || $cachedOtp != $request->otp) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid or expired OTP'
+            ], 422);
+        }
+
+        // Store verification in cache for password reset
+        Cache::put('password_reset_verified_' . $request->email, true, 600);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'OTP verified successfully'
+        ]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|min:6|confirmed'
+        ]);
+
+        // Check if OTP was verified
+        if (!Cache::get('password_reset_verified_' . $request->email)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'OTP verification required'
+            ], 422);
+        }
+
+        // Update password
+        $user = User::where('email', $request->email)
+        // ->where('type', $request->type) // Add type condition
+        ->first();
+        // return response()->json($request->type);
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        // Clear cache
+        Cache::forget('password_reset_otp_' . $request->email);
+        Cache::forget('password_reset_verified_' . $request->email);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Password reset successfully'
+        ]);
+    }
+
+
+
+
 
     public function logout()
     {

@@ -114,9 +114,9 @@
     <div class="flex min-h-screen">
         <!-- Sidebar Component -->
         <x-vendor.sidebar 
-            :profilePicture="$vendorBasicInfo->profile_picture"
-            :fullName="$vendorBasicInfo->full_name"
-            :profile_visibility="$vendorBasicInfo->profile_visibility"
+            :profilePicture="$vendorBasicInfo->profile_picture ?? 'default_profile.webp'"
+            :fullName="$vendorBasicInfo->full_name ?? $user->full_name"
+            :profile_visibility="$vendorBasicInfo->profile_visibility ?? 1"
             page='Profile'
         />
 
@@ -129,25 +129,25 @@
 {{-- {{dd($vendorBasicInfo)}} --}}
                 <x-vendor.profile-form 
                     :basicInfo="[
-                        'full_name' => $vendorBasicInfo->full_name,
-                        'store_name' => $vendorBasicInfo->store_name,
-                        'email' => $vendorBasicInfo->email,
-                        'phone' => $vendorBasicInfo->phone,
-                        'profile_visibility' => $vendorBasicInfo->profile_visibility,
-                        'profile_picture' => $vendorBasicInfo->profile_picture
+                        'full_name' => $vendorBasicInfo->full_name ?? $user->full_name,
+                        'store_name' => $vendorBasicInfo->store_name ?? null,
+                        'email' => $vendorBasicInfo->email ?? $user->email,
+                        'phone' => $vendorBasicInfo->phone ?? $user->phone,
+                        'profile_visibility' => $vendorBasicInfo->profile_visibility ?? 1,
+                        'profile_picture' => $vendorBasicInfo->profile_picture ?? 'default_profile.webp'
                     ]"
                     :storeDetails="[
-                        'business_type' => $storeDetail->business_type,
-                        'store_category' => $storeDetail->store_category,
-                        'store_description' => $storeDetail->store_description,
-                        'return_policy' => $storeDetail->return_policy,
-                        'shipping_policy' => $storeDetail->shipping_policy
+                        'business_type' => $storeDetail->business_type ?? null,
+                        'store_category' => $storeDetail->store_category ?? null,
+                        'store_description' => $storeDetail->store_description ?? null,
+                        'return_policy' => $storeDetail->return_policy ?? null,
+                        'shipping_policy' => $storeDetail->shipping_policy ?? null
                     ]"
                     :address="[
-                        'pickup_address' => $address->pickup_address,
-                        'city' => $address->city,
-                        'area' => $address->area,
-                        'postal_code' => $address->postal_code
+                        'pickup_address' => $address->pickup_address ?? null,
+                        'city' => $address->city ?? null,
+                        'area' => $address->area ?? null,
+                        'postal_code' => $address->postal_code ?? null
                     ]"
                     {{-- :current-step="$currentStep" --}}
                     {{-- :active-tab="$activeTab" --}}

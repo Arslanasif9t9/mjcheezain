@@ -35,7 +35,7 @@
         <label class="block text-gray-700 font-bold mb-2" for="email">Email Address</label>
         <div class="relative">
             <input type="email" id="email" value="{{ $basicInfo['email'] ?? '' }}"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 bg-gray-100">
+                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 bg-gray-100" readonly>
         </div>
     </div>
 

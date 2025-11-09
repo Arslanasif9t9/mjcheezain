@@ -34,6 +34,10 @@ Route::view('/product-listing', 'brands/product-listing');
 Route::view('/login-user', 'home/login');
 Route::post('/send-otp', [AuthController::class, 'sendOtp']);
 Route::view('/vendor-forgot-password', 'home/forgot');
+// Forgot Password Routes
+Route::post('/send-password-reset-otp', [AuthController::class, 'sendPasswordResetOtp']);
+Route::post('/verify-password-reset-otp', [AuthController::class, 'verifyPasswordResetOtp']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
 
 Route::view('/cart', 'cart');

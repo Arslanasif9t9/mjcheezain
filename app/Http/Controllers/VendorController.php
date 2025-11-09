@@ -7,12 +7,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use App\Models\VendorBasicInfo;
 
 class VendorController extends Controller
 {
     public function dashboard()
     {
         $user = Auth::user();
+        // dd($user->full_name);
         $vendor_id = $user->user_id;
 
         $vendorBasicInfo = DB::table('vendor_basic_info')
@@ -159,11 +161,12 @@ class VendorController extends Controller
             ->first();
 
         return view('vendor.profile', [
-            'profile_picture' => $vendorBasicInfo->profile_picture ?? asset('img/default-avatar.jpg'),
+            'user' => $user,
+            'profile_picture' => $vendorBasicInfo->profile_picture ?? 'default_profile.webp',
             'full_name' => $user->full_name ?? $user->username,
             'user_email' => $user->email,
             'phone' => $user->phone,
-            'store_logo' => $storeInfo->store_logo ?? asset('img/default-store.png'),
+            'store_logo' => $storeInfo->store_logo ?? 'default_profile.webp',
             'store_name' => $storeInfo->store_name ?? 'My Store',
             'rating' => $storeInfo->rating ?? 0,
             'verified' => $storeInfo->verified ?? false,
@@ -202,6 +205,7 @@ class VendorController extends Controller
 
 
         return view('vendor.edit-profile', compact(
+            "user",
             'vendorBasicInfo',
             'storeDetail',
             'address'
@@ -217,8 +221,8 @@ class VendorController extends Controller
             // Validate the request
             $validated = $request->validate([
                 'full_name' => 'required|string|max:255',
-                'store_name' => 'required|string|max:255',
-                'phone' => 'required|string|max:20',
+                'store_name' => 'string|max:255',
+                'phone' => 'max:20',
                 'profile_visibility' => 'nullable|boolean',
                 'profile_picture' => 'nullable'
             ]);
@@ -228,10 +232,14 @@ class VendorController extends Controller
             ->where('user_id', $vendor_id)->first();
             
             if (!$vendor) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Vendor not found'
-                ], 404);
+                // return response()->json([
+                //     'success' => false,
+                //     'message' => 'Vendor not found'
+                // ], 404);
+                VendorBasicInfo::create([
+                    'user_id' => $vendor_id,
+                    'full_name' => $request->full_name
+                ]);
             }
 
             // Handle profile picture upload

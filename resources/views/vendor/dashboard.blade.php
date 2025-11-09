@@ -30,17 +30,18 @@
 <body class="bg-gray-50 font-sans">
     <div class="flex min-h-screen">
         <!-- Sidebar Component -->
+        {{-- @if (!$vendorBasicInfo->profile_picture)  --}}
         <x-vendor.sidebar 
-            :profilePicture="$vendorBasicInfo->profile_picture"
-            :fullName="$vendorBasicInfo->full_name"
-            :profile_visibility="$vendorBasicInfo->profile_visibility"
+            :profilePicture="$vendorBasicInfo->profile_picture ?? 'default_profile.webp'"
+            :fullName="$vendorBasicInfo->full_name ?? $user->full_name"
+            :profile_visibility="$vendorBasicInfo->profile_visibility ?? 1"
             page='Dashboard'
         />
 
         <!-- Main Content -->
         <main class="bg-gray-100 flex-1 p-6 overflow-y-auto scrollbar-hide">
             <!-- Header Component -->
-            <x-vendor.header :profilePicture="$vendorBasicInfo->profile_picture" />
+            <x-vendor.header :profilePicture="$vendorBasicInfo->profile_picture ?? 'default_profile.webp'" />
 
             <!-- Overview Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">

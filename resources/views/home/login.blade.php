@@ -398,22 +398,22 @@
                 case "customer-signup": 
                     document.getElementById('userTypeSign').value = "customer";
                     document.getElementById('userTypeLog').value = "customer";
-                    document.getElementById('forgot').href = "/customer-forgot=passowrd";
+                    document.getElementById('forgot').href = "/customer-forgot-password";
                     break;
                 case "vendor-signup": 
                     document.getElementById('userTypeSign').value = "vendor";
                     document.getElementById('userTypeLog').value = "vendor";
-                    document.getElementById('forgot').href = "/vendor-forgot=passowrd";
+                    document.getElementById('forgot').href = "/vendor-forgot-password";
                     break;
                 case "customer-login": 
                     document.getElementById('userTypeSign').value = "customer";
                     document.getElementById('userTypeLog').value = "customer";
-                    document.getElementById('forgot').href = "/customer-forgot=passowrd";
+                    document.getElementById('forgot').href = "/customer-forgot-password";
                     break;
                 case "vendor-login": 
                     document.getElementById('userTypeSign').value = "vendor";
                     document.getElementById('userTypeLog').value = "vendor";
-                    document.getElementById('forgot').href = "/vendor-forgot=passowrd";
+                    document.getElementById('forgot').href = "/vendor-forgot-password";
                     break;
             }        
         }
@@ -501,7 +501,7 @@
                 
                 if (response.ok) {
                     showMessage(signupMessage, "OTP sent to your email successfully!", "success");
-                    getOtpBtn.innerHTML = '<span class=""></span> Send';
+                    getOtpBtn.innerHTML = '<span class=""></span> Resend';
                     startOtpTimer();
                 } else {
                     const errorMessage = result.message || 'Failed to send OTP. Please try again.';
@@ -576,22 +576,29 @@
                     body: JSON.stringify(data)
                 });
                 
+                console.log(response);
                 const result = await response.json();
+                console.log(result);
                 // const result = response;
                 
                 if (response.ok) {
                     showMessage(signupMessage, "Account created successfully! Redirecting...", "success");
                     // Redirect to dashboard after successful signup
-                    // console.log(result.type);
+                    // console.log(result);
                     setTimeout(() => {
                         window.location.href = `/${result.type}/dashboard`;
                     //     window.location.href = '/dashboard';
                     }, 500);
                 } else {
-                    // Handle errors from API
-                    const errorMessage = result.message || result.errors ? 
-                        Object.values(result.errors).flat().join(', ') : 
-                        'Signup failed. Please try again.';
+                    // Handle errors from API safely
+                    let errorMessage = 'Signup failed. Please try again.';
+                    if (result) {
+                        if (result.message) {
+                            errorMessage = result.message;
+                        } else if (result.errors && typeof result.errors === 'object') {
+                            errorMessage = Object.values(result.errors).flat().join(', ');
+                        }
+                    }
                     showMessage(signupMessage, errorMessage, "error");
                 }
             } catch (error) {
