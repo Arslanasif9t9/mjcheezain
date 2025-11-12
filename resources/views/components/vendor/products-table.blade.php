@@ -20,23 +20,32 @@
         <tbody>
             @if(count($products) > 0)
                 @foreach($products as $product)
-                    <tr class="border-b hover:bg-gray-50 transition">
+                            @php
+                                $position_map = [
+                                    'online' => 'Online',
+                                    'pending' => 'Pending',
+                                    'offline' => 'Offline',
+                                    'draft' => 'Draft'
+                                ];
+                                // echo $position_map[];
+                            @endphp
+                    <tr class="product-row border-b hover:bg-gray-50 transition" data-position="{{ $product->position ?? 'all' }}">
                         <td class="p-4">
-                            <a href="{{ route('products.show', $product->id) }}" target="_blank" 
+                            <a href="#" target="_blank" 
                                class="text-blue-500 hover:text-blue-700">
                                 {{ $product->id }}
                             </a>
                         </td>
                         <td class="p-4">
-                            <a href="{{ route('products.show', $product->id) }}" target="_blank">
+                            <a href="#" target="_blank">
                                 <img style="width: 50px !important; height: 50px !important; border-radius: 10px;" 
-                                     src="{{ $product->primary_image ? asset($product->primary_image) : asset('img/default-product.jpg') }}" 
+                                     src="{{ $product->primary_image ? asset('storage/vendor/products/images/'.$product->primary_image) : asset('img/default-product.jpg') }}" 
                                      alt="{{ $product->name }}"
                                      class="object-cover">
                             </a>
                         </td>
                         <td class="p-4 font-semibold">
-                            <a href="{{ route('products.show', $product->id) }}" target="_blank"
+                            <a href="#" target="_blank"
                                class="hover:text-blue-600 transition">
                                 <p class="h-8 overflow-hidden leading-4 line-clamp-2">
                                     {{ $product->name }}
@@ -86,26 +95,21 @@
                             @endfor
                         </td>
                         <td class="p-4">
-                            @php
-                                $position_map = [
-                                    'online' => 'Online',
-                                    'pending' => 'Pending',
-                                    'offline' => 'Offline',
-                                    'draft' => 'Draft'
-                                ];
-                            @endphp
                             {{ $position_map[$product->position] ?? ucfirst($product->position) }}
                         </td>
                         <td class="p-4 flex space-x-3">
-                            <a href="{{ route('products.show', $product->id) }}" target="_blank" 
-                               class="text-blue-500 hover:text-blue-700 transition" title="View">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <form method="POST" action="{{ route('vendor.products.destroy', $product->id) }}" 
-                                  class="inline" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                            <button>
+                                <a href="{{ route('vendor.products.edit', $product->id) }}" 
+                                    class="text-blue-500 hover:text-blue-700 transition" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                </a>
+                            </button>
+                            <form method="POST" action="{{ route('vendor.products.delete') }}" 
+                                class="delete-product-form inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:text-red-700 transition" title="Delete">
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <button type="submit" class="bg-white hover:bg-white text-red-500 hover:text-red-700 transition" title="Delete">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </form>
@@ -122,3 +126,130 @@
         </tbody>
     </table>
 </div>
+
+
+<script>
+    // Delete product functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add event listeners to all delete forms
+        const deleteForms = document.querySelectorAll('.delete-product-form');
+        
+        deleteForms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                deleteProduct(this);
+            });
+        });
+        
+        function deleteProduct(form) {
+            if (!confirm('Are you sure you want to delete this product?')) {
+                return;
+            }
+            
+            const productId = form.querySelector('input[name="product_id"]').value;
+            const url = form.getAttribute('action');
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
+            // Show loading state
+            const deleteButton = form.querySelector('button[type="submit"]');
+            const originalHTML = deleteButton.innerHTML;
+            deleteButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            deleteButton.disabled = true;
+            
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    product_id: productId
+                })
+            })
+            .then(response => {
+                console.log(response);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                if (data.success) {
+                    // Remove the product row from table
+                    const productRow = form.closest('tr');
+                    productRow.style.opacity = '0';
+                    productRow.style.transition = 'opacity 0.3s ease';
+                    
+                    setTimeout(() => {
+                        productRow.remove();
+                        
+                        // Show success message
+                        showAlert('Product deleted successfully!', 'success');
+                        
+                        // Check if table is empty
+                        checkEmptyTable();
+                    }, 300);
+                } else {
+                    throw new Error(data.message || 'Failed to delete product');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showAlert(error.message || 'Failed to delete product', 'error');
+                
+                // Reset button state
+                deleteButton.innerHTML = originalHTML;
+                deleteButton.disabled = false;
+            });
+        }
+        
+        function showAlert(message, type) {
+            // Remove existing alerts
+            const existingAlert = document.querySelector('.custom-alert');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+            
+            // Create alert element
+            const alert = document.createElement('div');
+            alert.className = `custom-alert fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
+                type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            }`;
+            alert.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
+                    <span>${message}</span>
+                    <button class="ml-4" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(alert);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (alert.parentElement) {
+                    alert.remove();
+                }
+            }, 5000);
+        }
+        
+        function checkEmptyTable() {
+            const tableBody = document.getElementById('product-table-body');
+            const visibleRows = tableBody.querySelectorAll('tr[style*="display: table-row"], tr:not([style])');
+            
+            if (visibleRows.length === 0) {
+                const emptyRow = document.createElement('tr');
+                emptyRow.innerHTML = `
+                    <td colspan="10" class="p-4 text-center text-gray-500">
+                        No products found
+                    </td>
+                `;
+                tableBody.appendChild(emptyRow);
+            }
+        }
+    });
+</script>

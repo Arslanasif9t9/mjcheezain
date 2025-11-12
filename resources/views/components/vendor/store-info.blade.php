@@ -22,7 +22,7 @@
         </div>
         
         <!-- Policies -->
-        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+        {{-- <div class="flex justify-between items-center py-2 border-b border-gray-100">
             <strong class="text-gray-700">Feature Policy:</strong>
             <div class="flex space-x-4">
                 @if($returnPolicy || $returnPolicyFile)
@@ -46,7 +46,7 @@
                 @endif
             </div>
         </div>
-        
+         --}}
         <!-- Description -->
         <div class="py-2">
             <strong class="text-gray-700 block mb-2">Description:</strong>
@@ -56,13 +56,13 @@
         </div>
         
         <!-- Store Banner -->
-        @if($storeBanner)
+        {{-- @if($storeBanner)
             <div class="py-2">
                 <strong class="text-gray-700 block mb-2">Banner:</strong>
-                <img src="{{ $storeBanner }}" 
+                <img src="{{ asset('storage/vendor/store/{{ $storeBanner }}') }}" 
                      alt="Store Banner" 
                      class="w-full h-48 object-cover rounded-lg shadow-md">
             </div>
-        @endif
+        @endif --}}
     </div>
 </div>

@@ -32,7 +32,7 @@
     <!-- Sidebar Component -->
     <x-vendor.sidebar 
             :profilePicture="$vendorBasicInfo->profile_picture ?? 'default_profile.webp'"
-            :fullName="$vendorBasicInfo->full_name ?? $user->full_name"
+            :fullName="$vendorBasicInfo->full_name ?? $user->full_name ?? ''"
             :profile_visibility="$vendorBasicInfo->profile_visibility ?? 1"
             page='Products'
         />
@@ -52,6 +52,91 @@
 </div>
 
 <x-logout-modal />
+
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const productRows = document.querySelectorAll('.product-row');
+            
+            // Set initial active tab
+            let activeTab = 'all';
+            updateActiveTab(activeTab);
+            filterProducts(activeTab);
+            
+            // Add click event listeners to tabs
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    activeTab = this.getAttribute('data-tab');
+                    updateActiveTab(activeTab);
+                    filterProducts(activeTab);
+                });
+            });
+            
+            // Function to update active tab styling
+            function updateActiveTab(tab) {
+                tabButtons.forEach(button => {
+                    if (button.getAttribute('data-tab') === tab) {
+                        button.classList.add('border-b-2', 'border-blue-500', 'text-blue-500');
+                        button.classList.remove('text-gray-600');
+                    } else {
+                        button.classList.remove('border-b-2', 'border-blue-500', 'text-blue-500');
+                        button.classList.add('text-gray-600');
+                    }
+                });
+            }
+            
+            // Function to filter products based on active tab
+            function filterProducts(tab) {
+                productRows.forEach(row => {
+                    const position = row.getAttribute('data-position');
+                    
+                    if (tab === 'all' || position === tab) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+        });
+
+        // Search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('productSearch');
+            
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase().trim();
+                    filterProductsBySearch(searchTerm);
+                });
+            }
+            
+            function filterProductsBySearch(searchTerm) {
+                const productRows = document.querySelectorAll('.product-row');
+                const activeTab = document.querySelector('.tab-button.border-blue-500').getAttribute('data-tab');
+                
+                productRows.forEach(row => {
+                    const productName = row.querySelector('.font-semibold').textContent.toLowerCase();
+                    const productCategory = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+                    const productId = row.querySelector('td:first-child a').textContent.toLowerCase();
+                    
+                    const matchesSearch = searchTerm === '' || 
+                        productName.includes(searchTerm) ||
+                        productCategory.includes(searchTerm) ||
+                        productId.includes(searchTerm);
+                    
+                    const position = row.getAttribute('data-position');
+                    const matchesTab = activeTab === 'all' || position === activeTab;
+                    
+                    if (matchesSearch && matchesTab) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {

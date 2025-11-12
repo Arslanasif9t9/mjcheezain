@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use App\Models\VendorBasicInfo;
+use App\Models\VendorProduct;
+use App\Models\VendorProductImage;
+use App\Models\VendorProductFault;
 
 class VendorController extends Controller
 {
@@ -160,20 +163,25 @@ class VendorController extends Controller
             ->where('user_id', $vendor_id)
             ->first();
 
+        // Get address info
+        $vendorAddress = DB::table('vendor_address')
+            ->where('user_id', $vendor_id)
+            ->first();
+
         return view('vendor.profile', [
             'user' => $user,
             'profile_picture' => $vendorBasicInfo->profile_picture ?? 'default_profile.webp',
             'full_name' => $user->full_name ?? $user->username,
             'user_email' => $user->email,
-            'phone' => $user->phone,
+            'phone' => $user->phone ?? $vendorBasicInfo->phone ?? null,
             'store_logo' => $storeInfo->store_logo ?? 'default_profile.webp',
             'store_name' => $storeInfo->store_name ?? 'My Store',
             'rating' => $storeInfo->rating ?? 0,
             'verified' => $storeInfo->verified ?? false,
-            'city' => $storeInfo->city ?? 'Not specified',
-            'country' => $storeInfo->country ?? 'Not specified',
+            'city' => $vendorAddress->city ?? 'Not specified',
+            'country' => $vendorAddress->country ?? 'Not specified',
             'store_banner' => $storeInfo->store_banner ?? asset('img/default-banner.jpg'),
-            'pickup_address' => $storeInfo->pickup_address ?? 'Not specified',
+            'pickup_address' => $vendorAddress->pickup_address ?? 'Not specified',
             'business_type' => $storeInfo->business_type ?? 'Not specified',
             'store_category' => $storeInfo->store_category ?? 'Not specified',
             'return_policy' => $storeInfo->return_policy ?? 'Not avaliable',
@@ -181,8 +189,8 @@ class VendorController extends Controller
             'shipping_policy' => $storeInfo->shipping_policy ?? 'Not avaliable',
             'shipping_policy_file' => $storeInfo->shipping_policy_file ?? 'Not avaliable',
             'store_description' => $storeInfo->store_description ?? 'No description provided.',
-            'area' => $storeInfo->area ?? 'Not specified',
-            'postal_code' => $storeInfo->postal_code ?? 'Not specified',
+            'area' => $vendorAddress->area ?? 'Not specified',
+            'postal_code' => $vendorAddress->postal_code ?? 'Not specified',
             'vendorBasicInfo' => $vendorBasicInfo,
         ]);
     }
@@ -255,7 +263,9 @@ class VendorController extends Controller
                 $filename = 'vendor_' . $vendor_id . '_' . time() . '.' . $profilePicture->getClientOriginalExtension();
                 
                 // Store the image
-                $path = $profilePicture->storeAs('vendor/profile', $filename);
+                $path = $profilePicture->storeAs('vendor/profile', $filename, 'public');
+                $destinationPath = public_path('storage/vendor/profile');
+                $profilePicture->move($destinationPath, $filename);
                 // $path = $profilePicture->move(public_path('storage/vendor/profile'));
                 
                 // Update filename in validated data
@@ -311,10 +321,11 @@ class VendorController extends Controller
             // Find vendor store record
             $vendor = DB::table('vendor_store_details')->where('user_id', $vendor_id)->first();
             if (!$vendor) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Vendor store details not found.'
-                ], 404);
+                // return response()->json([
+                //     'success' => false,
+                //     'message' => 'Vendor store details not found.'
+                // ], 404);
+                DB::table('vendor_store_details')->insert(['user_id'=>$vendor_id]);
             }
 
             // Define base storage paths
@@ -325,6 +336,8 @@ class VendorController extends Controller
                 $file = $request->file('store_logo');
                 $filename = 'logo_' . $vendor_id . '_' . time() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs($basePath, $filename);
+                $destinationPath = public_path('storage/vendor/store');
+                $file->move($destinationPath, $filename);
                 $validated['store_logo'] = $filename;
             }
 
@@ -332,6 +345,8 @@ class VendorController extends Controller
                 $file = $request->file('store_banner');
                 $filename = 'banner_' . $vendor_id . '_' . time() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs($basePath, $filename);
+                $destinationPath = public_path('storage/vendor/store');
+                $file->move($destinationPath, $filename);
                 $validated['store_banner'] = $filename;
             }
 
@@ -339,6 +354,8 @@ class VendorController extends Controller
                 $file = $request->file('return_policy_file');
                 $filename = 'return_policy_' . $vendor_id . '_' . time() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs($basePath, $filename);
+                $destinationPath = public_path('storage/vendor/store');
+                $file->move($destinationPath, $filename);
                 $validated['return_policy_file'] = $filename;
             }
 
@@ -346,6 +363,8 @@ class VendorController extends Controller
                 $file = $request->file('shipping_policy_file');
                 $filename = 'shipping_policy_' . $vendor_id . '_' . time() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs($basePath, $filename);
+                $destinationPath = public_path('storage/vendor/store');
+                $file->move($destinationPath, $filename);
                 $validated['shipping_policy_file'] = $filename;
             }
 
@@ -379,16 +398,19 @@ class VendorController extends Controller
 
             // Validate form inputs
             $validated = $request->validate([
-                'pickup_address' => 'required|string|max:255',
-                'city' => 'required|string|max:100',
-                'area' => 'required|string|max:100',
-                'country' => 'required|string|max:100',
-                'postal_code' => 'required|string|max:20',
+                'pickup_address' => 'max:255',
+                'city' => 'max:100',
+                'area' => 'max:100',
+                'country' => 'max:100',
+                'postal_code' => 'max:20',
             ]);
 
 
             // Check if vendor record exists
             $vendorAddress = DB::table('vendor_address')->where('user_id', $vendor_id)->first();
+            if (!$vendorAddress) {
+                DB::table('vendor_address')->insert(['user_id'=>$vendor_id]);
+            }
 
             if ($vendorAddress) {
                 // Update existing record
@@ -427,30 +449,39 @@ class VendorController extends Controller
         // $full_name = $vendorBasicInfo->full_name ?? 'Not specified';
         
         // Determine active tab from URL parameter
-        $active_tab = $request->get('tab', 'all');
+        // $active_tab = $request->get('tab', 'all');
         
         // Map tab names to position values
-        $tab_position_map = [
-            'online' => 'online',
-            'pending' => 'pending',
-            'offline' => 'offline',
-            'draft' => 'draft',
-            'all' => 'all'
-        ];
+        // $tab_position_map = [
+        //     'online' => 'online',
+        //     'pending' => 'pending',
+        //     'offline' => 'offline',
+        //     'draft' => 'draft',
+        //     'all' => 'all'
+        // ];
         
         // Get products based on active tab
-        $query = DB::table('vendor_products')
-        ->leftJoin('vendor_product_images as primaryImage', 'vendor_products.id', '=', 'primaryImage.product_id')
-        ->where('vendor_products.user_id', $vendor_id)
-        ->select('vendor_products.*', 'primaryImage.image_path as primary_image');
+        // $query = DB::table('vendor_products')
+        // ->leftJoin('vendor_product_images as primaryImage', 'vendor_products.id', '=', 'primaryImage.product_id')
+        // ->where('vendor_products.user_id', $vendor_id)
+        // ->select('vendor_products.*', 'primaryImage.image_path as primary_image');
+        $products = VendorProduct::where('user_id', $vendor_id)->get();
 
-        
-        if ($active_tab !== 'all') {
-            $position = $tab_position_map[$active_tab] ?? 'all';
-            $query->where('position', $position);
+        foreach ($products as $product) {
+            $productImage = VendorProductImage::where('product_id', $product->id)
+                                            ->where('is_primary', 1)
+                                            ->first(); // use first() because only one primary image
+
+            // Example: attach image path to product
+            $product->primary_image = $productImage ? $productImage->image_path : null;
         }
         
-        $products = $query->get();
+        // if ($active_tab !== 'all') {
+        //     $position = $tab_position_map[$active_tab] ?? 'all';
+        //     $query->where('position', $position);
+        // }
+        
+        // $products = $query->get();
         $total_products = $products->count();
         $pending_products = $products->where('position', 'pending')->count();
         
@@ -459,7 +490,9 @@ class VendorController extends Controller
             ? round(100 - (($pending_products / $total_products) * 100))
             : 0;
         
+        $active_tab = null;
         return view('vendor.products', compact(
+            'user',
             'vendorBasicInfo',
             'products',
             'active_tab',
@@ -469,7 +502,210 @@ class VendorController extends Controller
         ));
     }
 
-    public function productsCreate () {}
+    public function productsCreate ($id = null) {
+        $user = Auth::user();
+        $vendor_id = $user->user_id;
+        
+        // Get vendor basic info
+        $vendorBasicInfo = DB::table('vendor_basic_info')
+            ->where('user_id', $vendor_id)
+            ->first();
+
+        $product = null;
+        $productImages = [];
+        $productFaults = [];
+
+        // If editing, get product data
+        if ($id) {
+            $product = DB::table('vendor_products')
+                ->where('id', $id)
+                ->where('user_id', $vendor_id)
+                ->first();
+
+            if ($product) {
+                // Get product images
+                $productImages = DB::table('vendor_product_images')
+                    ->where('product_id', $id)
+                    ->get();
+
+                // Get product faults
+                $productFaults = DB::table('vendor_product_faults')
+                    ->where('product_id', $id)
+                    ->get();
+            }
+        }
+
+        return view('vendor.new_product', compact(
+            'user',
+            'vendorBasicInfo',
+            'product',
+            'productImages',
+            'productFaults'
+        ));
+    }
+
+    public function storeProduct(Request $request)
+    {
+        // Validate the request
+        // $validated = $request->validate([
+        //     // 'productVideo' => 'required|string|max:255',
+        //     'product_name' => 'required|string|max:255',
+        //     'category' => 'required|string|max:255',
+        //     'subcategory' => 'required|string|max:255',
+        //     'quantity' => 'required|integer|min:1',
+        //     'brand' => 'required|string|max:255',
+        //     'model' => 'nullable|string|max:255',
+        //     // 'model_value' => 'nullable|string|max:255',
+        //     // 'model_unit' => 'nullable|string|max:255',
+        //     'condition' => 'required|string|max:255',
+        //     'original_price' => 'required|numeric|min:0',
+        //     'delivery_charges' => 'required|numeric|min:0',
+        //     'selling_price' => 'required|numeric|min:0',
+        //     'mrp' => 'nullable|numeric|min:0',
+        //     'shipping_method' => 'required|string|max:255',
+        //     'shipping_time' => 'required|string|max:255',
+        //     'description' => 'required|string|min:100',
+        //     'location' => 'required|string|max:255',
+        //     'made_in' => 'required|string|max:255',
+        //     'return_policy' => 'nullable|string',
+        //     'productImages' => 'required|array|min:5|max:10',
+        //     'productImages.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        //     'productVideo' => 'nullable|file|mimes:mp4,mov,avi|max:51200',
+        //     'faults' => 'nullable|array',
+        //     'faults.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        //     'fault_descriptions' => 'nullable|array',
+        // ]);
+        
+        $validated = $request->all();
+        // Handle model field based on category
+        // $modelValue = $validated['model'] ?? '';
+        // if (!empty($validated['model_value']) && !empty($validated['model_unit'])) {
+        //     $modelValue = $validated['model_value'] . ' ' . $validated['model_unit'];
+        // }
+
+        // Create the product
+        $product = VendorProduct::create([
+            'user_id' => Auth::id(),
+            'name' => $validated['product_name'],
+            'category' => $validated['category'],
+            'subcategory' => $validated['subcategory'],
+            'quantity' => $validated['quantity'],
+            'brand' => $validated['brand'],
+            'model' => $validated['model'],
+            'pcondition' => $validated['condition'],
+            'original_price' => $validated['original_price'],
+            'delivery_charges' => $validated['delivery_charges'],
+            'selling_price' => $validated['selling_price'],
+            'mrp' => $validated['mrp'] ?? null,
+            'shipping_method' => $validated['shipping_method'],
+            'shipping_time' => $validated['shipping_time'],
+            'description' => $validated['description'],
+            'location' => $validated['location'],
+            'made_in' => $validated['made_in'],
+            'return_policy' => $validated['return_policy'] ?? null,
+            'status' => 'pending',
+        ]);
+
+        // return $request->input('productImages');
+        // Handle product images
+        if ($request->hasFile('productImages')) {
+            foreach ($request->file('productImages') as $index => $image) {
+                $extension = $image->getClientOriginalExtension();
+                $filename = uniqid() . '.' . $extension; // unique filename
+                $imagePath = $image->storeAs('vendor/products/images', $filename, 'public');
+                $destinationPath = public_path('storage/vendor/products/images');
+                $image->move($destinationPath, $filename);
+                
+                VendorProductImage::create([
+                    'product_id' => $product->id,
+                    'image_path' => $filename,
+                    'is_primary' => $index === 0, // First image is primary
+                ]);
+            }
+        }
+
+        // Handle product video
+        if ($request->hasFile('productVideo')) {
+            $extension = $image->getClientOriginalExtension();
+            $filename = uniqid() . '.' . $extension; // unique filename
+            $videoPath = $request->file('productVideo')->storeAs('vendor/products/videos', $filename, 'public');
+            $destinationPath = public_path('storage/vendor/products/videos');
+            $request->file('productVideo')->move($destinationPath, $filename);
+            VendorProduct::where('id', $product->id)
+                ->update([
+                    'video' => $filename
+                ]);
+        }
+
+        // Handle product faults
+        if ($request->hasFile('faults')) {
+            foreach ($request->file('faults') as $index => $faultImage) {
+                $extension = $image->getClientOriginalExtension();
+                $filename = uniqid() . '.' . $extension; // unique filename
+                $faultImagePath = $faultImage->storeAs('vendor/products/faults', $filename, 'public');
+                $destinationPath = public_path('storage/vendor/products/faults');
+                $faultImage->move($destinationPath, $filename);
+                
+                VendorProductFault::create([
+                    'product_id' => $product->id,
+                    'fault_image' => $filename,
+                    'fault_description' => $validated['fault_descriptions'][$index] ?? null,
+                ]);
+            }
+        }
+
+        return redirect()->route('vendor.products')
+            ->with('success', 'Product created successfully and is pending approval.');
+    }
+
+    public function deleteProduct(Request $request)
+    {
+        try {
+            // Validate the request
+            $request->validate([
+                'product_id' => 'required'
+            ]);
+            
+            // Find the product
+            $product = VendorProduct::findOrFail($request->product_id);
+            
+            // Check if the product belongs to the current vendor
+            if ($product->user_id !== auth()->id()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You are not authorized to delete this product.'
+                ], 403);
+            }
+            
+            // return response()->json(['success' => $product]);
+            // Delete product images from storage
+            if ($product->primary_image) {
+                Storage::delete('vendor/products/images/' . $product->primary_image);
+            }
+
+            // Delete additional images if any
+            if ($product->images) {
+                foreach ($product->images as $image) {
+                    Storage::delete('vendor/products/images/' . $image);
+                }
+            }
+
+            // Delete the product
+            $product->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Product deleted successfully.'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete product: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function pr ($pr = 1) {}
 
 }

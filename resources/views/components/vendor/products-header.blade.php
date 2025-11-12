@@ -8,9 +8,9 @@
 <!-- Header -->
 <div class="flex justify-between items-center mb-6">
     <div class="w-1/3">
-        <i class="fa-solid fa-magnifying-glass" style="position: relative; right: -28px;"></i> 
+        <i class="fa-solid fa-magnifying-glass" style="position: relative; right: -10px; top: 32px;"></i> 
         <input type="text" id="productSearch" placeholder="Search products" 
-               class="border px-4 py-2 rounded border-0 pl-8 border-0 outline-0 w-full" />
+               class="border px-12 py-2 rounded border-0 pl-8 border-0 outline-0 w-full" />
     </div>
     <div>
         <div class="w-48 h-[5px] bg-gray-300" style="border-radius: 20px;">
@@ -34,25 +34,20 @@
 <!-- Tabs -->
 <div class="flex justify-between items-center mb-4">
     <div class="flex space-x-8 border-b">
-        <a href="{{ route('vendor.products.index', ['tab' => 'online']) }}" 
-           class="pb-2 {{ $activeTab === 'online' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-600' }} transition">
+        <button data-tab="online" class="tab-button pb-2 border-b-2 border-blue-500 text-blue-500 transition">
             Online
-        </a>
-        <a href="{{ route('vendor.products.index', ['tab' => 'pending']) }}" 
-           class="pb-2 {{ $activeTab === 'pending' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-600' }} transition">
-            Pending Review
-        </a>
-        <a href="{{ route('vendor.products.index', ['tab' => 'offline']) }}" 
-           class="pb-2 {{ $activeTab === 'offline' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-600' }} transition">
+        </button>
+        <button data-tab="pending" class="tab-button pb-2 text-gray-600 transition">
+            Pending
+        </button>
+        <button data-tab="offline" class="tab-button pb-2 text-gray-600 transition">
             Offline
-        </a>
-        <a href="{{ route('vendor.products.index', ['tab' => 'draft']) }}" 
-           class="pb-2 {{ $activeTab === 'draft' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-600' }} transition">
+        </button>
+        <button data-tab="draft" class="tab-button pb-2 text-gray-600 transition">
             Draft
-        </a>
-        <a href="{{ route('vendor.products.index', ['tab' => 'all']) }}" 
-           class="pb-2 {{ $activeTab === 'all' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-600' }} transition">
+        </button>
+        <button data-tab="all" class="tab-button pb-2 text-gray-600 transition">
             All
-        </a>
+        </button>
     </div>
 </div>

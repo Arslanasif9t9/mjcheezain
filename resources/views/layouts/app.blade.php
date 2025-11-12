@@ -15,6 +15,7 @@
     <meta property="og:type" content="website">
     <meta property="og:image" content="{{ asset('img/short_logo.jpeg') }}">
     <link rel="icon" type="image/jpeg" href="{{ asset('img/short_logo.jpeg') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
     <!-- CSS Links -->

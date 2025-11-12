@@ -100,7 +100,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/profile-edit', [VendorController::class, 'profileEdit'])->name('profile.edit');
 
         Route::post('/products', [VendorController::class, 'products'])->name('products');
-        Route::post('/products/create', [VendorController::class, 'productsCreate'])->name('products.create');
+        Route::get('/products/create', [VendorController::class, 'productsCreate'])->name('products.create');
+        Route::post('/products/store', [VendorController::class, 'storeProduct'])->name('products.store');
+        Route::delete('/products/delete', [VendorController::class, 'deleteProduct'])->name('products.delete');
+        Route::get('/products/edit/{id}', [VendorController::class, 'productsCreate'])->name('products.edit');
+        Route::post('/products/update/{id}', [VendorController::class, 'productsUpdate'])->name('products.update');
         Route::post('/products/id', [VendorController::class, 'pr'])->name('products.index');
         
         Route::post('/profile-edit/basic-info', [VendorController::class, 'updateBasicInfo'])->name('basic.update');

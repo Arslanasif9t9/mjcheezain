@@ -18,6 +18,7 @@
     <meta property="og:type" content="website">
     <meta property="og:image" content="{{ asset('img/short_logo.jpeg') }}">
     <link rel="icon" type="image/jpeg" href="{{ asset('img/short_logo.jpeg') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Tailwind CSS  -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">

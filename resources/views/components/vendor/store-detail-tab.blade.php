@@ -64,7 +64,7 @@
         </div>
     </div>
 
-    <div class="mb-5">
+    {{-- <div class="mb-5">
         <label class="block text-gray-700 font-bold mb-2" for="return-policy">Return & Refund Policy</label>
         <div class="flex items-center gap-4">
             <textarea id="return-policy" name="return_policy" rows="5" placeholder="Enter policy text"
@@ -77,9 +77,9 @@
             file:bg-green-50 file:text-green-700
             hover:file:bg-green-100">
         </div>
-    </div>
+    </div> --}}
 
-    <div class="mb-5">
+    {{-- <div class="mb-5">
         <label class="block text-gray-700 font-bold mb-2" for="shipping-policy">Shipping Policy</label>
         <div class="flex items-center gap-4">
             <textarea id="shipping-policy" name="shipping_policy" rows="5" placeholder="Enter policy text"
@@ -92,7 +92,7 @@
             file:bg-green-50 file:text-green-700
             hover:file:bg-green-100">
         </div>
-    </div>
+    </div> --}}
 
     <div class="flex justify-between mt-8">
         <button type="button"
