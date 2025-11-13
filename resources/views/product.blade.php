@@ -45,7 +45,7 @@
 @endsection
 
 @section('body')
-    <x-cosmetics.header />
+    <x-cosmetics.header :user="$user ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
 
     <div class="mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
@@ -57,7 +57,7 @@
                 <!-- Main Image with icons -->
                 <div class="relative">
                     <img id="main-image"
-                        src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                        src="{{ asset('storage/vendor/products/images/'.$imageMain->image_path) }}"
                         class="border-2 border-blue-900 w-full h-[80vh] aspect-square object-cover rounded-lg overflow-hidden">
                     
                     <!-- Icons -->
@@ -102,7 +102,7 @@
 
             <!-- Right Column: Product Info & CTA -->
             <div class="mt-32 col-span-2">
-                <h1 class="text-3xl font-bold mb-2">MJ Whitening Cream 50ml</h1>
+                <h1 class="text-3xl font-bold mb-2">{{ $product->name }}</h1>
                 
                 <!-- Ratings & Verification -->
                 <div class="flex items-center space-x-4 text-sm mb-4">
@@ -117,17 +117,46 @@
                 </div>
 
                 <!-- Price -->
-                <p class="text-3xl font-extrabold text-gray-900 mb-4">PKR 1,950</p>
+                <p class="text-3xl font-extrabold text-gray-900 mb-4">
+                    PKR 
+                    @if ($product->mrp)
+                        <del> {{ $product->selling_price }} </del> &nbsp; 
+                        <small>{{ $product->mrp }}</small> 
+                    @else
+                        {{ $product->selling_price }}
+                    @endif
+                </p>
                 
                 <!-- Vendor Info -->
                 <div class="mb-4">
-                    <p class="text-sm text-gray-500">Sold by <span class="font-semibold text-blue-700 hover:text-blue-800 cursor-pointer">GlowSkin Official</span></p>
+                    <p class="text-sm text-gray-500">Sold by <span class="font-semibold text-blue-700 hover:text-blue-800 cursor-pointer">{{ $vendor->full_name }}</span></p>
                 </div>
                 
                 <!-- Stock Status -->
-                <div class="flex items-center text-green-600 font-semibold mb-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
-                    In Stock (ready to ship)
+                @php
+                    $stockStatus = '';
+                    $stockColor = '';
+                    $stockIcon = '';
+
+                    if ($product->quantity >= 10) {
+                        $stockStatus = 'In Stock';
+                        $stockColor = 'text-green-600';
+                        $stockIcon = '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />';
+                    } elseif ($product->quantity > 0 && $product->quantity < 10) {
+                        $stockStatus = 'Limited';
+                        $stockColor = 'text-yellow-600';
+                        $stockIcon = '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-11a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V7z" clip-rule="evenodd" />';
+                    } else {
+                        $stockStatus = 'Out of Stock';
+                        $stockColor = 'text-red-600';
+                        $stockIcon = '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />';
+                    }
+                @endphp
+                <div class="flex items-center {{ $stockColor }} font-semibold mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        {!! $stockIcon !!}
+                    </svg>
+                    {{ $stockStatus }}
                 </div>
 
                 <!-- Quantity Selector -->
@@ -154,11 +183,11 @@
                 <div class="space-y-3 text-sm">
                     <div class="flex items-center text-gray-700">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M13 8V4.835a1 1 0 01.325-.758l2.25-2.25a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-2.25 2.25a1 1 0 01-.758.325H16M3 9h11a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6a1 1 0 011-1zm0 0l-1.5 7" /></svg>
-                        Free delivery over PKR 2,000
+                        Delivery charges PKR {{ $product->delivery_charges }} (already included)
                     </div>
                     <div class="flex items-center text-gray-700">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
-                        Estimated <span class="font-semibold text-gray-800 ml-1">2-3 days</span>
+                        Estimated <span class="font-semibold text-gray-800 ml-1">{{ $product->shipping_time }} </span>
                     </div>
                     <div class="flex items-center justify-between text-gray-700">
                         <div class="flex items-center">
@@ -238,17 +267,21 @@
                 
                 // Sample images - replace with your actual image paths
                 const images = [
-                    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
-                    'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80',
-                    'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1025&q=80',
-                    'https://images.unsplash.com/photo-1605348532760-6753d2c43329?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
-                    'https://images.unsplash.com/photo-1605034313761-73ea4a0cfbf3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80',
-                    'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80',
-                    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
-                    'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1025&q=80',
-                    'https://images.unsplash.com/photo-1605034313761-73ea4a0cfbf3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80',
-                    'https://images.unsplash.com/photo-1605348532760-6753d2c43329?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80'
+                    @foreach($images as $image)
+                        '{{ asset("storage/vendor/products/images/".$image) }}'@if(!$loop->last),@endif
+                    @endforeach
+                    // 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+                    // 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80',
+                    // 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1025&q=80',
+                    // 'https://images.unsplash.com/photo-1605348532760-6753d2c43329?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
+                    // 'https://images.unsplash.com/photo-1605034313761-73ea4a0cfbf3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80',
+                    // 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80',
+                    // 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+                    // 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1025&q=80',
+                    // 'https://images.unsplash.com/photo-1605034313761-73ea4a0cfbf3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80',
+                    // 'https://images.unsplash.com/photo-1605348532760-6753d2c43329?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80'
                 ];
+                console.log(images);
                 
                 // Initialize thumbnails for main gallery
                 function initThumbnails() {
@@ -453,13 +486,14 @@
                     <!-- Tab 1: Description Content (Default Active) -->
                     <div id="content-description" class="tab-content">
                         <h3 class="text-xl font-semibold mb-4">Product Details</h3>
-                        <ul class="list-disc list-inside space-y-2 ml-4 text-gray-700">
+                        <p>{{ $product->description }}</p>
+                        {{-- <ul class="list-disc list-inside space-y-2 ml-4 text-gray-700">
                             <li>Brightens and evens skin tone.</li>
                             <li>Reduces the appearance of dark spots and hyperpigmentation.</li>
                             <li>Provides deep hydration for a supple feel.</li>
                             <li>Formulated with natural extracts and advanced brightening agents.</li>
                             <li>Suitable for all skin types.</li>
-                        </ul>
+                        </ul> --}}
                     </div>
 
                     <!-- Tab 2: Specifications Content -->
@@ -468,23 +502,23 @@
                         <table class="w-full text-left border-collapse">
                             <tr class="border-b">
                                 <th class="py-2 text-gray-500 font-normal w-1/4">Brand</th>
-                                <td class="py-2">MJ Cosmetics</td>
+                                <td class="py-2">{{ $product->brand }}</td>
                             </tr>
                             <tr class="border-b">
                                 <th class="py-2 text-gray-500 font-normal w-1/4">Volume</th>
-                                <td class="py-2">50ml</td>
+                                <td class="py-2">{{ $product->model }}</td>
                             </tr>
-                            <tr class="border-b">
+                            {{-- <tr class="border-b">
                                 <th class="py-2 text-gray-500 font-normal w-1/4">Skin Type</th>
                                 <td class="py-2">All</td>
-                            </tr>
+                            </tr> --}}
                             <tr class="border-b">
-                                <th class="py-2 text-gray-500 font-normal w-1/4">Key Ingredients</th>
-                                <td class="py-2">Niacinamide, Vitamin C, Licorice Extract</td>
+                                <th class="py-2 text-gray-500 font-normal w-1/4">Condition</th>
+                                <td class="py-2">{{ $product->pcondition }}</td>
                             </tr>
                             <tr>
                                 <th class="py-2 text-gray-500 font-normal w-1/4">Made In</th>
-                                <td class="py-2">Pakistan</td>
+                                <td class="py-2">{{ $product->made_in }}</td>
                             </tr>
                         </table>
                     </div>
@@ -572,7 +606,7 @@
                         controls
                         poster="{{ asset('img/video-poster.jpg') }}"
                         class="w-full rounded-2xl object-cover">
-                        <source src="{{ asset('video/cosmetics.mp4') }}" type="video/mp4">
+                        <source src="{{ asset('storage/vendor/products/videos/'.$product->video) }}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
 
@@ -713,3 +747,33 @@
         };
     </script>
 @endsection
+
+
+
+
+
+{{-- <div class="relative">
+                    <img id="main-image"
+                        src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                        class="border-2 border-blue-900 w-full h-[80vh] aspect-square object-cover rounded-lg overflow-hidden">
+                    
+                    <!-- Icons -->
+                    <div class="absolute top-3 right-3 flex space-x-3">
+                        <!-- Fullscreen Icon -->
+                        <button id="fullscreen-btn" class="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2" class="w-6 h-6 text-gray-700">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M8 3H5a2 2 0 00-2 2v3m0 8v3a2 2 0 002 2h3m8-16h3a2 2 0 012 2v3m0 8v3a2 2 0 01-2 2h-3" />
+                            </svg>
+                        </button>
+                        <!-- Heart Icon -->
+                        <button id="heart-btn" class="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition">
+                            <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2" class="w-6 h-6 text-gray-700">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.682l-7.682-7.682a4.5 4.5 0 010-6.364z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div> --}}

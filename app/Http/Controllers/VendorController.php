@@ -706,6 +706,116 @@ class VendorController extends Controller
         }
     }
 
+    public function updateProduct(Request $request, $id)
+    {
+        // Find the product
+        $product = VendorProduct::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $validated = $request->all();
+
+        // Update the product
+        $product->update([
+            'name' => $validated['product_name'],
+            'category' => $validated['category'],
+            'subcategory' => $validated['subcategory'],
+            'quantity' => $validated['quantity'],
+            'brand' => $validated['brand'],
+            'model' => $validated['model'],
+            'pcondition' => $validated['condition'],
+            'original_price' => $validated['original_price'],
+            'delivery_charges' => $validated['delivery_charges'],
+            'selling_price' => $validated['selling_price'],
+            'mrp' => $validated['mrp'] ?? null,
+            'shipping_method' => $validated['shipping_method'],
+            'shipping_time' => $validated['shipping_time'],
+            'description' => $validated['description'],
+            'location' => $validated['location'],
+            'made_in' => $validated['made_in'],
+            'return_policy' => $validated['return_policy'] ?? null,
+            'status' => 'pending',
+        ]);
+
+        // Handle product images - ADD NEW IMAGES ONLY
+        if ($request->hasFile('productImages')) {
+            foreach ($request->file('productImages') as $index => $image) {
+                $extension = $image->getClientOriginalExtension();
+                $filename = uniqid() . '.' . $extension;
+                $imagePath = $image->storeAs('vendor/products/images', $filename, 'public');
+                $destinationPath = public_path('storage/vendor/products/images');
+                $image->move($destinationPath, $filename);
+                
+                VendorProductImage::create([
+                    'product_id' => $product->id,
+                    'image_path' => $filename,
+                    'is_primary' => $index === 0 && $product->images()->count() === 0, // Primary only if no images exist
+                ]);
+            }
+        }
+
+        // Handle product video - REPLACE EXISTING VIDEO
+        if ($request->hasFile('productVideo')) {
+            // Delete old video if exists
+            if ($product->video) {
+                if (Storage::disk('public')->exists('vendor/products/videos/' . $product->video)) {
+                    Storage::disk('public')->delete('vendor/products/videos/' . $product->video);
+                }
+            }
+
+            $video = $request->file('productVideo');
+            $extension = $video->getClientOriginalExtension();
+            $filename = uniqid() . '.' . $extension;
+            $videoPath = $video->storeAs('vendor/products/videos', $filename, 'public');
+            $destinationPath = public_path('storage/vendor/products/videos');
+            $video->move($destinationPath, $filename);
+            
+            $product->update([
+                'video' => $filename
+            ]);
+        }
+
+        // Handle remove video request
+        if ($request->has('remove_video') && $request->input('remove_video')) {
+            if ($product->video) {
+                if (Storage::disk('public')->exists('vendor/products/videos/' . $product->video)) {
+                    Storage::disk('public')->delete('vendor/products/videos/' . $product->video);
+                }
+            }
+            $product->update(['video' => null]);
+        }
+
+        // Handle product faults - DELETE OLD AND ADD NEW
+        // First delete all existing faults
+        $existingFaults = VendorProductFault::where('product_id', $product->id)->get();
+        foreach ($existingFaults as $fault) {
+            if ($fault->fault_image && Storage::disk('public')->exists('vendor/products/faults/' . $fault->fault_image)) {
+                Storage::disk('public')->delete('vendor/products/faults/' . $fault->fault_image);
+            }
+            $fault->delete();
+        }
+
+        // Then add new faults
+        if ($request->hasFile('faults')) {
+            foreach ($request->file('faults') as $index => $faultImage) {
+                $extension = $faultImage->getClientOriginalExtension();
+                $filename = uniqid() . '.' . $extension;
+                $faultImagePath = $faultImage->storeAs('vendor/products/faults', $filename, 'public');
+                $destinationPath = public_path('storage/vendor/products/faults');
+                $faultImage->move($destinationPath, $filename);
+                
+                VendorProductFault::create([
+                    'product_id' => $product->id,
+                    'fault_image' => $filename,
+                    'fault_description' => $validated['fault_descriptions'][$index] ?? null,
+                ]);
+            }
+        }
+
+        return redirect()->route('vendor.products')
+            ->with('success', 'Product updated successfully and is pending approval.');
+    }
+
     public function pr ($pr = 1) {}
 
 }

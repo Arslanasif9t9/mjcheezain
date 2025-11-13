@@ -41,7 +41,7 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
 
 Route::view('/cart', 'cart');
-Route::view('/product', 'product');
+Route::get('/product/{id}', [HomeController::class, 'product']);
 
 Route::view('/about', 'footer/about');
 Route::view('/future-vision', 'footer/future-vision');
@@ -74,7 +74,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/search-products', [SearchController::class, 'searchProducts'])->name('search.products');
 
 Route::get('/products/savings', [ProductController::class, 'biggestSavings']);
-Route::get('/products/category/{category}', [ProductController::class, 'byCategory']);
+Route::post('/products/category', [ProductController::class, 'byCategory']);
 
 
 
@@ -104,7 +104,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/products/store', [VendorController::class, 'storeProduct'])->name('products.store');
         Route::delete('/products/delete', [VendorController::class, 'deleteProduct'])->name('products.delete');
         Route::get('/products/edit/{id}', [VendorController::class, 'productsCreate'])->name('products.edit');
-        Route::post('/products/update/{id}', [VendorController::class, 'productsUpdate'])->name('products.update');
+        Route::put('/products/update/{id}', [VendorController::class, 'updateProduct'])->name('products.update');
         Route::post('/products/id', [VendorController::class, 'pr'])->name('products.index');
         
         Route::post('/profile-edit/basic-info', [VendorController::class, 'updateBasicInfo'])->name('basic.update');

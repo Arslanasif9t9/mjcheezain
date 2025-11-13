@@ -419,7 +419,7 @@
                 <h1 class="text-3xl font-bold mb-2 text-gray-900">Add New Product</h1>
                 <p class="text-gray-600 mb-6">Fill in the details below to list your product</p>
 
-                <form class="space-y-6" id="productForm" action="{{ route('vendor.products.store') }}" method="post" enctype="multipart/form-data">
+                <form class="space-y-6" id="productForm" action="{{ route('vendor.products.store') }}" method="post" enctype="multipart/form-data" novalidate>
                     @csrf
                     <!-- Product Images Section -->
                     <div class="form-section">
@@ -1205,7 +1205,12 @@
                         // Clone the template
                         const clone = document.importNode(imageInputTemplate, true);
                         const input = clone.querySelector('input');
-                        input.required = true;
+                        
+                        // ONLY set required if NOT in edit mode
+                        if (!editingMode) {
+                            input.required = true;
+                        }
+                        
                         input.name = `productImages[]`;
                         input.dataset.index = i;
                         input.addEventListener('change', handleImageUpload);
@@ -1335,12 +1340,46 @@
                         }
                     });
                     
+                    // Count existing images in edit mode
+                    const existingImages = document.querySelectorAll('.image-preview[data-existing="true"]').length;
+                    const totalImages = filledInputs + existingImages;
+                    
                     const submitBtn = document.querySelector('#productForm button[type="submit"]');
                     if (submitBtn) {
-                        submitBtn.disabled = filledInputs < 5;
+                        submitBtn.disabled = totalImages < 5;
+                        
+                        // Show validation message
+                        if (totalImages < 5) {
+                            showValidationMessage(`Please upload at least ${5 - totalImages} more image(s)`);
+                        } else {
+                            hideValidationMessage();
+                        }
                     }
                     
-                    return filledInputs >= 5;
+                    return totalImages >= 5;
+                }
+
+                // Show validation message
+                function showValidationMessage(message) {
+                    let validationDiv = document.getElementById('imageValidationMessage');
+                    if (!validationDiv) {
+                        validationDiv = document.createElement('div');
+                        validationDiv.id = 'imageValidationMessage';
+                        validationDiv.className = 'bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mt-4';
+                        
+                        const imagesSection = document.querySelector('.form-section');
+                        imagesSection.appendChild(validationDiv);
+                    }
+                    validationDiv.innerHTML = `<strong>Validation Error:</strong> ${message}`;
+                    validationDiv.style.display = 'block';
+                }
+
+                // Hide validation message
+                function hideValidationMessage() {
+                    const validationDiv = document.getElementById('imageValidationMessage');
+                    if (validationDiv) {
+                        validationDiv.style.display = 'none';
+                    }
                 }
 
                 // Setup video upload
@@ -1447,8 +1486,19 @@
                 function handleFormSubmit(e) {
                     if (!validateImageCount()) {
                         e.preventDefault();
-                        alert('Please upload at least 5 images');
+                        const totalImages = document.querySelectorAll('input[name="productImages[]"]:valid').length + 
+                                        document.querySelectorAll('.image-preview[data-existing="true"]').length;
+                        const needed = 5 - totalImages;
+                        alert(`Please upload at least ${needed} more image(s) or keep existing images`);
                         return false;
+                    }
+                    
+                    // Remove required attributes from file inputs in edit mode to prevent HTML5 validation
+                    if (editingMode) {
+                        const fileInputs = document.querySelectorAll('input[name="productImages[]"]');
+                        fileInputs.forEach(input => {
+                            input.required = false;
+                        });
                     }
                     
                     // Collect fault descriptions
@@ -1493,6 +1543,7 @@
                             const element = document.querySelector(`[name="${field}"]`);
                             if (element) element.value = fields[field];
                         });
+                        console.log(fields);
 
                         // Fill select fields
                         const selectFields = {
@@ -1503,6 +1554,8 @@
 
                         Object.keys(selectFields).forEach(field => {
                             const element = document.querySelector(`select[name="${field}"]`);
+                            selectFields[field] = selectFields[field].replace('&amp;', '&');
+                            console.log(selectFields[field])
                             if (element) element.value = selectFields[field];
                         });
 
@@ -1543,6 +1596,11 @@
                             @endforeach
                         @endif
 
+                         // Load product video if exists
+                        @if($product->video)
+                            loadExistingVideo('{{ $product->video }}');
+                        @endif
+
                         // Load product faults
                         @if(isset($productFaults) && count($productFaults) > 0)
                             @foreach($productFaults as $fault)
@@ -1577,6 +1635,9 @@
                         const statusIndicator = container.querySelector('.upload-status');
                         const fileUploadLabel = container.querySelector('.file-upload-label');
                         
+                        // Remove required attribute for existing images
+                        requiredInputs[index].required = false;
+                        
                         // Update status indicator
                         statusIndicator.className = 'upload-status status-filled';
                         statusIndicator.innerHTML = '<i class="fas fa-check" style="font-size: 12px;"></i>';
@@ -1589,11 +1650,19 @@
                         requiredInputs[index].style.opacity = '0.5';
                         requiredInputs[index].style.pointerEvents = 'none';
                         
-                        // Add to preview
+                        // Add hidden input for existing image
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = 'existing_images[]';
+                        hiddenInput.value = imagePath;
+                        container.appendChild(hiddenInput);
+                        
+                        // Add to preview with existing flag
                         const previewContainer = document.getElementById('imagePreviews');
                         const previewDiv = document.createElement('div');
                         previewDiv.className = 'image-preview';
                         previewDiv.dataset.inputIndex = index;
+                        previewDiv.dataset.existing = 'true';
                         previewDiv.innerHTML = `
                             <img src="{{ asset('storage/vendor/products/images/') }}/${imagePath}" alt="Preview" />
                             <div class="remove-image" title="Remove image">
@@ -1601,12 +1670,64 @@
                             </div>
                         `;
                         
+                        // Update remove functionality for existing images
                         previewDiv.querySelector('.remove-image').addEventListener('click', function() {
-                            removeImage(container, previewDiv);
+                            // Remove the hidden input
+                            hiddenInput.remove();
+                            
+                            // Remove the existing flag
+                            previewDiv.dataset.existing = 'false';
+                            
+                            // Re-enable the file input and make it required
+                            requiredInputs[index].style.opacity = '1';
+                            requiredInputs[index].style.pointerEvents = 'auto';
+                            requiredInputs[index].required = true;
+                            requiredInputs[index].value = '';
+                            
+                            // Reset status indicator
+                            statusIndicator.className = 'upload-status status-empty';
+                            statusIndicator.innerHTML = '<i class="fas fa-plus" style="font-size: 12px;"></i>';
+                            
+                            // Remove has-image class and image
+                            fileUploadLabel.classList.remove('has-image');
+                            fileUploadLabel.innerHTML = `
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Click to upload</span>
+                            `;
+                            
+                            // Remove preview
+                            previewDiv.remove();
+                            validateImageCount();
                         });
                         
                         previewContainer.appendChild(previewDiv);
                     }
+                    
+                    // Re-validate after loading existing images
+                    validateImageCount();
+                }
+
+                // Load existing video
+                function loadExistingVideo(videoPath) {
+                    const videoUpload = document.getElementById('videoUpload');
+                    const videoPreview = document.getElementById('videoPreview');
+                    const videoPreviewElement = videoPreview?.querySelector('video');
+                    const videoUploadLabel = document.getElementById('videoUploadLabel');
+                    
+                    if (!videoUpload || !videoPreview || !videoPreviewElement) return;
+                    
+                    // Set video source
+                    videoPreviewElement.src = "{{ asset('storage/vendor/products/videos/') }}/" + videoPath;
+                    videoPreview.classList.remove('hidden');
+                    
+                    // Hide upload label
+                    if (videoUploadLabel) {
+                        videoUploadLabel.style.display = 'none';
+                    }
+                    
+                    // Disable the file input to prevent accidental changes
+                    videoUpload.disabled = true;
+                    videoUpload.style.opacity = '0.5';
                 }
 
                 // Load existing fault

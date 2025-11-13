@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\VendorProductImage;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -23,14 +24,29 @@ class ProductController extends Controller
     }
 
     // Get products by category
-    public function byCategory($category)
+    public function byCategory(Request $request)
     {
-        $products = Product::where('category', $category)
-            ->where('position', 'approved')
-            ->with('primaryImage')
+        // return response()->json([
+        //     'data' => $request->name
+        // ]);
+        $products = Product::where('category', $request->name)
+            ->where('position', 'pending')
             ->orderByDesc('updated_at')
             ->get();
 
-        return view('products.category', compact('products', 'category'));
+        // Get all product IDs
+        $productIds = $products->pluck('id');
+
+        // Get all images for these products
+        $allImages = VendorProductImage::whereIn('product_id', $productIds)->where('is_primary', 1)->get();
+
+        // Group images by product_id for easy access
+        $imagesByProduct = $allImages->groupBy('product_id');
+
+        return response()->json([
+            'data' => $products,
+            'images' => $imagesByProduct
+        ]);
+        // return view('products.category', compact('products', 'category'));
     }
 }

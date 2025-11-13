@@ -1,3 +1,4 @@
+@props(['user', 'profile', 'dashboardPage', 'imgPath'])
 <!-- The 'sticky top-0' classes make the header stay at the top when scrolling -->
     <header class="sticky top-0 z-50 bg-white shadow-xl/50 shadow-gray-200/50">
         <div class="max-w-full mx-auto px-8 sm:px-6 lg:px-8 py-3">
