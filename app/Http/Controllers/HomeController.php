@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Product;
 use App\Models\VendorBasicInfo;
 use App\Models\VendorProductImage;
+use App\Models\Subscription;
 
 class HomeController extends Controller
 {
@@ -99,4 +100,69 @@ class HomeController extends Controller
             'product', 'vendor', 'imageMain', 'images'
         ));
     }
+
+    public function subscribe(Request $request)
+    {
+        // Manual validation
+        // $validator = Validator::make($request->all(), [
+            //     'email' => 'required|email|max:255'
+            // ]);
+
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'message' => 'Invalid email address',
+        //         'errors' => $validator->errors(),
+        //         'success' => false
+        //     ], 422);
+        // }
+        
+        try {
+            $email = $request->email;
+            
+            // Check if email already exists
+            if (Subscription::find($email)) {
+                return response()->json([
+                    'message' => 'This email is already subscribed!',
+                    'success' => false
+                ], 409);
+            }
+            
+            // return response()->json([
+            //     'success' => false
+            // ]);
+            // Create new subscription
+            $subscription = Subscription::create([
+                'email' => $email
+            ]);
+
+            return response()->json([
+                'email' => $subscription->email,
+                'message' => 'Subscription successful!',
+                'success' => true
+            ]);
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Handle duplicate entry
+            if (str_contains($e->getMessage(), 'Duplicate entry') || $e->getCode() == 23000) {
+                return response()->json([
+                    'message' => 'This email is already subscribed!',
+                    'success' => false
+                ], 409);
+            }
+
+            Log::error('Database error in subscription: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Subscription failed. Please try again.',
+                'success' => false
+            ], 500);
+
+        } catch (\Exception $e) {
+            Log::error('Subscription error: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Subscription failed. Please try again.',
+                'success' => false
+            ], 500);
+        }
+    }
+
 }

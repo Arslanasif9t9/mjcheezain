@@ -58,7 +58,7 @@
                 <div class="relative">
                     <img id="main-image"
                         src="{{ asset('storage/vendor/products/images/'.$imageMain->image_path) }}"
-                        class="border-2 border-blue-900 w-full h-[80vh] aspect-square object-cover rounded-lg overflow-hidden">
+                        class="border-2 border-blue-900 w-full h-[72vh] aspect-square object-cover rounded-lg overflow-hidden">
                     
                     <!-- Icons -->
                     <div class="absolute top-3 right-3 flex space-x-3">
@@ -89,19 +89,21 @@
                     </button>
 
                     <div id="image-slider"
-                        class="grid grid-flow-col auto-cols-[15%] gap-3 overflow-x-auto scroll-smooth no-scrollbar px-8">
+                        class="grid grid-flow-col auto-cols-[19%] gap-2 overflow-x-auto scroll-smooth no-scrollbar px-8">
                         <!-- Thumbnails will be dynamically added here -->
                     </div>
 
-                    <button id="scroll-right"
-                        class="absolute right-0 top-1/2 -translate-y-1/2 bg-blue-900 text-white p-2 rounded-full z-10 hover:bg-blue-800 transition-colors">
-                        &#10095;
-                    </button>
+                    <div class="bg-white absolute right-0 top-1/2 " style="height: 60px; width: 25px; margin-top: -30px; display: flex; justify-content: center; align-items: center;">
+                        <button id="scroll-right" style="margin-top: 30px"
+                            class="-translate-y-1/2 bg-blue-900 text-white p-2 rounded-full z-10 hover:bg-blue-800 transition-colors">
+                            &#10095;
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <!-- Right Column: Product Info & CTA -->
-            <div class="mt-32 col-span-2">
+            <div class="mt-4 md:mt-32 col-span-2">
                 <h1 class="text-3xl font-bold mb-2">{{ $product->name }}</h1>
                 
                 <!-- Ratings & Verification -->
@@ -120,8 +122,8 @@
                 <p class="text-3xl font-extrabold text-gray-900 mb-4">
                     PKR 
                     @if ($product->mrp)
-                        <del> {{ $product->selling_price }} </del> &nbsp; 
-                        <small>{{ $product->mrp }}</small> 
+                        {{ $product->mrp }} <br>
+                        <small class="font-normal text-md"><del> {{ $product->selling_price }} </del></small>  &nbsp; 
                     @else
                         {{ $product->selling_price }}
                     @endif
@@ -171,13 +173,28 @@
 
                 <!-- Action Buttons -->
                 <div class="flex space-x-4 mb-6">
-                    <button class="flex-1 py-3 px-6 bg-gray-800 text-white font-semibold rounded-lg hover:bg-gray-700 transition duration-150">
+                    <button 
+                        class="flex-1 py-3 px-6 bg-gray-400 text-white font-semibold rounded-lg transition duration-150 cursor-not-allowed opacity-75"
+                        disabled
+                    >
                         Add to Cart
                     </button>
-                    <button class="flex-1 py-3 px-6 border border-blue-700 text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition duration-150">
+                    <button id="wh-btn" class="flex-1 py-3 px-6 border border-blue-700 text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition duration-150">
                         Buy Now
                     </button>
                 </div>
+                <script>
+                    document.getElementById("wh-btn").addEventListener("click", function () {
+                        const phone = "923048609067"; // your number
+                        const msg = "I want to buy it!";
+                        const url = window.location.href; // current product URL
+
+                        const finalMsg = `Product link: ${url}\n${msg}\n\n`;
+                        const encoded = encodeURIComponent(finalMsg);
+
+                        window.open(`https://wa.me/${phone}?text=${encoded}`, "_blank");
+                    });
+                </script>
 
                 <!-- Delivery & Payment Info -->
                 <div class="space-y-3 text-sm">
@@ -290,7 +307,7 @@
                     images.forEach((image, index) => {
                         const thumb = document.createElement('img');
                         thumb.src = image;
-                        thumb.className = 'thumb aspect-square object-cover border-2 border-blue-900 rounded-md h-32 cursor-pointer hover:opacity-75 transition flex-shrink-0';
+                        thumb.className = 'thumb aspect-square object-cover border-2 border-blue-900 rounded-md w-32 h-16 lg:h-32 cursor-pointer hover:opacity-75 transition flex-shrink-0';
                         
                         // Set first thumbnail as active
                         if (index === 0) {

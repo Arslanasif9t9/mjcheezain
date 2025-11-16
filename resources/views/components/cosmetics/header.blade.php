@@ -1,18 +1,23 @@
 @props(['user', 'profile', 'dashboardPage', 'imgPath'])
 <!-- The 'sticky top-0' classes make the header stay at the top when scrolling -->
     <header class="sticky top-0 z-50 bg-white shadow-xl/50 shadow-gray-200/50">
-        <div class="max-w-full mx-auto px-8 sm:px-6 lg:px-8 py-3">
+        <div class="max-w-full mx-auto px-2 sm:px-6 lg:px-8 py-2 md:py-3">
             <div class="flex items-center justify-between">
                 
                 <!-- Left Section: Logo/Brand -->
                 <div class="flex items-center flex-shrink-0">
                     <!-- Icon placeholder from the image (used Lucide 'Warehouse' for a store feel) -->
-                     <div>
-                        <img src="{{ asset('img/short_logo.jpeg') }}" class="w-32 h-8" style="margin-top: -7px;">
-                        <p class="" style="font-size: 0.6rem; font-weight: 400; margin: 0 7px;">Elegance in every choice</p>
+                    <img src="{{ asset('img/short_logo.jpeg') }}" class="w-16 h-4">
+                    <div>
+                        <span class="text-3xl font-bold md:font-extrabold text-gray-900 tracking-tight" style="margin-top: -7px;">MJ Cheezain</span>
+                        <p class="" style="font-size: 0.6rem; font-weight: 400; margin: 0 11px;">Elegance in every choice</p>
                     </div>
-                    <span class="text-3xl font-extrabold text-gray-900 tracking-tight">MJ Cheezain</span>
                 </div>
+                <button 
+                        class="flex-1 w-32 py-3 px-0 bg-black text-white font-semibold rounded-lg transition duration-150 md:hidden" 
+                        style="transform: scale(0.8); position: relative; top: 45px; left: 16px;">
+                    view all products
+                </button>
 
                 <!-- Center Section: Search Bar (Hidden on mobile for better space) -->
                 <div class="hidden md:flex flex-grow justify-center mx-4 lg:mx-16">
@@ -40,7 +45,7 @@
             </div>
             
             <!-- Mobile Search Bar (Shown below logo on small screens) -->
-            <div class="md:hidden mt-3 relative">
+            <div class="hidden mt-3 relative">
                 <input
                     type="text"
                     placeholder="Search thousands of products..."
@@ -50,7 +55,7 @@
             </div>
 
             <!-- Mobile Navigation (Simple, optional, could be a hamburger menu instead) -->
-            <nav class="md:hidden flex justify-around mt-3 border-t pt-3 space-x-4">
+            <nav class="hidden flex justify-around mt-3 border-t pt-3 space-x-4">
                 <a href="#home" class="text-sm text-gray-600 hover:text-primary font-medium">Home</a>
                 <a href="#products" class="text-sm text-gray-600 hover:text-primary font-medium">Products</a>
                 <a href="#checkout" class="text-sm text-gray-600 hover:text-primary font-medium">Checkout</a>

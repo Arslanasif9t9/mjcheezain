@@ -8,6 +8,9 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\VendorController;
 
+Route::view('/', 'comming-soon');
+Route::post('/subscribe', [HomeController::class, 'subscribe']);
+
 Route::get('/test-mail', function() {
     try {
         $email = "arslanahmadt58@gmail.com";
@@ -27,7 +30,7 @@ Route::view('createDB', 'mydatabase/creation');
 
 
 // Public routes
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/a-456', [HomeController::class, 'index'])->name('home');
 Route::view('cosmetics', 'brands/cosmetics');
 Route::view('/product-listing', 'brands/product-listing');
 
