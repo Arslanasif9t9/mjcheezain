@@ -1,16 +1,6 @@
-<?php @include "./redirect_vendor.php"; ?>
-<?php 
-    // session_start();
-    $user_id = $_SESSION['user_id']; 
-
-    @include "../mydatabase/conn.php";
-    $sql = "SELECT * FROM `customer_profile` WHERE user_id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $basic_info = $result->fetch_assoc();
-?>
+@php
+    // dd($basic_info);
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -87,56 +77,7 @@
 <body class="bg-gray-50">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <div class="hidden md:flex md:flex-shrink-0">
-            <div class="flex flex-col w-64 bg-white border-r border-gray-200">
-                <div class="flex items-center justify-center h-16 px-4 bg-blue-600">
-                    <span class="text-white font-bold text-xl">cheezain</span>
-                </div>                
-                <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
-                    <div class="flex items-center px-4 py-3 mb-4 bg-gray-100 rounded-lg">
-                        <img class="w-10 h-10 rounded-full" src="<?php echo $basic_info['profile_image'] ?>" alt="User">
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-gray-900"><?php echo $basic_info['first_name'] . " " . $basic_info['last_name']; ?></p>
-                            <p class="text-xs text-gray-500">Gold Member</p>
-                        </div>
-                    </div>
-                    
-                    <nav class="flex-1 space-y-2">
-                        <a href="./dashboard.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-900 rounded-lg sidebar-item hover:bg-gray-100 active">
-                            <i class="fas fa-tachometer-alt mr-3"></i>
-                            Dashboard
-                        </a>
-                        <a href="./orders.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-shopping-bag mr-3"></i>
-                            My Orders
-                        </a>
-                        <a href="./wishlist.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-heart mr-3"></i>
-                            Wishlist
-                        </a>
-                        <a href="./addresses.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-map-marker-alt mr-3"></i>
-                            Addresses
-                        </a>
-                        <!-- <a href="./support.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-headset mr-3"></i>
-                            Support
-                        </a> -->
-                        <a href="./profile.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-user-cog mr-3"></i>
-                            Profile Settings
-                        </a>
-                    </nav>
-                    
-                    <div class="mt-auto mb-4">
-                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50" id="logoutBtn">
-                            <i class="fas fa-sign-out-alt mr-3"></i>
-                            Logout
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <x-customer.sidebar :basic_info="$basic_info"/>
 
         <!-- Main Content -->
         <div class="flex flex-col flex-1 overflow-hidden">
@@ -203,7 +144,7 @@
                     </div>
 
                     <!-- User dropdown -->
-                    <div class="relative">
+                    {{-- <div class="relative">
                         <button id="user-menu-button" class="flex items-center focus:outline-none">
                             <div class="mr-3 text-right hidden sm:block">
                                 <span class="block text-sm font-medium text-gray-700"><?= $basic_info['first_name'] . " " . $basic_info['last_name']?></span>
@@ -214,12 +155,12 @@
                                     alt="User">
                             </div>
                         </button>
-                    </div>
+                    </div> --}}
                 </div>
             </header>
 
             <!-- Mobile Sidebar (hidden by default) -->
-            <div id="mobile-sidebar" class="hidden fixed inset-0 z-50 bg-black bg-opacity-50">
+            {{-- <div id="mobile-sidebar" class="hidden fixed inset-0 z-50 bg-black bg-opacity-50">
                 <div class="fixed inset-y-0 left-0 w-64 bg-white">
                     <div class="flex items-center justify-between h-16 px-4 bg-blue-600">
                         <span class="text-white font-bold text-xl">cheezain</span>
@@ -256,10 +197,10 @@
                         </nav>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-y-auto p-6">
+            {{-- <main class="flex-1 overflow-y-auto p-6">
                 <!-- Welcome Panel -->
                 <div class="bg-white rounded-lg shadow p-6 mb-6">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -517,7 +458,7 @@
                                 </button>
                             </div>
                 </div>
-            </main>
+            </main> --}}
         </div>
     </div>
 

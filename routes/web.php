@@ -7,8 +7,10 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\VendorController;
+use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\SalesController;
 
-Route::view('/', 'comming-soon');
+Route::view('/comming', 'comming-soon');
 Route::post('/subscribe', [HomeController::class, 'subscribe']);
 
 Route::get('/test-mail', function() {
@@ -30,7 +32,7 @@ Route::view('createDB', 'mydatabase/creation');
 
 
 // Public routes
-Route::get('/a-456', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::view('cosmetics', 'brands/cosmetics');
 Route::view('/product-listing', 'brands/product-listing');
 
@@ -45,6 +47,7 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
 Route::view('/cart', 'cart');
 Route::get('/product/{id}', [HomeController::class, 'product']);
+Route::get('/vendor-products/{id}', [HomeController::class, 'vendorProducts']);
 
 Route::view('/about', 'footer/about');
 Route::view('/future-vision', 'footer/future-vision');
@@ -115,4 +118,15 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/profile-edit/address', [VendorController::class, 'updateAddress'])->name('address.update');
     });
 
+});
+
+
+
+
+
+Route::prefix('admin')->group(function () {
+    Route::get('/login', [AdminAuthController::class, 'loginForm']);
+    Route::post('/login', [AdminAuthController::class, 'login']);
+    Route::get('/dashboard', [AdminAuthController::class, 'dashboard']);
+    Route::get('/sales-data', [SalesController::class, 'getSalesData']);
 });

@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "cheezaindb";
+$dbname = "u425346958_db";
 
 // Create connetion
 $conn = new mysqli($servername, $username, $password, $dbname);

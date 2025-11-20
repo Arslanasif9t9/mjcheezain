@@ -45,7 +45,7 @@
 @endsection
 
 @section('body')
-    <x-cosmetics.header :user="$user ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
+    <x-cosmetics.header :user="$user ?? null" :vendor="$vendor ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
 
     <div class="mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
@@ -103,19 +103,40 @@
             </div>
 
             <!-- Right Column: Product Info & CTA -->
-            <div class="mt-4 md:mt-32 col-span-2">
+            <div class="mt-4 md:mt-32 col-span-2 relative">
                 <h1 class="text-3xl font-bold mb-2">{{ $product->name }}</h1>
-                
+
+                <!-- Discount Badge -->
+                @if ($product->mrp < $product->selling_price)
+                    @php
+                        $discount = round((($product->selling_price - $product->mrp) / $product->mrp) * 100);
+                    @endphp
+
+                    <div class="absolute top-12 right-20 bg-red-600 text-white px-4 py-2 rounded-xl shadow-lg 
+                                text-lg font-bold transform translate-x-4 -translate-y-4 z-10">
+                        🔥 {{ $discount }}% OFF
+                    </div>
+                @endif
+      
                 <!-- Ratings & Verification -->
                 <div class="flex items-center space-x-4 text-sm mb-4">
                     <div class="flex items-center space-x-1">
                         <span class="font-semibold">4.8</span>
                         <span class="text-gray-500">(125 reviews)</span>
                     </div>
-                    <div class="flex items-center text-green-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
-                        Verified Seller
-                    </div>
+                    @if($vendor->verified)
+                        <div class="flex items-center text-green-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                            Verified Seller
+                        </div>
+                    @else
+                        <div class="flex items-center text-red-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3-11a1 1 0 00-1.414-1.414L10 7.586 8.414 6A1 1 0 107 7.414L8.586 9 7 10.586A1 1 0 108.414 12L10 10.414 11.586 12A1 1 0 0013 10.586L11.414 9 13 7.414z" clip-rule="evenodd"/>
+                            </svg>
+                            Vendor Unverified
+                        </div>
+                    @endif
                 </div>
 
                 <!-- Price -->
@@ -607,7 +628,7 @@
                                     <span class="ml-2 h-2 w-2 bg-primary-blue rounded-full"></span>
                                     <span class="ml-1 text-sm text-primary-blue">Verified</span>
                                 </p>
-                                <a href="#" class="text-sm text-primary-blue hover:text-blue-700 transition duration-150">
+                                <a href="/vendor-products/{{ $vendor->user_id }}" class="text-sm text-primary-blue hover:text-blue-700 transition duration-150">
                                     View all products from this vendor &rarr;
                                 </a>
                             </div>

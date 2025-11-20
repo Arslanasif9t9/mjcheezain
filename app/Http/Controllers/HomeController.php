@@ -165,4 +165,46 @@ class HomeController extends Controller
         }
     }
 
+    public function vendorProducts($id) {
+        $user = null;
+        $profile = null;
+        $dashboardPage = null;
+        $imgPath = 'img/default_profile.webp';
+        
+        if (Auth::check()) {
+            $user = Auth::user();
+            
+            if ($user->type == 'vendor') {
+                $profile = $user->vendorProfile;
+                $imgPath = $profile && $profile->profile_picture 
+                ? "vendor/profile/{$profile->profile_picture}" 
+                : "img/default_profile.webp";
+                $dashboardPage = route('vendor.dashboard');
+            } else {
+                $profile = $user->customerProfile;
+                $imgPath = $profile && $profile->profile_image 
+                ? "customer/profile/{$profile->profile_image}" 
+                : "img/default_profile.webp";
+                // dd($profile->profile_image);  
+                $dashboardPage = route('customer.dashboard');
+            }
+        }
+
+         // 👉 Add this for products
+        $products = Product::where('user_id', $id)->get();
+        $vendor = VendorBasicInfo::where('user_id', $id)->first();
+        foreach ($products as $product) {
+            $productImage = VendorProductImage::where('product_id', $product->id)
+                                            ->where('is_primary', 1)
+                                            ->first();
+            $product->primary_image = $productImage ? $productImage->image_path : null;
+        }
+        // $images = VendorProductImage::where('product_id', $product->id)->pluck('image_path');
+
+        return view('vendor-products', compact(
+            'user', 'profile', 'dashboardPage', 'imgPath', 
+            'products', 'vendor',
+        ));
+    }
+
 }

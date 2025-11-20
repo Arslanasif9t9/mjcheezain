@@ -31,13 +31,13 @@
                             @endphp
                     <tr class="product-row border-b hover:bg-gray-50 transition" data-position="{{ $product->position ?? 'all' }}">
                         <td class="p-4">
-                            <a href="#" target="_blank" 
+                            <a href="/product/{{ $product->id }}" target="_blank" 
                                class="text-blue-500 hover:text-blue-700">
                                 {{ $product->id }}
                             </a>
                         </td>
                         <td class="p-4">
-                            <a href="#" target="_blank">
+                            <a href="/product/{{ $product->id }}" target="_blank">
                                 <img style="width: 50px !important; height: 50px !important; border-radius: 10px;" 
                                      src="{{ $product->primary_image ? asset('storage/vendor/products/images/'.$product->primary_image) : asset('img/default-product.jpg') }}" 
                                      alt="{{ $product->name }}"
@@ -45,7 +45,7 @@
                             </a>
                         </td>
                         <td class="p-4 font-semibold">
-                            <a href="#" target="_blank"
+                            <a href="/product/{{ $product->id }}" target="_blank"
                                class="hover:text-blue-600 transition">
                                 <p class="h-8 overflow-hidden leading-4 line-clamp-2">
                                     {{ $product->name }}
