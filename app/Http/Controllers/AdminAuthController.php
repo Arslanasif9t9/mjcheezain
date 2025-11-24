@@ -45,6 +45,19 @@ class AdminAuthController extends Controller
         }
     }
 
+    function logout() {
+        // Clear all session data
+        Session::forget('admin_logged_in');
+        Session::forget('admin_id');
+        Session::forget('admin_username');
+        Session::forget('admin_data');
+        
+        // Alternatively, you can flush all session data
+        // Session::flush();
+        
+        return redirect('/admin/login');
+    }
+
     function dashboard() {
         // Check if admin is logged in
         if (!Session::get('admin_logged_in')) {
@@ -76,16 +89,77 @@ class AdminAuthController extends Controller
         ]);
     }
 
-    function logout() {
-        // Clear all session data
-        Session::forget('admin_logged_in');
-        Session::forget('admin_id');
-        Session::forget('admin_username');
-        Session::forget('admin_data');
-        
-        // Alternatively, you can flush all session data
-        // Session::flush();
-        
-        return redirect('/admin/login');
+    function vendors () {
+        // Check if admin is logged in
+        if (!Session::get('admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        $totalUsers = DB::table('users')
+                        ->where('type', 'vendor')
+                        ->count();
+        $activeUsers = DB::table('users')
+                        ->where('type', 'vendor')
+                        ->where('verified', 1)
+                        ->count();
+        $blocked = DB::table('users')
+                        ->where('type', 'vendor')
+                        ->where('status', 'blocked')
+                        ->count();
+        $pendding = DB::table('users')
+                        ->where('type', 'vendor')
+                        ->where('verified', 0)
+                        ->count();
+        $products = DB::table('vendor_products')
+                        ->count();
+
+        $vendors = DB::table('users')
+                        ->where('type', 'vendor')
+                        ->get()
+                        ->toArray();
+        $vendorsBasic = DB::table('vendor_basic_info')
+                        ->get()
+                        ->toArray();
+        return view('Admin/vendor_management', compact([
+            'totalUsers',
+            'activeUsers',
+            'blocked',
+            'pendding',
+            'products',
+            'vendors',
+            'vendorsBasic'
+        ]));
+    }
+
+    function products() {
+        // Check if admin is logged in
+        if (!Session::get('admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        $total = DB::table('vendor_products')
+                        ->count();
+        $pending = DB::table('vendor_products')
+                        ->where('position', 'pending')
+                        ->count();
+        $approved = DB::table('vendor_products')
+                        ->where('position', 'approved')
+                        ->count();
+        $rejected = DB::table('vendor_products')
+                        ->where('position', 'rejected')
+                        ->count();
+        $out = DB::table('vendor_products')
+                        ->where('quantity', 0)
+                        ->count();
+
+        $products = DB::table('vendor_products')
+                ->orderBy('created_at', 'desc')
+                ->get()
+                ->toArray();
+
+        return view('admin/product_management', compact([
+            'total', 'pending', 'approved', 'rejected', 'out',
+            'products'
+        ]));
     }
 }

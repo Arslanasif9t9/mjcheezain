@@ -816,6 +816,126 @@ class VendorController extends Controller
             ->with('success', 'Product updated successfully and is pending approval.');
     }
 
+    public function updateStatus(Request $request) {
+        try {
+            $request->validate([
+                'user_id' => 'required|integer|exists:users,user_id',
+                'status' => 'required|in:active,pending,blocked',
+                'action' => 'required|in:approve,block,unblock,reject'
+            ]);
+            
+            $userId = $request->user_id;
+            $newStatus = $request->status;
+            $action = $request->action;
+            $verify = ($newStatus == 'active') ? 1 : 0;
+            
+            // Update user status
+            DB::table('users')
+                ->where('user_id', $userId)
+                ->update(['status' => $newStatus, 'verified' => $verify]);
+            
+            return response()->json([
+                'success' => true
+            ]);
+            // Log the action if needed
+            // ActivityLog::create([...]);
+
+            return response()->json([
+                'success' => true,
+                'message' => "Vendor {$action}d successfully!",
+                'data' => [
+                    'user_id' => $userId,
+                    'new_status' => $newStatus,
+                    'action' => $action
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update vendor status: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getVendorDetails($user_id)
+    {
+        try {
+            $user_id = intval($user_id);
+
+            // Get vendor basic info
+            $vendor = DB::table('users as u')
+                ->leftJoin('vendor_basic_info as vbi', 'u.user_id', '=', 'vbi.user_id')
+                ->leftJoin('vendor_store_details as vsd', 'u.user_id', '=', 'vsd.user_id')
+                ->leftJoin('vendor_address as va', 'u.user_id', '=', 'va.user_id')
+                ->where('u.user_id', $user_id)
+                ->select('u.*', 'vbi.*', 'vsd.*', 'va.*')
+                ->first();
+
+            if (!$vendor) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Vendor not found'
+                ], 404);
+            }
+
+            // Get vendor products
+            $products = DB::table('vendor_products')
+                ->where('user_id', $user_id)
+                ->limit(5)
+                ->get();
+
+            // // Get vendor orders
+            // $orders = DB::table('orders as o')
+            //     ->join('vendor_products as p', 'o.product_id', '=', 'p.id')
+            //     ->where('o.vendor_id', $user_id)
+            //     ->select('o.*', 'p.name as product_name')
+            //     ->orderBy('o.order_date', 'DESC')
+            //     ->limit(5)
+            //     ->get();
+
+            // // Get vendor documents
+            // $documents = DB::table('vendor_documents')
+            //     ->where('user_id', $user_id)
+            //     ->get();
+
+            // // Get vendor payments
+            // $payments = DB::table('vendor_payments')
+            //     ->where('user_id', $user_id)
+            //     ->orderBy('payment_date', 'DESC')
+            //     ->limit(5)
+            //     ->get();
+
+            // // Calculate total earnings
+            // $earnings = DB::table('orders')
+            //     ->where('vendor_id', $user_id)
+            //     ->select(DB::raw('SUM(total_amount) as total_earnings'))
+            //     ->first();
+
+
+            // return response()->json([
+            //     'success' => true,
+            //     'html' => [$user_id, $vendor, $products]
+            // ]);
+
+            // Generate HTML content
+            $html = view('admin/vendor_details', compact([
+                'vendor', 'products'
+            ]))->render();
+
+            return response()->json([
+                'success' => true,
+                'html' => $html
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error loading vendor details: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function pr ($pr = 1) {}
 
 }

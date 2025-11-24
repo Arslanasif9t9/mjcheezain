@@ -129,4 +129,12 @@ Route::prefix('admin')->group(function () {
     Route::post('/login', [AdminAuthController::class, 'login']);
     Route::get('/dashboard', [AdminAuthController::class, 'dashboard']);
     Route::get('/sales-data', [SalesController::class, 'getSalesData']);
+
+    Route::get('/vendors', [AdminAuthController::class, 'vendors']);
+    Route::post('/admin/vendor/status', [VendorController::class, 'updateStatus'])->name('admin.vendor.status');
+    Route::get('/vendor/details/{user_id}', [VendorController::class, 'getVendorDetails']);
+
+    Route::get('/products', [AdminAuthController::class, 'products']);
+    Route::post('/change-product-position', [ProductController::class, 'changeProductPosition']);
+    Route::post('/delete-product', [ProductController::class, 'deleteProduct']);
 });

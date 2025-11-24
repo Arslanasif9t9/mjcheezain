@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\VendorProductImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -48,5 +49,83 @@ class ProductController extends Controller
             'images' => $imagesByProduct
         ]);
         // return view('products.category', compact('products', 'category'));
+    }
+
+
+
+    public function changeProductPosition(Request $request)
+    {
+        $productId = $request->input('product_id');
+        $position = $request->input('position');
+        
+        // Validate inputs
+        if (!$productId || !$position) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product ID and position are required'
+            ]);
+        }
+        
+        try {
+            // Update product position
+            $affected = DB::table('vendor_products')
+                ->where('id', $productId)
+                ->update(['position' => $position]);
+            
+            if ($affected) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Product position updated successfully'
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Product not found or no changes made'
+                ]);
+            }
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating product: ' . $e->getMessage()
+            ]);
+        }
+    }
+    
+    public function deleteProduct(Request $request)
+    {
+        $productId = $request->input('product_id');
+        
+        if (!$productId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product ID is required'
+            ]);
+        }
+        
+        try {
+            // Delete product
+            $deleted = DB::table('vendor_products')
+                ->where('id', $productId)
+                ->delete();
+            
+            if ($deleted) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Product deleted successfully'
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Product not found'
+                ]);
+            }
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting product: ' . $e->getMessage()
+            ]);
+        }
     }
 }

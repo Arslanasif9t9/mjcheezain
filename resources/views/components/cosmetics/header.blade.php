@@ -10,7 +10,7 @@
                     <img src="{{ asset('img/short_logo.jpeg') }}" class="w-16 md:w-32 h-4 md:h-8 mt-0 md:mt-[-15px]">
                     <div>
                         <span class="text-3xl font-bold md:font-extrabold text-gray-900 tracking-tight mt-[-7px]" style="">MJ Cheezain</span>
-                        <p class="mx-[11px] md:ml-[-117px] md:mt-[-5px]" style="font-size: 0.6rem; font-weight: 400;;">Elegance in every choice</p>
+                        <p class="mx-[11px] ml-[-70px] md:ml-[-117px] md:mt-[-5px]" style="font-size: 0.6rem; font-weight: 400;;">Elegance in every choice</p>
                     </div>
                 </div>
                 <a href="/vendor-products/{{ $vendor->user_id ?? null }}"
