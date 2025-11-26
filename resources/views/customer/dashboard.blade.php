@@ -92,7 +92,7 @@
                 </div>
 
                 <!-- Center - Search bar -->
-                <div class="hidden md:flex flex-1 max-w-md mx-4">
+                <div class="hidden flex-1 max-w-md mx-4"> <!-- md:flex -->
                     <div class="relative w-full">
                         <input type="text" placeholder="Search..."
                             class="w-full py-2 pl-4 pr-10 text-sm bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">
@@ -160,7 +160,7 @@
             </header>
 
             <!-- Mobile Sidebar (hidden by default) -->
-            {{-- <div id="mobile-sidebar" class="hidden fixed inset-0 z-50 bg-black bg-opacity-50">
+            <div id="mobile-sidebar" class="hidden fixed inset-0 z-50 bg-black bg-opacity-50">
                 <div class="fixed inset-y-0 left-0 w-64 bg-white">
                     <div class="flex items-center justify-between h-16 px-4 bg-blue-600">
                         <span class="text-white font-bold text-xl">cheezain</span>
@@ -197,15 +197,15 @@
                         </nav>
                     </div>
                 </div>
-            </div> --}}
+            </div>
 
             <!-- Main Content Area -->
-            {{-- <main class="flex-1 overflow-y-auto p-6">
+            <main class="flex-1 overflow-y-auto p-6">
                 <!-- Welcome Panel -->
                 <div class="bg-white rounded-lg shadow p-6 mb-6">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                         <div>
-                            <h2 class="text-2xl font-bold text-gray-800">Welcome back, <?= $basic_info['first_name']?>!</h2>
+                            <h2 class="text-2xl font-bold text-gray-800">Welcome back!</h2>
                             <p class="text-gray-600">Here's what's happening with your orders today.</p>
                         </div>
                         <div class="mt-4 md:mt-0">
@@ -225,12 +225,7 @@
                                 <div>
                                     <p class="text-sm text-gray-600">Total Orders</p>
                                     <p class="text-xl font-bold text-gray-800">
-                                        <?php
-                                            $sql = "SELECT COUNT(orders.id) AS total_orders FROM users JOIN orders ON users.user_id = orders.user_id WHERE users.type = 'customer' GROUP BY users.user_id ORDER BY total_orders DESC";
-                                            $result = $conn->query($sql);
-                                            while ($row = $result->fetch_assoc()) 
-                                                echo $row['total_orders'];
-                                        ?>
+                                        {{ DB::table('orders')->where('user_id', $basic_info->user_id)->count() }}
                                     </p>
                                 </div>
                             </div>
@@ -243,17 +238,7 @@
                                 <div>
                                     <p class="text-sm text-gray-600">Active Orders</p>
                                     <p class="text-xl font-bold text-gray-800">
-                                        <?php
-                                            $sql = "SELECT COUNT(orders.id) AS active_orders 
-                                                    FROM users 
-                                                    JOIN orders ON users.user_id = orders.user_id 
-                                                    WHERE users.type = 'customer' 
-                                                    AND orders.fulfillment NOT IN ('delivered', 'cancelled')";
-                                                    
-                                            $result = $conn->query($sql);
-                                            if ($row = $result->fetch_assoc()) 
-                                                echo $row['active_orders'];
-                                        ?>
+                                        {{ DB::table('orders')->where('user_id', $basic_info->user_id)->where('status', '!=', 'completed')->count() }}
                                     </p>
                                 </div>
                             </div>
@@ -266,17 +251,7 @@
                                 <div>
                                     <p class="text-sm text-gray-600">Completed</p>
                                     <p class="text-xl font-bold text-gray-800">
-                                        <?php
-                                            $sql = "SELECT COUNT(orders.id) AS delivered_orders 
-                                                    FROM users 
-                                                    JOIN orders ON users.user_id = orders.user_id 
-                                                    WHERE users.type = 'customer' 
-                                                    AND orders.fulfillment = 'delivered'";
-                                                    
-                                            $result = $conn->query($sql);
-                                            if ($row = $result->fetch_assoc()) 
-                                                echo $row['delivered_orders'];
-                                        ?>
+                                        {{ DB::table('orders')->where('user_id', $basic_info->user_id)->where('status', 'completed')->count() }}
                                     </p>
                                 </div>
                             </div>
@@ -381,7 +356,7 @@
                 </div> -->
 
                 <!-- Recent Activity Section -->
-                <div class="profile-card bg-white rounded-lg shadow p-6">
+                {{-- <div class="profile-card bg-white rounded-lg shadow p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-lg font-medium text-gray-900">Recent Activity</h3>
                                 <button class="text-blue-600 hover:text-blue-800 focus:outline-none">
@@ -389,55 +364,6 @@
                                 </button>
                             </div>
                             <div class="space-y-4">
-                                <?php
-                                // Database connection
-                                require_once '../mydatabase/conn.php';
-                                
-                                // Get current customer ID (you'll need to set this based on your auth system)
-                                $customer_id = $_SESSION['user_id'] ?? 0;
-                                
-                                // Query to get recent activities
-                                $query = "SELECT * FROM customer_recent_activity 
-                                        WHERE user_id = ? 
-                                        ORDER BY created_at DESC 
-                                        LIMIT 4";
-                                $stmt = $conn->prepare($query);
-                                $stmt->bind_param("i", $customer_id);
-                                $stmt->execute();
-                                $result = $stmt->get_result();
-                                
-                                // Icons and colors for different activity types
-                                $activity_icons = [
-                                    'order_placed' => ['icon' => 'shopping-bag', 'color' => 'blue'],
-                                    'order_delivered' => ['icon' => 'check-circle', 'color' => 'green'],
-                                    'wishlist' => ['icon' => 'heart', 'color' => 'purple'],
-                                    'review' => ['icon' => 'star', 'color' => 'yellow']
-                                ];
-                                
-                                // Display activities
-                                while ($activity = $result->fetch_assoc()) {
-                                    $icon = $activity_icons[$activity['activity_type']]['icon'] ?? 'bell';
-                                    $color = $activity_icons[$activity['activity_type']]['color'] ?? 'gray';
-                                    
-                                    // Calculate time ago
-                                    $created_at = new DateTime($activity['created_at']);
-                                    $now = new DateTime();
-                                    $interval = $created_at->diff($now);
-                                    
-                                    if ($interval->y > 0) {
-                                        $time_ago = $interval->y . ' year' . ($interval->y > 1 ? 's' : '') . ' ago';
-                                    } elseif ($interval->m > 0) {
-                                        $time_ago = $interval->m . ' month' . ($interval->m > 1 ? 's' : '') . ' ago';
-                                    } elseif ($interval->d > 0) {
-                                        $time_ago = $interval->d . ' day' . ($interval->d > 1 ? 's' : '') . ' ago';
-                                    } elseif ($interval->h > 0) {
-                                        $time_ago = $interval->h . ' hour' . ($interval->h > 1 ? 's' : '') . ' ago';
-                                    } elseif ($interval->i > 0) {
-                                        $time_ago = $interval->i . ' minute' . ($interval->i > 1 ? 's' : '') . ' ago';
-                                    } else {
-                                        $time_ago = 'Just now';
-                                    }
-                                ?>
                                 <div class="flex">
                                     <div class="flex-shrink-0 mr-4">
                                         <div class="bg-<?= $color ?>-100 p-3 rounded-full">
@@ -457,8 +383,8 @@
                                     View All Activity
                                 </button>
                             </div>
-                </div>
-            </main> --}}
+                </div> --}}
+            </main>
         </div>
     </div>
 
@@ -550,7 +476,7 @@
             const filter = document.getElementById("orderFilter");
 
             function loadOrders(status = 'all') {
-                fetch(`get_orders.php?status=${status}`)
+                fetch(`/customer/get_orders?status=${status}`)
                     .then(res => res.json())
                     .then(data => {
                         ordersTableBody.innerHTML = "";

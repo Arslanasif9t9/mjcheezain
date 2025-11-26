@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -81,7 +82,13 @@ class HomeController extends Controller
 
         // 👉 Add this for products
         $product = Product::where('id', $id)->first();
+        if($product->position != 'approved' && $product->user_id != $user->user_id) {
+            return 'blocked';
+        }
         $vendor = VendorBasicInfo::where('user_id', $product->user_id)->first();
+        $vendorUser = DB::table('users')
+                        ->where('user_id', $product->user_id)
+                        ->first();
         $imageMain = VendorProductImage::where('product_id', $product->id)
                     ->where('is_primary', 1)
                     ->first();
@@ -97,7 +104,7 @@ class HomeController extends Controller
         // return view('home.index');
         return view('product', compact(
             'user', 'profile', 'dashboardPage', 'imgPath', 
-            'product', 'vendor', 'imageMain', 'images'
+            'product', 'vendor', 'imageMain', 'images', 'vendorUser'
         ));
     }
 

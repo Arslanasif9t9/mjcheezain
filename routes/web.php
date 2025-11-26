@@ -9,6 +9,9 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\AddressController;
+use App\Http\Controllers\FavoriteController;
 
 Route::view('/comming', 'comming-soon');
 Route::post('/subscribe', [HomeController::class, 'subscribe']);
@@ -90,10 +93,16 @@ Route::middleware(['auth'])->group(function () {
     // ----------------------------
     Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('/dashboard', [CustomerController::class, 'dashboard'])->name('dashboard');
+        Route::get('/get_orders', [OrderController::class, 'getOrders']);
+        Route::get('/profile', [CustomerController::class, 'profile'])->name('cprofile');
+        Route::get('/profile/edit', [CustomerController::class, 'editProfile']);
+        Route::post('/profile/save', [CustomerController::class, 'saveProfile']);
+        Route::get('/addresses', [CustomerController::class, 'addresses']);
+        Route::get('/wishlist', [CustomerController::class, 'wishlist']);
         // Add other customer routes here
         // Example: Route::get('/orders', [CustomerController::class, 'orders'])->name('orders');
     });
-
+    
     // ----------------------------
     // 🔵 VENDOR ROUTES
     // ----------------------------
@@ -119,8 +128,14 @@ Route::middleware(['auth'])->group(function () {
     });
 
 });
+Route::post('/customer/address/save', [AddressController::class, 'saveAddress']);
+Route::get('/customer/address/get/{id}', [AddressController::class, 'getAddress']);
+Route::get('/customer/address/set-default/{id}', [AddressController::class, 'setDefault'])->name('addresses.set_default');
+Route::get('/customer/address/delete/{id}', [AddressController::class, 'delete'])->name('addresses.delete');
 
-
+Route::post('/favorites/toggle', [FavoriteController::class, 'toggleFavorite']);
+Route::get('/favorites/check/{product_id}', [FavoriteController::class, 'checkFavorite']);
+Route::get('/wishlist/get', [FavoriteController::class, 'getWishlist']);
 
 
 

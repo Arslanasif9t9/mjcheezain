@@ -1,16 +1,3 @@
-<?php @include "./redirect_vendor.php"; ?>
-<?php 
-    // session_start();
-    $user_id = $_SESSION['user_id']; 
-
-    @include "../mydatabase/conn.php";
-    $sql = "SELECT * FROM `customer_profile` WHERE user_id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $basic_info = $result->fetch_assoc();
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,60 +62,7 @@
 <body class="bg-gray-50">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <div class="hidden md:flex md:flex-shrink-0">
-            <div class="flex flex-col w-64 bg-white border-r border-gray-200">
-                <div class="flex items-center justify-center h-16 px-4 bg-blue-600">
-                    <span class="text-white font-bold text-xl">cheezain</span>
-                </div>                
-                <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
-                    <div class="flex items-center px-4 py-3 mb-4 bg-gray-100 rounded-lg">
-                        <img class="w-10 h-10 rounded-full" src="<?php echo $basic_info['profile_image'] ?>" alt="User">
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-gray-900"><?php echo $basic_info['first_name'] . " " . $basic_info['last_name']; ?></p>
-                            <p class="text-xs text-gray-500">Gold Member</p>
-                        </div>
-                    </div>
-                    
-                    <nav class="flex-1 space-y-2">
-                        <a href="./dashboard.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-900 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-tachometer-alt mr-3"></i>
-                            Dashboard
-                        </a>
-                        <a href="./orders.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-shopping-bag mr-3"></i>
-                            My Orders
-                        </a>
-                        <a href="./wishlist.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-heart mr-3"></i>
-                            Wishlist
-                        </a>
-                        <a href="./addresses.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-map-marker-alt mr-3"></i>
-                            Addresses
-                        </a>
-                        <!-- <a href="./payments.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-credit-card mr-3"></i>
-                            Payment Methods
-                        </a>
-                        <a href="./support.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-headset mr-3"></i>
-                            Support
-                        </a> -->
-                        <a href="./profile.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100 active">
-                            <i class="fas fa-user-cog mr-3"></i>
-                            Profile Settings
-                        </a>
-                    </nav>
-                    
-                    <div class="mt-auto mb-4">
-                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50" id="logoutBtn">
-                            <i class="fas fa-sign-out-alt mr-3"></i>
-                            Logout
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <x-customer.sidebar :basic_info="$basic_info"/>
         
         <!-- Main Content -->
         <div class="flex flex-col flex-1 overflow-hidden">
@@ -143,7 +77,7 @@
                 </div>
 
                 <!-- Center - Search bar -->
-                <div class="hidden md:flex flex-1 max-w-md mx-4">
+                <div class="hidden flex-1 max-w-md mx-4">
                     <div class="relative w-full">
                         <input type="text" placeholder="Search..."
                             class="w-full py-2 pl-4 pr-10 text-sm bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">
@@ -195,7 +129,7 @@
                     </div>
 
                     <!-- User dropdown -->
-                    <div class="relative">
+                    {{-- <div class="relative">
                         <button id="user-menu-button" class="flex items-center focus:outline-none">
                             <div class="mr-3 text-right hidden sm:block">
                                 <span class="block text-sm font-medium text-gray-700"><?= $basic_info['first_name'] . " " . $basic_info['last_name']?></span>
@@ -206,7 +140,7 @@
                                     alt="User">
                             </div>
                         </button>
-                    </div>
+                    </div> --}}
                 </div>
             </header>
 
@@ -243,13 +177,13 @@
                         <div class="flex flex-col md:flex-row md:items-end md:justify-between">
                             <div class="flex items-end">
                                 <div class="relative">
-                                    <img class="w-32 h-32 rounded-full border-4 border-white" src="<?php echo $basic_info['profile_image']; ?>" alt="Profile">
+                                    <img class="w-32 h-32 rounded-full border-4 border-white" src="{{ asset('storage/customer/profile/' . $basic_info->profile_image) }}" alt="Profile">
                                     <span class="absolute bottom-0 right-0 bg-green-500 rounded-full p-1 border-2 border-white">
                                         <i class="fas fa-check text-white text-xs"></i>
                                     </span>
                                 </div>
                                 <div class="ml-6 mb-4">
-                                    <h2 class="text-2xl font-bold text-gray-900"><?php echo $basic_info['first_name'] . " " . $basic_info['last_name']; ?></h2>
+                                    <h2 class="text-2xl font-bold text-gray-900">{{ $basic_info->first_name }} {{ $basic_info->last_name }}</h2>
                                     <p class="text-gray-600">Gold Member</p>
                                     <!-- <div class="flex items-center mt-2">
                                         <i class="fas fa-map-marker-alt text-gray-400 mr-2"></i>
@@ -261,7 +195,7 @@
                                 <!-- <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none mr-2">
                                     <i class="fas fa-share-alt mr-2"></i>Share Profile
                                 </button> -->
-                                <a href="./edit-profile.php" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 focus:outline-none">
+                                <a href="/customer/profile/edit" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 focus:outline-none">
                                     <i class="fas fa-user-edit mr-2"></i>Edit Profile
                                 </a>
                             </div>
@@ -273,48 +207,25 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                     <div class="stats-card bg-white rounded-lg shadow p-4 text-center">
                         <div class="text-2xl font-bold text-blue-600 mb-1">
-                            <?php
-                                            $sql = "SELECT COUNT(orders.id) AS total_orders FROM users JOIN orders ON users.user_id = orders.user_id WHERE users.type = 'customer' GROUP BY users.user_id ORDER BY total_orders DESC";
-                                            $result = $conn->query($sql);
-                                            while ($row = $result->fetch_assoc()) 
-                                                echo $row['total_orders'];
-                            ?>
+                            {{ DB::table('orders')->where('user_id', $basic_info->user_id)->count() }}
                         </div>
                         <p class="text-sm text-gray-600">Total Orders</p>
                     </div>
                     <div class="stats-card bg-white rounded-lg shadow p-4 text-center">
                         <div class="text-2xl font-bold text-green-600 mb-1">
-                            <?php
-                                            $sql = "SELECT COUNT(orders.id) AS delivered_orders 
-                                                    FROM users 
-                                                    JOIN orders ON users.user_id = orders.user_id 
-                                                    WHERE users.type = 'customer' 
-                                                    AND orders.fulfillment = 'delivered'";
-                                                    
-                                            $result = $conn->query($sql);
-                                            if ($row = $result->fetch_assoc()) 
-                                                echo $row['delivered_orders'];
-                            ?>
+                            {{ DB::table('orders')->where('user_id', $basic_info->user_id)->where('status', 'completed')->count() }}
                         </div>
                         <p class="text-sm text-gray-600">Completed</p>
                     </div>
                     <div class="stats-card bg-white rounded-lg shadow p-4 text-center">
-                        <div class="text-2xl font-bold text-purple-600 mb-1">5</div>
+                        <div class="text-2xl font-bold text-purple-600 mb-1">
+                            {{ DB::table('favorites')->where('user_id', $basic_info->user_id)->count() }}
+                        </div>
                         <p class="text-sm text-gray-600">Wishlist Items</p>
                     </div>
                     <div class="stats-card bg-white rounded-lg shadow p-4 text-center">
                         <div class="text-2xl font-bold text-yellow-600 mb-1">
-                            <?php
-                                            $sql = "SELECT COUNT(orders.id) AS active_orders 
-                                                    FROM users 
-                                                    JOIN orders ON users.user_id = orders.user_id 
-                                                    WHERE users.type = 'customer' 
-                                                    AND orders.fulfillment NOT IN ('delivered', 'cancelled')";
-                                                    
-                                            $result = $conn->query($sql);
-                                            if ($row = $result->fetch_assoc()) 
-                                                echo $row['active_orders'];
-                            ?>
+                            {{ DB::table('orders')->where('user_id', $basic_info->user_id)->where('status', '!=', 'completed')->count() }}
                         </div>
                         <p class="text-sm text-gray-600">Active Orders</p>
                     </div>
@@ -329,26 +240,26 @@
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-lg font-medium text-gray-900">About</h3>
                                 <button class="text-blue-600 hover:text-blue-800 focus:outline-none">
-                                    <a href="./edit-profile.php"><i class="fas fa-edit"></i></a>
+                                    <a href="/customer/profile/edit"><i class="fas fa-edit"></i></a>
                                 </button>
                             </div>
                             <div class="space-y-4">
                                 <div>
                                     <p class="text-sm text-gray-500">Bio</p>
-                                    <p class="text-gray-700 mt-1"><?php echo $basic_info['bio']; ?></p>
+                                    <p class="text-gray-700 mt-1">{{ $basic_info->bio }}</p>
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <p class="text-sm text-gray-500">Email</p>
-                                        <p class="text-gray-700 mt-1"><?php echo $basic_info['email']; ?></p>
+                                        <p class="text-gray-700 mt-1">{{ $basic_info->email }}</p>
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-500">Phone</p>
-                                        <p class="text-gray-700 mt-1"><?php echo $basic_info['phone']; ?></p>
+                                        <p class="text-gray-700 mt-1">{{ $basic_info->phone }}</p>
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-500">Birthday</p>
-                                        <p class="text-gray-700 mt-1"><?php echo $basic_info['birthday']; ?></p>
+                                        <p class="text-gray-700 mt-1">{{ $basic_info->birthday }}</p>
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-500">Member Since</p>
@@ -359,7 +270,7 @@
                         </div>
                         
                         <!-- Recent Activity -->
-                        <div class="profile-card bg-white rounded-lg shadow p-6">
+                        {{-- <div class="profile-card bg-white rounded-lg shadow p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-lg font-medium text-gray-900">Recent Activity</h3>
                                 <button class="text-blue-600 hover:text-blue-800 focus:outline-none">
@@ -435,13 +346,13 @@
                                     View All Activity
                                 </button>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     
                     <!-- Right Column -->
                     <div>
                         <!-- Membership Status -->
-                        <div class="profile-card bg-white rounded-lg shadow p-6 mb-6">
+                        {{-- <div class="profile-card bg-white rounded-lg shadow p-6 mb-6">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-lg font-medium text-gray-900">Membership Status</h3>
                                 <span class="px-2 py-1 text-xs font-semibold bg-yellow-100 text-yellow-800 rounded-full badge">
@@ -479,15 +390,15 @@
                             <button class="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none">
                                 Learn More
                             </button>
-                        </div>
+                        </div> --}}
                         
                         <!-- Recent Reviews -->
                         <div class="profile-card bg-white rounded-lg shadow p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-lg font-medium text-gray-900">Recent Reviews</h3>
-                                <button class="text-blue-600 hover:text-blue-800 focus:outline-none">
+                                {{-- <button class="text-blue-600 hover:text-blue-800 focus:outline-none">
                                     <i class="fas fa-ellipsis-h"></i>
-                                </button>
+                                </button> --}}
                             </div>
                             <div class="space-y-4">
                                 <div>
@@ -519,11 +430,11 @@
                                     <p class="text-xs text-gray-400 mt-1">1 week ago</p>
                                 </div>
                             </div>
-                            <div class="mt-4 text-center">
+                            {{-- <div class="mt-4 text-center">
                                 <button class="text-blue-600 text-sm font-medium hover:text-blue-800 focus:outline-none">
                                     View All Reviews
                                 </button>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>

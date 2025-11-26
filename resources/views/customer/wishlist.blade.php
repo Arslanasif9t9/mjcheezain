@@ -1,22 +1,10 @@
-<?php @include "./redirect_vendor.php"; ?>
-<?php 
-    // session_start();
-    $user_id = $_SESSION['user_id']; 
-
-    @include "../mydatabase/conn.php";
-    $sql = "SELECT * FROM `customer_profile` WHERE user_id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $basic_info = $result->fetch_assoc();
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Wishlist | Multivendor Platform</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Tailwind CSS  -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -80,60 +68,7 @@
 <body class="bg-gray-50">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <div class="hidden md:flex md:flex-shrink-0">
-            <div class="flex flex-col w-64 bg-white border-r border-gray-200">
-                <div class="flex items-center justify-center h-16 px-4 bg-blue-600">
-                    <span class="text-white font-bold text-xl">cheezain</span>
-                </div>                
-                <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
-                    <div class="flex items-center px-4 py-3 mb-4 bg-gray-100 rounded-lg">
-                        <img class="w-10 h-10 rounded-full" src="<?php echo $basic_info['profile_image'] ?>" alt="User">
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-gray-900"><?php echo $basic_info['first_name'] . " " . $basic_info['last_name']; ?></p>
-                            <p class="text-xs text-gray-500">Gold Member</p>
-                        </div>
-                    </div>
-                    
-                    <nav class="flex-1 space-y-2">
-                        <a href="./dashboard.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-900 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-tachometer-alt mr-3"></i>
-                            Dashboard
-                        </a>
-                        <a href="./orders.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-shopping-bag mr-3"></i>
-                            My Orders
-                        </a>
-                        <a href="./wishlist.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100 active">
-                            <i class="fas fa-heart mr-3"></i>
-                            Wishlist
-                        </a>
-                        <a href="./addresses.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-map-marker-alt mr-3"></i>
-                            Addresses
-                        </a>
-                        <!-- <a href="./payments.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-credit-card mr-3"></i>
-                            Payment Methods
-                        </a>
-                        <a href="./support.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-headset mr-3"></i>
-                            Support
-                        </a> -->
-                        <a href="./profile.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-user-cog mr-3"></i>
-                            Profile Settings
-                        </a>
-                    </nav>
-                    
-                    <div class="mt-auto mb-4">
-                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50" id="logoutBtn">
-                            <i class="fas fa-sign-out-alt mr-3"></i>
-                            Logout
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <x-customer.sidebar :basic_info="$basic_info"/>
         
         <!-- Main Content -->
         <div class="flex flex-col flex-1 overflow-hidden">
@@ -148,7 +83,7 @@
                 </div>
 
                 <!-- Center - Search bar -->
-                <div class="hidden md:flex flex-1 max-w-md mx-4">
+                <div class="hidden flex-1 max-w-md mx-4">
                     <div class="relative w-full">
                         <input type="text" placeholder="Search..."
                             class="w-full py-2 pl-4 pr-10 text-sm bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">
@@ -201,7 +136,7 @@
                     <script src="../script/notification_dropdown.js"></script>
 
                     <!-- User dropdown -->
-                    <div class="relative">
+                    {{-- <div class="relative">
                         <button id="user-menu-button" class="flex items-center focus:outline-none">
                             <div class="mr-3 text-right hidden sm:block">
                                 <span class="block text-sm font-medium text-gray-700"><?= $basic_info['first_name'] . " " . $basic_info['last_name']?></span>
@@ -212,7 +147,7 @@
                                     alt="User">
                             </div>
                         </button>
-                    </div>
+                    </div> --}}
                 </div>
             </header>
 
@@ -246,7 +181,7 @@
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
                     <div>
                         <h2 class="text-2xl font-bold text-gray-800">Saved Items</h2>
-                        <p class="text-gray-600">12 items in your wishlist</p>
+                        <p class="text-gray-600">{{ count($fav) }} items in your wishlist</p>
                     </div>
                 </div>
                 
@@ -286,9 +221,11 @@
                             <i class="fas fa-heart text-gray-300 text-5xl mb-4"></i>
                             <h3 class="text-lg font-medium text-gray-900 mb-1">Your wishlist is empty</h3>
                             <p class="text-gray-500 mb-6">Save items you love by clicking the heart icon. We'll keep them here for you.</p>
-                            <button class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:outline-none">
-                                <i class="fas fa-shopping-bag mr-2"></i>Start Shopping
-                            </button>
+                            <a href="/">
+                                <button class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:outline-none">
+                                    <i class="fas fa-shopping-bag mr-2"></i>Start Shopping
+                                </button>
+                            </a>
                         </div>
                     </div>
                     
@@ -456,7 +393,7 @@
             document.getElementById('loading-skeleton').classList.remove('hidden');
             document.querySelector('.divide-y').innerHTML = ''; // Clear items
 
-            fetch(`get_wishlist.php?sort=${mapSortValue(sort)}&filter=${mapFilterValue(filter)}`)
+            fetch(`/wishlist/get?sort=${mapSortValue(sort)}&filter=${mapFilterValue(filter)}`)
                 .then(res => res.json())
                 .then(data => {
                     document.getElementById('loading-skeleton').classList.add('hidden');
@@ -476,7 +413,7 @@
                         <div class="wishlist-item p-4 hover:bg-gray-50">
                             <div class="flex flex-col md:flex-row">
                                 <div class="flex-shrink-0 mb-4 md:mb-0 md:mr-4">
-                                    <img src="../vendor/${product.image_path || './uploads/default_img.png'}" alt="${product.name}" class="w-32 h-32 rounded-lg object-cover">
+                                    <img src="http://127.0.0.1:8000/storage/vendor/products/images/${product.image_path || './uploads/default_img.png'}" alt="${product.name}" class="w-32 h-32 rounded-lg object-cover">
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <div class="flex justify-between">
@@ -492,22 +429,34 @@
                                         </div>
                                         <div class="flex flex-col items-end">
                                             <div class="flex items-center">
-                                                <span class="text-xl font-bold text-gray-900">$${product.selling_price}</span>
-                                                <span class="ml-2 text-sm ${product.quantity > 0 ? 'text-green-600 bg-green-100' : 'text-red-600 bg-red-100'} px-2 py-1 rounded-full">${product.quantity > 0 ? 'In Stock' : 'Out of Stock'}</span>
+                                                <span class="text-xl font-bold text-gray-900"><small class="font-normal"><del>$${product.selling_price}</del></small> $${product.mrp}</span>
+                                                <span class="ml-2 text-sm ${
+                                                    product.quantity > 10 ? 'text-green-600 bg-green-100' : 
+                                                    product.quantity > 0 ? 'text-yellow-600 bg-yellow-100' : 
+                                                    'text-red-600 bg-red-100'
+                                                } px-2 py-1 rounded-full">
+                                                    ${
+                                                        product.quantity > 10 ? 'In Stock' : 
+                                                        product.quantity > 0 ? 'Limited Stock' : 
+                                                        'Out of Stock'
+                                                    }
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="flex flex-wrap items-center justify-between mt-4">
                                         <div class="flex items-center space-x-3">
-                                            <a href="../buy.php?productId=${product.product_id}" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 focus:outline-none">
-                                                Buy Now
-                                            </a>
-                                            <a href="../product.php?id=${product.product_id}" class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">
+                                            <a href="/product/${product.id}" target="_blank" class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">
                                                 <i class="fas fa-eye mr-2"></i>View Details
                                             </a>
                                         </div>
-                                        <button onclick="removeFromWishlist(this, ${product.id})" class="p-2 text-red-500 hover:text-red-700 focus:outline-none">
-                                            <i class="fas fa-trash-alt"></i>
+                                        <!-- Heart Icon -->
+                                        <button id="heart-btn" onclick="favToggle(${product.id})" data-product-id="${product.id}" class="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition">
+                                            <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
+                                                stroke="currentColor" stroke-width="2" class="w-6 h-6 text-red-500">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.682l-7.682-7.682a4.5 4.5 0 010-6.364z" />
+                                            </svg>
                                         </button>
                                     </div>
                                 </div>
@@ -546,10 +495,50 @@
         }
     </script>
 <script>
-    
+    async function favToggle(productId){
+        console.log('click')
+        try {
+            // Show loading state
+            // heartBtn.disabled = true;
+            
+            const response = await fetch('/favorites/toggle', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    product_id: productId
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Update UI based on favorite status
+                // if (data.is_favorite) {
+                //     heartIcon.classList.replace('text-gray-700', 'text-red-500');
+                //     heartIcon.setAttribute('fill', 'currentColor');
+                // } else {
+                //     heartIcon.classList.replace('text-red-500', 'text-gray-700');
+                //     heartIcon.setAttribute('fill', 'none');
+                // }
+                
+                showNotification(data.message, 'success');
+            } else {
+                showNotification(data.message, 'error');
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            showNotification('Error updating favorites', 'error');
+        } finally {
+            // heartBtn.disabled = false;
+        }
+    }
 
 </script>
-
+{{-- <script src="{{ asset('js/fav.js') }}"></script> --}}
     <!-- Notification  -->
     <script src="../script/customer_notification.js"></script>
 </body>

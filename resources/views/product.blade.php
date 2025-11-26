@@ -71,7 +71,7 @@
                             </svg>
                         </button>
                         <!-- Heart Icon -->
-                        <button id="heart-btn" class="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition">
+                        <button id="heart-btn" data-product-id="{{ $product->id }}" class="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition">
                             <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor" stroke-width="2" class="w-6 h-6 text-gray-700">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -124,7 +124,8 @@
                         <span class="font-semibold">4.8</span>
                         <span class="text-gray-500">(125 reviews)</span>
                     </div>
-                    @if($user->verified)
+                    {{-- {{ dd($vendor) }} --}}
+                    @if($vendorUser->verified)
                         <div class="flex items-center text-green-600">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
                             Verified Seller
@@ -195,8 +196,7 @@
                 <!-- Action Buttons -->
                 <div class="flex space-x-4 mb-6">
                     <button 
-                        class="flex-1 py-3 px-6 bg-gray-400 text-white font-semibold rounded-lg transition duration-150 cursor-not-allowed opacity-75"
-                        disabled
+                        class="flex-1 py-3 px-6 bg-black text-white font-semibold rounded-lg transition duration-150 hover:scale-1"
                     >
                         Add to Cart
                     </button>
@@ -282,7 +282,8 @@
                 </div>
             </div>
         </div>
-
+        
+        <script src="{{ asset('js/fav.js') }}"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 // Elements
@@ -290,8 +291,6 @@
                 const leftBtn = document.getElementById('scroll-left');
                 const rightBtn = document.getElementById('scroll-right');
                 const mainImage = document.getElementById('main-image');
-                const heartBtn = document.getElementById('heart-btn');
-                const heartIcon = document.getElementById('heart-icon');
                 const fullscreenBtn = document.getElementById('fullscreen-btn');
                 const fullscreenModal = document.getElementById('fullscreen-modal');
                 const fullscreenImage = document.getElementById('fullscreen-image');
@@ -408,16 +407,7 @@
                     slider.scrollBy({ left: -slider.clientWidth * 0.5, behavior: 'smooth' });
                 });
                 
-                // Heart icon toggle
-                heartBtn.addEventListener('click', () => {
-                    if (heartIcon.classList.contains('text-red-500')) {
-                        heartIcon.classList.replace('text-red-500', 'text-gray-700');
-                        heartIcon.setAttribute('fill', 'none');
-                    } else {
-                        heartIcon.classList.replace('text-gray-700', 'text-red-500');
-                        heartIcon.setAttribute('fill', 'currentColor');
-                    }
-                });
+                
                 
                 // Fullscreen open
                 fullscreenBtn.addEventListener('click', () => {
@@ -643,7 +633,7 @@
                     <video
                         controls
                         poster="{{ asset('img/video-poster.jpg') }}"
-                        class="w-full rounded-2xl object-cover">
+                        class="w-full rounded-2xl object-cover h-[366px]">
                         <source src="{{ asset('storage/vendor/products/videos/'.$product->video) }}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>

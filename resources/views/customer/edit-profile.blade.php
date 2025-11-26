@@ -1,16 +1,3 @@
-<?php @include "./redirect_vendor.php"; ?>
-<?php 
-// session_start();
-$user_id = $_SESSION['user_id']; 
-
-@include "../mydatabase/conn.php";
-$sql = "SELECT * FROM `customer_profile` WHERE user_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$basic_info = $result->fetch_assoc();
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -89,89 +76,32 @@ $basic_info = $result->fetch_assoc();
 <body class="bg-gray-50">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <div class="hidden md:flex md:flex-shrink-0">
-            <div class="flex flex-col w-64 bg-white border-r border-gray-200">
-                <div class="flex items-center justify-center h-16 px-4 bg-blue-600">
-                    <span class="text-white font-bold text-xl">cheezain</span>
-                </div>                
-                <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
-                    <div class="flex items-center px-4 py-3 mb-4 bg-gray-100 rounded-lg">
-                        <img class="w-10 h-10 rounded-full" src="<?php echo $basic_info['profile_image'] ?>" alt="User">
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-gray-900"><?php echo $basic_info['first_name'] . " " . $basic_info['last_name']; ?></p>
-                            <p class="text-xs text-gray-500">Gold Member</p>
-                        </div>
-                    </div>
-                    
-                    <nav class="flex-1 space-y-2">
-                        <a href="./dashboard.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-900 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-tachometer-alt mr-3"></i>
-                            Dashboard
-                        </a>
-                        <a href="./orders.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-shopping-bag mr-3"></i>
-                            My Orders
-                        </a>
-                        <a href="./wishlist.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-heart mr-3"></i>
-                            Wishlist
-                        </a>
-                        <a href="./addresses.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-map-marker-alt mr-3"></i>
-                            Addresses
-                        </a>
-                        <!-- <a href="./payments.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-credit-card mr-3"></i>
-                            Payment Methods
-                        </a>
-                        <a href="./support.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                            <i class="fas fa-headset mr-3"></i>
-                            Support
-                        </a> -->
-                        <a href="./profile.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100 active">
-                            <i class="fas fa-user-cog mr-3"></i>
-                            Profile Settings
-                        </a>
-                    </nav>
-                    
-                    <div class="mt-auto mb-4">
-                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50" id="logoutBtn">
-                            <i class="fas fa-sign-out-alt mr-3"></i>
-                            Logout
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <x-customer.sidebar :basic_info="$basic_info"/>
         
         <!-- Main Content Area -->
         <main class="flex-1 overflow-y-auto p-6">
-            <?php
-            // Determine active tab from URL parameter or default to 'account'
-            $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'account';
-            ?>
             
             <!-- Profile Settings Tabs -->
-            <div class="border-b border-gray-200 mb-6">
+            {{-- <div class="border-b border-gray-200 mb-6">
                 <nav class="flex -mb-px space-x-8 overflow-x-auto">
-                    <a href="?tab=account" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm <?php echo $active_tab == 'account' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'; ?>">
+                    <a href="?tab=account" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm tab-active">
                         Account
                     </a>
-                    <a href="?tab=security" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm <?php echo $active_tab == 'security' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'; ?>">
+                    <a href="?tab=security" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
                         Security
                     </a>
-                    <a href="?tab=notifications" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm <?php echo $active_tab == 'notifications' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'; ?>">
+                    <a href="?tab=notifications" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
                         Notifications
                     </a>
-                    <a href="?tab=actions" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm <?php echo $active_tab == 'actions' ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'; ?>">
+                    <a href="?tab=actions" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
                         Account Actions
                     </a>
                 </nav>
-            </div>
+            </div> --}}
             
             <!-- Tab Content -->
             <div class="tab-content">
-                <?php if ($active_tab == 'account'): ?>
+                {{-- <?php if ($active_tab == 'account'): ?> --}}
                     <!-- Account Settings Section -->
                     <div class="settings-section bg-white rounded-lg shadow overflow-hidden mb-6">
                         <div class="border-b border-gray-200 px-6 py-4">
@@ -180,13 +110,15 @@ $basic_info = $result->fetch_assoc();
                         </div>
                         
                         <div class="p-6">
-                            <form id="profile-form" action="upload_profile.php?user_id=<?php echo $user_id ?>" method="POST" enctype="multipart/form-data">
+                            <form id="profile-form" action="/customer/profile/save" method="POST" enctype="multipart/form-data">
                                 <div class="flex flex-col md:flex-row">
+                                    @csrf
+                                    <input type="hidden" name="user_id" value="{{ $basic_info->user_id }}">
                                     <!-- Profile Picture -->
                                     <div class="md:w-1/3 mb-6 md:mb-0 md:pr-6">
                                         <div class="flex flex-col items-center">
                                             <div class="relative mb-4">
-                                                <img id="profile-preview" src="<?php echo $basic_info['profile_image']; ?>" alt="Profile" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow">
+                                                <img id="profile-preview" src="{{ asset('storage/customer/profile/' . $basic_info->profile_image) }}" alt="Profile" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow">
                                                 <div class="absolute bottom-0 right-0 bg-blue-600 rounded-full p-2">
                                                     <input type="file" id="profile-upload" name="profile-upload" class="file-upload-input" accept="image/*">
                                                     <label for="profile-upload" class="file-upload-label">
@@ -203,38 +135,38 @@ $basic_info = $result->fetch_assoc();
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div>
                                                 <label for="first-name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                                                <input type="text" id="first-name" name="first-name" value="<?php echo $basic_info['first_name']; ?>"
+                                                <input type="text" id="first-name" name="first-name" value="{{ $basic_info->first_name }}" required
                                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                                             </div>
                                             
                                             <div>
                                                 <label for="last-name" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                                                <input type="text" id="last-name" name="last-name" value="<?php echo $basic_info['last_name']; ?>" 
+                                                <input type="text" id="last-name" name="last-name" value="{{ $basic_info->last_name }}" required
                                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                                             </div>
                                             
                                             <div class="md:col-span-2">
                                                 <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                                                <input type="email" id="email" name="email" value="<?php echo $basic_info['email']; ?>" 
+                                                <input type="email" id="email" name="email" value="{{ $basic_info->email }}" required
                                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                                             </div>
                                             
                                             <div>
                                                 <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                                                <input type="tel" id="phone" name="phone" value="<?php echo $basic_info['phone']; ?>" 
+                                                <input type="tel" id="phone" name="phone" value="{{ $basic_info->phone }}" required
                                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                                             </div>
                                             
                                             <div>
                                                 <label for="birthday" class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
-                                                <input type="date" id="birthday" name="birthday" value="<?php echo $basic_info['birthday']; ?>" 
+                                                <input type="date" id="birthday" name="birthday" value="{{ $basic_info->birthday }}" required
                                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                                             </div>
                                             
                                             <div class="md:col-span-2">
                                                 <label for="bio" class="block text-sm font-medium text-gray-700 mb-1">Bio</label>
                                                 <textarea id="bio" name="bio" rows="3" 
-                                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"><?php echo $basic_info['bio']; ?></textarea>
+                                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">{{ $basic_info->bio }}</textarea>
                                             </div>
                                         </div>
                                         
@@ -249,7 +181,7 @@ $basic_info = $result->fetch_assoc();
                         </div>
                     </div>
                 
-                <?php elseif ($active_tab == 'security'): ?>
+                {{-- <?php elseif ($active_tab == 'security'): ?>
                     <!-- Account Security Section -->
                     <div class="settings-section bg-white rounded-lg shadow overflow-hidden mb-6">
                         <div class="border-b border-gray-200 px-6 py-4">
@@ -465,7 +397,7 @@ $basic_info = $result->fetch_assoc();
                             </div>
                         </div>
                     </div>
-                <?php endif; ?>
+                <?php endif; ?> --}}
             </div>
         </main>
     </div>
