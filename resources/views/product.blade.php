@@ -41,6 +41,45 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
+        /* Add to Cart Animations */
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% {
+                transform: translate3d(0,0,0);
+            }
+            40%, 43% {
+                transform: translate3d(0,-15px,0);
+            }
+            70% {
+                transform: translate3d(0,-7px,0);
+            }
+            90% {
+                transform: translate3d(0,-3px,0);
+            }
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 0.5s ease-out forwards;
+        }
+        
+        .animate-pulse-custom {
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        .animate-bounce-custom {
+            animation: bounce 0.8s ease-in-out;
+        }
     </style>
 @endsection
 
@@ -195,15 +234,22 @@
 
                 <!-- Action Buttons -->
                 <div class="flex space-x-4 mb-6">
-                    <button 
-                        class="flex-1 py-3 px-6 bg-black text-white font-semibold rounded-lg transition duration-150 hover:scale-1"
-                    >
+                    <button id="addToCartBtn" onclick="addToCart()"
+                        class="flex-1 py-3 px-6 bg-black text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95 flex items-center justify-center">
+                        <i class="fas fa-cart-plus mr-2"></i>
                         Add to Cart
                     </button>
                     <button id="wh-btn" class="flex-1 py-3 px-6 border border-blue-700 text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition duration-150">
                         Buy Now
                     </button>
                 </div>
+
+                <!-- Success Message -->
+                <div id="successMessage" class="mt-4 text-center text-green-600 font-semibold transition-all duration-300 opacity-0 transform translate-y-4">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    Item added to cart successfully!
+                </div>
+
                 <script>
                     document.getElementById("wh-btn").addEventListener("click", function () {
                         const phone = "923048609067"; // your number
@@ -239,6 +285,23 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Bottom Cart Summary -->
+        <div id="cartSummary" class="fixed bottom-0 left-0 w-full h-20 bg-white shadow-lg border-t border-gray-200 flex items-center justify-between px-6 transform translate-y-full transition-transform duration-500 z-50">
+            <div class="flex items-center">
+                <div id="cartIcon" class="relative mr-4">
+                    <i class="fas fa-shopping-cart text-2xl text-purple-600"></i>
+                    <span id="itemCount" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">0</span>
+                </div>
+                <div>
+                    <p class="font-semibold text-gray-800"><span id="totalItems">0</span> items in cart</p>
+                    <p class="text-sm text-gray-600">Total: PKR <span id="totalPrice">0.00</span></p>
+                </div>
+            </div>
+            <button id="viewCartBtn" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-md">
+                View Cart
+            </button>
         </div>
 
         <!-- Enhanced Fullscreen Modal -->
@@ -285,7 +348,111 @@
         
         <script src="{{ asset('js/fav.js') }}"></script>
         <script>
+            // Add to Cart functionality
+            async function addToCart() {
+                const button = document.getElementById('addToCartBtn');
+                const successMessage = document.getElementById('successMessage');
+                const cartSummary = document.getElementById('cartSummary');
+                const itemCount = document.getElementById('itemCount');
+                const totalItems = document.getElementById('totalItems');
+                const totalPriceElement = document.getElementById('totalPrice');
+                const cartIcon = document.getElementById('cartIcon');
+                
+                // Button animation
+                button.classList.add('animate-pulse-custom');
+                
+                try {
+                    const response = await fetch('/cart/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            product_id: {{ $product->id }}
+                        })
+                    });
+
+                    const data = await response.json();
+                    console.log(data);
+
+                    if (data.success) {
+                        // Update cart display
+                        itemCount.textContent = data.cart_count;
+                        totalItems.textContent = data.cart_count;
+                        totalPriceElement.textContent = data.cart_total.toFixed(2);
+                        
+                        // Show cart summary with animation
+                        cartSummary.classList.remove('translate-y-full');
+                        cartSummary.classList.add('animate-slide-up');
+                        
+                        // Cart icon bounce animation
+                        cartIcon.classList.add('animate-bounce-custom');
+                        
+                        // Show success message
+                        successMessage.classList.remove('opacity-0', 'translate-y-4');
+                        successMessage.classList.add('opacity-100', 'translate-y-0');
+                        
+                        // Hide success message after 2 seconds
+                        setTimeout(() => {
+                            successMessage.classList.remove('opacity-100', 'translate-y-0');
+                            successMessage.classList.add('opacity-0', 'translate-y-4');
+                        }, 2000);
+                    } else {
+                        alert('Failed to add product to cart');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error adding product to cart');
+                }
+                
+                // Reset button animation
+                setTimeout(() => {
+                    button.classList.remove('animate-pulse-custom');
+                }, 500);
+                
+                // Reset cart icon animation
+                setTimeout(() => {
+                    cartIcon.classList.remove('animate-bounce-custom');
+                }, 800);
+            }
+            
+            // View Cart button functionality
+            document.getElementById('viewCartBtn').addEventListener('click', function() {
+                // Redirect to cart page or show cart modal
+                window.location.href = '/cart'; // You'll need to create this route
+            });
+
+            // Load cart summary on page load
+            async function loadCartSummary() {
+                try {
+                    const response = await fetch('/cart/summary');
+                    const data = await response.json();
+
+                    const itemCount = document.getElementById('itemCount');
+                    const totalItems = document.getElementById('totalItems');
+                    const totalPriceElement = document.getElementById('totalPrice');
+                    const cartSummary = document.getElementById('cartSummary');
+
+                    if (data.cart_count > 0) {
+                        itemCount.textContent = data.cart_count;
+                        totalItems.textContent = data.cart_count;
+                        totalPriceElement.textContent = data.cart_total.toFixed(2);
+                        cartSummary.classList.remove('translate-y-full');
+                    }
+                } catch (error) {
+                    console.error('Error loading cart summary:', error);
+                }
+            }
+
+            // Load cart summary when page loads
+            // document.addEventListener('DOMContentLoaded', function() {
+                
+            // Your existing DOMContentLoaded code continues here...
+            // KEEP ALL YOUR EXISTING CODE BELOW THIS LINE
+            
             document.addEventListener('DOMContentLoaded', function() {
+                loadCartSummary();
                 // Elements
                 const slider = document.getElementById('image-slider');
                 const leftBtn = document.getElementById('scroll-left');
@@ -307,16 +474,6 @@
                     @foreach($images as $image)
                         '{{ asset("storage/vendor/products/images/".$image) }}'@if(!$loop->last),@endif
                     @endforeach
-                    // 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
-                    // 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80',
-                    // 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1025&q=80',
-                    // 'https://images.unsplash.com/photo-1605348532760-6753d2c43329?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
-                    // 'https://images.unsplash.com/photo-1605034313761-73ea4a0cfbf3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80',
-                    // 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80',
-                    // 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
-                    // 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1025&q=80',
-                    // 'https://images.unsplash.com/photo-1605034313761-73ea4a0cfbf3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80',
-                    // 'https://images.unsplash.com/photo-1605348532760-6753d2c43329?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80'
                 ];
                 console.log(images);
                 
@@ -406,8 +563,6 @@
                 leftBtn.addEventListener('click', () => {
                     slider.scrollBy({ left: -slider.clientWidth * 0.5, behavior: 'smooth' });
                 });
-                
-                
                 
                 // Fullscreen open
                 fullscreenBtn.addEventListener('click', () => {
@@ -515,13 +670,6 @@
                     <div id="content-description" class="tab-content">
                         <h3 class="text-xl font-semibold mb-4">Product Details</h3>
                         <p>{{ $product->description }}</p>
-                        {{-- <ul class="list-disc list-inside space-y-2 ml-4 text-gray-700">
-                            <li>Brightens and evens skin tone.</li>
-                            <li>Reduces the appearance of dark spots and hyperpigmentation.</li>
-                            <li>Provides deep hydration for a supple feel.</li>
-                            <li>Formulated with natural extracts and advanced brightening agents.</li>
-                            <li>Suitable for all skin types.</li>
-                        </ul> --}}
                     </div>
 
                     <!-- Tab 2: Specifications Content -->
@@ -536,10 +684,6 @@
                                 <th class="py-2 text-gray-500 font-normal w-1/4">Volume</th>
                                 <td class="py-2">{{ $product->model }}</td>
                             </tr>
-                            {{-- <tr class="border-b">
-                                <th class="py-2 text-gray-500 font-normal w-1/4">Skin Type</th>
-                                <td class="py-2">All</td>
-                            </tr> --}}
                             <tr class="border-b">
                                 <th class="py-2 text-gray-500 font-normal w-1/4">Condition</th>
                                 <td class="py-2">{{ $product->pcondition }}</td>
@@ -555,16 +699,6 @@
                     <div id="content-reviews" class="tab-content hidden">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                             
-                            {{-- <!-- Review Summary -->
-                            <div class="md:col-span-1">
-                                <div class="text-center">
-                                    <div class="text-star-yellow text-4xl mb-2">
-                                        <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9734;</span>
-                                    </div>
-                                    <p class="text-gray-500">Based on 125 reviews</p>
-                                </div>
-                            </div> --}}
-
                             <!-- Rating Breakdown -->
                             <div class="md:col-span-2 space-y-2">
                                 <div class="flex items-center space-x-2">
@@ -775,33 +909,3 @@
         };
     </script>
 @endsection
-
-
-
-
-
-{{-- <div class="relative">
-                    <img id="main-image"
-                        src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
-                        class="border-2 border-blue-900 w-full h-[80vh] aspect-square object-cover rounded-lg overflow-hidden">
-                    
-                    <!-- Icons -->
-                    <div class="absolute top-3 right-3 flex space-x-3">
-                        <!-- Fullscreen Icon -->
-                        <button id="fullscreen-btn" class="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" class="w-6 h-6 text-gray-700">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M8 3H5a2 2 0 00-2 2v3m0 8v3a2 2 0 002 2h3m8-16h3a2 2 0 012 2v3m0 8v3a2 2 0 01-2 2h-3" />
-                            </svg>
-                        </button>
-                        <!-- Heart Icon -->
-                        <button id="heart-btn" class="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition">
-                            <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" class="w-6 h-6 text-gray-700">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.682l-7.682-7.682a4.5 4.5 0 010-6.364z" />
-                            </svg>
-                        </button>
-                    </div>
-                </div> --}}

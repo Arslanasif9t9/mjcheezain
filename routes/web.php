@@ -137,6 +137,8 @@ Route::post('/favorites/toggle', [FavoriteController::class, 'toggleFavorite']);
 Route::get('/favorites/check/{product_id}', [FavoriteController::class, 'checkFavorite']);
 Route::get('/wishlist/get', [FavoriteController::class, 'getWishlist']);
 
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+Route::get('/cart/summary', [CartController::class, 'getCartSummary'])->name('cart.summary');
 
 
 Route::prefix('admin')->group(function () {
