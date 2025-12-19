@@ -14,11 +14,14 @@
 @endsection
 
 @section('body')
-    <x-cosmetics.header />
-    @include('../products.product-list', ['category' => 'Fitness & Gym Equipment', 'id' => 'gym'])
+    <x-cosmetics.header :user="$user ?? null" :vendor="$vendor ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
+    <main id="main">
+        @include('../products.product-list', ['category' => 'Fitness & Gym Equipment', 'id' => 'gym'])
+    </main>
     {{-- @include('../products.product-list', ['category' => 'Auto Parts & Accessories', 'id' => 'auto']) --}}
     {{-- @include('../products.product-list', ['category' => 'Car Tools & Maintenance', 'id' => 'car']) --}}
     <x-footer />
 
+    <script src="{{ asset('js/search.js') }}"></script>
     {{-- <script src="{{ asset('js/category_fetch.js') }}"></script> --}}
 @endsection

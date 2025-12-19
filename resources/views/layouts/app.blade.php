@@ -99,7 +99,7 @@
 `
     <x-header :user="$user ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
 
-    <main>
+    <main id="main">
         @yield('content')
         {{-- <script src="{{ asset('js/search_product.js') }}"></script> --}}
         {{-- <x-Banner /> --}}
@@ -115,8 +115,10 @@
             ['image' => 'img/toyota.jpeg', 'name' => 'Toyota', 'link' => '#'],
             ['image' => 'img/levis.jpeg', 'name' => 'Levis', 'link' => '#'],
         ]" /> --}}
+        @include('products.category', ['category' => 'Bundle Sales', 'id' => 'bSales'])
         @include('products.category', ['category' => 'Auto Parts & Accessories', 'id' => 'auto'])
-        @include('products.category', ['category' => 'Car Tools & Maintenance', 'id' => 'car'])
+        {{-- @include('products.category', ['category' => 'Car Tools & Maintenance', 'id' => 'car']) --}}
+        {{-- @include('products.category', ['category' => 'Mens Accessories', 'id' => 'cr']) --}}
     </main>
 
     <x-footer />
@@ -125,6 +127,7 @@
     {{-- <x-auth-modal /> --}}
 
     <!-- Scripts -->
+    <script src="{{ asset('js/search.js') }}"></script>
     <script src="{{ asset('js/login&signup.js') }}"></script>
     <script src="{{ asset('js/javascript.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>

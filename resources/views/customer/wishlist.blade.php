@@ -79,7 +79,7 @@
                     <button class="md:hidden mr-4 text-gray-500 focus:outline-none">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h1 class="text-xl font-semibold text-gray-800">Dashboard</h1>
+                    <h1 class="text-xl font-semibold text-gray-800">Wishlist</h1>
                 </div>
 
                 <!-- Center - Search bar -->
@@ -94,7 +94,7 @@
                 </div>
 
                 <!-- Right side - Icons and user menu -->
-                <div class="flex items-center space-x-4">
+                <div class="hidden flex items-center space-x-4">
                     <!-- Notification dropdown -->
                     <div class="relative">
                         <button id="notification-button"

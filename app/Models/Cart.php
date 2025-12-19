@@ -14,7 +14,9 @@ class Cart extends Model
         'session_id',
         'product_id',
         'quantity',
-        'price'
+        'price',
+        'order_id',
+        'single_buy'
     ];
 
     public function product()

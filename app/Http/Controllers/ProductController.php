@@ -31,7 +31,7 @@ class ProductController extends Controller
         //     'data' => $request->name
         // ]);
         $products = Product::where('category', $request->name)
-            ->where('position', 'pending')
+            ->where('position', 'approved')
             ->orderByDesc('updated_at')
             ->get();
 

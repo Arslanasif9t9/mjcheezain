@@ -103,7 +103,7 @@
                 </div>
 
                 <!-- Right side - Icons and user menu -->
-                <div class="flex items-center space-x-4">
+                <div class="hidden flex items-center space-x-4">
                     <!-- Notification dropdown -->
                     <div class="relative">
                         <button id="notification-button"
@@ -263,7 +263,7 @@
                 <div class="bg-white rounded-lg shadow p-6 mb-6">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-xl font-bold text-gray-800">My Orders</h2>
-                        <div class="relative">
+                        {{-- <div class="relative">
                             <select id="orderFilter" class="appearance-none bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="all">All Orders</option>
                                 <option value="processing">Processing</option>
@@ -274,7 +274,7 @@
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                 <i class="fas fa-chevron-down text-xs"></i>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <div class="overflow-x-auto">
@@ -307,12 +307,12 @@
                         </table>
                     </div>
 
-                    <div class="mt-4 flex justify-between items-center">
+                    {{-- <div class="mt-4 flex justify-between items-center">
                         <p class="text-sm text-gray-600">Showing <span class="font-medium" id="showingStart">1</span> to <span class="font-medium" id="showingEnd">4</span> of <span class="font-medium" id="totalOrders">24</span> orders</p>
                         <div class="flex space-x-2" id="pagination">
                             <!-- Pagination will be dynamically loaded here -->
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <!-- Quick Links Section -->
@@ -488,16 +488,16 @@
                         data.forEach(order => {
                             const row = document.createElement("tr");
                             row.innerHTML = `
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#${order.order_id}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">ORD-${order.order_id}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${order.order_date}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${order.quantity}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Rs. ${order.total_amount}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
                                     <span class="inline-flex px-2 py-1 rounded text-xs font-semibold ${
                                         getStatusColor(order.fulfillment)
-                                    }">${order.fulfillment}</span>
+                                    }">${order.fulfillment ? order.fulfillment : 'Order Placed'}</span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 hover:underline cursor-pointer"><a href="./orders.php">View<a/></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 hover:underline cursor-pointer"><a href="/customer/orders">View<a/></td>
                             `;
                             ordersTableBody.appendChild(row);
                         });

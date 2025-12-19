@@ -77,7 +77,7 @@
                     <button class="md:hidden mr-4 text-gray-500 focus:outline-none">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h1 class="text-xl font-semibold text-gray-800">Dashboard</h1>
+                    <h1 class="text-xl font-semibold text-gray-800">Addresses</h1>
                 </div>
 
                 <!-- Center - Search bar -->
@@ -92,7 +92,7 @@
                 </div>
 
                 <!-- Right side - Icons and user menu -->
-                <div class="flex items-center space-x-4">
+                <div class="hidden flex items-center space-x-4">
                     <!-- Notification dropdown -->
                     <div class="relative">
                         <button id="notification-button"
@@ -269,7 +269,7 @@
                 </div>
                 
                 <!-- Address Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="address-con">
                     @if(count($addresses) == 0)
                         <div class="col-span-full text-center py-12">
                             <i class="fas fa-map-marker-alt text-gray-300 text-5xl mb-4"></i>
@@ -282,7 +282,7 @@
                         </div>
                     @else
                         @foreach ($addresses as $address)
-                            <div class="address-card bg-white rounded-lg shadow {{ $address->is_default ? 'default-address' : '' }}">
+                            <div class="address-card bg-white rounded-lg shadow {{ $address->is_default ? 'default-address' : '' }}" data-address-id="{{ $address->id }}">
                                 <div class="p-6">
                                     <div class="flex justify-between items-start">
                                         <div>
@@ -365,24 +365,6 @@
         </div>
     </div>
 
-    <!-- logout modal  -->
-    <div id="logoutModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
-            <h2 class="text-xl font-semibold mb-4 text-gray-800">Are you sure you want to logout?</h2>
-            <p class="text-gray-600 mb-6">You'll need to sign in again to access your account.</p>
-            <div class="flex justify-end space-x-3">
-                <button id="cancelBtn"
-                    class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition">
-                    Cancel
-                </button>
-                <button id="confirmLogoutBtn" type="button"
-                    class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition">
-                    <a href="../logout.php">Yes, Logout</a>
-                </button>
-            </div>
-        </div>
-    </div>
-    <script src="../script/logout.js"></script>
     
     <!-- Internal JavaScript -->
     <script>
@@ -519,10 +501,13 @@
                     showNotification(data.message, 'success');
                     document.getElementById('address-form').classList.remove('open');
                     
+                    console.log(data.address_id)
                     if (formData.address_id) {
                         // Update existing address in the list
+                        console.log('update')
                         updateAddressInList(data.address_id, formData);
                     } else {
+                        // console.log('save')
                         // Add new address to the list
                         addNewAddressToList(data.address_id, formData);
                     }
@@ -540,19 +525,20 @@
 
         // Add new address to the list without reload
         function addNewAddressToList(addressId, addressData) {
-            const addressesContainer = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.gap-6');
+            const addressesContainer = document.querySelector('#address-con');
             
             // Remove empty state if exists
             const emptyState = addressesContainer.querySelector('.col-span-full.text-center');
             if (emptyState) {
                 emptyState.remove();
             }
-
+            
             // Create new address card
             const newAddressCard = createAddressCard(addressId, addressData);
             
             // Add to the container
             addressesContainer.appendChild(newAddressCard);
+            console.log(addressesContainer)
         }
 
         // Update existing address in the list
@@ -758,26 +744,87 @@
         function updateDefaultButtonStates(defaultAddressId) {
             document.querySelectorAll('[data-address-id]').forEach(card => {
                 const addressId = card.getAttribute('data-address-id');
+                const isDefault = addressId == defaultAddressId;
+                
+                // Update the card border
+                if (isDefault) {
+                    card.classList.add('default-address');
+                } else {
+                    card.classList.remove('default-address');
+                }
+                
+                // Get the title element
+                const title = card.querySelector('h3.text-lg');
                 const buttonContainer = card.querySelector('.flex.space-x-2');
                 
-                if (buttonContainer) {
-                    if (addressId == defaultAddressId) {
-                        // Remove set default button for the default address
-                        const setDefaultBtn = buttonContainer.querySelector('button:first-child');
-                        if (setDefaultBtn && setDefaultBtn.textContent.includes('Set Default')) {
-                            setDefaultBtn.remove();
+                if (title) {
+                    const titleContainer = title.parentElement;
+                    
+                    if (isDefault) {
+                        // Create/update default badge structure
+                        if (!titleContainer.classList.contains('flex') || !titleContainer.classList.contains('items-center')) {
+                            // Wrap title in flex container with badge
+                            const wrapperDiv = document.createElement('div');
+                            wrapperDiv.className = 'flex items-center mb-2';
+                            
+                            const badge = document.createElement('span');
+                            badge.className = 'text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full mr-2';
+                            badge.textContent = 'Default';
+                            
+                            wrapperDiv.appendChild(badge);
+                            wrapperDiv.appendChild(title.cloneNode(true));
+                            
+                            titleContainer.replaceChild(wrapperDiv, title);
+                        } else {
+                            // Already has flex container, just ensure badge exists
+                            const existingBadge = titleContainer.querySelector('span.text-green-600');
+                            if (!existingBadge) {
+                                const badge = document.createElement('span');
+                                badge.className = 'text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full mr-2';
+                                badge.textContent = 'Default';
+                                titleContainer.insertBefore(badge, titleContainer.firstChild);
+                            }
                         }
                     } else {
-                        // Add set default button if not present
-                        if (!buttonContainer.querySelector('button:first-child') || 
-                            !buttonContainer.querySelector('button:first-child').textContent.includes('Set Default')) {
-                            
+                        // Remove default badge structure
+                        if (titleContainer.classList.contains('flex') && titleContainer.classList.contains('items-center')) {
+                            const badge = titleContainer.querySelector('span.text-green-600');
+                            if (badge) {
+                                // Get the title from the wrapper
+                                const titleInWrapper = titleContainer.querySelector('h3.text-lg');
+                                if (titleInWrapper) {
+                                    // Replace wrapper with just the title
+                                    titleContainer.parentElement.replaceChild(titleInWrapper, titleContainer);
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // Update set default button
+                if (buttonContainer) {
+                    const existingSetDefaultBtn = buttonContainer.querySelector('button.text-xs.bg-gray-100');
+                    
+                    if (isDefault) {
+                        // Remove set default button
+                        if (existingSetDefaultBtn) {
+                            existingSetDefaultBtn.remove();
+                        }
+                    } else {
+                        // Add set default button if not exists
+                        if (!existingSetDefaultBtn) {
                             const setDefaultBtn = document.createElement('button');
                             setDefaultBtn.className = 'text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200';
                             setDefaultBtn.textContent = 'Set Default';
                             setDefaultBtn.onclick = function() { setDefaultAddress(addressId); };
                             
-                            buttonContainer.insertBefore(setDefaultBtn, buttonContainer.firstChild);
+                            // Insert before edit button
+                            const editBtn = buttonContainer.querySelector('button:has(.fa-edit)');
+                            if (editBtn) {
+                                buttonContainer.insertBefore(setDefaultBtn, editBtn);
+                            } else {
+                                buttonContainer.prepend(setDefaultBtn);
+                            }
                         }
                     }
                 }

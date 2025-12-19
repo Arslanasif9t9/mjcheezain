@@ -86,7 +86,7 @@
 @section('body')
     <x-cosmetics.header :user="$user ?? null" :vendor="$vendor ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
 
-    <div class="mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div id="main" class="mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
         <!-- Product Summary Section -->
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 mb-12">
@@ -95,8 +95,11 @@
             <div class="col-span-3 relative">
                 <!-- Main Image with icons -->
                 <div class="relative">
+                    {{-- <img id="main-image"
+                        src="{{ asset('storage/vendor/products/images/'.$imageMain->image_path) }}" 
+                        class="border-2 border-blue-900 w-full h-[72vh] aspect-square object-cover rounded-lg overflow-hidden"> --}}
                     <img id="main-image"
-                        src="{{ asset('storage/vendor/products/images/'.$imageMain->image_path) }}"
+                        src="https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg" 
                         class="border-2 border-blue-900 w-full h-[72vh] aspect-square object-cover rounded-lg overflow-hidden">
                     
                     <!-- Icons -->
@@ -225,7 +228,7 @@
                 <!-- Quantity Selector -->
                 <div class="mb-6">
                     <label class="block text-gray-700 mb-2">Quantity</label>
-                    <div class="flex w-32 border border-gray-300 rounded-lg overflow-hidden">
+                    <div class="flex w-32 border border-gray-300 rounded-lg overflow-hidden" id="quantityBtns">
                         <button id="decrease-qty" class="w-10 h-10 flex items-center justify-center text-xl text-gray-600 hover:bg-gray-100">-</button>
                         <input id="quantity" type="text" value="1" class="w-12 h-10 text-center border-x border-gray-300 focus:outline-none" readonly>
                         <button id="increase-qty" class="w-10 h-10 flex items-center justify-center text-xl text-gray-600 hover:bg-gray-100">+</button>
@@ -252,14 +255,15 @@
 
                 <script>
                     document.getElementById("wh-btn").addEventListener("click", function () {
-                        const phone = "923048609067"; // your number
-                        const msg = "I want to buy it!";
-                        const url = window.location.href; // current product URL
+                        location.href = "/product/{{ $product->id }}/buy/" + quantity.value;
+                        // const phone = "923048609067"; // your number
+                        // const msg = "I want to buy it!";
+                        // const url = window.location.href; // current product URL
 
-                        const finalMsg = `Product link: ${url}\n${msg}\n\n`;
-                        const encoded = encodeURIComponent(finalMsg);
+                        // const finalMsg = `Product link: ${url}\n${msg}\n\n`;
+                        // const encoded = encodeURIComponent(finalMsg);
 
-                        window.open(`https://wa.me/${phone}?text=${encoded}`, "_blank");
+                        // window.open(`https://wa.me/${phone}?text=${encoded}`, "_blank");
                     });
                 </script>
 
@@ -369,7 +373,8 @@
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
                         body: JSON.stringify({
-                            product_id: {{ $product->id }}
+                            product_id: {{ $product->id }},
+                            quantity: quantity.value
                         })
                     });
 
@@ -392,6 +397,17 @@
                         // Show success message
                         successMessage.classList.remove('opacity-0', 'translate-y-4');
                         successMessage.classList.add('opacity-100', 'translate-y-0');
+
+                        button.disabled = true;
+                        button.style.backgroundColor = "#9ca3af"; // gray-400
+                        button.style.cursor = "not-allowed";
+                        button.style.opacity = "0.6";
+
+                        // int quantityBtns = document.getElementById('quantityBtns');
+                        // quantityBtns.disabled = true;
+                        // quantityBtns.style.backgroundColor = "#9ca3af"; // gray-400
+                        // quantityBtns.style.cursor = "not-allowed";
+                        // quantityBtns.style.opacity = "0.6";
                         
                         // Hide success message after 2 seconds
                         setTimeout(() => {
@@ -470,12 +486,28 @@
                 const quantityInput = document.getElementById('quantity');
                 
                 // Sample images - replace with your actual image paths
+                // const images = [
+                //     @foreach($images as $image)
+                //         '{{ asset("storage/vendor/products/images/".$image) }}'@if(!$loop->last),@endif
+                //     @endforeach
+                // ];
+                // console.log(images);
                 const images = [
-                    @foreach($images as $image)
-                        '{{ asset("storage/vendor/products/images/".$image) }}'@if(!$loop->last),@endif
-                    @endforeach
-                ];
-                console.log(images);
+                    "https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg",
+                    "https://images.pexels.com/photos/19090/pexels-photo.jpg",
+                    "https://images.pexels.com/photos/267320/pexels-photo-267320.jpeg",
+                    "https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg",
+                    "https://images.pexels.com/photos/5710083/pexels-photo-5710083.jpeg",
+                    "https://images.pexels.com/photos/631986/pexels-photo-631986.jpeg",
+                    "https://images.pexels.com/photos/718981/pexels-photo-718981.jpeg",
+                    "https://images.pexels.com/photos/2562992/pexels-photo-2562992.jpeg",
+                    "https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg",
+                    "https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg"
+                    ];
+
+                    console.log(images);
+
+
                 
                 // Initialize thumbnails for main gallery
                 function initThumbnails() {
@@ -764,11 +796,18 @@
             <!-- Video Element - Autoplay, loop, and muted are mandatory for background videos -->
             <div class="w-full flex justify-center items-center py-10 bg-gradient-to-b from-pink-50 to-white">
                 <div class="relative w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl border-4 border-pink-200 hover:border-pink-400 transition-all duration-300">
-                    <video
+                    {{-- <video
                         controls
                         poster="{{ asset('img/video-poster.jpg') }}"
                         class="w-full rounded-2xl object-cover h-[366px]">
                         <source src="{{ asset('storage/vendor/products/videos/'.$product->video) }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video> --}}
+                    <video
+                        controls
+                        poster="{{ asset('img/video-poster.jpg') }}"
+                        class="w-full rounded-2xl object-cover h-[366px]">
+                        <source src="{{ asset('video/cosmetics.mp4') }}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
 
@@ -858,6 +897,7 @@
     <x-footer />
 
 
+    <script src="{{ asset('js/search.js') }}"></script>
     <script src="{{ asset('js/category_fetch.js') }}"></script>
     <script>
         tailwind.config = {

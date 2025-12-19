@@ -23,6 +23,10 @@
                     <i class="fas fa-shopping-bag mr-3"></i>
                     My Orders
                 </a>
+                <a href="/customer/notifications" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
+                    <i class="fas fa-shopping-bag mr-3"></i>
+                    Notifications
+                </a>
                 <a href="/customer/wishlist" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
                     <i class="fas fa-heart mr-3"></i>
                     Wishlist
@@ -38,17 +42,184 @@
             </nav>
             
             <div class="mt-auto mb-4">
-                <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50" id="logoutBtn">
+                <button id="logoutBtn" class="flex items-center w-full px-4 py-2 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50 transition-all duration-200">
                     <i class="fas fa-sign-out-alt mr-3"></i>
                     Logout
-                </a>
+                </button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Premium Logout Modal -->
+<div id="logoutModal" class="fixed inset-0 z-[9999] flex items-center justify-center hidden">
+    <!-- Backdrop with blur and gradient -->
+    <div class="absolute inset-0 bg-gradient-to-br from-gray-900/70 via-purple-900/50 to-gray-900/70 backdrop-blur-sm transition-opacity duration-500"></div>
+    
+    <!-- Modal Container -->
+    <div class="relative z-10 w-full max-w-md mx-4 transform transition-all duration-500 opacity-0 scale-95" id="modalContent">
+        <!-- Modal Card -->
+        <div class="bg-gradient-to-br from-white via-gray-50 to-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200/50">
+            <!-- Animated Header -->
+            <div class="p-8 bg-gradient-to-r from-red-50 to-pink-50">
+                <div class="flex items-center justify-center mb-4">
+                    <!-- Animated Icon Container -->
+                    <div class="relative">
+                        <!-- Outer Ring Animation -->
+                        <div class="absolute inset-0 animate-ping bg-red-200 rounded-full opacity-20"></div>
+                        <!-- Inner Icon -->
+                        <div class="relative w-16 h-16 bg-gradient-to-br from-red-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
+                            <i class="fas fa-sign-out-alt text-white text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Title with Gradient Text -->
+                <h2 class="text-2xl font-bold text-center bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                    Confirm Logout
+                </h2>
+                <p class="text-gray-600 text-center mt-2">
+                    Are you sure you want to sign out?
+                </p>
+            </div>
+            
+            <!-- Body -->
+            <div class="p-8">
+                <!-- Warning Message -->
+                <div class="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                    <div class="flex items-start">
+                        <i class="fas fa-exclamation-circle text-amber-500 mt-1 mr-3"></i>
+                        <p class="text-sm text-amber-700">
+                            You'll need to sign in again to access your account.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Buttons -->
+                <div class="flex space-x-4">
+                    <!-- Cancel Button -->
+                    <button id="cancelLogoutBtn" 
+                            class="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 transform hover:scale-[1.02] active:scale-95">
+                        Cancel
+                    </button>
+                    
+                    <!-- Logout Button with Animation -->
+                    <a href="/logout" 
+                       class="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white font-medium rounded-xl shadow-lg hover:shadow-xl hover:from-red-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-[1.02] active:scale-95 flex items-center justify-center group">
+                        <span>Yes, Logout</span>
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Footer Note -->
+            <div class="px-8 py-4 bg-gray-50/50 border-t border-gray-100">
+                <p class="text-xs text-gray-500 text-center">
+                    <i class="fas fa-lock mr-1"></i>
+                    Your session will be securely closed
+                </p>
+            </div>
+        </div>
+        
+        <!-- Decorative Elements -->
+        <div class="absolute -top-4 -right-4 w-24 h-24 bg-red-400/10 rounded-full blur-xl"></div>
+        <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-pink-400/10 rounded-full blur-xl"></div>
+    </div>
+</div>
+
+<style>
+    @keyframes modalFadeIn {
+        0% {
+            opacity: 0;
+            transform: translateY(-20px) scale(0.95);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+    
+    @keyframes backdropFadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    .modal-open #logoutModal {
+        display: flex !important;
+    }
+    
+    .modal-open #logoutModal > div:first-child {
+        animation: backdropFadeIn 0.5s ease-out forwards;
+    }
+    
+    .modal-open #modalContent {
+        animation: modalFadeIn 0.5s ease-out 0.1s forwards;
+    }
+</style>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
+    const logoutBtn = document.getElementById('logoutBtn');
+    const cancelBtn = document.getElementById('cancelLogoutBtn');
+    const logoutModal = document.getElementById('logoutModal');
+    const modalContent = document.getElementById('modalContent');
+    
+    // Open modal function
+    function openLogoutModal() {
+        document.body.classList.add('modal-open');
+        logoutModal.classList.remove('hidden');
+        
+        // Trigger animations
+        setTimeout(() => {
+            modalContent.classList.remove('opacity-0', 'scale-95');
+        }, 10);
+    }
+    
+    // Close modal function
+    function closeLogoutModal() {
+        // Add closing animation
+        modalContent.classList.add('opacity-0', 'scale-95');
+        
+        setTimeout(() => {
+            logoutModal.classList.add('hidden');
+            document.body.classList.remove('modal-open');
+            // modalContent.classList.add('opacity-0', 'scale-95');
+        }, 300);
+    }
+    
+    // Event Listeners
+    logoutBtn.addEventListener('click', openLogoutModal);
+    cancelBtn.addEventListener('click', closeLogoutModal);
+    
+    // Close modal when clicking outside content
+    logoutModal.addEventListener('click', function(e) {
+        if (e.target === logoutModal) {
+            closeLogoutModal();
+        }
+    });
+    
+    // Close with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !logoutModal.classList.contains('hidden')) {
+            closeLogoutModal();
+        }
+    });
+    
+    // Prevent default on logout link to handle animation
+    document.querySelector('a[href="/logout"]').addEventListener('click', function(e) {
+        // Optional: Add loading animation before redirect
+        const logoutBtn = this;
+        const originalText = logoutBtn.innerHTML;
+        
+        logoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Logging out...';
+        logoutBtn.classList.add('opacity-75', 'cursor-not-allowed');
+        
+        // Optional: Add a small delay for better UX
+        setTimeout(() => {
+            // Allow the redirect to happen
+        }, 500);
+    });
+    
     function activateSidebarLink() {
         // Get current URL path
         const currentPath = window.location.pathname;
@@ -95,9 +266,6 @@
     
     // Initialize sidebar activation
     activateSidebarLink();
-    
-    // Optional: Re-activate when navigating via AJAX or SPA (if needed)
-    // You can call activateSidebarLink() after AJAX page loads
     
     // Optional: Add click handler to update active state immediately on click
     document.querySelectorAll('.sidebar-item').forEach(item => {

@@ -88,7 +88,7 @@
                 </div>
 
                 <!-- Right side - Icons and user menu -->
-                <div class="flex items-center space-x-4">
+                <div class="hidden flex items-center space-x-4">
                     <!-- Notification dropdown -->
                     <div class="relative">
                         <button id="notification-button"
@@ -442,24 +442,7 @@
         </div>
     </div>
 
-    <!-- logout modal  -->
-    <div id="logoutModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
-            <h2 class="text-xl font-semibold mb-4 text-gray-800">Are you sure you want to logout?</h2>
-            <p class="text-gray-600 mb-6">You'll need to sign in again to access your account.</p>
-            <div class="flex justify-end space-x-3">
-                <button id="cancelBtn"
-                    class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition">
-                    Cancel
-                </button>
-                <button id="confirmLogoutBtn" type="button"
-                    class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition">
-                    <a href="../logout.php">Yes, Logout</a>
-                </button>
-            </div>
-        </div>
-    </div>
-    <script src="../script/logout.js"></script>
+
     
     <!-- Internal JavaScript -->
     <script>

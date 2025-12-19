@@ -187,4 +187,81 @@ class CustomerController extends Controller
             'basic_info', 'fav'
         ]));
     }
+
+    public function orders() {
+        $user = Auth::user();
+
+        $basic_info = DB::table('customer_profile')
+                        ->where('user_id', $user->user_id)
+                        ->first();
+        // Example: Fetch customer orders
+        $orders = DB::table('orders')->where('user_id', $user->user_id)->get()->toArray();
+
+        return view('customer.orders', compact([
+            'basic_info', 'orders'
+        ]));
+    }
+
+
+
+
+
+    public function notifications()
+    {
+        $user = Auth::user();
+        
+        // Get basic customer profile info
+        $basic_info = DB::table('customer_profile')
+            ->where('user_id', $user->user_id)
+            ->first();
+        
+        // Get notifications grouped by date
+        $notifications = DB::table('notifications')
+            ->where('user_id', $user->user_id)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->groupBy(function($notification) {
+                return $this->formatDateGroup($notification->created_at);
+            });
+        
+        return view('customer.notifications', compact('basic_info', 'notifications'));
+    }
+    
+    /**
+     * Mark notification as read
+     */
+    public function markAsRead($id)
+    {
+        $user = Auth::user();
+        
+        DB::table('notifications')
+            ->where('id', $id)
+            ->where('user_id', $user->user_id)
+            ->update([
+                'is_read' => 1,
+                'read_at' => now()
+            ]);
+        
+        return response()->json(['success' => true]);
+    }
+    
+    /**
+     * Format date for grouping
+     */
+    private function formatDateGroup($date)
+    {
+        $notificationDate = \Carbon\Carbon::parse($date);
+        $today = \Carbon\Carbon::today();
+        $yesterday = \Carbon\Carbon::yesterday();
+        
+        if ($notificationDate->isToday()) {
+            return 'Today';
+        } elseif ($notificationDate->isYesterday()) {
+            return 'Yesterday';
+        } elseif ($notificationDate->isCurrentWeek()) {
+            return 'This Week';
+        } else {
+            return $notificationDate->format('F Y');
+        }
+    }
 }

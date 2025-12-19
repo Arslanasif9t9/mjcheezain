@@ -49,11 +49,12 @@ class VendorController extends Controller
         // dd($chartLabels, $chartData);
 
         // ✅ Vendor balance
-        $balanceRow = DB::table('vendor_balance')
-            ->where('user_id', $vendor_id)
-            ->select('total_balance')
-            ->first();
-        $balance = $balanceRow->total_balance ?? 0.00;
+        // $balanceRow = DB::table('vendor_balance')
+        //     ->where('user_id', $vendor_id)
+        //     ->select('total_balance')
+        //     ->first();
+        // $balance = $balanceRow->total_balance ?? 0.00;
+        $balance = 999;
 
         // ✅ Products (from vendor_products)
         $products = DB::table('vendor_products')
@@ -937,5 +938,144 @@ class VendorController extends Controller
     }
 
     public function pr ($pr = 1) {}
+
+    public function orders() {
+        $user = Auth::user();
+        $vendor_id = $user->user_id;
+        
+        // Get all product IDs for this vendor
+        $productIds = DB::table('vendor_products')
+            ->where('user_id', $vendor_id)
+            ->pluck('id')
+            ->toArray();
+
+        // Get all carts that have these product IDs
+        $orders = DB::table('carts')
+            ->whereIn('product_id', $productIds)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Calculate stats
+        $totalOrders = $orders->count();
+        $deliveredOrders = $orders->where('status', 'delivered')->count();
+        $paidOrders = $orders->where('status', 'paid')->count();
+        $activeOrders = $orders->whereNotIn('status', ['delivered', 'cancelled'])->count();
+
+        // Get vendor basic info
+        $vendorBasicInfo = DB::table('vendor_basic_info')
+            ->where('user_id', $vendor_id)
+            ->first();
+
+        return view('vendor.orders', compact(
+            'orders',
+            'totalOrders',
+            'deliveredOrders',
+            'paidOrders',
+            'activeOrders',
+            'vendorBasicInfo'
+        ));
+    }
+
+    public function updateOrderStatus(Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required|integer|exists:carts,id',
+            'status' => 'required|in:order placed,processing,shipping,delivered,cancelled'
+        ]);
+
+        $vendor_id = Auth::id();
+        
+        // Check if the product belongs to this vendor
+        $isValid = DB::table('carts')
+            ->join('vendor_products', 'carts.product_id', '=', 'vendor_products.id')
+            ->where('carts.id', $request->order_id)
+            ->where('vendor_products.user_id', $vendor_id)
+            ->exists();
+
+        if (!$isValid) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized access'
+            ], 403);
+        }
+
+        // Update status
+        DB::table('carts')
+            ->where('id', $request->order_id)
+            ->update([
+                'status' => $request->status,
+                'updated_at' => now()
+            ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status updated successfully',
+            'status' => $request->status
+        ]);
+    }
+
+
+
+
+
+    public function notifications()
+    {
+        $user = Auth::user();
+        // dd($user->full_name);
+        $vendor_id = $user->user_id;
+
+        $vendorBasicInfo = DB::table('vendor_basic_info')
+            ->where('user_id', $vendor_id)
+            ->first();
+        
+        // Get notifications grouped by date
+        $notifications = DB::table('notifications')
+            ->where('user_id', $user->user_id)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->groupBy(function($notification) {
+                return $this->formatDateGroup($notification->created_at);
+            });
+        
+        return view('vendor.notifications', compact('user', 'vendor_id', 'vendorBasicInfo', 'notifications'));
+    }
+    
+    /**
+     * Mark notification as read
+     */
+    public function markAsRead($id)
+    {
+        $user = Auth::user();
+        
+        DB::table('notifications')
+            ->where('id', $id)
+            ->where('user_id', $user->user_id)
+            ->update([
+                'is_read' => 1,
+                'read_at' => now()
+            ]);
+        
+        return response()->json(['success' => true]);
+    }
+    
+    /**
+     * Format date for grouping
+     */
+    private function formatDateGroup($date)
+    {
+        $notificationDate = \Carbon\Carbon::parse($date);
+        $today = \Carbon\Carbon::today();
+        $yesterday = \Carbon\Carbon::yesterday();
+        
+        if ($notificationDate->isToday()) {
+            return 'Today';
+        } elseif ($notificationDate->isYesterday()) {
+            return 'Yesterday';
+        } elseif ($notificationDate->isCurrentWeek()) {
+            return 'This Week';
+        } else {
+            return $notificationDate->format('F Y');
+        }
+    }
 
 }

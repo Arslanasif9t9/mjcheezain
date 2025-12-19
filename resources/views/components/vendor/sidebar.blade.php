@@ -32,8 +32,17 @@
         <a href="{{ route('vendor.orders') }}" class="flex items-center gap-2">
             <i class="fa fa-shopping-cart"></i> Orders
         </a>
+        <a href="{{ route('vendor.replacements.index') }}" class="flex items-center gap-2">
+            <i class="fa fa-shopping-cart"></i> Replace Orders
+        </a>
+        <a href="{{ route('vendor.returns.index') }}" class="flex items-center gap-2">
+            <i class="fa fa-shopping-cart"></i> Return Orders
+        </a>
         <a href="{{ route('vendor.withdraw') }}" class="flex items-center gap-2">
             <i class="fa fa-wallet"></i> Withdraw
+        </a>
+        <a href="{{ route('vendor.notifications') }}" class="flex items-center gap-2">
+            <i class="fa fa-wallet"></i> Notifications
         </a>
         <a href="{{ route('vendor.profile') }}" class="flex items-center gap-2">
             <i class="fa-solid fa-user"></i> Profile

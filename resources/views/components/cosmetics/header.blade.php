@@ -26,6 +26,7 @@
                 <div class="w-full max-w-2xl relative">
                     <input 
                         type="text" 
+                        id="search-input"
                         placeholder="Search products..." 
                         class="w-full p-3 pl-10 border border-gray-300 rounded-full text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
                     >

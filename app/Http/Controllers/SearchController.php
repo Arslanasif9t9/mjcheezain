@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
 {
-    public function searchProducts(Request $request)
+    public function searchProductsOld(Request $request)
     {
         $searchTerm = $request->input('search', '');
         $category = $request->input('category', 'All Categories');
@@ -45,5 +45,87 @@ class SearchController extends Controller
             'page' => $page,
             'hasMore' => count($products) === $perPage,
         ]);
+    }
+
+    public function searchProducts(Request $request)
+    {
+        $request->validate([
+            'q' => 'nullable|string|min:2|max:100',
+        ]);
+        
+        $searchTerm = $request->input('q', '');
+        $searchPattern = '%' . $searchTerm . '%';
+        
+        // return response()->json([
+        //         'error' => 'Database error'
+        // ]);
+        try {
+            $products = DB::table('vendor_products as vp')
+                ->select([
+                    'vp.id',
+                    'vp.name',
+                    'vp.category',
+                    'vp.subcategory',
+                    'vp.quantity',
+                    'vp.brand',
+                    'vp.model',
+                    'vp.pcondition',
+                    'vp.original_price',
+                    'vp.delivery_charges',
+                    'vp.selling_price',
+                    'vp.mrp',
+                    'vp.shipping_method',
+                    'vp.shipping_time',
+                    'vp.description',
+                    'vp.location',
+                    'vp.made_in',
+                    'vp.return_policy',
+                    'vp.status',
+                    'vp.rating',
+                    'vp.video',
+                    'vp.created_at',
+                    // Join with vendor_product_images to get primary image
+                    'vpi.image_path as primary_image',
+                    'vpi.is_primary'
+                ])
+                ->leftJoin('vendor_product_images as vpi', function($join) {
+                    $join->on('vp.id', '=', 'vpi.product_id')
+                        ->where('vpi.is_primary', '=', 1);
+                })
+                ->where('vp.position', 'approved')
+                ->where(function ($query) use ($searchPattern) {
+                    $query->where('vp.name', 'like', $searchPattern)
+                        ->orWhere('vp.category', 'like', $searchPattern)
+                        ->orWhere('vp.subcategory', 'like', $searchPattern)
+                        ->orWhere('vp.brand', 'like', $searchPattern)
+                        ->orWhere('vp.model', 'like', $searchPattern)
+                        ->orWhere('vp.description', 'like', $searchPattern);
+                })
+                ->orderByRaw("
+                    CASE 
+                        WHEN vp.name LIKE ? THEN 1
+                        WHEN vp.name LIKE ? THEN 2
+                        WHEN vp.category LIKE ? THEN 3
+                        ELSE 4
+                    END
+                ", [
+                    $searchTerm . '%',
+                    $searchPattern,
+                    $searchPattern
+                ])
+                ->orderBy('vp.rating', 'desc')
+                ->orderBy('vp.created_at', 'desc')
+                ->limit(50)
+                ->get();
+
+            return response()->json($products);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Database error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+        
     }
 }
