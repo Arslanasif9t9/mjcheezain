@@ -157,7 +157,7 @@
             :profilePicture="$vendorBasicInfo->profile_picture ?? 'default_profile.webp'"
             :fullName="$vendorBasicInfo->full_name ?? auth()->user()->full_name"
             :profile_visibility="$vendorBasicInfo->profile_visibility ?? 1"
-            page='Dashboard'
+            page='Orders'
         />
 
         <!-- Main Content -->
@@ -197,8 +197,8 @@
             </div>
 
             <!-- Orders Table -->
-            <div class="bg-white rounded-lg shadow overflow-hidden">
-                <div class="overflow-x-auto">
+            <div class="bg-white rounded-lg shadow">
+                <div class="overflow-x-auto min-w-[600px] max-w-full">
                     <table class="min-w-full">
                         <thead class="bg-gray-50">
                             <tr class="text-left text-sm text-gray-500">
@@ -239,15 +239,15 @@
                                 @endphp
                                 
                                 <tr class="order-row hover:bg-gray-50" data-order-id="{{ $order->id }}">
-                                    <td class="px-6 py-4 font-medium text-blue-600">ORD-{{ $order->id }}</td>
-                                    <td class="px-6 py-4">
+                                    <td class="whitespace-nowrap px-6 py-4 font-medium text-black">ORD-{{ $order->id }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4">
                                         @if($customer)
                                             {{ $customer->first_name }} {{ $customer->last_name }}
                                         @else
                                             User {{ $order->user_id }}
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="whitespace-nowrap px-6 py-4">
                                         @if($product)
                                             <div class="flex items-center space-x-2">
                                                 @php
@@ -267,11 +267,11 @@
                                             P-{{ $order->product_id }}
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4">{{ $order->quantity }}</td>
-                                    <td class="px-6 py-4 font-medium">${{ number_format($order->price, 2) }}</td>
-                                    <td class="px-6 py-4 font-bold text-green-600">${{ number_format($totalAmount, 2) }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4">{{ $order->quantity }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4 font-medium">${{ number_format($order->price, 2) }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4 font-bold text-green-600">${{ number_format($totalAmount, 2) }}</td>
                                     
-                                    <td class="px-6 py-4">
+                                    <td class="whitespace-nowrap px-6 py-4">
                                         <div class="relative inline-block">
                                             <span class="badge {{ $statusColor }} text-white status-badge cursor-pointer"
                                                   data-order-id="{{ $order->id }}"
@@ -282,7 +282,7 @@
                                             </span>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 text-gray-500">{{ \Carbon\Carbon::parse($order->created_at)->format('M d, Y') }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4 text-gray-500">{{ \Carbon\Carbon::parse($order->created_at)->format('M d, Y') }}</td>
                                 </tr>
                             @empty
                                 <tr>

@@ -376,8 +376,8 @@
                             <form method="get" class="input-group me-3" style="width: 250px;">
                                 <input type="hidden" name="status" value="">
                                 <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                <input type="text" name="search" class="form-control" placeholder="Search vendors..." value="">
-                                <button class="btn btn-outline-secondary" type="submit">Search</button>
+                                <input type="text" id="searchInput" class="form-control" placeholder="Search vendors..." value="">
+                                <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
                             </form>
                             <div class="dropdown">
                                 <button class="btn btn-light dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -385,10 +385,10 @@
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="filterDropdown">
                                     <li><h6 class="dropdown-header">Filter by Status</h6></li>
-                                    <li><a class="dropdown-item" href="?status=all">All Vendors</a></li>
-                                    <li><a class="dropdown-item" href="?status=active"><span class="status-badge status-active me-2"></span> Active</a></li>
-                                    <li><a class="dropdown-item" href="?status=pending"><span class="status-badge status-pending me-2"></span> Pending</a></li>
-                                    <li><a class="dropdown-item" href="?status=blocked"><span class="status-badge status-blocked me-2"></span> Blocked</a></li>
+                                    <li><a class="dropdown-item filter-option" href="#" data-status="all">All Vendors</a></li>
+                                    <li><a class="dropdown-item filter-option" href="#" data-status="active"><span class="status-badge status-active me-2"></span> Active</a></li>
+                                    <li><a class="dropdown-item filter-option" href="#" data-status="pending"><span class="status-badge status-pending me-2"></span> Pending</a></li>
+                                    <li><a class="dropdown-item filter-option" href="#" data-status="blocked"><span class="status-badge status-blocked me-2"></span> Blocked</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -414,7 +414,7 @@
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="vendorTableBody">
                                     @foreach ($vendors as $vendor)
                                         @php
                                             // Try to get vendor details from $vendors first, then fall back to $vendorsBasic
@@ -499,8 +499,195 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <script>
+                            // Search and Filter Functionality
+                            document.addEventListener('DOMContentLoaded', function() {
+                                // Get all vendor rows from the table
+                                const vendorRows = Array.from(document.querySelectorAll('#vendorTableBody tr'));
+                                let currentFilter = 'all';
+                                let currentSearch = '';
+                                
+                                // Store original rows for resetting
+                                const originalRows = vendorRows.map(row => ({
+                                    element: row,
+                                    name: row.cells[1].textContent.toLowerCase(),
+                                    store: row.cells[2].textContent.toLowerCase(),
+                                    email: row.cells[3].textContent.toLowerCase(),
+                                    phone: row.cells[4].textContent.toLowerCase(),
+                                    status: row.cells[5].querySelector('.status-badge').textContent.trim(),
+                                    id: row.cells[0].textContent.trim()
+                                }));
+                                
+                                // Search functionality
+                                const searchInput = document.getElementById('searchInput');
+                                const searchButton = document.getElementById('searchButton');
+                                
+                                // Search when button is clicked
+                                if (searchButton) {
+                                    searchButton.addEventListener('click', performSearch);
+                                }
+                                
+                                // Search when Enter key is pressed
+                                if (searchInput) {
+                                    let searchTimeout;
+                                    searchInput.addEventListener('keyup', function(event) {
+                                        clearTimeout(searchTimeout);
+                                        searchTimeout = setTimeout(() => {
+                                            currentSearch = this.value.toLowerCase().trim();
+                                            filterAndSearch();
+                                        }, 300); // 300ms delay for better performance
+                                    });
+                                }
+                                
+                                // Filter functionality
+                                const filterOptions = document.querySelectorAll('.filter-option');
+                                filterOptions.forEach(option => {
+                                    option.addEventListener('click', function(e) {
+                                        e.preventDefault();
+                                        currentFilter = this.getAttribute('data-status');
+                                        updateFilterButtonText(this.textContent.trim());
+                                        filterAndSearch();
+                                    });
+                                });
+                                
+                                function performSearch() {
+                                    currentSearch = searchInput.value.toLowerCase().trim();
+                                    filterAndSearch();
+                                }
+                                
+                                function filterAndSearch() {
+                                    const tbody = document.getElementById('vendorTableBody');
+                                    
+                                    // Clear current table content
+                                    tbody.innerHTML = '';
+                                    
+                                    // Filter rows
+                                    const filteredRows = originalRows.filter(row => {
+                                        // Apply status filter
+                                        if (currentFilter !== 'all' && row.status !== currentFilter) {
+                                            return false;
+                                        }
+                                        
+                                        // Apply search filter
+                                        if (currentSearch) {
+                                            const searchTerms = currentSearch.toLowerCase();
+                                            return (
+                                                row.name.includes(searchTerms) ||
+                                                row.store.includes(searchTerms) ||
+                                                row.email.includes(searchTerms) ||
+                                                row.phone.includes(searchTerms) ||
+                                                row.id.includes(searchTerms)
+                                            );
+                                        }
+                                        
+                                        return true;
+                                    });
+                                    
+                                    // Add filtered rows back to table
+                                    if (filteredRows.length > 0) {
+                                        filteredRows.forEach(row => {
+                                            tbody.appendChild(row.element);
+                                        });
+                                    } else {
+                                        // Show "no results" message
+                                        tbody.innerHTML = `
+                                            <tr>
+                                                <td colspan="11" class="text-center py-4">
+                                                    <div class="text-muted">
+                                                        <i class="fas fa-search fa-2x mb-3"></i>
+                                                        <h5>No vendors found</h5>
+                                                        <p>Try adjusting your search or filter</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        `;
+                                    }
+                                    
+                                    // Update pagination visibility (hide if filtered)
+                                    updatePaginationVisibility(filteredRows.length);
+                                }
+                                
+                                function updateFilterButtonText(text) {
+                                    const filterButton = document.getElementById('filterDropdown');
+                                    if (filterButton) {
+                                        // Remove status badge text from button text
+                                        const cleanText = text.replace('●', '').trim();
+                                        filterButton.innerHTML = `<i class="fas fa-filter"></i> ${cleanText}`;
+                                    }
+                                }
+                                
+                                function updatePaginationVisibility(visibleRows) {
+                                    const pagination = document.querySelector('.pagination');
+                                    if (pagination) {
+                                        if (currentSearch !== '' || currentFilter !== 'all') {
+                                            pagination.style.display = 'none';
+                                        } else {
+                                            pagination.style.display = 'flex';
+                                        }
+                                    }
+                                }
+                                
+                                // Clear search and filter
+                                function clearFilters() {
+                                    searchInput.value = '';
+                                    currentSearch = '';
+                                    currentFilter = 'all';
+                                    updateFilterButtonText('Filter');
+                                    filterAndSearch();
+                                }
+                                
+                                // Add clear button (optional)
+                                function addClearButton() {
+                                    const searchContainer = document.querySelector('.input-group');
+                                    if (searchContainer) {
+                                        const clearButton = document.createElement('button');
+                                        clearButton.type = 'button';
+                                        clearButton.className = 'btn btn-outline-secondary';
+                                        clearButton.id = 'clearButton';
+                                        clearButton.innerHTML = '<i class="fas fa-times"></i>';
+                                        clearButton.title = 'Clear search and filters';
+                                        clearButton.addEventListener('click', clearFilters);
+                                        
+                                        // Insert after search button
+                                        const searchBtn = document.getElementById('searchButton');
+                                        searchContainer.insertBefore(clearButton, searchBtn.nextSibling);
+                                    }
+                                }
+                                
+                                // Initialize
+                                addClearButton();
+                                filterAndSearch(); // Initial filter to show all rows
+                            });
+
+                            // If you want to add a reset filter option in dropdown, add this:
+                            function addResetFilterOption() {
+                                const filterDropdown = document.querySelector('.dropdown-menu');
+                                if (filterDropdown) {
+                                    const resetItem = document.createElement('li');
+                                    resetItem.innerHTML = '<hr class="dropdown-divider">';
+                                    filterDropdown.appendChild(resetItem);
+                                    
+                                    const resetLink = document.createElement('li');
+                                    resetLink.innerHTML = '<a class="dropdown-item text-primary" href="#" id="resetFilter"><i class="fas fa-sync-alt me-2"></i> Reset Filters</a>';
+                                    filterDropdown.appendChild(resetLink);
+                                    
+                                    document.getElementById('resetFilter').addEventListener('click', function(e) {
+                                        e.preventDefault();
+                                        document.getElementById('searchInput').value = '';
+                                        currentSearch = '';
+                                        currentFilter = 'all';
+                                        updateFilterButtonText('Filter');
+                                        filterAndSearch();
+                                    });
+                                }
+                            }
+
+                            // Call this after DOM is loaded
+                            document.addEventListener('DOMContentLoaded', addResetFilterOption);
+                        </script>
                         
-                        <nav aria-label="Page navigation" class="mt-3">
+                        {{-- <nav aria-label="Page navigation" class="mt-3">
                             <ul class="pagination justify-content-center">
                                 <li class="page-item disabled">
                                     <a class="page-link" href="#" tabindex="-1">Previous</a>
@@ -512,7 +699,7 @@
                                     <a class="page-link" href="#">Next</a>
                                 </li>
                             </ul>
-                        </nav>
+                        </nav> --}}
                     </div>
                 </div>
             </div>

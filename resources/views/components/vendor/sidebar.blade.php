@@ -7,16 +7,16 @@
 
 <!-- Sidebar -->
 <aside id="aside" 
-    class="fixd top-0 left-0 h-[100vh] w-64 bg-gray-900 text-white p-4 transform -translate-x-full transition-transform duration-300 md:translate-x-0 z-40 shadow-lg">
+    class="sticky top-0 left-0 h-[100vh] w-64 bg-gray-900 text-white p-4 transform -translate-x-full transition-transform duration-300 md:translate-x-0 z-40 shadow-lg">
     
     <div class="flex flex-col items-center">
         <img class="w-24 h-24 rounded-full object-cover" src="{{ asset("storage/vendor/profile/" . $profilePicture) }}" alt="Profile" />
-        <h2 class="mt-4 font-semibold text-xl">{{ $fullName }}</h2>
+        <h2 class="mt-4 font-semibold text-xl" id="full-name-sidebar">{{ $fullName }}</h2>
 
         @if($profile_visibility)
-            <span class='active-button mt-1 bg-green-500 px-2 rounded-full'>Active</span>
+            <span class='active-button mt-1 bg-green-500 px-2 rounded-full visi'>Active</span>
         @else
-            <span class='active-button mt-1 bg-red-500 px-2 rounded-full'>Close</span>
+            <span class='active-button mt-1 bg-red-500 px-2 rounded-full visi'>Close</span>
         @endif
 
         <div class="text-yellow-500 mb-4 text-lg">★★★★★</div>
@@ -83,6 +83,9 @@
             'Products': 'vendor/products',
             'Orders': 'vendor/orders',
             'Withdraw': 'vendor/withdraw',
+            'Replacements': 'vendor/replacements',
+            'Returns': 'vendor/returns',
+            'Notifications': 'vendor/notifications',
             'Profile': 'vendor/profile'
         };
         document.querySelectorAll('nav a').forEach(link => {

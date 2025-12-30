@@ -95,12 +95,12 @@
             <div class="col-span-3 relative">
                 <!-- Main Image with icons -->
                 <div class="relative">
-                    {{-- <img id="main-image"
-                        src="{{ asset('storage/vendor/products/images/'.$imageMain->image_path) }}" 
-                        class="border-2 border-blue-900 w-full h-[72vh] aspect-square object-cover rounded-lg overflow-hidden"> --}}
                     <img id="main-image"
-                        src="https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg" 
+                        src="{{ asset('storage/vendor/products/images/'.$imageMain->image_path) }}" 
                         class="border-2 border-blue-900 w-full h-[72vh] aspect-square object-cover rounded-lg overflow-hidden">
+                    {{-- <img id="main-image"
+                        src="https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg" 
+                        class="border-2 border-blue-900 w-full h-[72vh] aspect-square object-cover rounded-lg overflow-hidden"> --}}
                     
                     <!-- Icons -->
                     <div class="absolute top-3 right-3 flex space-x-3">
@@ -149,9 +149,10 @@
                 <h1 class="text-3xl font-bold mb-2">{{ $product->name }}</h1>
 
                 <!-- Discount Badge -->
-                @if ($product->mrp < $product->selling_price)
+                @if ($product->mrp > $product->selling_price)
                     @php
-                        $discount = round((($product->selling_price - $product->mrp) / $product->mrp) * 100);
+                        $gst = $product->selling_price * 1.17;
+                        $discount = round((($product->mrp - $gst) / $product->mrp) * 100);
                     @endphp
 
                     <div class="absolute top-12 right-20 bg-red-600 text-white px-4 py-2 rounded-xl shadow-lg 
@@ -186,10 +187,10 @@
                 <p class="text-3xl font-extrabold text-gray-900 mb-4">
                     PKR 
                     @if ($product->mrp)
-                        {{ $product->mrp }} <br>
-                        <small class="font-normal text-md"><del> {{ $product->selling_price }} </del></small>  &nbsp; 
+                        {{ $gst }} <br>
+                        <small class="font-normal text-md"><del> {{ $product->mrp }} </del></small>  &nbsp; 
                     @else
-                        {{ $product->selling_price }}
+                        {{ $gst }}
                     @endif
                 </p>
                 
@@ -237,12 +238,26 @@
 
                 <!-- Action Buttons -->
                 <div class="flex space-x-4 mb-6">
-                    <button id="addToCartBtn" onclick="addToCart()"
-                        class="flex-1 py-3 px-6 bg-black text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95 flex items-center justify-center">
+                    <button id="addToCartBtn" 
+                    @if ($product->user_id == $vendor->user_id)
+                        style="background-color: #9ca3af; cursor: not-allowed; opacity: 0.6"
+                        disable
+                    @else
+                        onclick="addToCart()"
+                    @endif 
+                        class="flex-1 py-3 px-6 bg-black text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95 flex items-center justify-center"
+                        >
                         <i class="fas fa-cart-plus mr-2"></i>
                         Add to Cart
                     </button>
-                    <button id="wh-btn" class="flex-1 py-3 px-6 border border-blue-700 text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition duration-150">
+                    <button class="flex-1 py-3 px-6 border border-blue-700 text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition duration-150"
+                    @if ($product->user_id == $vendor->user_id)
+                        style="background-color: #9ca3af; cursor: not-allowed; opacity: 0.6"
+                        disable
+                    @else
+                        id="wh-btn"
+                    @endif 
+                    >
                         Buy Now
                     </button>
                 </div>
@@ -486,26 +501,26 @@
                 const quantityInput = document.getElementById('quantity');
                 
                 // Sample images - replace with your actual image paths
-                // const images = [
-                //     @foreach($images as $image)
-                //         '{{ asset("storage/vendor/products/images/".$image) }}'@if(!$loop->last),@endif
-                //     @endforeach
-                // ];
-                // console.log(images);
                 const images = [
-                    "https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg",
-                    "https://images.pexels.com/photos/19090/pexels-photo.jpg",
-                    "https://images.pexels.com/photos/267320/pexels-photo-267320.jpeg",
-                    "https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg",
-                    "https://images.pexels.com/photos/5710083/pexels-photo-5710083.jpeg",
-                    "https://images.pexels.com/photos/631986/pexels-photo-631986.jpeg",
-                    "https://images.pexels.com/photos/718981/pexels-photo-718981.jpeg",
-                    "https://images.pexels.com/photos/2562992/pexels-photo-2562992.jpeg",
-                    "https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg",
-                    "https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg"
-                    ];
+                    @foreach($images as $image)
+                        '{{ asset("storage/vendor/products/images/".$image) }}'@if(!$loop->last),@endif
+                    @endforeach
+                ];
+                console.log(images);
+                // const images = [
+                //     "https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg",
+                //     "https://images.pexels.com/photos/19090/pexels-photo.jpg",
+                //     "https://images.pexels.com/photos/267320/pexels-photo-267320.jpeg",
+                //     "https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg",
+                //     "https://images.pexels.com/photos/5710083/pexels-photo-5710083.jpeg",
+                //     "https://images.pexels.com/photos/631986/pexels-photo-631986.jpeg",
+                //     "https://images.pexels.com/photos/718981/pexels-photo-718981.jpeg",
+                //     "https://images.pexels.com/photos/2562992/pexels-photo-2562992.jpeg",
+                //     "https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg",
+                //     "https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg"
+                //     ];
 
-                    console.log(images);
+                //     console.log(images);
 
 
                 
@@ -776,13 +791,13 @@
                     <div id="content-vendorinfo" class="tab-content hidden">
                         <div class="flex items-center space-x-3">
                             <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
-                                
+                                <img src="{{ asset('storage/vendor/profile/' . $vendor->profile_picture) }}" class="w-full h-full">
                             </div>
                             <div>
                                 <p class="font-semibold text-lg flex items-center">
-                                    GlowSkin Official 
+                                    {{ $vendor->full_name }}
                                     <span class="ml-2 h-2 w-2 bg-primary-blue rounded-full"></span>
-                                    <span class="ml-1 text-sm text-primary-blue">Verified</span>
+                                    <span class="ml-1 text-sm text-primary-blue">{{ $vendorUser->verified ? "Verified" : "Unverified" }}</span>
                                 </p>
                                 <a href="/vendor-products/{{ $vendor->user_id }}" class="text-sm text-primary-blue hover:text-blue-700 transition duration-150">
                                     View all products from this vendor &rarr;
@@ -794,22 +809,22 @@
             </div>
 
             <!-- Video Element - Autoplay, loop, and muted are mandatory for background videos -->
-            <div class="w-full flex justify-center items-center py-10 bg-gradient-to-b from-pink-50 to-white">
+            <div class="w-full flex justify-center items-center py-10 bg-gradient-to-b from-pink50 to-white">
                 <div class="relative w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl border-4 border-pink-200 hover:border-pink-400 transition-all duration-300">
-                    {{-- <video
+                    <video
                         controls
                         poster="{{ asset('img/video-poster.jpg') }}"
-                        class="w-full rounded-2xl object-cover h-[366px]">
+                        class="w-full rounded-2xl h-[366px]">
                         <source src="{{ asset('storage/vendor/products/videos/'.$product->video) }}" type="video/mp4">
                         Your browser does not support the video tag.
-                    </video> --}}
-                    <video
+                    </video>
+                    {{-- <video
                         controls
                         poster="{{ asset('img/video-poster.jpg') }}"
                         class="w-full rounded-2xl object-cover h-[366px]">
                         <source src="{{ asset('video/cosmetics.mp4') }}" type="video/mp4">
                         Your browser does not support the video tag.
-                    </video>
+                    </video> --}}
 
                     <!-- Optional overlay label -->
                     <div class="absolute top-3 left-3 bg-pink-600 text-white text-sm font-semibold px-3 py-1 rounded-full shadow-md">
@@ -824,9 +839,9 @@
             <div class="flex justify-between align-center">
                 <h3 class="text-xl font-semibold mt-8 mb-0">Customer Reviews</h3>
                 <div class="flex justify-end">
-                    <button class="text-primary-blue border border-primary-blue py-2 px-4 rounded-lg hover:bg-blue-50 transition duration-150">
+                    {{-- <button class="text-primary-blue border border-primary-blue py-2 px-4 rounded-lg hover:bg-blue-50 transition duration-150">
                         Write a Review
-                    </button>
+                    </button> --}}
                 </div>
             </div>
 

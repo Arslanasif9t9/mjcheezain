@@ -54,7 +54,7 @@
             :profilePicture="$vendorBasicInfo->profile_picture ?? 'default_profile.webp'"
             :fullName="$vendorBasicInfo->full_name ?? $user->full_name"
             :profile_visibility="$vendorBasicInfo->profile_visibility ?? 1"
-            page='Dashboard'
+            page='Notifications'
         />
         
         <!-- Main Content -->

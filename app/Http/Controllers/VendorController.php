@@ -307,6 +307,7 @@ class VendorController extends Controller
             $vendor_id = $user->user_id;
 
             // Validate fields
+            
             $validated = $request->validate([
                 'business_type' => 'nullable|string|max:100',
                 'store_category' => 'nullable|string|max:100',
@@ -373,6 +374,14 @@ class VendorController extends Controller
             DB::table('vendor_store_details')
                 ->where('user_id', $vendor_id)
                 ->update($validated);
+
+            if($request->NTN != null){
+                DB::table('vendor_store_details')
+                    ->where('user_id', $vendor_id)
+                    ->update(['NTN' => $request->NTN]);
+            }
+
+            
 
             return response()->json([
                 'success' => true,
@@ -535,6 +544,7 @@ class VendorController extends Controller
                     ->get();
             }
         }
+        
 
         return view('vendor.new_product', compact(
             'user',
@@ -594,7 +604,7 @@ class VendorController extends Controller
             'brand' => $validated['brand'],
             'model' => $validated['model'],
             'pcondition' => $validated['condition'],
-            'original_price' => $validated['original_price'],
+            'original_price' => 0,
             'delivery_charges' => $validated['delivery_charges'],
             'selling_price' => $validated['selling_price'],
             'mrp' => $validated['mrp'] ?? null,
@@ -653,6 +663,14 @@ class VendorController extends Controller
                     'fault_description' => $validated['fault_descriptions'][$index] ?? null,
                 ]);
             }
+        }
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Product created successfully and is pending approval.',
+                'redirect' => route('vendor.products')
+            ]);
         }
 
         return redirect()->route('vendor.products')
@@ -725,7 +743,7 @@ class VendorController extends Controller
             'brand' => $validated['brand'],
             'model' => $validated['model'],
             'pcondition' => $validated['condition'],
-            'original_price' => $validated['original_price'],
+            'original_price' => 0,
             'delivery_charges' => $validated['delivery_charges'],
             'selling_price' => $validated['selling_price'],
             'mrp' => $validated['mrp'] ?? null,
@@ -811,6 +829,14 @@ class VendorController extends Controller
                     'fault_description' => $validated['fault_descriptions'][$index] ?? null,
                 ]);
             }
+        }
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Product updated successfully and is pending approval.',
+                'redirect' => route('vendor.products')
+            ]);
         }
 
         return redirect()->route('vendor.products')

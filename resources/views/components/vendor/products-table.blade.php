@@ -1,8 +1,9 @@
 @props(['products', 'activeTab'])
 
 <!-- Products Table -->
-<div class="bg-white shadow rounded p-4 overflow-x-auto">
-    <table class="min-w-full text-left">
+<div class="bg-white shadow rounded p-4">
+    <div class="overflow-x-auto min-w-[600px] max-w-full">
+    <table class="min-w-full text-left w-full">
         <thead class="border-b bg-gray-50">
             <tr>
                 <th class="p-4">ID</th>
@@ -17,7 +18,7 @@
                 <th class="p-4">Action</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody style="font-size: 14px">
             @if(count($products) > 0)
                 @foreach($products as $product)
                             @php
@@ -30,21 +31,21 @@
                                 // echo $position_map[];
                             @endphp
                     <tr class="product-row border-b hover:bg-gray-50 transition" data-position="{{ $product->position ?? 'all' }}">
-                        <td class="p-4">
-                            <a href="/product/{{ $product->id }}" target="_blank" 
-                               class="text-blue-500 hover:text-blue-700">
-                                {{ $product->id }}
+                        <td class="p-0 whitespace-nowrap">
+                            <a href="/product/{{ $product->id }}" target="_blank" id="prd-id"
+                               class="text-black hover:text-blue-700">
+                                PRD-{{ str_pad($product->id, 6, '0', STR_PAD_LEFT) }}-{{ \Carbon\Carbon::parse($product->updated_at)->format('y') }}
                             </a>
                         </td>
-                        <td class="p-4">
+                        <td class="p-2 whitespace-nowrap">
                             <a href="/product/{{ $product->id }}" target="_blank">
-                                <img style="width: 50px !important; height: 50px !important; border-radius: 10px;" 
+                                <img style="width: 75px !important; height: 75px !important; border-radius: 10px;" 
                                      src="{{ $product->primary_image ? asset('storage/vendor/products/images/'.$product->primary_image) : asset('img/default-product.jpg') }}" 
                                      alt="{{ $product->name }}"
                                      class="object-cover">
                             </a>
                         </td>
-                        <td class="p-4 font-semibold">
+                        <td class="p-2 font-semibold">
                             <a href="/product/{{ $product->id }}" target="_blank"
                                class="hover:text-blue-600 transition">
                                 <p class="h-8 overflow-hidden leading-4 line-clamp-2">
@@ -52,10 +53,10 @@
                                 </p>
                             </a>
                         </td>
-                        <td class="p-4">{{ $product->category }}</td>
-                        <td class="p-4">{{ $product->quantity }}</td>
-                        <td class="p-4">${{ number_format($product->selling_price, 2) }}</td>
-                        <td class="p-4">
+                        <td class="p-2 whitespace-nowrap">{{ $product->category }}</td>
+                        <td class="p-2 whitespace-nowrap">{{ $product->quantity }}</td>
+                        <td class="p-2 whitespace-nowrap">${{ number_format($product->selling_price, 2) }}</td>
+                        <td class="p-2 whitespace-nowrap">
                             @php
                                 $status_class = '';
                                 $status_text = '';
@@ -74,7 +75,7 @@
                                 {{ $status_text }}
                             </span>
                         </td>
-                        <td class="p-4">
+                        <td class="p-2 whitespace-nowrap">
                             @php
                                 $rating = $product->rating ?? 0;
                                 $full_stars = floor($rating);
@@ -94,10 +95,10 @@
                                 <i class="far fa-star text-yellow-400"></i>
                             @endfor
                         </td>
-                        <td class="p-4">
+                        <td class="p-2 whitespace-nowrap">
                             {{ $position_map[$product->position] ?? ucfirst($product->position) }}
                         </td>
-                        <td class="p-4 flex space-x-3">
+                        <td class="p-2 flex space-x-3">
                             <button>
                                 <a href="{{ route('vendor.products.edit', $product->id) }}" 
                                     class="text-blue-500 hover:text-blue-700 transition" title="Edit">
@@ -125,6 +126,7 @@
             @endif
         </tbody>
     </table>
+    </div>
 </div>
 
 

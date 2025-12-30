@@ -33,7 +33,11 @@
     <!-- Main Content -->
     <main class="flex-1 p-6 space-y-6">
       <!-- Top Cards -->
-      {{-- <div class="w-max bg-green-500 text-white px-4 py-2 rounded font-bold">Earnings</div> --}}
+      <div class="flex">
+        <div class="w-max bg-green-500 text-white px-4 py-2 mx-2 rounded font-bold">Earnings</div>
+        <div class="w-max bg-green-500 text-white px-4 py-2 mx-2 rounded font-bold">Earnings</div>
+        <div class="w-max bg-green-500 text-white px-4 py-2 mx-2 rounded font-bold">Earnings</div>
+      </div>
       <div class="flex flex-wrap gap-4 top-cards">
           <div class="bg-blue-300 text-white shadow rounded p-4 w-[23%]">
             <div class="text-2xl font-bold">

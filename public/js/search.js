@@ -1,6 +1,7 @@
 // resources/js/search.js
 const input = document.getElementById('search-input');
 const main = document.getElementById('main');
+const allMain = document.querySelectorAll('main');
 
 let debounceTimer;
 
@@ -15,6 +16,8 @@ input.addEventListener('input', function() {
     }
     
     debounceTimer = setTimeout(() => {
+        allMain.forEach(main => main.classList.add('hidden'));
+        const main = document.getElementById('main').classList.remove('hidden');
         searchProducts(searchTerm);
     }, 300);
 });
@@ -22,6 +25,7 @@ input.addEventListener('input', function() {
 async function searchProducts(searchTerm) {
     try {
         // Show loading spinner with your design theme
+
         main.innerHTML = `
             <div class="py-16 px-8 sm:px-6 lg:px-8 max-w-full mx-auto">
                 <h2 class="font-serif text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">

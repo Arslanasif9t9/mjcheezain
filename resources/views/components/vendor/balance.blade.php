@@ -7,7 +7,7 @@
             {{ $balance }} <span class="text-sm">PKR</span>
         </p>
         <button class="mt-4 px-4 py-2 bg-green-500 text-white rounded">
-            <a href="./withdraw.php">Withdraw Now</a>
+            <a href="/vendor/withdraw">Withdraw Now</a>
         </button>
     </div>
 </div>

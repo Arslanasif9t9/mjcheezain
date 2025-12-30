@@ -505,7 +505,7 @@
                                 @endphp
                                 
                                 <tr class="table-row replacement-row" data-replacement-id="{{ $replacement->id }}">
-                                    <td class="table-cell font-bold text-blue-600">
+                                    <td class="table-cell font-bold text-black">
                                         REP-{{ str_pad($replacement->id, 6, '0', STR_PAD_LEFT) }}
                                     </td>
                                     

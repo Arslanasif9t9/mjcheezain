@@ -94,9 +94,29 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(response => response.json())
         .then(data => {
             console.log(data);
+            // Inside your .then() block after successful update
             if (data.success) {
-                showSuccess('Profile updated successfully!')
-                // document.querySelector(`[data-tab='store-details']`)?.click();
+                showSuccess('Profile updated successfully!');
+                document.querySelector('#full-name-sidebar').innerText = document.querySelector("#full-name")?.value;
+                
+                // Handle profile visibility
+                const isActive = document.querySelector("#profile-visibility")?.checked;
+                document.querySelector('.visi').innerText = isActive ? "Active" : "Close";
+                document.querySelector('.visi').classList.add(isActive ? "bg-green-500" : "bg-red-500");
+                document.querySelector('.visi').classList.remove(isActive ? "bg-red-500" : "bg-green-500");
+                
+                // Set profile image in aside/sidebar
+                const profilePicInput = document.querySelector("#profile-picture");
+                const asideImg = document.querySelector('#aside img');
+                
+                if (profilePicInput.files.length > 0) {
+                    // If new file was uploaded, use the local preview
+                    const file = profilePicInput.files[0];
+                    asideImg.src = URL.createObjectURL(file);
+                } else if (data.profile_picture_url) {
+                    // If server returned the uploaded image URL
+                    asideImg.src = data.profile_picture_url;
+                }
             } else {
                 showError('Something')
             }

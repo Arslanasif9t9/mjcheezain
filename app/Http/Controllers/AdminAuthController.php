@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Session;
 class AdminAuthController extends Controller
 {
     function loginForm() {
-        return view('admin/login');
+        return view('Admin/login');
     }
     
     function login(Request $request) {
@@ -80,7 +80,7 @@ class AdminAuthController extends Controller
         
             
         // Pass session data to view
-        return view('admin/admin_dashboard', [
+        return view('Admin/admin_dashboard', [
             'total_users' => $totalUsers,
             'active_users' => $activeUsers,
             'orders' => $orders,
@@ -157,7 +157,7 @@ class AdminAuthController extends Controller
                 ->get()
                 ->toArray();
 
-        return view('admin/product_management', compact([
+        return view('Admin/product_management', compact([
             'total', 'pending', 'approved', 'rejected', 'out',
             'products'
         ]));

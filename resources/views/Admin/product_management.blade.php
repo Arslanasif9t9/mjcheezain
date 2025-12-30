@@ -298,6 +298,45 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #a8a8a8;
         }
+
+
+
+        /* Add to your existing CSS */
+        .position-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+
+        .position-pending {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: #f39c12;
+        }
+
+        .position-approved {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+
+        .position-rejected {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
+        .position-disabled {
+            background-color: rgba(149, 165, 166, 0.2);
+            color: #95a5a6;
+        }
+
+        /* Product thumbnail style */
+        .product-thumb {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
@@ -383,29 +422,32 @@
                     <h5 class="mb-0">All Products</h5>
                     <div class="d-flex flex-wrap gap-2 mt-2 mt-md-0">
                         <!-- Search Form -->
+                        <!-- Replace your existing search form with this: -->
                         <form method="GET" class="d-flex">
                             <div class="input-group" style="width: 250px;">
                                 <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
-                                <input type="text" name="search" class="form-control" placeholder="Search products..." 
-                                       value="" aria-label="Search products">
-                                <input type="hidden" name="position" value="">
-                                <input type="hidden" name="vendor" value="">
-                                <input type="hidden" name="category" value="">
+                                <input type="text" id="searchInput" class="form-control" placeholder="Search products..." 
+                                    value="" aria-label="Search products">
+                                <button type="button" id="searchButton" class="btn btn-outline-secondary">Search</button>
+                                <button type="button" id="clearButton" class="btn btn-outline-secondary" title="Clear search">
+                                    <i class="fas fa-times"></i>
+                                </button>
                             </div>
                         </form>
                         
                         <!-- position Filter Dropdown -->
+                        <!-- Replace your existing filter dropdown with this: -->
                         <div class="dropdown">
                             <button class="btn btn-light dropdown-toggle" type="button" id="positionFilterDropdown" 
                                     data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-filter me-1"></i> position: Pending
+                                <i class="fas fa-filter me-1"></i> Status: All
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="positionFilterDropdown">
-                                <li><a class="dropdown-item" href="?position=all">All Products</a></li>
-                                <li><a class="dropdown-item" href="?position=0">Pending</a></li>
-                                <li><a class="dropdown-item" href="?position=1">Approved</a></li>
-                                <li><a class="dropdown-item" href="?position=2">Rejected</a></li>
-                                <li><a class="dropdown-item" href="?position=3">Disabled</a></li>
+                                <li><a class="dropdown-item filter-option" href="#" data-status="all">All Products</a></li>
+                                <li><a class="dropdown-item filter-option" href="#" data-status="pending">Pending</a></li>
+                                <li><a class="dropdown-item filter-option" href="#" data-status="approved">Approved</a></li>
+                                <li><a class="dropdown-item filter-option" href="#" data-status="rejected">Rejected</a></li>
+                                <li><a class="dropdown-item filter-option" href="#" data-status="disable">Disabled</a></li>
                             </ul>
                         </div>
                     </div>
@@ -446,7 +488,7 @@
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="productTableBody">
                                     @if(count($products) > 0)
                                         @foreach($products as $product)
                                             <tr>
@@ -848,6 +890,184 @@
                 });
             }
         }
+
+
+
+
+
+        // Search and Filter Functionality for Products
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize search and filter functionality
+            initProductSearchFilter();
+            
+            function initProductSearchFilter() {
+                // Get all product rows from the table
+                const productRows = Array.from(document.querySelectorAll('#productTableBody tr'));
+                let currentFilter = 'all';
+                let currentSearch = '';
+                
+                // Store original rows data for filtering
+                const originalRows = productRows.map(row => {
+                    const cells = row.cells;
+                    const statusBadge = cells[4].querySelector('.position-badge');
+                    
+                    return {
+                        element: row,
+                        id: cells[0].textContent.trim(),
+                        name: cells[1].textContent.toLowerCase(),
+                        vendor: cells[2].textContent.toLowerCase(),
+                        category: cells[3].textContent.toLowerCase(),
+                        status: statusBadge ? statusBadge.textContent.toLowerCase() : '',
+                        stock: cells[5].textContent.trim(),
+                        price: cells[6].textContent.trim(),
+                        rating: cells[7].textContent.toLowerCase()
+                    };
+                });
+                
+                // DOM Elements
+                const searchInput = document.getElementById('searchInput');
+                const searchButton = document.getElementById('searchButton');
+                const clearButton = document.getElementById('clearButton');
+                const filterOptions = document.querySelectorAll('.filter-option');
+                const filterDropdown = document.getElementById('positionFilterDropdown');
+                const pagination = document.querySelector('.pagination');
+                
+                // Initialize
+                updatePaginationVisibility();
+                
+                // Search functionality
+                if (searchButton) {
+                    searchButton.addEventListener('click', performSearch);
+                }
+                
+                if (searchInput) {
+                    searchInput.addEventListener('keyup', function(event) {
+                        if (event.key === 'Enter') {
+                            performSearch();
+                        }
+                    });
+                }
+                
+                if (clearButton) {
+                    clearButton.addEventListener('click', clearSearch);
+                }
+                
+                // Filter functionality
+                if (filterOptions) {
+                    filterOptions.forEach(option => {
+                        option.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            const status = this.getAttribute('data-status');
+                            applyFilter(status);
+                            
+                            // Update dropdown button text
+                            const statusText = this.textContent.trim();
+                            updateFilterButtonText(statusText);
+                        });
+                    });
+                }
+                
+                function performSearch() {
+                    currentSearch = searchInput.value.toLowerCase().trim();
+                    applyFilter(currentFilter);
+                }
+                
+                function clearSearch() {
+                    searchInput.value = '';
+                    currentSearch = '';
+                    applyFilter(currentFilter);
+                }
+                
+                function applyFilter(status) {
+                    currentFilter = status;
+                    const tbody = document.getElementById('productTableBody');
+                    
+                    // Clear current table content
+                    tbody.innerHTML = '';
+                    
+                    // Filter rows based on search and status
+                    const filteredRows = originalRows.filter(row => {
+                        // Apply status filter
+                        if (currentFilter !== 'all') {
+                            if (currentFilter === 'pending' && row.status !== 'pending') return false;
+                            if (currentFilter === 'approved' && row.status !== 'approved') return false;
+                            if (currentFilter === 'rejected' && row.status !== 'rejected') return false;
+                            if (currentFilter === 'disable' && row.status !== 'disabled') return false;
+                        }
+                        
+                        // Apply search filter
+                        if (currentSearch) {
+                            const searchTerm = currentSearch.toLowerCase();
+                            return (
+                                row.id.includes(searchTerm) ||
+                                row.name.includes(searchTerm) ||
+                                row.vendor.includes(searchTerm) ||
+                                row.category.includes(searchTerm) ||
+                                row.status.includes(searchTerm) ||
+                                row.price.includes(searchTerm) ||
+                                row.rating.includes(searchTerm)
+                            );
+                        }
+                        
+                        return true;
+                    });
+                    
+                    // Add filtered rows back to table
+                    if (filteredRows.length > 0) {
+                        filteredRows.forEach(row => {
+                            tbody.appendChild(row.element);
+                        });
+                    } else {
+                        // Show "no results" message
+                        tbody.innerHTML = `
+                            <tr>
+                                <td colspan="9" class="text-center py-4">
+                                    <div class="text-muted">
+                                        <i class="fas fa-search fa-2x mb-3"></i>
+                                        <h5>No products found</h5>
+                                        <p>Try adjusting your search or filter criteria</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    }
+                    
+                    // Update pagination visibility
+                    updatePaginationVisibility();
+                }
+                
+                function updateFilterButtonText(text) {
+                    if (filterDropdown) {
+                        // Clean the text (remove any existing status badge)
+                        const cleanText = text.replace('●', '').trim();
+                        const statusText = cleanText === 'All Products' ? 'All' : cleanText;
+                        filterDropdown.innerHTML = `<i class="fas fa-filter me-1"></i> Status: ${statusText}`;
+                    }
+                }
+                
+                function updatePaginationVisibility() {
+                    if (pagination) {
+                        if (currentSearch !== '' || currentFilter !== 'all') {
+                            pagination.style.display = 'none';
+                        } else {
+                            pagination.style.display = 'flex';
+                        }
+                    }
+                }
+                
+                // Real-time search as you type (optional)
+                if (searchInput) {
+                    let searchTimeout;
+                    searchInput.addEventListener('input', function() {
+                        clearTimeout(searchTimeout);
+                        searchTimeout = setTimeout(() => {
+                            currentSearch = this.value.toLowerCase().trim();
+                            applyFilter(currentFilter);
+                        }, 300); // 300ms delay for better performance
+                    });
+                }
+            }
+        });
     </script>
 </body>
 </html>
