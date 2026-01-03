@@ -171,30 +171,95 @@
             <!-- Main Content Area -->
             <main class="flex-1 overflow-y-auto p-6">
                 <!-- Profile Header -->
-                <div class="profile-card bg-white rounded-lg shadow overflow-hidden mb-6">
-                    <div class="bg-gradient-to-r from-blue-500 to-blue-700 h-32"></div>
-                    <div class="px-6 pb-6 -mt-16">
+                <div class="profile-card bg-white rounded-lg shadow overflow-hidden mb-6 h-[18rem]">
+                    <div class="bg-gradient-to-r from-blue-500 to-blue-700 h-48 relative" id="cover-container">
+                        {{-- @if ($bannerImage) --}}
+                        <img 
+                            src="{{ asset('storage/customer/banner/' . $bannerImage) }}" 
+                            class="
+                                w-full 
+                                h-48
+                                object-cover 
+                                object-center
+                                rounded-t-xl
+                                shadow-md
+                                border-b border-gray-200
+                            "
+                            id="cover-image"
+                        >
+                        {{-- @endif --}}
+                        
+                        <!-- Camera Icon for Cover Photo -->
+                        <div class="absolute top-2 right-2">
+                            <button class="bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-2 rounded-full transition-all duration-200"
+                                    id="cover-camera-btn">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                            
+                            <!-- Cover Photo Actions Dropdown -->
+                            <div class="absolute right-0 mt-1 bg-white rounded-lg shadow-lg py-2 z-10 hidden w-40" 
+                                id="cover-actions-dropdown">
+                                <input type="file" 
+                                    id="cover-upload-input" 
+                                    accept="image/*" 
+                                    class="hidden">
+                                <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                                        onclick="document.getElementById('cover-upload-input').click()">
+                                    <i class="fas fa-upload mr-2"></i> Upload Photo
+                                </button>
+                                <button class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 flex items-center"
+                                        id="remove-cover-btn">
+                                    <i class="fas fa-trash-alt mr-2"></i> Remove Photo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="px-6 pb-6 -mt-12">
                         <div class="flex flex-col md:flex-row md:items-end md:justify-between">
                             <div class="flex items-end">
                                 <div class="relative">
-                                    <img class="w-32 h-32 rounded-full border-4 border-white" src="{{ asset('storage/customer/profile/' . $basic_info->profile_image) }}" alt="Profile">
-                                    <span class="absolute bottom-0 right-0 bg-green-500 rounded-full p-1 border-2 border-white">
+                                    <img class="w-32 h-32 rounded-full border-4 border-white" 
+                                        src="{{ asset('storage/customer/profile/' . $basic_info->profile_image) }}" 
+                                        alt="Profile"
+                                        id="profile-image">
+                                    
+                                    <!-- Camera Icon for Profile Picture -->
+                                    <button class="absolute bottom-2 right-2 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full"
+                                            id="profile-camera-btn">
+                                        <i class="fas fa-camera text-sm"></i>
+                                    </button>
+                                    
+                                    <!-- Profile Picture Actions Dropdown -->
+                                    <div class="absolute bottom-[2rem] right-[-9rem] mb-2 bg-white rounded-lg shadow-lg py-2 z-10 hidden w-40"
+                                        id="profile-actions-dropdown">
+                                        <input type="file" 
+                                            id="profile-upload-input" 
+                                            accept="image/*" 
+                                            class="hidden">
+                                        <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                                                onclick="document.getElementById('profile-upload-input').click()">
+                                            <i class="fas fa-upload mr-2"></i> Upload Photo
+                                        </button>
+                                        <button class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 flex items-center"
+                                                id="remove-profile-btn">
+                                            <i class="fas fa-trash-alt mr-2"></i> Remove Photo
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Verified Badge -->
+                                    <span class="hidden absolute bottom-0 right-0 bg-green-500 rounded-full p-1 border-2 border-white">
                                         <i class="fas fa-check text-white text-xs"></i>
                                     </span>
                                 </div>
+                                
                                 <div class="ml-6 mb-4">
                                     <h2 class="text-2xl font-bold text-gray-900">{{ $basic_info->first_name }} {{ $basic_info->last_name }}</h2>
                                     <p class="text-gray-600">Gold Member</p>
-                                    <!-- <div class="flex items-center mt-2">
-                                        <i class="fas fa-map-marker-alt text-gray-400 mr-2"></i>
-                                        <span class="text-sm text-gray-600">New York, USA</span>
-                                    </div> -->
                                 </div>
                             </div>
+                            
                             <div class="mt-4 md:mt-0">
-                                <!-- <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none mr-2">
-                                    <i class="fas fa-share-alt mr-2"></i>Share Profile
-                                </button> -->
                                 <a href="/customer/profile/edit" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 focus:outline-none">
                                     <i class="fas fa-user-edit mr-2"></i>Edit Profile
                                 </a>
@@ -202,6 +267,310 @@
                         </div>
                     </div>
                 </div>
+
+                <script>
+                    // Wait for DOM to load
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Elements
+                        const coverCameraBtn = document.getElementById('cover-camera-btn');
+                        const coverActionsDropdown = document.getElementById('cover-actions-dropdown');
+                        const coverUploadInput = document.getElementById('cover-upload-input');
+                        const removeCoverBtn = document.getElementById('remove-cover-btn');
+                        const coverImage = document.getElementById('cover-image');
+                        
+                        const profileCameraBtn = document.getElementById('profile-camera-btn');
+                        const profileActionsDropdown = document.getElementById('profile-actions-dropdown');
+                        const profileUploadInput = document.getElementById('profile-upload-input');
+                        const removeProfileBtn = document.getElementById('remove-profile-btn');
+                        const profileImage = document.getElementById('profile-image');
+                        
+                        // Toggle dropdowns
+                        coverCameraBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            coverActionsDropdown.classList.toggle('hidden');
+                            profileActionsDropdown.classList.add('hidden');
+                        });
+                        
+                        profileCameraBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            profileActionsDropdown.classList.toggle('hidden');
+                            coverActionsDropdown.classList.add('hidden');
+                        });
+                        
+                        // Close dropdowns when clicking outside
+                        document.addEventListener('click', function() {
+                            coverActionsDropdown.classList.add('hidden');
+                            profileActionsDropdown.classList.add('hidden');
+                        });
+                        
+                        // Prevent dropdowns from closing when clicking inside
+                        coverActionsDropdown.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                        });
+                        
+                        profileActionsDropdown.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                        });
+                        
+                        // Handle cover photo upload
+                        coverUploadInput.addEventListener('change', function(e) {
+                            if (e.target.files.length > 0) {
+                                uploadBannerImage(e.target.files[0]);
+                            }
+                        });
+                        
+                        // Handle profile picture upload
+                        profileUploadInput.addEventListener('change', function(e) {
+                            if (e.target.files.length > 0) {
+                                uploadProfileImage(e.target.files[0]);
+                            }
+                        });
+                        
+                        // Handle cover photo removal
+                        removeCoverBtn.addEventListener('click', function() {
+                            removeBannerImage();
+                            coverActionsDropdown.classList.add('hidden');
+                        });
+                        
+                        // Handle profile picture removal
+                        removeProfileBtn.addEventListener('click', function() {
+                            removeProfileImage();
+                            profileActionsDropdown.classList.add('hidden');
+                        });
+                        
+                        // Function to upload profile image
+                        function uploadProfileImage(file) {
+                            // Create form data
+                            const formData = new FormData();
+                            formData.append('profile_image', file); // Must match controller field name
+                            
+                            // Show loading state
+                            const originalSrc = profileImage.src;
+                            profileImage.style.opacity = '0.5';
+                            
+                            // API endpoint
+                            const apiUrl = '/api/upload-profile-image';
+                            
+                            // Send request
+                            fetch(apiUrl, {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                }
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                if (data.success) {
+                                    // Update image preview
+                                    profileImage.src = data.image_url + '?t=' + new Date().getTime();
+                                    
+                                    // Show success message
+                                    showNotification(data.message || 'Profile image uploaded successfully!', 'success');
+                                } else {
+                                    throw new Error(data.message || 'Upload failed');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Upload error:', error);
+                                showNotification('Failed to upload image: ' + error.message, 'error');
+                                profileImage.src = originalSrc;
+                            })
+                            .finally(() => {
+                                profileImage.style.opacity = '1';
+                                profileActionsDropdown.classList.add('hidden');
+                            });
+                        }
+                        
+                        // Function to upload banner image
+                        function uploadBannerImage(file) {
+                            // Create form data
+                            const formData = new FormData();
+                            formData.append('banner_image', file); // Must match controller field name
+                            
+                            // Show loading state
+                            const originalSrc = coverImage.src;
+                            coverImage.style.opacity = '0.5';
+                            
+                            // API endpoint
+                            const apiUrl = '/api/upload-banner-image';
+                            
+                            // Send request
+                            fetch(apiUrl, {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                }
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                if (data.success) {
+                                    // Update image preview
+                                    coverImage.src = data.image_url + '?t=' + new Date().getTime();
+                                    
+                                    // Show success message
+                                    showNotification(data.message || 'Banner image uploaded successfully!', 'success');
+                                } else {
+                                    throw new Error(data.message || 'Upload failed');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Upload error:', error);
+                                showNotification('Failed to upload image: ' + error.message, 'error');
+                                coverImage.src = originalSrc;
+                            })
+                            .finally(() => {
+                                coverImage.style.opacity = '1';
+                                coverActionsDropdown.classList.add('hidden');
+                            });
+                        }
+                        
+                        // Function to remove profile image
+                        function removeProfileImage() {
+                            if (!confirm('Are you sure you want to remove your profile picture?')) {
+                                return;
+                            }
+                            
+                            // Show loading state
+                            const originalSrc = profileImage.src;
+                            profileImage.style.opacity = '0.5';
+                            
+                            // API endpoint
+                            const apiUrl = '/api/remove-profile-image';
+                            
+                            // Send request
+                            fetch(apiUrl, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({})
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                if (data.success) {
+                                    // Update image preview
+                                    profileImage.src = data.image_url + '?t=' + new Date().getTime();
+                                    
+                                    showNotification(data.message || 'Profile image removed successfully!', 'success');
+                                } else {
+                                    throw new Error(data.message || 'Removal failed');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Remove error:', error);
+                                showNotification('Failed to remove image: ' + error.message, 'error');
+                                profileImage.src = originalSrc;
+                            })
+                            .finally(() => {
+                                profileImage.style.opacity = '1';
+                            });
+                        }
+                        
+                        // Function to remove banner image
+                        function removeBannerImage() {
+                            if (!confirm('Are you sure you want to remove your cover photo?')) {
+                                return;
+                            }
+                            
+                            // Show loading state
+                            const originalSrc = coverImage.src;
+                            coverImage.style.opacity = '0.5';
+                            
+                            // API endpoint
+                            const apiUrl = '/api/remove-banner-image';
+                            
+                            // Send request
+                            fetch(apiUrl, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({})
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                if (data.success) {
+                                    // Update image preview
+                                    if (data.image_url) {
+                                        coverImage.src = data.image_url + '?t=' + new Date().getTime();
+                                    } else {
+                                        // Set default cover image
+                                        coverImage.src = "{{ asset('storage/customer/banner/default-banner.jpg') }}";
+                                    }
+                                    
+                                    showNotification(data.message || 'Banner image removed successfully!', 'success');
+                                } else {
+                                    throw new Error(data.message || 'Removal failed');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Remove error:', error);
+                                showNotification('Failed to remove image: ' + error.message, 'error');
+                                coverImage.src = originalSrc;
+                            })
+                            .finally(() => {
+                                coverImage.style.opacity = '1';
+                            });
+                        }
+                        
+                        // Helper function to show notifications
+                        function showNotification(message, type) {
+                            // Create notification element
+                            const notification = document.createElement('div');
+                            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 transition-all duration-300 ${
+                                type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' : 
+                                'bg-red-100 text-red-800 border border-red-200'
+                            }`;
+                            notification.innerHTML = `
+                                <div class="flex items-center">
+                                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
+                                    <span>${message}</span>
+                                    <button class="ml-4 text-gray-500 hover:text-gray-700" onclick="this.parentElement.parentElement.remove()">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            `;
+                            
+                            // Add to document
+                            document.body.appendChild(notification);
+                            
+                            // Auto remove after 5 seconds
+                            setTimeout(() => {
+                                if (notification.parentNode) {
+                                    notification.parentNode.removeChild(notification);
+                                }
+                            }, 5000);
+                        }
+                    });
+                </script>
                 
                 <!-- Stats Overview -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">

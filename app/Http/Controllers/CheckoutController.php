@@ -73,13 +73,14 @@ class CheckoutController extends Controller
 
         // Calculate totals
         $subtotal = $cartItems->sum(function($item) {
-            return $item->quantity * $item->selling_price;
+            return $item->cq * $item->price;
         });
 
         $shipping = 2.50; // Fixed shipping for now
-        $tax = $subtotal * 0.05; // 5% tax
-        $discount = 15.00; // Fixed discount for now
+        $tax = $subtotal * 0.00; // 5% tax
+        $discount = 0.00; // Fixed discount for now
         $total = $subtotal + $shipping + $tax - $discount;
+        // dd($cartItems);
 
         if(!$user) {
             return "please <a href='https://arslan.mjcheezain.com/login-user?type=customer-login'> Register or login </a> your account";

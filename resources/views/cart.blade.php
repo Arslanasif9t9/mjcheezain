@@ -102,6 +102,7 @@
                 const data = await response.json();
                 
                 if (data.success) {
+                    console.log(cartState)
                     cartState.items = data.items;
                     cartState.totals = data.totals;
                     
@@ -139,7 +140,7 @@
                         <div class="flex-shrink-0 mr-4">
                             <div class="w-32 h-32 bg-gray-100 border border-gray-200 rounded-lg flex items-center justify-center overflow-hidden shadow-sm">
                                 ${item.image_path ? 
-                                    `<img src="https://mjcheezain.com/storage/vendor/products/images/${item.image_path}" alt="${item.product_name}" class="w-full h-full object-cover hover:scale-105 transition duration-300">` : 
+                                    `<img src="https://arslan.mjcheezain.com/storage/vendor/products/images/${item.image_path}" alt="${item.product_name}" class="w-full h-full object-cover hover:scale-105 transition duration-300">` : 
                                     '<span class="text-gray-400 text-xs">No Image</span>'
                                 }
                             </div>

@@ -17,11 +17,11 @@
             onmouseover="keepDropdown(this, true)"
             onmouseout="keepDropdown(this, false)"
         >
-            <a href="/login-user?type=customer-signup" 
+            <a href="/login-user?type=customer-signup&page={{ request()->path() }}" 
                class="login-btn block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 text-left"
                onclick="userType('customer', 'sign')">Customer Sign Up</a>
 
-            <a href="/login-user?type=vendor-signup" 
+            <a href="/login-user?type=vendor-signup&page={{ request()->path() }}" 
                class="login-btn block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 text-left"
                onclick="userType('vendor', 'sign')">Vendor Sign Up</a>
         </div>
@@ -45,10 +45,10 @@
             onmouseover="keepDropdown(this, true)"
             onmouseout="keepDropdown(this, false)"
         >
-            <a href="/login-user?type=customer-login" 
+            <a href="/login-user?type=customer-login&page={{ request()->path() }}" 
                class="login-btn block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 text-left" onclick="userType('customer', 'log')">Customer Login</a>
 
-            <a href="/login-user?type=vendor-login" 
+            <a href="/login-user?type=vendor-login&page={{ request()->path() }}" 
                class="login-btn block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 text-left" onclick="userType('vendor', 'log')">Vendor Login</a>
         </div>
     </div>

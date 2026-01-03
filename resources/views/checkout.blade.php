@@ -392,10 +392,11 @@
                         <div class="space-y-4 mb-6 max-h-80 overflow-y-auto">
                             @if($cartItems->count() > 0)
                                 @foreach($cartItems as $item)
+                                    @php($item->selling_price *= 1.17)
                                     <div class="flex items-center space-x-3">
                                         <div class="w-16 h-16 bg-gray100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                                             @if($item->primary_image)
-                                                <img src="{{ asset('storage/products/vendor/images' . $item->primary_image) }}" alt="{{ $item->name }}" class="w-full h-full object-cover">
+                                                <img src="{{ asset('storage/vendor/products/images/' . $item->primary_image) }}" alt="{{ $item->name }}" class="w-full h-full object-cover">
                                             @else
                                                 <span class="text-2xl">📦</span>
                                             @endif

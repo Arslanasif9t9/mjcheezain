@@ -157,6 +157,10 @@
         function updateOtpTimer() {
             otpTimer.textContent = `Resend OTP in ${otpCountdown} seconds`;
         }
+        function getQueryParam(param) {
+            return new URLSearchParams(window.location.search).get(param);
+        }
+        const page = getQueryParam('page');
 
         // Add OTP button event listener
         getOtpBtn.addEventListener('click', async () => {
@@ -315,6 +319,7 @@
             }
         });
 
+        
         // Handle login form submission
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -348,7 +353,11 @@
                     }
                     // Redirect to dashboard after successful login
                     setTimeout(() => {
-                        window.location.href = `/${result.type}/dashboard`;
+                        if (page === '/' || page === '%2F') {
+                            window.location.href = `/${result.type}/dashboard`;
+                        } else {
+                            window.location.href = decodeURIComponent(page);
+                        }
                     }, 500);
                 } else {
                     // Handle errors from API

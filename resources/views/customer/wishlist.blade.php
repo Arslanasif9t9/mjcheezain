@@ -413,7 +413,7 @@
                         <div class="wishlist-item p-4 hover:bg-gray-50">
                             <div class="flex flex-col md:flex-row">
                                 <div class="flex-shrink-0 mb-4 md:mb-0 md:mr-4">
-                                    <img src="http://127.0.0.1:8000/storage/vendor/products/images/${product.image_path || './uploads/default_img.png'}" alt="${product.name}" class="w-32 h-32 rounded-lg object-cover">
+                                    <img src="https://arslan.mjcheezain.com/storage/vendor/products/images/${product.image_path || './uploads/default_img.png'}" alt="${product.name}" class="w-32 h-32 rounded-lg object-cover">
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <div class="flex justify-between">

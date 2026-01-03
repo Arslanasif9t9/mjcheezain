@@ -18,6 +18,8 @@ use App\Http\Controllers\ProductRatingController;
 use App\Http\Controllers\VendorReplacementController;
 use App\Http\Controllers\ReturnController;
 use App\Http\Controllers\VendorReturnController;
+use App\Http\Controllers\ProfileImageController;
+
 // Add this route
 Route::get('/api/search', [SearchController::class, 'searchProducts']);
 Route::view('/comming', 'comming-soon');
@@ -137,6 +139,18 @@ Route::middleware(['auth'])->group(function () {
     });
 
 });
+
+// customer Profile Image Routes
+Route::middleware(['auth'])->group(function () {
+    // Profile Image Routes
+    Route::post('/api/upload-profile-image', [ProfileImageController::class, 'uploadProfileImage']);
+    Route::post('/api/remove-profile-image', [ProfileImageController::class, 'removeProfileImage']);
+    
+    // Banner Image Routes
+    Route::post('/api/upload-banner-image', [ProfileImageController::class, 'uploadBannerImage']);
+    Route::post('/api/remove-banner-image', [ProfileImageController::class, 'removeBannerImage']);
+});
+
 
 Route::middleware(['auth'])->group(function () {
     Route::prefix('customer')->group(function () {

@@ -31,11 +31,15 @@ class CustomerController extends Controller
         $basic_info = DB::table('customer_profile')
                         ->where('user_id', $user->user_id)
                         ->first();
+        $banner = DB::table('customer_banner')
+                        ->where('user_id', $user->user_id)
+                        ->first();
+        $bannerImage = $banner->banner_image ?? "default_img.png";
         // Example: Fetch customer orders
         $orders = DB::table('orders')->where('user_id', $user->user_id)->count();
 
         return view('customer.profile', compact([
-            'basic_info'
+            'basic_info', 'bannerImage'
         ]));
     }
 

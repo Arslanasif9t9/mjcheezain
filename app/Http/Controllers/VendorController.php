@@ -588,6 +588,10 @@ class VendorController extends Controller
         // ]);
         
         $validated = $request->all();
+        $validated['product_name'] = ucwords(trim($validated['product_name']));
+        $validated['brand'] = ucwords(trim($validated['brand']));
+        $validated['model'] = ucwords(trim($validated['model']));
+        $validated['made_in'] = ucwords(trim($validated['made_in']));
         // Handle model field based on category
         // $modelValue = $validated['model'] ?? '';
         // if (!empty($validated['model_value']) && !empty($validated['model_unit'])) {

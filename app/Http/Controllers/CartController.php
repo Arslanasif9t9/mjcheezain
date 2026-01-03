@@ -76,7 +76,7 @@ class CartController extends Controller
                 'session_id' => $sessionId,
                 'product_id' => $request->product_id,
                 'quantity' => $request->quantity,
-                'price' => $product->mrp ?: $product->selling_price
+                'price' => $product->selling_price*1.17
             ]);
         // }
             

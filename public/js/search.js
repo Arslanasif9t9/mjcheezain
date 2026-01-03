@@ -126,7 +126,7 @@ function displayProducts(products, searchTerm) {
         
         const card = document.createElement('div');
         card.className = 'bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-2xl transition duration-300 transform hover:-translate-y-1';
-        
+        /*
         card.innerHTML = `
             <div class="relative overflow-hidden">
                 ${product.video && !product.primary_image ? `
@@ -136,7 +136,7 @@ function displayProducts(products, searchTerm) {
                         <source src="${product.video}" type="video/mp4">
                     </video>
                 ` : `
-                    <img src="http://127.0.0.1:8000/storage/vendor/products/images/${productImage}" 
+                    <img src="https://arslan.mjcheezain.com/storage/vendor/products/images/${productImage}" 
                          alt="${product.name}" 
                          class="w-full h-48 object-cover transition duration-500 ease-in-out group-hover:scale-105 brightness-90">
                 `}
@@ -236,6 +236,62 @@ function displayProducts(products, searchTerm) {
                 </div>
             </div>
         `;
+        */
+
+        // /*
+        card.innerHTML = `
+            <div class="relative overflow-hidden aspect-w-4 aspect-h-3">
+                <!-- Product Image -->
+                <img src="https://arslan.mjcheezain.com/storage/vendor/products/images/${productImage || 'default.jpg'}" 
+                    alt="${product.name || 'Product'}" 
+                    class="w-full h-[210px] object-cover transition duration-300 ease-in-out group-hover:scale-125">
+                
+                <!-- Discount Badge -->
+                ${discountPercentage > 0 ? `
+                    <span class="absolute top-3 right-3 px-3 py-1 text-xs font-semibold rounded-full bg-red-500 text-white shadow-md">
+                        ${discountPercentage}% OFF
+                    </span>
+                ` : ''}
+            </div>
+
+            <div class="p-4">
+                <!-- Product Name -->
+                <h3 class="text-lg font-bold text-gray-900 mb-1 truncate">${product.name || 'Product Name'}</h3>
+                
+                <!-- Description -->
+                <p class="text-sm text-gray-600 h-10 overflow-hidden mb-2">
+                    ${product.description || 'No description available'}
+                </p>
+                
+                <!-- Price & Rating -->
+                <div class="flex justify-between items-baseline my-3">
+                    <!-- Price -->
+                    <div class="flex flex-col">
+                        <span class="text-xl font-extrabold text-gray-900">
+                            $${product.selling_price*1.17 || '0.00'}
+                        </span>
+                        ${discountPercentage > 0 && product.original_price ? `
+                            <span class="text-sm text-gray-500 line-through">$${product.original_price}</span>
+                        ` : ''}
+                    </div>
+                    
+                    <!-- Rating -->
+                    <div class="flex items-center">
+                        <span class="font-semibold">${product.rating ? product.rating : '0.0'}</span>
+                        <span class="text-yellow-500 text-lg ml-1">★</span>
+                    </div>
+                </div>
+                
+                <!-- Quick View Button -->
+                <a href="/product/${product.id}">
+                    <button class="px-4 py-2 text-sm font-semibold text-white bg-gray-900 rounded-lg w-full 
+                                hover:bg-gray-700 transition duration-300 shadow-md">
+                        Quick View
+                    </button>
+                </a>
+            </div>
+        `;
+        // */
         
         grid.appendChild(card);
     });

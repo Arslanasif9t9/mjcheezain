@@ -129,8 +129,17 @@ var image = [];
                     
                     // Product Card HTML Structure
                     card.innerHTML = `
+                        <a href="/product/${product.id}" class="relative no-underline">
+                            <div class="absolute top-3 right-3 flex space-x-3 z-[9]">
+                                <!-- Heart Icon -->
+                                <button id="heart-btn" data-product-id="26" class="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition">
+                                    <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="w-6 h-6 text-gray-700">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.682l-7.682-7.682a4.5 4.5 0 010-6.364z"></path>
+                                    </svg>
+                                </button>
+                            </div>
                             <div class="relative overflow-hidden aspect-w-4 aspect-h-3">
-                                <img src="http://127.0.0.1:8000/storage/vendor/products/images/${image[product.id][0].image_path}" alt="${product.name}" 
+                                <img src="https://arslan.mjcheezain.com/storage/vendor/products/images/${image[product.id][0].image_path}" alt="${product.name}" 
                                     class="w-full h-[210px] object-cover transition duration-300 ease-in-out group-hover:scale-125">
                             </div>
 
@@ -139,7 +148,7 @@ var image = [];
                                 <p class="text-sm text-gray-600 h-10 overflow-hidden">${product.description}</p>
                                 
                                 <div class="flex justify-between items-baseline my-3">
-                                    <span class="text-xl font-extrabold text-gray-900">${product.selling_price}</span>
+                                    <span class="text-xl font-extrabold text-gray-900">${(product.selling_price*1.17).toFixed(2)}</span>
                                     <div class="flex items-center">
                                     <span class="font-semibold">4.99 </span>
                                         <span class="text-yellow-500 text-lg mr-1"> ★</span>
@@ -153,6 +162,7 @@ var image = [];
                                     </button>
                                 </a>
                             </div>
+                        </a>
                     `;
                     grid.appendChild(card);
                 });

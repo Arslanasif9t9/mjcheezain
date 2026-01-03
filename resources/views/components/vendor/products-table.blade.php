@@ -55,7 +55,7 @@
                         </td>
                         <td class="p-2 whitespace-nowrap">{{ $product->category }}</td>
                         <td class="p-2 whitespace-nowrap">{{ $product->quantity }}</td>
-                        <td class="p-2 whitespace-nowrap">${{ number_format($product->selling_price, 2) }}</td>
+                        <td class="p-2 whitespace-nowrap">${{ number_format($product->selling_price*1.17, 2) }}</td>
                         <td class="p-2 whitespace-nowrap">
                             @php
                                 $status_class = '';

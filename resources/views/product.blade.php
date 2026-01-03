@@ -97,7 +97,7 @@
                 <div class="relative">
                     <img id="main-image"
                         src="{{ asset('storage/vendor/products/images/'.$imageMain->image_path) }}" 
-                        class="border-2 border-blue-900 w-full h-[72vh] aspect-square object-cover rounded-lg overflow-hidden">
+                        class="border-2 border-blue-900 w-full h-[72vh] aspect-square object-contain rounded-lg overflow-hidden">
                     {{-- <img id="main-image"
                         src="https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg" 
                         class="border-2 border-blue-900 w-full h-[72vh] aspect-square object-cover rounded-lg overflow-hidden"> --}}
@@ -149,11 +149,11 @@
                 <h1 class="text-3xl font-bold mb-2">{{ $product->name }}</h1>
 
                 <!-- Discount Badge -->
+                @php
+                    $gst = $product->selling_price * 1.17;
+                    $discount = round((($product->mrp - $gst) / $product->mrp) * 100);
+                @endphp
                 @if ($product->mrp > $product->selling_price)
-                    @php
-                        $gst = $product->selling_price * 1.17;
-                        $discount = round((($product->mrp - $gst) / $product->mrp) * 100);
-                    @endphp
 
                     <div class="absolute top-12 right-20 bg-red-600 text-white px-4 py-2 rounded-xl shadow-lg 
                                 text-lg font-bold transform translate-x-4 -translate-y-4 z-10">
@@ -239,7 +239,7 @@
                 <!-- Action Buttons -->
                 <div class="flex space-x-4 mb-6">
                     <button id="addToCartBtn" 
-                    @if ($product->user_id == $vendor->user_id)
+                    @if ($user && $product->user_id == $user->user_id)
                         style="background-color: #9ca3af; cursor: not-allowed; opacity: 0.6"
                         disable
                     @else
@@ -251,7 +251,7 @@
                         Add to Cart
                     </button>
                     <button class="flex-1 py-3 px-6 border border-blue-700 text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition duration-150"
-                    @if ($product->user_id == $vendor->user_id)
+                    @if ($user && $product->user_id == $user->user_id)
                         style="background-color: #9ca3af; cursor: not-allowed; opacity: 0.6"
                         disable
                     @else
@@ -716,8 +716,41 @@
                     <!-- Tab 1: Description Content (Default Active) -->
                     <div id="content-description" class="tab-content">
                         <h3 class="text-xl font-semibold mb-4">Product Details</h3>
-                        <p>{{ $product->description }}</p>
+                        <p id="productText">{{ $product->description }}</p>
+                        <button
+                            id="toggleBtn"
+                            class="mt-2 text-blue-600 font-medium hover:underline hidden">
+                            Read more
+                        </button>
                     </div>
+                    <script>
+                        const textElement = document.getElementById("productText");
+                        const toggleBtn = document.getElementById("toggleBtn");
+
+                        const fullText = textElement.innerText;
+                        const words = fullText.split(" ");
+                        const limit = 500;
+
+                        if (words.length > limit) {
+                            const shortText = words.slice(0, limit).join(" ") + "...";
+                            let isExpanded = false;
+
+                            textElement.innerText = shortText;
+                            toggleBtn.classList.remove("hidden");
+
+                            toggleBtn.addEventListener("click", () => {
+                                if (!isExpanded) {
+                                    textElement.innerText = fullText;
+                                    toggleBtn.innerText = "Read less";
+                                } else {
+                                    textElement.innerText = shortText;
+                                    toggleBtn.innerText = "Read more";
+                                }
+                                isExpanded = !isExpanded;
+                            });
+                        }
+                    </script>
+
 
                     <!-- Tab 2: Specifications Content -->
                     <div id="content-specifications" class="tab-content hidden">
