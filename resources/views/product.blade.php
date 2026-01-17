@@ -378,7 +378,7 @@
                 const cartIcon = document.getElementById('cartIcon');
                 
                 // Button animation
-                button.classList.add('animate-pulse-custom');
+                // button.classList.add('animate-pulse-custom');
                 
                 try {
                     const response = await fetch('/cart/add', {

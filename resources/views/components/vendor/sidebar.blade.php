@@ -47,7 +47,7 @@
         <a href="{{ route('vendor.profile') }}" class="flex items-center gap-2">
             <i class="fa-solid fa-user"></i> Profile
         </a>
-        <a href="/" id="logoutBtn" class="flex items-center gap-2 text-red-400 rounded-lg hover:bg-gray-800 hover:text-red-300 transition-colors">
+        <a href="#" id="logoutBtn" class="flex items-center gap-2 text-red-400 rounded-lg hover:bg-gray-800 hover:text-red-300 transition-colors">
             <i class="fas fa-sign-out-alt w-5 text-center"></i> Log out
         </a>
     </nav>

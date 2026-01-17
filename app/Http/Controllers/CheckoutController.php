@@ -120,6 +120,32 @@ class CheckoutController extends Controller
             ->whereNull('order_id')
             ->update(['order_id' => $orderId]);
 
+
+        DB::table('notifications')
+            ->insert([
+                'user_id' => $userId,
+                'title' => "Order",
+                'message' => "Your order has been send",
+                'type' => "order",
+                'icon_class' => "fas fa-shipping-fast",
+                "icon_color" => "bg-blue-100 text-blue-600",
+                "dot_color" => "bg-blue-500",
+                "is_read" => 0,
+                'created_at' => now()
+            ]);
+        // DB::table('notifications')
+        //     ->insert([
+        //         'user_id' => $userId,
+        //         'title' => "Order",
+        //         'message' => "Your order has been receive",
+        //         'type' => "order",
+        //         'icon_class' => "fas fa-shipping-fast",
+        //         "icon_color" => "bg-blue-100 text-blue-600",
+        //         "dot_color" => "bg-blue-500",
+        //         "is_read" => 0,
+        //         'created_at' => now()
+        //     ]);
+
         return response()->json([
             'success' => $userId
         ]);
