@@ -234,12 +234,12 @@ class CustomerController extends Controller
     /**
      * Mark notification as read
      */
-    public function markAsRead($id)
+    public function markAsRead()
     {
         $user = Auth::user();
         
         DB::table('notifications')
-            ->where('id', $id)
+            // ->where('id', $id)
             ->where('user_id', $user->user_id)
             ->update([
                 'is_read' => 1,

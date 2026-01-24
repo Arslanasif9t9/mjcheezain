@@ -157,6 +157,7 @@
             :profilePicture="$vendorBasicInfo->profile_picture ?? 'default_profile.webp'"
             :fullName="$vendorBasicInfo->full_name ?? auth()->user()->full_name"
             :profile_visibility="$vendorBasicInfo->profile_visibility ?? 1"
+            :user="$user"
             page='Orders'
         />
 
@@ -202,8 +203,8 @@
                     <table class="min-w-full">
                         <thead class="bg-gray-50">
                             <tr class="text-left text-sm text-gray-500">
-                                <th class="px-6 py-3 font-medium">ID</th>
-                                <th class="px-6 py-3 font-medium">Customer</th>
+                                <th class="px-6 py-3 font-medium">Order ID</th>
+                                {{-- <th class="px-6 py-3 font-medium">Customer</th> --}}
                                 <th class="px-6 py-3 font-medium">Product</th>
                                 <th class="px-6 py-3 font-medium">Quantity</th>
                                 <th class="px-6 py-3 font-medium">Price</th>
@@ -239,15 +240,18 @@
                                 @endphp
                                 
                                 <tr class="order-row hover:bg-gray-50" data-order-id="{{ $order->id }}">
-                                    <td class="whitespace-nowrap px-6 py-4 font-medium text-black">ORD-{{ $order->id }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4">
+                                    <td class="whitespace-nowrap px-6 py-4 font-medium text-black">
+                                        {{-- ORD-{{ $order->id }} --}}
+                                        ORD-{{ str_pad($order->id, 6, '0', STR_PAD_LEFT) }}-{{ \Carbon\Carbon::parse($order->updated_at)->format('y') }}
+                                    </td>
+                                    {{-- <td class="whitespace-nowrap px-6 py-4">
                                         @if($customer)
                                             {{ $customer->first_name }} {{ $customer->last_name }}
                                         @else
                                             User {{ $order->user_id }}
                                         @endif
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4">
+                                    </td> --}}
+                                    <td class="whitespacenowrap px-6 py-4 max-w-28">
                                         @if($product)
                                             <div class="flex items-center space-x-2">
                                                 @php
@@ -367,6 +371,9 @@
             </div>
         </div>
     </div>
+
+
+    <x-logout-modal />
 
     <!-- JavaScript -->
     <script>

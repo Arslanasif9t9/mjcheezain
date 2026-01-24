@@ -54,6 +54,7 @@
             :profilePicture="$vendorBasicInfo->profile_picture ?? 'default_profile.webp'"
             :fullName="$vendorBasicInfo->full_name ?? $user->full_name"
             :profile_visibility="$vendorBasicInfo->profile_visibility ?? 1"
+            :user="$user"
             page='Notifications'
         />
         
@@ -116,14 +117,14 @@
                                 
                                 <div class="divide-y divide-gray-100">
                                     @foreach($groupedNotifications as $notification)
-                                        <div class="notification-item flex items-start px-4 py-3 hover:bg-gray-50" 
+                                        <div class="notification-item flex items-start px-4 py-3 hover:bg-gray-100 {{ $notification->is_read ? '' : 'bg-blue-100' }}" 
                                              data-notification-id="{{ $notification->id }}">
-                                            <label class="inline-flex items-center mt-1 mr-3">
+                                            {{-- <label class="inline-flex items-center mt-1 mr-3">
                                                 <input type="checkbox" 
                                                        class="notification-checkbox form-checkbox h-4 w-4 text-blue-600 sr-only" 
                                                        {{ $notification->is_read ? 'checked' : '' }}>
                                                 <span class="checkmark h-4 w-4 border border-gray-300 rounded-sm flex-shrink-0"></span>
-                                            </label>
+                                            </label> --}}
                                             <div class="flex-shrink-0 mr-3">
                                                 <div class="p-2 rounded-full {!! $notification->icon_color !!}">
                                                     <i class="{{ $notification->icon_class }}"></i>
@@ -166,6 +167,8 @@
             </main>
         </div>
     </div>
+
+    <x-logout-modal />
 
     <script>
         // Mobile sidebar toggle
@@ -249,6 +252,28 @@
                         }
                     }
                 });
+            });
+
+
+            fetch(`/customer/notifications/read`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => {
+                // if (!response.ok) {
+                //     throw new Error(`HTTP error! status: ${response.status}`);
+                // }
+                return response.json(); // or response.text() if not JSON
+            })
+            .then(data => {
+                console.log('Successfully read notifications', data);
+                document.getElementById('noti-num').style.display = 'none'
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
         });
     </script>

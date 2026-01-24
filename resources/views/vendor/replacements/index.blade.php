@@ -334,6 +334,7 @@
             :profilePicture="$vendorBasicInfo->profile_picture ?? 'default_profile.webp'"
             :fullName="$vendorBasicInfo->full_name ?? auth()->user()->full_name"
             :profile_visibility="$vendorBasicInfo->profile_visibility ?? 1"
+            :user="$user"
             page='Replacements'
         />
 
@@ -506,7 +507,8 @@
                                 
                                 <tr class="table-row replacement-row" data-replacement-id="{{ $replacement->id }}">
                                     <td class="table-cell font-bold text-black">
-                                        REP-{{ str_pad($replacement->id, 6, '0', STR_PAD_LEFT) }}
+                                        {{-- REP-{{ str_pad($replacement->id, 6, '0', STR_PAD_LEFT) }} --}}
+                                        REP-{{ str_pad($replacement->id, 6, '0', STR_PAD_LEFT) }}-{{ \Carbon\Carbon::parse($replacement->updated_at)->format('y') }}
                                     </td>
                                     
                                     <td class="table-cell">

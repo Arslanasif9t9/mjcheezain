@@ -1,4 +1,4 @@
-@props(['profilePicture', 'fullName', 'profile_visibility', 'page'])
+@props(['profilePicture', 'fullName', 'profile_visibility', 'page', 'user'])
 <!-- Sidebar Toggle Button -->
 <button id="btn-side" onclick="navbarToggle()" 
     class="md:hidden fixed top-4 left-4 m-2 z-50 text-gray-700 hover:text-red-200 transition-colors duration-200 text-2xl">
@@ -43,6 +43,12 @@
         </a>
         <a href="{{ route('vendor.notifications') }}" class="flex items-center gap-2">
             <i class="fa fa-wallet"></i> Notifications
+            @php $unreadCount = DB::table('notifications')->where('user_id', $user->user_id)->where('is_read', 0)->count(); @endphp
+            @if ($unreadCount != 0)
+                <div id="noti-num" class="w-5 h-5 text-sm absolute right-8 bg-white text-black flex justify-center items-center rounded-full">
+                    {{ $unreadCount }}
+                </div>
+            @endif
         </a>
         <a href="{{ route('vendor.profile') }}" class="flex items-center gap-2">
             <i class="fa-solid fa-user"></i> Profile

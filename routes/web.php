@@ -155,7 +155,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::prefix('customer')->group(function () {
         Route::get('/notifications', [CustomerController::class, 'notifications'])->name('customer.notifications');
-        Route::post('/notifications/{id}/read', [CustomerController::class, 'markAsRead'])->name('customer.notifications.read');
+        Route::post('/notifications/read', [CustomerController::class, 'markAsRead'])->name('customer.notifications.read');
     });
     Route::prefix('vendor')->group(function () {
         Route::get('/notifications', [VendorController::class, 'notifications'])->name('vendor.notifications');
@@ -269,4 +269,6 @@ Route::prefix('admin')->group(function () {
     Route::get('/products', [AdminAuthController::class, 'products']);
     Route::post('/change-product-position', [ProductController::class, 'changeProductPosition']);
     Route::post('/delete-product', [ProductController::class, 'deleteProduct']);
+
+    Route::get('/orders', [AdminAuthController::class, 'orders']);
 });

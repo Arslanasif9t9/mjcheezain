@@ -997,6 +997,7 @@ class VendorController extends Controller
             ->first();
 
         return view('vendor.orders', compact(
+            'user',
             'orders',
             'totalOrders',
             'deliveredOrders',

@@ -6,7 +6,7 @@
           <li><a href="/admin/vendors" class="block py-2 px-4 rounded hover:bg-gray-900"><i class="fa-solid fa-users"></i> Vendors</a></li>
           <li><a href="/admin/dashboardp" class="block py-2 px-4 rounded hover:bg-gray-800"><i class="fa-solid fa-users"></i> Customers</a></li>
           <li><a href="/admin/products" class="block py-2 px-4 rounded hover:bg-gray-800"><i class="fa-solid fa-users"></i> Products</a></li>
-          <li><a href="/admin/dashboard" class="block py-2 px-4 rounded hover:bg-gray-800"><i class="fa-solid fa-truck"></i> Orders</a></li>
+          <li><a href="/admin/orders" class="block py-2 px-4 rounded hover:bg-gray-800"><i class="fa-solid fa-truck"></i> Orders</a></li>
           <li><a href="/admin/dashboard" class="block py-2 px-4 rounded hover:bg-gray-800"><i class="fa-solid fa-dollar-sign"></i> Customer Payments</a></li>
           <li><a href="/admin/dashboard" class="block py-2 px-4 rounded hover:bg-gray-800"><i class="fa-solid fa-dollar-sign"></i> withdraw Request</a></li>
           <!-- <li><a href="#" class="block py-2 px-4 rounded hover:bg-gray-800"><i class="fa-solid fa-rotate-left"></i>

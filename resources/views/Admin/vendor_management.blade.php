@@ -431,7 +431,8 @@
                                         @endphp
 
                                         <tr id="vendor-row-{{ $userId }}">
-                                            <td>{{ $vendor->user_id }}</td>
+                                            {{-- <td>{{ $vendor->user_id }}</td> --}}
+                                            <td>USR-{{ str_pad($vendor->user_id, 6, '0', STR_PAD_LEFT) }}-{{ \Carbon\Carbon::parse($vendor->created_at)->format('y') }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <img src="{{ asset('storage/vendor/profile/' . ($vendorBasic->profile_picture ?? 'default_profile.webp')) }}" 

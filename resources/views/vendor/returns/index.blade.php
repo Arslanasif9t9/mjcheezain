@@ -419,6 +419,7 @@
             :profilePicture="$vendorBasicInfo->profile_picture ?? 'default_profile.webp'"
             :fullName="$vendorBasicInfo->full_name ?? auth()->user()->full_name"
             :profile_visibility="$vendorBasicInfo->profile_visibility ?? 1"
+            :user="$user"
             page='Returns'
         />
 
@@ -581,7 +582,8 @@
                                 
                                 <tr class="table-row return-row" data-return-id="{{ $return->id }}">
                                     <td class="table-cell font-bold text-orange-600">
-                                        RET-{{ str_pad($return->id, 6, '0', STR_PAD_LEFT) }}
+                                        {{-- RET-{{ str_pad($return->id, 6, '0', STR_PAD_LEFT) }} --}}
+                                        RET-{{ str_pad($return->id, 6, '0', STR_PAD_LEFT) }}-{{ \Carbon\Carbon::parse($return->updated_at)->format('y') }}
                                     </td>
                                     
                                     <td class="table-cell">

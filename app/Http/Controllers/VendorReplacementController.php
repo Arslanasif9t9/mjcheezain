@@ -258,6 +258,7 @@ class VendorReplacementController extends Controller
             ->orderBy('rr.created_at', 'desc')
             ->paginate(20);
         
-        return view('vendor.replacements.partials.table', compact('replacements'))->render();
+        $user = (object) ['user_id' => $vendorId];
+        return view('vendor.replacements.partials.table', compact('user', 'replacements'))->render();
     }
 }

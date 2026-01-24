@@ -133,18 +133,45 @@ class CheckoutController extends Controller
                 "is_read" => 0,
                 'created_at' => now()
             ]);
-        // DB::table('notifications')
-        //     ->insert([
-        //         'user_id' => $userId,
-        //         'title' => "Order",
-        //         'message' => "Your order has been receive",
-        //         'type' => "order",
-        //         'icon_class' => "fas fa-shipping-fast",
-        //         "icon_color" => "bg-blue-100 text-blue-600",
-        //         "dot_color" => "bg-blue-500",
-        //         "is_read" => 0,
-        //         'created_at' => now()
-        //     ]);
+
+        // Get product IDs from carts
+        $productIds = DB::table('carts')
+            ->where('order_id', $orderId)
+            ->pluck('product_id')
+            ->toArray();
+
+        // Get vendor user IDs from vendor_products
+        $vendorIds = DB::table('vendor_products')
+            ->whereIn('id', $productIds)
+            ->pluck('user_id')
+            ->toArray();
+
+        // Prepare notification data for all vendors
+        $notificationData = [];
+
+        // For each vendor, create a notification for each product
+        // This creates one notification per vendor per product
+        foreach ($vendorIds as $vendorId) {
+            foreach ($productIds as $productId) {
+                $notificationData[] = [
+                    'user_id' => $vendorId,
+                    'title' => "Order Received",
+                    'message' => "Your order of product PRD-{$productId}",
+                    'type' => "order",
+                    'icon_class' => "fas fa-shipping-fast",
+                    "icon_color" => "bg-blue-100 text-blue-600",
+                    "dot_color" => "bg-blue-500",
+                    "is_read" => 0,
+                    'created_at' => now(),
+                    // 'updated_at' => now()
+                ];
+            }
+        }
+
+        // Insert all notifications at once
+        if (!empty($notificationData)) {
+            DB::table('notifications')->insert($notificationData);
+        }
 
         return response()->json([
             'success' => $userId

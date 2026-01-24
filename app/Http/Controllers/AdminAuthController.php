@@ -162,4 +162,40 @@ class AdminAuthController extends Controller
             'products'
         ]));
     }
+
+
+    function orders() {
+        // Check if admin is logged in
+        if (!Session::get('admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        $total = DB::table('carts')
+                        ->count();
+        $pending = DB::table('carts')
+                        ->where('status', null)
+                        ->count();
+        $shipped = DB::table('carts')
+                        ->where('status', 'shipped')
+                        ->count();
+        $approved = DB::table('carts')
+                        ->where('status', 'delivered')
+                        ->count();
+        $rejected = DB::table('carts')
+                        ->where('status', 'cencelled')
+                        ->count();
+        // $out = DB::table('carts')
+        //                 ->where('quantity', 0)
+        //                 ->count();
+
+        $carts = DB::table('carts')
+                ->orderBy('created_at', 'desc')
+                ->get()
+                ->toArray();
+
+        return view('Admin/order_management', compact([
+            'total', 'pending', 'shipped', 'approved', 'rejected',
+            'carts'
+        ]));
+    }
 }

@@ -75,7 +75,9 @@ class VendorReturnController extends Controller
                 ->count(),
         ];
         
-        return view('vendor.returns.index', compact('returns', 'stats'));
+        // $user = (object) ['user_id' => $vendorId];
+        $user = (object) ['user_id' => $vendorId];
+        return view('vendor.returns.index', compact('returns', 'stats', 'user'));
     }
     
     // View return details
@@ -114,8 +116,8 @@ class VendorReturnController extends Controller
         $images = DB::table('return_images')
             ->where('return_id', $id)
             ->get();
-        
-        return view('vendor.returns.show', compact('return', 'tracking', 'images'));
+        $user = (object) ['user_id' => $vendorId];
+        return view('vendor.returns.show', compact('user', 'return', 'tracking', 'images'));
     }
     
     // Update return status

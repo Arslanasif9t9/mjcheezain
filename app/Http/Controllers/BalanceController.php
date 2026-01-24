@@ -23,7 +23,9 @@ class BalanceController extends Controller
             $balance = $this->createBalanceRecord($vendorId);
         }
         
-        return view('vendor.withdraw', compact('balance'));
+        $user = (object) ['user_id' => $vendorId];
+        // dd($user);
+        return view('vendor.withdraw', compact('balance', 'user'));
     }
     
     // Create balance record if not exists
