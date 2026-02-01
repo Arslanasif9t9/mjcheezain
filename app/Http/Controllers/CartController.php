@@ -197,7 +197,7 @@ class CartController extends Controller
         $total = $subtotal + $shipping + $tax - $discount;
 
         if(!$user) {
-            return "please <a href='https://arslan.mjcheezain.com/login-user?type=customer-login'> Register or login </a> your account";
+            return "please <a href='https://arslan.mjcheezain.com/login-user?type=customer-login&page=product/40/buy/1'> Register or login </a> your account";
         }
         return view('checkout', compact(
             'user', 'profile', 'dashboardPage', 'imgPath',

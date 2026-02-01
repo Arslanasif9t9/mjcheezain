@@ -3,7 +3,7 @@
     <section id="{{ $id }}-products-section" class="py-16 px-4 sm:px-6 lg:px-8 max-w-full mx-auto hidden">
         
         <!-- Category Title (Acts as the component header) -->
-        <h2 id="{{ $id}}-title" class="text-3xl font-bold text-gray-900 mb-8 sm:text-left">
+        <h2 id="{{ $id}}-title" class="{{$related == true ? 'hidden' : ''}} text-3xl font-bold text-gray-900 mb-8 sm:text-left">
             <!-- Title injected by JS -->
         </h2>
         

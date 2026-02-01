@@ -147,6 +147,200 @@
         .close-btn:hover {
             color: #374151;
         }
+        
+        /* Print Label Modal Styles */
+        /* Print Label Modal Styles - FIXED */
+        .label-modal {
+            position: fixed;
+            z-index: 9999;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 400px;
+            max-width: 95vw;
+            max-height: 95vh;
+            display: none;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+
+        .label-modal.open {
+            display: flex;
+            flex-direction: column;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .label-modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f9fafb;
+            flex-shrink: 0;
+        }
+
+        .label-modal-body {
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+            max-height: calc(95vh - 140px);
+        }
+
+        .label-preview {
+            background: white;
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .label-header {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+
+        .label-title {
+            font-weight: bold;
+            color: #374151;
+        }
+
+        .label-value {
+            color: #111827;
+        }
+
+        /* Scrollbar styling for modal body */
+        .label-modal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .label-modal-body::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .label-modal-body::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .label-modal-body::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Scrollbar styling for label preview */
+        .label-preview::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .label-preview::-webkit-scrollbar-track {
+            background: #f5f5f5;
+            border-radius: 2px;
+        }
+
+        .label-preview::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 2px;
+        }
+
+        .label-modal-footer {
+            padding: 20px;
+            border-top: 1px solid #e5e7eb;
+            background: #f9fafb;
+            flex-shrink: 0;
+        }
+
+        .print-only {
+            display: none;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .print-label, .print-label * {
+                visibility: visible;
+            }
+            .print-label {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: white;
+                padding: 20px;
+                margin: 0;
+                border: none;
+                box-shadow: none;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+        }
+
+        /* Responsive adjustments for small screens */
+        @media (max-height: 600px) {
+            .label-modal {
+                width: 380px;
+                max-height: 85vh;
+            }
+            
+            .label-modal-body {
+                max-height: calc(85vh - 140px);
+            }
+            
+            .label-preview {
+                max-height: 300px;
+                padding: 10px;
+                font-size: 11px;
+            }
+            
+            .label-header h2 {
+                font-size: 18px;
+            }
+            
+            .label-row {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .label-modal {
+                width: 90vw;
+                max-height: 90vh;
+            }
+            
+            .label-modal-body {
+                padding: 15px;
+            }
+        }
+
+
+        /* Table container with horizontal scroll */
+        table {
+            max-width: 800px !important;
+        }
+        table th, 
+        table td {
+            white-space: nowrap;
+        }
+    
     </style>
 </head>
 
@@ -204,13 +398,13 @@
                         <thead class="bg-gray-50">
                             <tr class="text-left text-sm text-gray-500">
                                 <th class="px-6 py-3 font-medium">Order ID</th>
-                                {{-- <th class="px-6 py-3 font-medium">Customer</th> --}}
                                 <th class="px-6 py-3 font-medium">Product</th>
                                 <th class="px-6 py-3 font-medium">Quantity</th>
                                 <th class="px-6 py-3 font-medium">Price</th>
                                 <th class="px-6 py-3 font-medium">Total</th>
                                 <th class="px-6 py-3 font-medium">Status</th>
                                 <th class="px-6 py-3 font-medium">Order Date</th>
+                                <th class="px-6 py-3 font-medium">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="text-sm divide-y divide-gray-100" id="ordersTableBody">
@@ -237,20 +431,17 @@
                                     $product = DB::table('vendor_products')
                                         ->where('id', $order->product_id)
                                         ->first();
+                                    
+                                    // Get vendor info for label
+                                    $vendor = DB::table('vendor_basic_info')
+                                        ->where('user_id', auth()->id())
+                                        ->first();
                                 @endphp
                                 
                                 <tr class="order-row hover:bg-gray-50" data-order-id="{{ $order->id }}">
                                     <td class="whitespace-nowrap px-6 py-4 font-medium text-black">
-                                        {{-- ORD-{{ $order->id }} --}}
                                         ORD-{{ str_pad($order->id, 6, '0', STR_PAD_LEFT) }}-{{ \Carbon\Carbon::parse($order->updated_at)->format('y') }}
                                     </td>
-                                    {{-- <td class="whitespace-nowrap px-6 py-4">
-                                        @if($customer)
-                                            {{ $customer->first_name }} {{ $customer->last_name }}
-                                        @else
-                                            User {{ $order->user_id }}
-                                        @endif
-                                    </td> --}}
                                     <td class="whitespacenowrap px-6 py-4 max-w-28">
                                         @if($product)
                                             <div class="flex items-center space-x-2">
@@ -287,6 +478,12 @@
                                         </div>
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4 text-gray-500">{{ \Carbon\Carbon::parse($order->created_at)->format('M d, Y') }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4">
+                                        <button onclick="openPrintLabelModal('{{ $order->id }}')" 
+                                                class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-sm no-print">
+                                            <i class="fas fa-print mr-1"></i> Print Label
+                                        </button>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -372,6 +569,39 @@
         </div>
     </div>
 
+    <!-- Print Label Modal -->
+    <div id="labelModalOverlay" class="modal-overlay"></div>
+    
+    <div id="labelModal" class="label-modal">
+        <button class="close-btn" onclick="closePrintLabelModal()">
+            <i class="fas fa-times"></i>
+        </button>
+        
+        <div class="status-dropdown-header">
+            <h3 class="text-lg font-bold text-gray-800">Print Shipping Label</h3>
+            <p class="text-sm text-gray-600 mt-1">Order: <span id="labelOrderId" class="font-medium"></span></p>
+        </div>
+        
+        <div class="p-4">
+            <div class="label-preview" id="labelPreview">
+                <!-- Label content will be dynamically inserted here -->
+            </div>
+            
+            <div class="mt-6 pt-4 border-t border-gray-200">
+                <button onclick="printLabel()" 
+                        class="w-full py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition">
+                    <i class="fas fa-print mr-2"></i> Print Label
+                </button>
+                <button onclick="closePrintLabelModal()" 
+                        class="w-full py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition mt-3">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden div for printing label -->
+    <div id="printLabelContainer" class="print-only"></div>
 
     <x-logout-modal />
 
@@ -384,6 +614,7 @@
             let currentOrderId = null;
             let currentOrderStatus = null;
             let selectedStatus = null;
+            let currentLabelOrderId = null;
             
             // Search functionality
             const searchInput = document.getElementById('orderSearch');
@@ -402,13 +633,15 @@
                 });
             }
             
-            // Close modal when clicking overlay
+            // Close modals when clicking overlay
             document.getElementById('statusModalOverlay').addEventListener('click', closeStatusModal);
+            document.getElementById('labelModalOverlay').addEventListener('click', closePrintLabelModal);
             
-            // Close modal with Escape key
+            // Close modals with Escape key
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     closeStatusModal();
+                    closePrintLabelModal();
                 }
             });
         });
@@ -539,9 +772,6 @@
                     setTimeout(() => {
                         closeStatusModal();
                     }, 1000);
-                    
-                    // Update stats if needed (you can add logic here)
-                    console.log(`Status updated to: ${selectedStatus}`);
                 } else {
                     throw new Error(data.message || 'Update failed');
                 }
@@ -576,6 +806,154 @@
                     updateBtn.disabled = (selectedStatus === currentOrderStatus);
                 }
             });
+        }
+        
+        // Open print label modal
+        function openPrintLabelModal(orderId) {
+            currentLabelOrderId = orderId;
+            
+            // Set order ID in modal
+            document.getElementById('labelOrderId').textContent = `ORD-${orderId}`;
+            
+            // Get order data from the table row
+            const row = document.querySelector(`tr[data-order-id="${orderId}"]`);
+            if (!row) {
+                showNotification('Order data not found', 'error');
+                return;
+            }
+            
+            // Extract data from the table row
+            const orderNumber = row.cells[0].textContent.trim();
+            const productName = row.cells[1].querySelector('.font-medium')?.textContent || row.cells[1].textContent.trim();
+            const quantity = row.cells[2].textContent.trim();
+            const price = row.cells[3].textContent.trim();
+            const total = row.cells[4].textContent.trim();
+            const status = row.cells[5].querySelector('.badge').textContent.trim();
+            const orderDate = row.cells[6].textContent.trim();
+            
+            // Generate label content (without customer details)
+            const labelContent = `
+                <div class="label-header">
+                    <h2 class="text-xl font-bold">SHIPPING LABEL</h2>
+                    <p class="text-sm">Vendor Copy - Keep for Records</p>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="label-row">
+                        <span class="label-title">Order Number:</span>
+                        <span class="label-value">${orderNumber}</span>
+                    </div>
+                    <div class="label-row">
+                        <span class="label-title">Order Date:</span>
+                        <span class="label-value">${orderDate}</span>
+                    </div>
+                    <div class="label-row">
+                        <span class="label-title">Status:</span>
+                        <span class="label-value">${status}</span>
+                    </div>
+                </div>
+                
+                <div class="mb-4 border-t pt-3">
+                    <h3 class="font-bold mb-2">PRODUCT DETAILS</h3>
+                    <div class="label-row">
+                        <span class="label-title">Product:</span>
+                        <span class="label-value">${productName}</span>
+                    </div>
+                    <div class="label-row">
+                        <span class="label-title">Quantity:</span>
+                        <span class="label-value">${quantity}</span>
+                    </div>
+                    <div class="label-row">
+                        <span class="label-title">Unit Price:</span>
+                        <span class="label-value">${price}</span>
+                    </div>
+                    <div class="label-row">
+                        <span class="label-title">Total Amount:</span>
+                        <span class="label-value">${total}</span>
+                    </div>
+                </div>
+                
+                <div class="mb-4 border-t pt-3">
+                    <h3 class="font-bold mb-2">VENDOR INFORMATION</h3>
+                    <div class="label-row">
+                        <span class="label-title">Vendor ID:</span>
+                        <span class="label-value">VEND-{{ auth()->id() }}</span>
+                    </div>
+                    <div class="label-row">
+                        <span class="label-title">Printed Date:</span>
+                        <span class="label-value">${new Date().toLocaleDateString('en-US', { 
+                            year: 'numeric', 
+                            month: 'short', 
+                            day: 'numeric' 
+                        })}</span>
+                    </div>
+                    <div class="label-row">
+                        <span class="label-title">Printed Time:</span>
+                        <span class="label-value">${new Date().toLocaleTimeString('en-US', { 
+                            hour: '2-digit', 
+                            minute: '2-digit' 
+                        })}</span>
+                    </div>
+                </div>
+                
+                <div class="mt-6 pt-4 border-t-2 border-double text-center">
+                    <p class="text-xs text-gray-600 mb-1">This is an internal shipping label for vendor records.</p>
+                    <p class="text-xs text-gray-600">Customer details are not included for privacy protection.</p>
+                </div>
+                
+                <div class="mt-4 text-center print-only">
+                    <div class="barcode-placeholder" style="padding: 10px; background: #f5f5f5;">
+                        <!-- Barcode would go here in a real implementation -->
+                        <p style="font-family: monospace; letter-spacing: 2px;">* ${orderNumber} *</p>
+                    </div>
+                </div>
+            `;
+            
+            // Update preview
+            document.getElementById('labelPreview').innerHTML = labelContent;
+            
+            // Show modal
+            document.getElementById('labelModalOverlay').classList.add('open');
+            document.getElementById('labelModal').classList.add('open');
+            document.body.classList.add('modal-open');
+        }
+        
+        // Close print label modal
+        function closePrintLabelModal() {
+            document.getElementById('labelModalOverlay').classList.remove('open');
+            document.getElementById('labelModal').classList.remove('open');
+            document.body.classList.remove('modal-open');
+            
+            currentLabelOrderId = null;
+        }
+        
+        // Print label
+        function printLabel() {
+            // Create print-friendly version
+            const printContent = document.getElementById('labelPreview').innerHTML;
+            
+            // Add print-specific styling
+            const printHTML = `
+                <div class="print-label" style="font-family: 'Courier New', monospace; padding: 20px;">
+                    ${printContent}
+                    <div style="margin-top: 30px; text-align: center; border-top: 1px solid #000; padding-top: 10px;">
+                        <p style="font-size: 10px;">--- END OF LABEL ---</p>
+                    </div>
+                </div>
+            `;
+            
+            // Put content in print container
+            const printContainer = document.getElementById('printLabelContainer');
+            printContainer.innerHTML = printHTML;
+            
+            // Trigger print
+            window.print();
+            
+            // Close modal after a delay
+            setTimeout(() => {
+                closePrintLabelModal();
+                showNotification('Label sent to printer', 'success');
+            }, 500);
         }
         
         // Show notification

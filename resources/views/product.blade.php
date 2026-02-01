@@ -936,8 +936,9 @@
             </div>
         </div>
 
+        {{-- <h1>{{$product->category}}</h1> --}}
         <!-- You Might Also Like Section -->
-       @include('../products.related-product', ['category' => 'Related Products', 'id' => 'gym'])
+       @include('../products.category', ['category' => $product->category, 'id' => 'gym', 'related' => true])
 
 
     </div>

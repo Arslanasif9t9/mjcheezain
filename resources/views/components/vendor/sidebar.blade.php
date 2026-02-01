@@ -7,7 +7,7 @@
 
 <!-- Sidebar -->
 <aside id="aside" 
-    class="sticky top-0 left-0 h-[100vh] w-64 bg-gray-900 text-white p-4 transform -translate-x-full transition-transform duration-300 md:translate-x-0 z-40 shadow-lg">
+    class="sticky top-0 left-0 h-[100vh] !min-w-64 bg-gray-900 text-white p-4 transform -translate-x-full transition-transform duration-300 md:translate-x-0 z-40 shadow-lg" style="min-width: 224px !important">
     
     <div class="flex flex-col items-center">
         <img class="w-24 h-24 rounded-full object-cover" src="{{ asset("storage/vendor/profile/" . $profilePicture) }}" alt="Profile" />
@@ -45,7 +45,7 @@
             <i class="fa fa-wallet"></i> Notifications
             @php $unreadCount = DB::table('notifications')->where('user_id', $user->user_id)->where('is_read', 0)->count(); @endphp
             @if ($unreadCount != 0)
-                <div id="noti-num" class="w-5 h-5 text-sm absolute right-8 bg-white text-black flex justify-center items-center rounded-full">
+                <div id="noti-num" class="w-5 h-5 text-sm absolute right-8 bg-red-500 text-white flex justify-center items-center rounded-full">
                     {{ $unreadCount }}
                 </div>
             @endif
