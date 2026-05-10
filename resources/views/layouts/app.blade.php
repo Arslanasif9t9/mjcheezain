@@ -106,7 +106,7 @@
         <x-categories />
         <x-vendors />
         {{-- @include('products.biggest-savings') --}}
-        @include('products.category', ['category' => 'Fitness & Gym Equipment', 'id' => 'gym'])
+        @include('products.category', ['category' => 'Fitness & Gym Equipment', 'id' => 'gym', 'related' => false])
         {{-- <x-popular-brands :brands="[
             ['image' => 'img/nike sho.jpg', 'name' => 'Nike', 'link' => '#'],
             ['image' => 'img/adidas.jpeg', 'name' => 'Adidas', 'link' => '#'],
@@ -115,8 +115,8 @@
             ['image' => 'img/toyota.jpeg', 'name' => 'Toyota', 'link' => '#'],
             ['image' => 'img/levis.jpeg', 'name' => 'Levis', 'link' => '#'],
         ]" /> --}}
-        @include('products.category', ['category' => 'Bundle Sales', 'id' => 'bSales'])
-        @include('products.category', ['category' => 'Auto Parts & Accessories', 'id' => 'auto'])
+        @include('products.category', ['category' => 'Bundle Sales', 'id' => 'bSales', 'related' => false])
+        @include('products.category', ['category' => 'Auto Parts & Accessories', 'id' => 'auto', 'related' => false])
         {{-- @include('products.category', ['category' => 'Car Tools & Maintenance', 'id' => 'car']) --}}
         {{-- @include('products.category', ['category' => 'Mens Accessories', 'id' => 'cr']) --}}
     </main>

@@ -275,3 +275,24 @@
         @endif
     </body>
 </html>
+
+
+
+{{-- ------------- --}}
+                                        {{-- <div class="notification-item flex items-start px-4 py-3 hover:bg-gray-100 {{ $notification->is_read ? '' : 'bg-blue-100' }}" 
+                                             data-notification-id="{{ $notification->id }}">
+                                                <div class="p-2 rounded-full {!! $notification->icon_color !!}">
+                                                    <i class="{{ $notification->icon_class }}"></i>
+                                                </div>
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-sm font-medium text-gray-900">{{ $notification->title }}</p>
+                                                <p class="text-sm text-gray-500 mt-1">{{ $notification->message }}</p>
+                                                <p class="text-xs text-gray-400 mt-1">
+                                                    {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}
+                                                </p>
+                                            </div>
+                                            <div class="ml-4 flex-shrink-0">
+                                                <span class="w-2 h-2 rounded-full {{ $notification->is_read ? 'bg-gray-300' : $notification->dot_color }}"></span>
+                                            </div>
+                                        </div> --}}

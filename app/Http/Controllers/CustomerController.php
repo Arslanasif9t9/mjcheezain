@@ -199,7 +199,7 @@ class CustomerController extends Controller
                         ->where('user_id', $user->user_id)
                         ->first();
         // Example: Fetch customer orders
-        $orders = DB::table('orders')->where('user_id', $user->user_id)->get()->toArray();
+        $orders = DB::table('orders')->where('user_id', $user->user_id)->orderByDesc('id')->get()->toArray();
 
         return view('customer.orders', compact([
             'basic_info', 'orders'

@@ -240,6 +240,15 @@ function displayProducts(products, searchTerm) {
 
         // /*
         card.innerHTML = `
+        <a href="/product/${product.id}" class="relative no-underline">
+            <div class="absolute top-3 right-3 flex space-x-3 z-[9]">
+                <!-- Heart Icon -->
+                <button id="heart-btn" data-product-id="26" class="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition">
+                    <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="w-6 h-6 text-gray-700">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.682l-7.682-7.682a4.5 4.5 0 010-6.364z"></path>
+                    </svg>
+                </button>
+            </div>
             <div class="relative overflow-hidden aspect-w-4 aspect-h-3">
                 <!-- Product Image -->
                 <img src="https://arslan.mjcheezain.com/storage/vendor/products/images/${productImage || 'default.jpg'}" 
@@ -290,6 +299,7 @@ function displayProducts(products, searchTerm) {
                     </button>
                 </a>
             </div>
+        </a>
         `;
         // */
         

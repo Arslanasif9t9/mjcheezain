@@ -227,6 +227,7 @@ class ProductRatingController extends Controller
             $replacement = DB::table('replacement_requests')
                 ->where('id', $replacementId)
                 ->where('customer_id', Auth::id())
+                // ->orderByDesc('created_at')
                 ->first();
             
             if (!$replacement) {
@@ -240,7 +241,9 @@ class ProductRatingController extends Controller
             $trackingStepsRaw = DB::table('replacement_tracking')
                 ->where('replacement_id', $replacementId)
                 ->orderBy('created_at', 'asc')
+                // ->orderByDesc('created_at')
                 ->get();
+            // dd($trackingStepsRaw);
             
             // Organize tracking steps by step name
             $trackingSteps = [];

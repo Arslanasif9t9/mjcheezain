@@ -117,28 +117,30 @@
                                 
                                 <div class="divide-y divide-gray-100">
                                     @foreach($groupedNotifications as $notification)
-                                        <div class="notification-item flex items-start px-4 py-3 hover:bg-gray-100 {{ $notification->is_read ? '' : 'bg-blue-100' }}" 
-                                             data-notification-id="{{ $notification->id }}">
-                                            {{-- <label class="inline-flex items-center mt-1 mr-3">
-                                                <input type="checkbox" 
-                                                       class="notification-checkbox form-checkbox h-4 w-4 text-blue-600 sr-only" 
-                                                       {{ $notification->is_read ? 'checked' : '' }}>
-                                                <span class="checkmark h-4 w-4 border border-gray-300 rounded-sm flex-shrink-0"></span>
-                                            </label> --}}
-                                            <div class="flex-shrink-0 mr-3">
-                                                <div class="p-2 rounded-full {!! $notification->icon_color !!}">
+                                        <div class="group flex items-center justify-between p-4 bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden {{ $notification->is_read ? '' : 'bg-blue-100' }}">
+                                            <div class="flex items-center gap-4">
+                                                <div class="absolute left-0 w-1 h-12 rounded-r-full {{ $notification->is_read ? '' : 'bg-orange-400' }} -ml-0.5"></div>
+                                                <div class="w-1.5 h-1.5 rounded-full {{ $notification->is_read ? '' : 'bg-orange-400' }} ml-1"></div>
+                                                
+                                                <div class="{{ $notification->icon_color }} p-2.5 rounded-full text-white">
                                                     <i class="{{ $notification->icon_class }}"></i>
                                                 </div>
+
+                                                <div class="flex flex-col">
+                                                    <h3 class="font-bold text-gray-800 leading-tight">{{ $notification->title }}</h3>
+                                                    <p class="text-gray-500 text-sm mt-0.5">{{ $notification->message }}</p>
+                                                </div>
                                             </div>
-                                            <div class="flex-1 min-w-0">
-                                                <p class="text-sm font-medium text-gray-900">{{ $notification->title }}</p>
-                                                <p class="text-sm text-gray-500 mt-1">{{ $notification->message }}</p>
-                                                <p class="text-xs text-gray-400 mt-1">
-                                                    {{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}
-                                                </p>
-                                            </div>
-                                            <div class="ml-4 flex-shrink-0">
-                                                <span class="w-2 h-2 rounded-full {{ $notification->is_read ? 'bg-gray-300' : $notification->dot_color }}"></span>
+
+                                            <div class="flex items-center gap-6">
+                                                <div class="text-right flex flex-col items-end">
+                                                    <span class="text-blue-900 font-semibold text-sm cursor-pointer hover:underline">view detail</span>
+                                                    <span class="text-gray-400 text-xs mt-1">{{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}</span>
+                                                    {{-- ${notif.subTime ? `<span class="text-gray-400 text-xs">${notif.subTime}</span>` : ''} --}}
+                                                </div>
+                                                <button class="text-gray-300 hover:text-gray-600">
+                                                    <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+                                                </button>
                                             </div>
                                         </div>
                                     @endforeach

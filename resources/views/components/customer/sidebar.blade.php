@@ -28,7 +28,7 @@
                     Notifications
                     @php $unreadCount = DB::table('notifications')->where('user_id', $basic_info->user_id)->where('is_read', 0)->count(); @endphp
                     @if ($unreadCount != 0)
-                        <div id="noti-num" class="w-5 h-5 text-sm absolute right-4 bg-black text-white flex justify-center items-center rounded-full">
+                        <div id="noti-num" class="w-5 h-5 text-sm absolute right-4 bg-red-600 text-white flex justify-center items-center rounded-full">
                             {{ $unreadCount }}
                         </div>
                     @endif
