@@ -489,6 +489,98 @@
                                     </tr>
                                 </thead>
                                 <tbody id="productTableBody">
+                                    
+                                    @if(count($autoProducts) > 0)
+                                        @foreach($autoProducts as $product)
+                                            <tr>
+                                                <td>{{ $product->id }}</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        {{-- @php
+                                                            // Get primary image for the product
+                                                            $image = $product->primary_image ?? 'https://via.placeholder.com/100';
+                                                        @endphp
+                                                        <img src="{{ asset('vendor/' . $image) }}" class="product-thumb me-2"> --}}
+                                                        <span>{{ $product->product_name }}</span>
+                                                    </div>
+                                                </td>
+                                                <td>{{ DB::table('vendor_basic_info')->where('user_id', $product->vendor_id)->value('store_name') }}</td>
+                                                <td>Autoparts</td>
+                                                <td>
+                                                    @php
+                                                        $position_class = '';
+                                                        $position_text = '';
+                                                        switch ($product->status) {
+                                                            case "pending":
+                                                                $position_class = 'position-pending';
+                                                                $position_text = 'Pending';
+                                                                break;
+                                                            case "approved":
+                                                                $position_class = 'position-approved';
+                                                                $position_text = 'Approved';
+                                                                break;
+                                                            case "rejected":
+                                                                $position_class = 'position-rejected';
+                                                                $position_text = 'Rejected';
+                                                                break;
+                                                            case "disable":
+                                                                $position_class = 'position-disabled';
+                                                                $position_text = 'Disabled';
+                                                                break;
+                                                            default:
+                                                                $position_class = 'position-pending';
+                                                                $position_text = 'Unknown';
+                                                        }
+                                                    @endphp
+                                                    <span class="position-badge {{ $position_class }}">{{ $position_text }}</span>
+                                                </td>
+                                                <td>{{ $product->quantity }}</td>
+                                                <td>Rs. {{ number_format($product->selling_price) }}</td>
+                                                <td>N/A</td>
+                                                <td>
+                                                    <a href="/product/{{ $product->id }}" target="_blank">
+                                                        <button type="button" class="btn btn-sm btn-info action-btn" title="View" data-bs-toggle="modal" data-bs-target="#productDetailsModal" 
+                                                                onclick="">
+                                                            <i class="fas fa-eye"></i>
+                                                        </button>
+                                                    </a>
+                                                    
+                                                    @if($product->status != "approved")
+                                                        <button type="button" class="btn btn-sm btn-success action-btn" title="Approve" 
+                                                                onclick="changeProductPosition({{ $product->id }}, 2, true)">
+                                                            <i class="fas fa-check"></i>
+                                                        </button>
+                                                    @endif
+
+                                                    @if($product->status != "rejected")
+                                                        <button type="button" class="btn btn-sm btn-danger action-btn" title="Reject" 
+                                                                onclick="changeProductPosition({{ $product->id }}, 3, true)">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    @endif
+
+                                                    @if($product->status != "disable")
+                                                        <button type="button" class="btn btn-sm btn-warning action-btn" title="Disable" 
+                                                                onclick="changeProductPosition({{ $product->id }}, 4, true)">
+                                                            <i class="fas fa-ban"></i>
+                                                        </button>
+                                                    @else
+                                                        <button type="button" class="btn btn-sm btn-success action-btn" title="Enable" 
+                                                                onclick="changeProductPosition({{ $product->id }}, 2), true">
+                                                            <i class="fas fa-check"></i>
+                                                        </button>
+                                                    @endif
+
+                                                    <button type="button" class="btn btn-sm btn-secondary action-btn" title="Delete" 
+                                                            onclick="confirmDelete({{ $product->id }}, true)">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    
+                                    @endif
+                                    
                                     @if(count($products) > 0)
                                         @foreach($products as $product)
                                             <tr>
@@ -577,6 +669,7 @@
                                                 </td>
                                             </tr>
                                         @endforeach
+                                    
                                     @else
                                         <tr>
                                             <td colspan="9" class="text-center">No products found</td>
@@ -782,7 +875,7 @@
         });
 
         // Function to change product position
-        function changeProductPosition(productId, position) {
+        function changeProductPosition(productId, position, auto = false) {
             let action = "";
             let positionText = "";
             
@@ -822,7 +915,8 @@
                     },
                     body: JSON.stringify({
                         product_id: productId,
-                        position: positionText
+                        position: positionText,
+                        autopart: auto
                     })
                 })
                 .then(response => response.json())
@@ -849,7 +943,7 @@
         }
 
         // Function to confirm and delete product
-        function confirmDelete(productId) {
+        function confirmDelete(productId, auto = false) {
             if(confirm('Are you sure you want to delete this product? This action cannot be undone!')) {
                 // Show loading state
                 const button = event.target.closest('.action-btn');
@@ -865,7 +959,8 @@
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
                     body: JSON.stringify({
-                        product_id: productId
+                        product_id: productId,
+                        autopart: auto
                     })
                 })
                 .then(response => response.json())

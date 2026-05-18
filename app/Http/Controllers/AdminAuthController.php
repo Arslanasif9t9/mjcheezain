@@ -156,10 +156,15 @@ class AdminAuthController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->get()
                 ->toArray();
+                
+        $autoProducts = DB::table('auto_parts_products')
+                ->orderBy('created_at', 'desc')
+                ->get()
+                ->toArray();
 
         return view('Admin/product_management', compact([
             'total', 'pending', 'approved', 'rejected', 'out',
-            'products'
+            'products', 'autoProducts'
         ]));
     }
 

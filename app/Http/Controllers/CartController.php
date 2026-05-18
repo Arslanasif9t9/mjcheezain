@@ -188,7 +188,7 @@ class CartController extends Controller
 
         // Calculate totals
         $subtotal = $cartItems->sum(function($item) {
-            return $item->quantity * $item->selling_price;
+            return $item->cq * $item->selling_price * 1.17;
         });
 
         $shipping = 2.50; // Fixed shipping for now
@@ -197,7 +197,7 @@ class CartController extends Controller
         $total = $subtotal + $shipping + $tax - $discount;
 
         if(!$user) {
-            return "please <a href='https://arslan.mjcheezain.com/login-user?type=customer-login&page=product/40/buy/1'> Register or login </a> your account";
+            return 'please <a href="https://arslan.mjcheezain.com/login-user?type=customer-login&page=product/' . $product_id . '/buy/' . $quantity . '"> Register or login </a> your account';
         }
         return view('checkout', compact(
             'user', 'profile', 'dashboardPage', 'imgPath',

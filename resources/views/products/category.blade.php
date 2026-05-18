@@ -1,3 +1,6 @@
+@php
+    $related = $related ?? null;
+@endphp
 
 <!-- Main Section Container (Targeted by JS and initially hidden) -->
     <section id="{{ $id }}-products-section" class="py-16 px-4 sm:px-6 lg:px-8 max-w-full mx-auto hidden">

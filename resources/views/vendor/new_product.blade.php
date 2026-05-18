@@ -2639,6 +2639,7 @@
                 const contentType = response.headers.get("content-type");
                 if (contentType && contentType.includes("application/json")) {
                     const result = await response.json();
+                    console.log(result)
                     
                     if (result.success) {
                         // Success handling

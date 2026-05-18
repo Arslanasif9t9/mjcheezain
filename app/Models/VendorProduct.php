@@ -35,7 +35,8 @@ class VendorProduct extends Model
         'admin_notes',
         'approved_by',
         'approved_at',
-        'video'
+        'video',
+        'part_type'
     ];
 
     public function user()

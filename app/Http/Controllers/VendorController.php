@@ -11,6 +11,7 @@ use App\Models\VendorBasicInfo;
 use App\Models\VendorProduct;
 use App\Models\VendorProductImage;
 use App\Models\VendorProductFault;
+use App\Http\Controllers\Vendor\AutoPartsProductController;
 
 class VendorController extends Controller
 {
@@ -588,6 +589,9 @@ class VendorController extends Controller
         // ]);
         
         $validated = $request->all();
+        // return response()->json([
+        //         'success' => $request->all()
+        //     ]);
         $validated['product_name'] = ucwords(trim($validated['product_name']));
         $validated['brand'] = ucwords(trim($validated['brand']));
         $validated['model'] = ucwords(trim($validated['model']));
@@ -619,6 +623,7 @@ class VendorController extends Controller
             'made_in' => $validated['made_in'],
             'return_policy' => $validated['return_policy'] ?? null,
             'status' => 'pending',
+            'part_type' => $validated['part_type'] ?? null
         ]);
 
         // return $request->input('productImages');
@@ -667,6 +672,12 @@ class VendorController extends Controller
                     'fault_description' => $validated['fault_descriptions'][$index] ?? null,
                 ]);
             }
+        }
+        
+        if ($validated['part_type'] ?? null) {
+            $AutoPartsProductController = new AutoPartsProductController();
+            $result = $AutoPartsProductController->store($validated, $product->id);
+            // return response()->json(['test'=>$result]);
         }
 
         if ($request->ajax()) {

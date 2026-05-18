@@ -19,6 +19,32 @@ use App\Http\Controllers\VendorReplacementController;
 use App\Http\Controllers\ReturnController;
 use App\Http\Controllers\VendorReturnController;
 use App\Http\Controllers\ProfileImageController;
+use App\Http\Controllers\Vendor\AutoPartsProductController;
+use App\Http\Controllers\Vendor\AutoPartsProductShowController;
+
+// Auto Parts Public Routes
+Route::prefix('auto-parts')->name('auto-parts.')->group(function () {
+    Route::get('/', [AutoPartsProductShowController::class, 'publicIndex'])->name('index');
+    Route::get('/api/products', [AutoPartsProductShowController::class, 'apiProducts'])->name('api.products');
+    Route::get('/api/filters', [AutoPartsProductShowController::class, 'apiFilters'])->name('api.filters');
+    Route::get('/product/{id}', [AutoPartsProductShowController::class, 'publicShow'])->name('show');
+});
+
+Route::get('/auto/{id}', [AutoPartsProductShowController::class, 'singleShow']);
+
+
+// Auto Parts Products Routes
+Route::prefix('vendor/products/autoparts')->name('vendor.products.autoparts.')->group(function () {
+    Route::get('/create', [App\Http\Controllers\Vendor\AutoPartsProductController::class, 'create'])->name('create');
+    Route::post('/store', [App\Http\Controllers\Vendor\AutoPartsProductController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [App\Http\Controllers\Vendor\AutoPartsProductController::class, 'edit'])->name('edit');
+    Route::post('/update/{id}', [App\Http\Controllers\Vendor\AutoPartsProductController::class, 'update'])->name('update');
+    Route::delete('/delete/{id}', [App\Http\Controllers\Vendor\AutoPartsProductController::class, 'destroy'])->name('destroy');
+    Route::get('/index', [App\Http\Controllers\Vendor\AutoPartsProductController::class, 'index'])->name('index');
+    Route::get('/subcategories/{categoryId}', [App\Http\Controllers\Vendor\AutoPartsProductController::class, 'getSubcategories'])->name('subcategories');
+});
+
+// Route::view('/autoparts', 'brands/autopart');
 
 // Add this route
 Route::get('/api/search', [SearchController::class, 'searchProducts']);

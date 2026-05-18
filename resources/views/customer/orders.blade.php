@@ -479,9 +479,13 @@
                                             $timelineStatus = 'Order Placed';
                                             
                                             switch ($cart->status) {
+                                                case 'processing':
+                                                    $sColor = 'purple';
+                                                    $timelineStatus = 'Processing';
+                                                    break;
                                                 case 'shipping':
                                                     $sColor = 'yellow';
-                                                    $timelineStatus = 'Shipping';
+                                                    $timelineStatus = 'Shipped';
                                                     break;
                                                 case 'cancelled':
                                                     $sColor = 'red';
@@ -2403,101 +2407,70 @@
 
         // Function to show tracking modal with dynamic status
         function showTrackingModal(orderId, orderStatus) {
-            const modal = document.getElementById('trackingModal');
-            const statusSteps = ['Order Placed', 'Processing', 'Shipped', 'Delivered'];
-            
-            // Set order ID in modal
-            document.querySelector('#trackingModal h2').textContent = `Track Order ${orderId}`;
-            
-            // Get all timeline steps
-            const steps = document.querySelectorAll('#trackingModal .text-center');
-            const lines = document.querySelectorAll('#trackingModal .h-1');
-            
-            // Reset all steps to inactive
-            steps.forEach(step => {
-                const dot = step.querySelector('div');
-                const text = step.querySelector('p:nth-child(2)');
-                dot.className = 'w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mx-auto mb-2';
-                text.className = 'text-sm font-medium text-gray-600';
-            });
-            
-            lines.forEach(line => {
-                line.className = 'h-1 flex-1 bg-gray-300';
-            });
-            
-            // Find the active step index based on order status
-            let activeIndex = statusSteps.indexOf(orderStatus);
-            if (activeIndex === -1) {
-                activeIndex = 0; // Default to first step if status not found
-            }
-            
-            // Activate steps up to the current status
-            for (let i = 0; i <= activeIndex; i++) {
-                if (i < steps.length) {
-                    const step = steps[i];
-                    const dot = step.querySelector('div');
-                    const text = step.querySelector('p:nth-child(2)');
-                    
-                    // Set active color
-                    const colorClass = getStatusColorClass(orderStatus);
-                    dot.className = `w-10 h-10 ${colorClass} rounded-full flex items-center justify-center mx-auto mb-2`;
-                    text.className = `text-sm font-medium ${colorClass.replace('bg-', 'text-').replace('-500', '-600')}`;
-                    
-                    // Set icon
-                    const icons = ['fa-shopping-cart', 'fa-cog', 'fa-truck', 'fa-check'];
-                    dot.innerHTML = `<i class="fas ${icons[i]} text-white"></i>`;
-                    
-                    // Activate line before this step
-                    if (i > 0 && lines[i - 1]) {
-                        lines[i - 1].className = `h-1 flex-1 ${colorClass}`;
-                    }
-                }
-            }
-            
-            // Update status message
-            const statusMessages = {
-                'Order Placed': 'Your order has been confirmed and is being processed.',
-                'Processing': 'Your order is currently being prepared for shipment.',
-                'Shipped': 'Your order has been shipped and is on its way.',
-                'Delivered': 'Your order has been successfully delivered.'
-            };
-            
-            const statusDetails = {
-                'order placed': 'The seller has received your order.',
-                'processing': 'Your items are being packed and prepared for shipping.',
-                'shipped': 'The package is in transit with the carrier.',
-                'delivered': 'The package has been delivered to your address.'
-            };
+    const modal = document.getElementById('trackingModal');
+    
+    document.querySelector('#trackingModal h2').textContent = `Track Order ${orderId}`;
+    
+    const statusSteps = ['Order Placed', 'Processing', 'Shipped', 'Delivered'];
+    const icons = ['fa-shopping-cart', 'fa-cog', 'fa-truck', 'fa-check'];
+    const colorMap = {
+        'Order Placed': 'bg-blue-500',
+        'Processing':   'bg-yellow-500',
+        'Shipped':      'bg-purple-500',
+        'Delivered':    'bg-green-500',
+    };
 
-            const normalizedStatus = orderStatus.toLowerCase();
-            const message = statusMessages[orderStatus] || 'Your order is being processed.';
-            const details = statusDetails[normalizedStatus] || 'Tracking information will be updated soon.';
+const matchedStatus = statusSteps.find(s => s.toLowerCase() === orderStatus.toLowerCase()) || 'Order Placed';
+let activeIndex = statusSteps.indexOf(matchedStatus);
+if (activeIndex === -1) activeIndex = 0;
 
-            document.getElementById('statusMessage').textContent = message;
-            document.getElementById('statusDetails').textContent = details;
-            
-            // Update estimated delivery
-            const deliveryDate = new Date();
-            if (normalizedStatus === 'order placed') {
-                deliveryDate.setDate(deliveryDate.getDate() + 7);
-            } else if (normalizedStatus === 'processing') {
-                deliveryDate.setDate(deliveryDate.getDate() + 5);
-            } else if (normalizedStatus === 'shipped') {
-                deliveryDate.setDate(deliveryDate.getDate() + 3);
-            } else if (normalizedStatus === 'delivered') {
-                deliveryDate.setDate(deliveryDate.getDate());
-            }
-            
-            document.getElementById('estimatedDelivery').textContent = 
-                deliveryDate.toLocaleDateString('en-US', { 
-                    month: 'short', 
-                    day: 'numeric', 
-                    year: 'numeric' 
-                });
-            
-            // Show modal
-            modal.classList.remove('hidden');
+const color = colorMap[matchedStatus] || 'bg-blue-500';
+
+    // Grab the 4 step containers inside the flex row
+    const stepDivs = document.querySelectorAll('#trackingModal .flex.items-center.justify-between > .text-center');
+    const lines    = document.querySelectorAll('#trackingModal .flex.items-center.justify-between > .h-1');
+
+    stepDivs.forEach((stepEl, i) => {
+        const dot  = stepEl.querySelector('div');   // the circle
+        const label = stepEl.querySelector('p');    // the label text
+
+        if (i <= activeIndex) {
+            dot.className = `w-10 h-10 ${color} rounded-full flex items-center justify-center mx-auto mb-2`;
+            dot.innerHTML = `<i class="fas ${icons[i]} text-white"></i>`;
+            label.className = 'text-sm font-medium text-blue-600';
+        } else {
+            dot.className = 'w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mx-auto mb-2';
+            dot.innerHTML = `<i class="fas ${icons[i]} text-gray-500"></i>`;
+            label.className = 'text-sm font-medium text-gray-600';
         }
+    });
+
+    lines.forEach((line, i) => {
+        line.className = i < activeIndex
+            ? `h-1 flex-1 ${color}`
+            : 'h-1 flex-1 bg-gray-300';
+    });
+
+    // Status message
+    const statusMessages = {
+        'Order Placed': ['Your order has been confirmed.',          'The seller has received your order.'],
+        'Processing':   ['Your order is being prepared.',           'Items are being packed for shipping.'],
+        'Shipped':      ['Your order is on its way.',               'The package is in transit with the carrier.'],
+        'Delivered':    ['Your order has been delivered.',          'The package was delivered to your address.'],
+    };
+    const [msg, detail] = statusMessages[matchedStatus] || ['Processing your order.', ''];
+    document.getElementById('statusMessage').textContent = msg;
+    document.getElementById('statusDetails').textContent = detail;
+
+    // Estimated delivery
+    const daysMap = { 'Order Placed': 7, 'Processing': 5, 'Shipped': 3, 'Delivered': 0 };
+    const deliveryDate = new Date();
+    deliveryDate.setDate(deliveryDate.getDate() + (daysMap[orderStatus] ?? 7));
+    document.getElementById('estimatedDelivery').textContent =
+        deliveryDate.setDate(deliveryDate.getDate() + (daysMap[matchedStatus] ?? 7));
+
+    modal.classList.remove('hidden');
+}
 
         // Helper function to get color based on status
         function getStatusColorClass(status) {

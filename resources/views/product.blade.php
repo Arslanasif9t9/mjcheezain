@@ -239,6 +239,7 @@
                 <!-- Action Buttons -->
                 <div class="flex space-x-4 mb-6">
                     <button id="addToCartBtn" 
+                   
                     @if ($user && $product->user_id == $user->user_id)
                         style="background-color: #9ca3af; cursor: not-allowed; opacity: 0.6"
                         disable

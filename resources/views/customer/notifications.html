@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications | Multivendor Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="./CDN tailwind.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .sidebar-item.active {
+            background-color: #f3f4f6;
+            border-right: 3px solid #3b82f6;
+            color: #3b82f6;
+        }
+        /* Notification animations */
+        @keyframes slideIn {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .notification-item {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        /* Custom checkbox style */
+        input[type="checkbox"]:checked + .checkmark {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+        
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 5px;
+            top: 1px;
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+        
+        input[type="checkbox"]:checked + .checkmark:after {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="hidden md:flex md:flex-shrink-0">
+            <div class="flex flex-col w-64 bg-white border-r border-gray-200">
+                <div class="flex items-center justify-center h-16 px-4 bg-blue-600">
+                    <span class="text-white font-bold text-xl">MultiShop</span>
+                </div>
+                <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
+                    <div class="flex items-center px-4 py-3 mb-4 bg-gray-100 rounded-lg">
+                        <img class="w-10 h-10 rounded-full" src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">John Doe</p>
+                            <p class="text-xs text-gray-500">Gold Member</p>
+                        </div>
+                    </div>
+                    
+                    <nav class="flex-1 space-y-2">
+                        <a href="dashboard.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-tachometer-alt mr-3"></i>
+                            Dashboard
+                        </a>
+                        <a href="orders.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-shopping-bag mr-3"></i>
+                            My Orders
+                        </a>
+                        <a href="wishlist.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-heart mr-3"></i>
+                            Wishlist
+                        </a>
+                        <a href="notifications.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-900 rounded-lg bg-gray-100">
+                            <i class="fas fa-bell mr-3"></i>
+                            Notifications
+                        </a>
+                        <a href="addresses.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-map-marker-alt mr-3"></i>
+                            Addresses
+                        </a>
+                        <a href="payments.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-credit-card mr-3"></i>
+                            Payment Methods
+                        </a>
+                        <a href="support.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-headset mr-3"></i>
+                            Support
+                        </a>
+                        <a href="profile.php" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-user mr-3"></i>
+                            My Profile
+                        </a>
+                    </nav>
+                    
+                    <div class="mt-auto mb-4">
+                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50">
+                            <i class="fas fa-sign-out-alt mr-3"></i>
+                            Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="flex flex-col flex-1 overflow-hidden">
+            <!-- Top Navigation -->
+            <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
+                <div class="flex items-center">
+                    <button class="md:hidden mr-4 text-gray-500 focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="text-xl font-semibold text-gray-800">Notifications</h1>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button class="p-2 text-gray-500 rounded-full hover:bg-gray-100 relative">
+                        <i class="fas fa-bell"></i>
+                        <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </button>
+                    <button class="p-2 text-gray-500 rounded-full hover:bg-gray-100">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="relative">
+                        <button id="user-menu-button" class="flex items-center focus:outline-none">
+                            <span class="mr-2 text-sm font-medium text-gray-700">John</span>
+                            <img class="w-8 h-8 rounded-full" src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                        </button>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Main Content Area -->
+            <main class="flex-1 overflow-y-auto p-6">
+                <div class="max-w-4xl mx-auto">
+                    <!-- Notification Header -->
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Your Notifications</h2>
+                        <div class="flex items-center space-x-2">
+                            <button class="px-3 py-1 text-sm text-blue-600 hover:text-blue-800">
+                                Mark all as read
+                            </button>
+                            <button class="px-3 py-1 text-sm text-gray-600 hover:text-gray-800">
+                                <i class="fas fa-filter mr-1"></i> Filter
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Notification List -->
+                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                        <!-- Today's Notifications -->
+                        <div class="border-b border-gray-200">
+                            <div class="px-4 py-3 bg-gray-50">
+                                <h3 class="text-sm font-medium text-gray-500">Today</h3>
+                            </div>
+                            
+                            <div class="divide-y divide-gray-100">
+                                <!-- Notification Item 1 -->
+                                <div class="notification-item flex items-start px-4 py-3 hover:bg-gray-50">
+                                    <label class="inline-flex items-center mt-1 mr-3">
+                                        <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 sr-only">
+                                        <span class="checkmark h-4 w-4 border border-gray-300 rounded-sm flex-shrink-0"></span>
+                                    </label>
+                                    <div class="flex-shrink-0 mr-3">
+                                        <div class="bg-blue-100 p-2 rounded-full">
+                                            <i class="fas fa-shipping-fast text-blue-600"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900">Your order #ORD-2023-008 has shipped</p>
+                                        <p class="text-sm text-gray-500 mt-1">Expected delivery: June 15, 2023</p>
+                                        <p class="text-xs text-gray-400 mt-1">2 hours ago</p>
+                                    </div>
+                                    <div class="ml-4 flex-shrink-0">
+                                        <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Notification Item 2 -->
+                                <div class="notification-item flex items-start px-4 py-3 hover:bg-gray-50">
+                                    <label class="inline-flex items-center mt-1 mr-3">
+                                        <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 sr-only">
+                                        <span class="checkmark h-4 w-4 border border-gray-300 rounded-sm flex-shrink-0"></span>
+                                    </label>
+                                    <div class="flex-shrink-0 mr-3">
+                                        <div class="bg-green-100 p-2 rounded-full">
+                                            <i class="fas fa-check-circle text-green-600"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900">Payment received for order #ORD-2023-007</p>
+                                        <p class="text-sm text-gray-500 mt-1">Amount: $129.99 • Visa ending in 4242</p>
+                                        <p class="text-xs text-gray-400 mt-1">5 hours ago</p>
+                                    </div>
+                                    <div class="ml-4 flex-shrink-0">
+                                        <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Yesterday's Notifications -->
+                        <div class="border-b border-gray-200">
+                            <div class="px-4 py-3 bg-gray-50">
+                                <h3 class="text-sm font-medium text-gray-500">Yesterday</h3>
+                            </div>
+                            
+                            <div class="divide-y divide-gray-100">
+                                <!-- Notification Item 3 -->
+                                <div class="notification-item flex items-start px-4 py-3 hover:bg-gray-50">
+                                    <label class="inline-flex items-center mt-1 mr-3">
+                                        <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 sr-only" checked>
+                                        <span class="checkmark h-4 w-4 border border-gray-300 rounded-sm flex-shrink-0"></span>
+                                    </label>
+                                    <div class="flex-shrink-0 mr-3">
+                                        <div class="bg-yellow-100 p-2 rounded-full">
+                                            <i class="fas fa-exclamation-circle text-yellow-600"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900">Limited time offer: 20% off electronics</p>
+                                        <p class="text-sm text-gray-500 mt-1">Discount applies at checkout. Ends in 12 hours.</p>
+                                        <p class="text-xs text-gray-400 mt-1">June 12, 2023</p>
+                                    </div>
+                                    <div class="ml-4 flex-shrink-0">
+                                        <span class="w-2 h-2 bg-gray-300 rounded-full"></span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Notification Item 4 -->
+                                <div class="notification-item flex items-start px-4 py-3 hover:bg-gray-50">
+                                    <label class="inline-flex items-center mt-1 mr-3">
+                                        <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 sr-only" checked>
+                                        <span class="checkmark h-4 w-4 border border-gray-300 rounded-sm flex-shrink-0"></span>
+                                    </label>
+                                    <div class="flex-shrink-0 mr-3">
+                                        <div class="bg-purple-100 p-2 rounded-full">
+                                            <i class="fas fa-gift text-purple-600"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900">You've earned 50 loyalty points</p>
+                                        <p class="text-sm text-gray-500 mt-1">For your recent purchase. Only 200 more to Gold status!</p>
+                                        <p class="text-xs text-gray-400 mt-1">June 12, 2023</p>
+                                    </div>
+                                    <div class="ml-4 flex-shrink-0">
+                                        <span class="w-2 h-2 bg-gray-300 rounded-full"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Older Notifications -->
+                        <div>
+                            <div class="px-4 py-3 bg-gray-50">
+                                <h3 class="text-sm font-medium text-gray-500">This Week</h3>
+                            </div>
+                            
+                            <div class="divide-y divide-gray-100">
+                                <!-- Notification Item 5 -->
+                                <div class="notification-item flex items-start px-4 py-3 hover:bg-gray-50">
+                                    <label class="inline-flex items-center mt-1 mr-3">
+                                        <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 sr-only" checked>
+                                        <span class="checkmark h-4 w-4 border border-gray-300 rounded-sm flex-shrink-0"></span>
+                                    </label>
+                                    <div class="flex-shrink-0 mr-3">
+                                        <div class="bg-red-100 p-2 rounded-full">
+                                            <i class="fas fa-times-circle text-red-600"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900">Order #ORD-2023-006 was canceled</p>
+                                        <p class="text-sm text-gray-500 mt-1">Refund processed to your original payment method</p>
+                                        <p class="text-xs text-gray-400 mt-1">June 10, 2023</p>
+                                    </div>
+                                    <div class="ml-4 flex-shrink-0">
+                                        <span class="w-2 h-2 bg-gray-300 rounded-full"></span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Notification Item 6 -->
+                                <div class="notification-item flex items-start px-4 py-3 hover:bg-gray-50">
+                                    <label class="inline-flex items-center mt-1 mr-3">
+                                        <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 sr-only" checked>
+                                        <span class="checkmark h-4 w-4 border border-gray-300 rounded-sm flex-shrink-0"></span>
+                                    </label>
+                                    <div class="flex-shrink-0 mr-3">
+                                        <div class="bg-blue-100 p-2 rounded-full">
+                                            <i class="fas fa-comment-alt text-blue-600"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900">New message from Seller</p>
+                                        <p class="text-sm text-gray-500 mt-1">Regarding your recent order #ORD-2023-005</p>
+                                        <p class="text-xs text-gray-400 mt-1">June 8, 2023</p>
+                                    </div>
+                                    <div class="ml-4 flex-shrink-0">
+                                        <span class="w-2 h-2 bg-gray-300 rounded-full"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Load More Button -->
+                    <div class="mt-6 text-center">
+                        <button class="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            Load More Notifications
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Toggle checkboxes
+        document.querySelectorAll('.checkmark').forEach(item => {
+            item.addEventListener('click', event => {
+                const checkbox = item.previousElementSibling;
+                checkbox.checked = !checkbox.checked;
+                
+                // Update notification dot
+                const dot = item.closest('.notification-item').querySelector('.rounded-full:last-child');
+                if (checkbox.checked) {
+                    dot.classList.remove('bg-blue-500', 'bg-green-500');
+                    dot.classList.add('bg-gray-300');
+                } else {
+                    const iconDiv = item.closest('.notification-item').querySelector('.rounded-full:first-child');
+                    if (iconDiv.classList.contains('bg-blue-100')) {
+                        dot.classList.add('bg-blue-500');
+                    } else if (iconDiv.classList.contains('bg-green-100')) {
+                        dot.classList.add('bg-green-500');
+                    }
+                }
+            });
+        });
+        
+        // Mark all as read
+        document.querySelector('button:first-of-type').addEventListener('click', () => {
+            document.querySelectorAll('.notification-item input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            document.querySelectorAll('.rounded-full:last-child').forEach(dot => {
+                dot.classList.remove('bg-blue-500', 'bg-green-500');
+                dot.classList.add('bg-gray-300');
+            });
+        });
+    </script>
+</body>
+</html>

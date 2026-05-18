@@ -130,6 +130,7 @@
                 <div class="flex flex-wrap gap-2" x-init>
                     <button class="px-4 py-1 text-sm font-medium rounded-full bg-gray-900 text-white transition duration-200 shadow-sm">All</button>
                     <a href="cosmetics"><button class="px-4 py-1 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm"><span class="PFDI">MJ</span>Cosmetics</button></a>
+                    <a href="auto-parts"><button class="px-4 py-1 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm"><span class="PFDI">Auto</span>parts</button></a>
                     {{-- <button class="px-4 py-1 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm">New Arrivals</button>
                     <button class="px-4 py-1 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm">Collections</button>
                     <button class="px-4 py-1 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm">Followed</button>

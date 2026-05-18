@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        body {
+            width: auto;
+            height: auto;
+            background-color: #23292f;
+
+        }
+
+        #boxu h5,
+        #boxu input,
+        #boxu button,
+        #boxu .social-icons {
+            display: block;
+            margin: 0.5rem 0;
+        }
+        
+        .container {
+            
+            
+            padding: 0px 10rem;
+            display: grid;
+            gap: 1em;
+            grid-template-columns: repeat(5, 1fr);
+
+        }
+
+        h5 {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            line-height: 1rem;
+            font-family: sans-serif;
+            margin-left: 9%;
+
+        }
+
+        .box {
+            /* margin-left: 2em; */
+            width: 100%;
+            height: 16.25rem;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0 1rem;
+            list-style: none;
+            text-decoration: none;
+        }
+
+        a {
+            color: #999999;
+            text-decoration: none;
+            background-color: transparent;
+            font-size: 12px;
+            line-height: 20px;
+
+        }
+
+        @media(max-width:992px) {
+
+            .container {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+                height: 100%;
+
+            }
+
+            .new {
+                width: 40%;
+                text-align: center;
+                display: none;
+
+            }
+
+            #boxu {
+                top: 3rem;
+                width: 330px;
+                height: auto;
+            }
+        }
+
+        @media(max-width:768px) {
+            .container {
+                grid-template-columns: repeat(2, 1fr);
+                height: auto;
+
+            }
+
+
+            #boxu {
+                position: static;
+                /* offset hat gaya */
+                bottom: auto;
+                left: auto;
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+                margin: 0 auto;
+                padding: 1rem;
+            }
+
+            .new {
+                display: none;
+            }
+        }
+
+        @media(max-width:480px) {
+            .container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+        }
+
+        .new {
+            text-align: justify;
+        }
+
+        #boxu {
+            position: relative;
+            bottom: 150px;
+            /* left: 50px; */
+            width: 100%;
+            max-width: 16.25rem;
+            height: auto;
+            text-align: justify;
+
+        }
+
+        .new {
+            max-width: 100%;
+            text-align: center;
+            position: static;
+            color: #999999;
+            font-size: 12px;
+        }
+
+        .btn {
+            color: #fff;
+            background-color: #3eb549;
+            border-color: #37a241;
+            overflow: visible;
+            text-shadow: none;
+        }
+
+
+        .social-icons {
+            display: flex;
+            gap: 5px;
+            /* Icons ke beech ka gap */
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #999;
+            /* Circle ka background */
+            color: white;
+            /* Icon ka color */
+            width: 30px;
+            /* Circle size */
+            height: 30px;
+            border-radius: 50%;
+            /* Circle shape */
+            text-decoration: none;
+            /* Underline remove */
+            transition: 0.3s;
+        }
+
+
+        .twitter:hover {
+            background-color: blue;
+
+        }
+
+
+
+        .twitter:hover {
+            background-color: rgb(10, 174, 239);
+        }
+
+        .facebook:hover {
+            background-color: rgb(52, 52, 184);
+        }
+
+        .pinterest:hover {
+            background-color: red;
+        }
+
+        .instagram:hover {
+            background-color: rgb(42, 85, 195);
+        }
+
+        .youtube:hover {
+            background-color: Red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- Cars By Make -->
+        <div class="box" id="box1">
+            <h5>Cars By Make</h5>
+            <ul>
+                <li><a href="#">Toyota Cars for Sale</a></li>
+                <li><a href="#">Suzuki Cars for Sale</a></li>
+                <li><a href="#">Honda Cars for Sale</a></li>
+                <li><a href="#">Daihatsu Cars for Sale</a></li>
+                <li><a href="#">Mitsubishi Cars for Sale</a></li>
+                <li><a href="#">Nissan Cars for Sale</a></li>
+                <li><a href="#">Mercedes Cars for Sale</a></li>
+                <li><a href="#">Hyundai Cars for Sale</a></li>
+                <li><a href="#">BMW Cars for Sale</a></li>
+            </ul>
+        </div>
+
+        <!-- Cars By City -->
+        <div class="box" id="box2">
+            <h5>Cars By City</h5>
+            <ul>
+                <li><a href="#">Cars in Karachi</a></li>
+                <li><a href="#">Cars in Lahore</a></li>
+                <li><a href="#">Cars in Islamabad</a></li>
+                <li><a href="#">Cars in Rawalpindi</a></li>
+                <li><a href="#">Cars in Peshawar</a></li>
+                <li><a href="#">Cars in Faisalabad</a></li>
+                <li><a href="#">Cars in Multan</a></li>
+                <li><a href="#">Cars in Gujranwala</a></li>
+                <li><a href="#">Cars in Sialkot</a></li>
+            </ul>
+        </div>
+
+        <!-- Explore PakWheels -->
+        <div class="box" id="box3">
+            <h5>Explore PakWheels</h5>
+            <ul class="space-y-2 text-sm">
+                <li><a href="#">Used Cars</a></li>
+                <li><a href="#">Used Bikes</a></li>
+                <li><a href="#">New Cars</a></li>
+                <li><a href="#">Auto Parts & Accessories</a></li>
+                <li><a href="#">Cool Rides</a></li>
+                <li><a href="#">Forums</a></li>
+                <li><a href="#">Autoshow</a></li>
+                <li><a href="#">Sitemap</a></li>
+            </ul>
+        </div>
+
+        <!-- PakWheels.com -->
+        <div class="box" id="box4">
+            <h5>PakWheels.com</h5>
+            <ul class="space-y-2 text-sm">
+                <li><a href="#">About PakWheels.com</a></li>
+                <li><a href="#">Our Products</a></li>
+                <li><a href="#">Advertise With Us</a></li>
+                <li><a href="#">How To Pay</a></li>
+                <li><a href="#">FAQs</a></li>
+                <li><a href="#">Refunds & Returns</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+        </div>
+
+        <!-- Sell On PakWheels -->
+        <div class="box" id="box5">
+            <h5>Sell On PakWheels</h5>
+            <ul class="space-y-2 text-sm mb-6">
+                <li><a href="#">Sell Your Car</a></li>
+                <li><a href="#">Sell Your Bike</a></li>
+                <li><a href="#">Sell Accessory</a></li>
+            </ul>
+        </div>
+
+        <!--Cars by Category-->
+        <div class="box" id="box6">
+            <h5>Cars by Category</h5>
+            <ul class="space-y-1 text-sm">
+                <li><a href="#">Jeep</a></li>
+                <li><a href="#">Japanese Cars</a></li>
+                <li><a href="#">Imported Cars</a></li>
+                <li><a href="#">Automatic Cars</a></li>
+                <li><a href="#">Low Priced Cars</a></li>
+                <li><a href="#">4x4 Cars</a></li>
+                <li><a href="#">660cc Cars</a></li>
+                <li><a href="#">1000cc Cars</a></li>
+            </ul>
+        </div>
+
+        <!-- Cars by Body Type -->
+        <div class="box" id="box7">
+            <h5>Cars by Body Type</h5>
+            <ul class="space-y-1 text-sm">
+                <li><a href="#">Crossover</a></li>
+                <li><a href="#">Hatchback</a></li>
+                <li><a href="#">Micro Van</a></li>
+                <li><a href="#">Mini Van</a></li>
+                <li><a href="#">Pick Up</a></li>
+                <li><a href="#">Sedan</a></li>
+                <li><a href="#">SUV</a></li>
+                <li><a href="#">Van</a></li>
+            </ul>
+        </div>
+
+        <!-- Cars by Color -->
+        <div class="box" id="box8">
+            <h5>Cars by Color</h5>
+            <ul class="space-y-1 text-sm">
+                <li><a href="#">Black Cars</a></li>
+                <li><a href="#">Blue Cars</a></li>
+                <li><a href="#">Gold Cars</a></li>
+                <li><a href="#">Green Cars</a></li>
+                <li><a href="#">Grey Cars</a></li>
+                <li><a href="#">Red Cars</a></li>
+                <li><a href="#">Silver Cars</a></li>
+                <li><a href="#">White Cars</a></li>
+            </ul>
+        </div>
+
+        <!-- Cars by Province -->
+        <div class="box" id="box9">
+            <h5>Cars by Province</h5>
+            <ul class="space-y-1 text-sm">
+                <li><a href="#">Cars in Balochistan</a></li>
+                <li><a href="#">Cars in Azad Kashmir</a></li>
+                <li><a href="#">Cars in Federally Administered</a></li>
+                <li><a href="#">Tribal Areas</a></li>
+            </ul>
+        </div>
+
+        <div class="flex items-center space-x-2" class="box" id="boxu">
+            <h5 class="Newsletter">Subscribe to our Newsletter</h5>
+            <input type="email" placeholder="name@email.com" class="w-full px-3 py-1 rounded text-black" />
+            <button class="btn">Subscribe</button>
+
+
+            <!-- Follow Us & Apps -->
+
+            <h5 id="follow">Follow Us</h5>
+            <div class="social-icons">
+                <a href="https://www.twitter.com/" class="twitter"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.facebook.com/" class="facebook" target="_blank"><i
+                        class="fab fa-facebook-f"></i></a>
+                <a href="https://www.pinterest.com/" class="pinterest"><i class="fab fa-pinterest-p"></i></a>
+                <a href="https://www.instagram.com/" class="instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/" class="youtube" target="_blank"><i class="fab fa-youtube"></i></a>
+            </div>
+            <h5 class="Download">Download Mobile Apps</h5>
+
+
+            <a href="https://play.google.com/store" target="_blank">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                    alt="Google Play" width="110px" height="50px">
+            </a>
+
+            <a href="https://www.apple.com/app-store/" target="_blank">
+                <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                    alt="App Store" width="110px" height="50px">
+            </a>
+
+            <a href="https://appgallery.huawei.com/#/app/C123456789" target="_blank">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2b/Huawei_AppGallery_badge_EN.svg"
+                    alt="Explore it on AppGallery" width="110px" height="50px">
+            </a>
+
+
+
+
+        </div>
+
+    </div>
+
+    <div class="new">
+        <hr>
+        <p>Copyright © 2003 - 2025 PakWheels (Pvt) Ltd. - All Rights Reserved.</p>
+        <p class="mt-2">
+            <a href="#" class="hover:underline">Terms of Service</a> |
+            <a href="#" class="hover:underline">Privacy Policy</a>
+        </p>
+        <p class="mt-2 text-xs">Reproduction of material from any PakWheels.com pages without permission is
+            strictly
+            prohibited.</p>
+    </div>
+
+</body>
+
+</html>

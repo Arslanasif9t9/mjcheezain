@@ -1,0 +1,23 @@
+ul.space-y-2.p-4 li a:hover,
+.ad-active {
+    --tw-text-opacity: 1;
+    background-color: rgba(31,41,55,var(--tw-bg-opacity));
+    border-right: 5px solid orangered;
+    /* border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px; */
+    border-radius: 5px;
+}
+
+.top-cards > div {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    align-items: center;
+}
+
+
+
+
+
+.table-responsive table {
+    font-size: 12px;
+}

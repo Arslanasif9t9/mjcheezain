@@ -57,6 +57,7 @@ class ProductController extends Controller
     {
         $productId = $request->input('product_id');
         $position = $request->input('position');
+        $auto = $request->input('autopart');
         
         // Validate inputs
         if (!$productId || !$position) {
@@ -68,9 +69,18 @@ class ProductController extends Controller
         
         try {
             // Update product position
-            $affected = DB::table('vendor_products')
+            $affected = null;
+            if ($auto) {
+                $affected = DB::table('auto_parts_products')
+                ->where('id', $productId)
+                ->update(['status' => $position]);
+            }
+            else {
+                $affected = DB::table('vendor_products')
                 ->where('id', $productId)
                 ->update(['position' => $position]);
+            }
+            
             
             if ($affected) {
                 return response()->json([
@@ -95,6 +105,7 @@ class ProductController extends Controller
     public function deleteProduct(Request $request)
     {
         $productId = $request->input('product_id');
+        $auto = $request->input('autopart');
         
         if (!$productId) {
             return response()->json([
@@ -105,9 +116,17 @@ class ProductController extends Controller
         
         try {
             // Delete product
-            $deleted = DB::table('vendor_products')
+            $deleted = null;
+            if ($auto) {
+                $deleted = DB::table('auto_parts_products')
                 ->where('id', $productId)
                 ->delete();
+            }
+            else {
+                $deleted = DB::table('vendor_products')
+                ->where('id', $productId)
+                ->delete();
+            }
             
             if ($deleted) {
                 return response()->json([
