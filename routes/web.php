@@ -250,6 +250,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Replacement tracking routes
     Route::get('/get-replacement-tracking/{replacementId}', [ProductRatingController::class, 'getReplacementTracking']);
+    Route::get('/product/{id}/reviews', [HomeController::class, 'loadMoreReviews']);
     Route::post('/mark-replacement-shipped/{replacementId}', [ProductRatingController::class, 'markReplacementShipped']);
     Route::post('/cancel-replacement/{replacementId}', [ProductRatingController::class, 'cancelReplacement']);
 });

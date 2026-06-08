@@ -102,10 +102,47 @@ class HomeController extends Controller
 
             // dd($images);
         // return view('home.index');
+        $reviews = DB::table('product_ratings')
+            ->join('users', 'product_ratings.customer_id', '=', 'users.user_id')
+            ->where('product_ratings.product_id', $product->id)
+            ->where('product_ratings.is_replacement', 0)
+            ->select('product_ratings.rating', 'product_ratings.comment', 'product_ratings.created_at', 'users.full_name as customer_name')
+            ->orderBy('product_ratings.created_at', 'desc')
+            ->limit(5)
+            ->get();
+
+        $reviewCount = DB::table('product_ratings')
+            ->where('product_id', $product->id)
+            ->where('is_replacement', 0)
+            ->count();
+
+        $avgRating = DB::table('product_ratings')
+            ->where('product_id', $product->id)
+            ->where('is_replacement', 0)
+            ->avg('rating');
+
         return view('product', compact(
             'user', 'profile', 'dashboardPage', 'imgPath', 
-            'product', 'vendor', 'imageMain', 'images', 'vendorUser'
+            'product', 'vendor', 'imageMain', 'images', 'vendorUser',
+            'reviews', 'reviewCount', 'avgRating'
         ));
+    }
+
+    public function loadMoreReviews(Request $request, $id)
+    {
+        $offset = $request->query('offset', 5);
+
+        $reviews = DB::table('product_ratings')
+            ->join('users', 'product_ratings.customer_id', '=', 'users.user_id')
+            ->where('product_ratings.product_id', $id)
+            ->where('product_ratings.is_replacement', 0)
+            ->select('product_ratings.rating', 'product_ratings.comment', 'product_ratings.created_at', 'users.full_name as customer_name')
+            ->orderBy('product_ratings.created_at', 'desc')
+            ->limit(5)
+            ->offset($offset)
+            ->get();
+
+        return response()->json($reviews);
     }
 
     public function productList() {

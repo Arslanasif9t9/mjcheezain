@@ -872,70 +872,65 @@
         <div class="mb-4">
             <div class="flex justify-between align-center">
                 <h3 class="text-xl font-semibold mt-8 mb-0">Customer Reviews</h3>
-                <div class="flex justify-end">
-                    {{-- <button class="text-primary-blue border border-primary-blue py-2 px-4 rounded-lg hover:bg-blue-50 transition duration-150">
-                        Write a Review
-                    </button> --}}
+                <div class="flex items-center space-x-2 mt-8">
+                    @if($reviewCount > 0)
+                        <span class="text-yellow-500 text-lg font-bold">{{ number_format($avgRating, 1) }} &#9733;</span>
+                        <span class="text-gray-500 text-sm">({{ $reviewCount }} reviews)</span>
+                    @else
+                        <span class="text-gray-400 text-sm">No reviews yet</span>
+                    @endif
                 </div>
             </div>
 
-            <!-- Example Review 1 -->
-            <div class="border-t pt-4 mt-4 space-y-2">
-                <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 rounded-full bg-gray-200 overflow-hidden">
-                        
-                    </div>
-                    <div>
-                        <div class="text-star-yellow text-lg">
-                            <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span>
+            <div id="reviews-container">
+                @forelse($reviews as $review)
+                    <div class="border-t pt-4 mt-4 space-y-2">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                                <span class="text-xs font-bold text-blue-600">{{ strtoupper(substr($review->customer_name, 0, 1)) }}</span>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-800">{{ $review->customer_name }}</p>
+                                <div class="text-yellow-500 text-lg">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($i <= $review->rating)
+                                            <span>&#9733;</span>
+                                        @else
+                                            <span class="text-gray-300">&#9734;</span>
+                                        @endif
+                                    @endfor
+                                </div>
+                                <span class="text-xs text-green-600 font-medium flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                                    Verified Purchase
+                                </span>
+                            </div>
                         </div>
-                        <span class="text-xs text-verified-green font-medium flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
-                            Verified Purchase
-                        </span>
+                        @if($review->comment)
+                            <p class="text-gray-700">{{ $review->comment }}</p>
+                        @endif
+                        <p class="text-xs text-gray-400">{{ date('M d, Y', strtotime($review->created_at)) }}</p>
                     </div>
-                </div>
-                <p class="text-gray-700">Amazing product! Saw results in just a week.</p>
+                @empty
+                    <div class="border-t pt-4 mt-4">
+                        <p class="text-gray-500 text-sm">No reviews yet. Be the first to review this product!</p>
+                    </div>
+                @endforelse
             </div>
 
-            <!-- Example Review 2 -->
-            <div class="border-t pt-4 mt-4 space-y-2">
-                <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 rounded-full bg-blue-100 overflow-hidden">
-                        
-                    </div>
-                    <div>
-                        <div class="text-star-yellow text-lg">
-                            <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9734;</span><span>&#9734;</span>
-                        </div>
-                        <span class="text-xs text-verified-green font-medium flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
-                            Verified Purchase
-                        </span>
-                    </div>
+            @if($reviewCount > 5)
+                <div class="mt-6 text-center">
+                    <button id="load-more-reviews"
+                        data-product-id="{{ $product->id }}"
+                        data-offset="5"
+                        class="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition duration-150 text-sm font-medium">
+                        Load More Reviews
+                    </button>
                 </div>
-                <p class="text-gray-700">Good hydration, but took a little longer for brightening effects.</p>
-            </div>
-
-            <!-- Example Review 2 -->
-            <div class="border-t pt-4 mt-4 space-y-2">
-                <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 rounded-full bg-blue-100 overflow-hidden">
-                        
-                    </div>
-                    <div>
-                        <div class="text-star-yellow text-lg">
-                            <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9734;</span><span>&#9734;</span>
-                        </div>
-                        <span class="text-xs text-verified-green font-medium flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
-                            Verified Purchase
-                        </span>
-                    </div>
-                </div>
-                <p class="text-gray-700">Good hydration, but took a little longer for brightening effects.</p>
-            </div>
+            @endif
         </div>
+
+        {{-- <h1>{{$product->category}}</h1> --}}
 
         {{-- <h1>{{$product->category}}</h1> --}}
         <!-- You Might Also Like Section -->
@@ -997,5 +992,75 @@
         window.onload = function() {
             switchTab('description');
         };
+
+        // Load More Reviews
+        const loadMoreBtn = document.getElementById('load-more-reviews');
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', function() {
+                const productId = this.getAttribute('data-product-id');
+                let offset = parseInt(this.getAttribute('data-offset'));
+
+                this.textContent = 'Loading...';
+                this.disabled = true;
+
+                fetch('/product/' + productId + '/reviews?offset=' + offset)
+                    .then(function(res) { return res.json(); })
+                    .then(function(reviews) {
+                        const container = document.getElementById('reviews-container');
+
+                        if (reviews.length === 0) {
+                            loadMoreBtn.textContent = 'No More Reviews';
+                            loadMoreBtn.disabled = true;
+                            return;
+                        }
+
+                        reviews.forEach(function(review) {
+                            let stars = '';
+                            for (let i = 1; i <= 5; i++) {
+                                stars += i <= review.rating
+                                    ? '<span>&#9733;</span>'
+                                    : '<span style="color:#d1d5db">&#9734;</span>';
+                            }
+
+                            let commentHtml = review.comment
+                                ? '<p class="text-gray-700">' + review.comment + '</p>'
+                                : '';
+
+                            let date = new Date(review.created_at);
+                            let dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+                            let html = '<div class="border-t pt-4 mt-4 space-y-2">'
+                                + '<div class="flex items-center space-x-3">'
+                                + '<div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">'
+                                + '<span class="text-xs font-bold text-blue-600">' + review.customer_name.charAt(0).toUpperCase() + '</span>'
+                                + '</div>'
+                                + '<div>'
+                                + '<p class="text-sm font-semibold text-gray-800">' + review.customer_name + '</p>'
+                                + '<div class="text-yellow-500 text-lg">' + stars + '</div>'
+                                + '<span class="text-xs text-green-600 font-medium">&#10003; Verified Purchase</span>'
+                                + '</div>'
+                                + '</div>'
+                                + commentHtml
+                                + '<p class="text-xs text-gray-400">' + dateStr + '</p>'
+                                + '</div>';
+
+                            container.insertAdjacentHTML('beforeend', html);
+                        });
+
+                        loadMoreBtn.setAttribute('data-offset', offset + reviews.length);
+                        loadMoreBtn.textContent = 'Load More Reviews';
+                        loadMoreBtn.disabled = false;
+
+                        if (reviews.length < 5) {
+                            loadMoreBtn.textContent = 'No More Reviews';
+                            loadMoreBtn.disabled = true;
+                        }
+                    })
+                    .catch(function() {
+                        loadMoreBtn.textContent = 'Error. Try Again';
+                        loadMoreBtn.disabled = false;
+                    });
+            });
+        }
     </script>
 @endsection
