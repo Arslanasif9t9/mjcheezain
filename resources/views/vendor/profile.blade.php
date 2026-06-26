@@ -86,8 +86,5 @@
 
     <!-- Logout Modal Component -->
     <x-logout-modal />
-
-    <script src="{{ asset('script/vendor_navbar.js') }}"></script>
-    <script src="{{ asset('script/notification.js') }}"></script>
 </body>
 @endsection

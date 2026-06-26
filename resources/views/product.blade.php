@@ -97,7 +97,7 @@
                 <div class="relative">
                     <img id="main-image"
                         src="{{ asset('storage/vendor/products/images/'.$imageMain->image_path) }}" 
-                        class="border-2 border-blue-900 w-full h-[72vh] aspect-square object-contain rounded-lg overflow-hidden">
+                        class="border-2 border-blue-900 w-full h-[40vh] sm:h-[60vh] lg:h-[72vh] aspect-square object-contain rounded-lg overflow-hidden">
                     {{-- <img id="main-image"
                         src="https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg" 
                         class="border-2 border-blue-900 w-full h-[72vh] aspect-square object-cover rounded-lg overflow-hidden"> --}}

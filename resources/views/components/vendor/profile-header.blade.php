@@ -1,27 +1,27 @@
 @props(['storeLogo', 'storeName', 'rating', 'verified', 'city', 'country', 'storeBanner'])
 
-<div class="profile-header p-6 rounded-lg shadow flex items-center justify-center relative overflow-hidden">
+<div class="profile-header p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-center relative overflow-hidden min-h-[220px]">
     <!-- Background Banner -->
     <div class="absolute inset-0 z-0">
-        <img src="{{asset('storage/vendor/store/' . $storeBanner) ?: asset('img/default-banner.jpg') }}" 
+        <img src="{{ asset('storage/vendor/store/' . $storeBanner) ?: asset('img/default-banner.jpg') }}" 
              class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+        <div class="absolute inset-0 bg-black bg-opacity-65"></div>
     </div>
     
-    <div class="flex items-center space-x-6 relative z-10">
+    <div class="flex flex-col sm:flex-row items-center text-center sm:text-left space-y-4 sm:space-y-0 sm:space-x-6 relative z-10 w-full max-w-2xl justify-center sm:justify-start">
         <!-- Store Logo -->
-        <div class="bg-green-400 p-1 rounded-full">
+        <div class="bg-green-400 p-0.5 rounded-full flex-shrink-0">
             <img src="{{ asset('storage/vendor/store/' . $storeLogo) }}" 
                  alt="Store Logo" 
-                 class="rounded-full w-20 h-20 object-cover border-4 border-white">
+                 class="rounded-full w-24 h-24 object-cover border-4 border-white shadow-md">
         </div>
         
         <!-- Store Info -->
-        <div class="text-white">
-            <h1 class="text-3xl font-bold">{{ $storeName }}</h1>
+        <div class="text-white flex-1">
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">{{ $storeName }}</h1>
             
             <!-- Rating -->
-            <div class="flex items-center space-x-2 mt-2">
+            <div class="flex items-center space-x-2 mt-2 justify-center sm:justify-start">
                 <div class="flex space-x-1">
                     @for($i = 1; $i <= 5; $i++)
                         @if($i <= floor($rating))
@@ -48,7 +48,7 @@
             
             <!-- Edit Profile Button -->
             <a href="{{ route('vendor.profile.edit') }}" 
-               class="inline-block mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+               class="inline-block mt-4 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white px-5 py-2 rounded-xl transition-all font-semibold shadow-sm hover:shadow text-sm">
                 Edit Profile
             </a>
         </div>

@@ -111,6 +111,23 @@
         .horizontal-timeline {
             position: relative;
             padding: 20px 0;
+            overflow-x: auto;
+            width: 100%;
+            -webkit-overflow-scrolling: touch;
+        }
+        .horizontal-timeline::-webkit-scrollbar {
+            height: 6px;
+        }
+        .horizontal-timeline::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .horizontal-timeline::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .horizontal-timeline .flex {
+            min-width: 620px;
         }
 
         .timeline-step {
@@ -374,7 +391,7 @@
                 </div>
 
                 <!-- Center - Search bar -->
-                <div class="hidden flex-1 max-w-md mx-4">
+                <div class="hidden md:flex flex-1 max-w-md mx-4">
                     <div class="relative w-full">
                         <input type="text" placeholder="Search..."
                             class="w-full py-2 pl-4 pr-10 text-sm bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">
@@ -385,7 +402,7 @@
                 </div>
 
                 <!-- Right side - Icons and user menu -->
-                <div class="hidden flex items-center space-x-4">
+                <div class="hidden md:flex items-center space-x-4">
                     <!-- User dropdown -->
                 </div>
             </header>
@@ -584,14 +601,14 @@
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="md:ml-6 md:pl-6 md:border-l md:border-gray-200 mt-4 md:mt-0">
-                                                    <div class="flex space-x-3">
+                                                <div class="md:ml-6 md:pl-6 md:border-l md:border-gray-200 mt-4 md:mt-0 w-full md:w-auto">
+                                                    <div class="flex flex-col sm:flex-row gap-2 sm:gap-0 sm:space-x-3 w-full">
                                                         @if($cart->status == 'delivered')
                                                             <!-- For delivered products -->
                                                             @if($hasReplacement && $replacementInfo)
                                                                 <!-- Show replacement tracking button -->
                                                                 <button 
-                                                                    class="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 rounded-lg text-sm font-semibold hover:shadow-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:-translate-y-0.5 flex items-center track-replacement-btn"
+                                                                    class="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 rounded-lg text-sm font-semibold hover:shadow-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center track-replacement-btn w-full sm:w-auto"
                                                                     data-replacement-id="{{ $replacementInfo->id }}"
                                                                 >
                                                                     <i class="fas fa-truck-fast mr-2"></i>Track Replacement
@@ -600,7 +617,7 @@
                                                                 @if($replacementInfo->status == 'completed')
                                                                     <!-- If replacement is completed, show rate button again -->
                                                                     <button 
-                                                                        class="px-4 py-2 bg-blue-500 text-white border border-blue-600 rounded-lg text-sm font-medium hover:bg-blue-600 flex items-center rate-product-btn"
+                                                                        class="px-4 py-2 bg-blue-500 text-white border border-blue-600 rounded-lg text-sm font-medium hover:bg-blue-600 flex items-center justify-center rate-product-btn w-full sm:w-auto"
                                                                         data-product-id="{{ $cart->product_id }}"
                                                                         data-product-name="{{ $cart->product_name }}"
                                                                         data-order-id="{{ $order->id }}"
@@ -611,9 +628,9 @@
                                                                 @endif
                                                             @elseif($hasReturnRequest)
                                                                 <!-- Show view return request button -->
-                                                                <a href="/customer/returns/track/{{ $returnRequestInfo->id }}" target="_blank">
+                                                                <a href="/customer/returns/track/{{ $returnRequestInfo->id }}" target="_blank" class="w-full sm:w-auto flex">
                                                                     <button 
-                                                                        class="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white border-0 rounded-lg text-sm font-semibold hover:shadow-lg hover:from-orange-600 hover:to-red-600 transition-all duration-300 transform hover:-translate-y-0.5 flex items-center view-return-request-btn"
+                                                                        class="w-full px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white border-0 rounded-lg text-sm font-semibold hover:shadow-lg hover:from-orange-600 hover:to-red-600 transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center view-return-request-btn"
                                                                         data-return-id="{{ $returnRequestInfo->id }}"
                                                                     >
                                                                         <i class="fas fa-file-alt mr-2"></i>View Request
@@ -622,7 +639,7 @@
                                                             @else
                                                                 <!-- Original delivered product buttons -->
                                                                 <button 
-                                                                    class="px-4 py-2 bg-blue-500 text-white border border-blue-600 rounded-lg text-sm font-medium hover:bg-blue-600 flex items-center rate-product-btn"
+                                                                    class="px-4 py-2 bg-blue-500 text-white border border-blue-600 rounded-lg text-sm font-medium hover:bg-blue-600 flex items-center justify-center rate-product-btn w-full sm:w-auto"
                                                                     data-product-id="{{ $cart->product_id }}"
                                                                     data-product-name="{{ $cart->product_name }}"
                                                                     data-order-id="{{ $order->id }}"
@@ -631,32 +648,32 @@
                                                                     <i class="fas fa-star mr-2"></i>{{ $isRated ? 'View Rating' : 'Rate' }}
                                                                 </button>
                                                                 
-                                                                <button class="px-4 py-2 bg-yellow-500 text-white border border-yellow-600 rounded-lg text-sm font-medium hover:bg-yellow-600 flex items-center replace-product-btn"
+                                                                <button class="px-4 py-2 bg-yellow-500 text-white border border-yellow-600 rounded-lg text-sm font-medium hover:bg-yellow-600 flex items-center justify-center replace-product-btn w-full sm:w-auto"
                                                                         data-product-id="{{ $cart->product_id }}"
                                                                         data-order-id="{{ $order->id }}">
                                                                     <i class="fas fa-exchange-alt mr-2"></i>Replace
                                                                 </button>
                                                                 
-                                                                <button class="px-4 py-2 bg-red-500 text-white border border-red-600 rounded-lg text-sm font-medium hover:bg-red-600 flex items-center return-product-btn"
+                                                                <button class="px-4 py-2 bg-red-500 text-white border border-red-600 rounded-lg text-sm font-medium hover:bg-red-600 flex items-center justify-center return-product-btn w-full sm:w-auto"
                                                                         data-product-id="{{ $cart->product_id }}"
                                                                         data-order-id="{{ $order->id }}">
                                                                     <i class="fas fa-undo mr-2"></i>Return
                                                                 </button>
                                                             @endif
                                                         @elseif($cart->status == 'cancelled')
-                                                            <span class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg text-sm font-medium">
+                                                            <span class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg text-sm font-medium w-full sm:w-auto text-center">
                                                                 Cancelled
                                                             </span>
                                                         @else
                                                             <!-- For non-delivered products -->
                                                             <button 
-                                                                class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center track-order-btn"
+                                                                class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center justify-center track-order-btn w-full sm:w-auto"
                                                                 data-order-id="ORD-{{ $order->id }}"
                                                                 data-order-status="{{ $timelineStatus }}"
                                                             >
                                                                 <i class="fas fa-truck mr-2"></i>Track
                                                             </button>
-                                                            <button class="px-4 py-2 bg-red-500 text-white border border-red-600 rounded-lg text-sm font-medium hover:bg-red-600 flex items-center cancel-order-btn"
+                                                            <button class="px-4 py-2 bg-red-500 text-white border border-red-600 rounded-lg text-sm font-medium hover:bg-red-600 flex items-center justify-center cancel-order-btn w-full sm:w-auto"
                                                                     data-order-id="{{ $order->id }}"
                                                                     data-cart-id="{{ $cart->id }}">
                                                                 <i class="fas fa-times mr-2"></i>Cancel
@@ -689,43 +706,51 @@
                 
                 <!-- Timeline -->
                 <div class="space-y-6">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-0">
                         <!-- Order Placed Step -->
-                        <div class="text-center">
-                            <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <div class="flex md:flex-col items-center text-left md:text-center w-full md:w-auto">
+                            <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mb-0 md:mb-2 mr-3 md:mr-0 flex-shrink-0">
                                 <i class="fas fa-shopping-cart text-gray-500"></i>
                             </div>
-                            <p class="text-sm font-medium text-gray-600">Order Placed</p>
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Order Placed</p>
+                            </div>
                         </div>
                         
-                        <div class="h-1 flex-1 bg-gray-300"></div>
+                        <div class="hidden md:block h-1 flex-1 bg-gray-300 mx-2"></div>
                         
                         <!-- Processing Step -->
-                        <div class="text-center">
-                            <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <div class="flex md:flex-col items-center text-left md:text-center w-full md:w-auto">
+                            <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mb-0 md:mb-2 mr-3 md:mr-0 flex-shrink-0">
                                 <i class="fas fa-cog text-gray-500"></i>
                             </div>
-                            <p class="text-sm font-medium text-gray-600">Processing</p>
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Processing</p>
+                            </div>
                         </div>
                         
-                        <div class="h-1 flex-1 bg-gray-300"></div>
+                        <div class="hidden md:block h-1 flex-1 bg-gray-300 mx-2"></div>
                         
                         <!-- Shipped Step -->
-                        <div class="text-center">
-                            <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <div class="flex md:flex-col items-center text-left md:text-center w-full md:w-auto">
+                            <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mb-0 md:mb-2 mr-3 md:mr-0 flex-shrink-0">
                                 <i class="fas fa-truck text-gray-500"></i>
                             </div>
-                            <p class="text-sm font-medium text-gray-600">Shipped</p>
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Shipped</p>
+                            </div>
                         </div>
                         
-                        <div class="h-1 flex-1 bg-gray-300"></div>
+                        <div class="hidden md:block h-1 flex-1 bg-gray-300 mx-2"></div>
                         
                         <!-- Delivered Step -->
-                        <div class="text-center">
-                            <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <div class="flex md:flex-col items-center text-left md:text-center w-full md:w-auto">
+                            <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mb-0 md:mb-2 mr-3 md:mr-0 flex-shrink-0">
                                 <i class="fas fa-check text-gray-500"></i>
                             </div>
-                            <p class="text-sm font-medium text-gray-600">Delivered</p>
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Delivered</p>
+                            </div>
                         </div>
                     </div>
                     

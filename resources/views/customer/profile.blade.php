@@ -8,7 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="./CDN tailwind.js"></script>
     <!-- font-awesome  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google font  -->
@@ -77,7 +76,7 @@
                 </div>
 
                 <!-- Center - Search bar -->
-                <div class="hidden flex-1 max-w-md mx-4">
+                <div class="hidden md:flex flex-1 max-w-md mx-4">
                     <div class="relative w-full">
                         <input type="text" placeholder="Search..."
                             class="w-full py-2 pl-4 pr-10 text-sm bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">
@@ -88,7 +87,7 @@
                 </div>
 
                 <!-- Right side - Icons and user menu -->
-                <div class="hidden flex items-center space-x-4">
+                <div class="hidden md:flex items-center space-x-4">
                     <!-- Notification dropdown -->
                     <div class="relative">
                         <button id="notification-button"
@@ -144,34 +143,12 @@
                 </div>
             </header>
 
-            <!-- Mobile Sidebar (hidden by default) -->
-            <div id="mobile-sidebar" class="hidden fixed inset-0 z-50 bg-black bg-opacity-50">
-                <div class="fixed inset-y-0 left-0 w-64 bg-white">
-                    <div class="flex items-center justify-between h-16 px-4 bg-blue-600">
-                        <span class="text-white font-bold text-xl">cheezain</span>
-                        <button id="close-sidebar" class="text-white focus:outline-none">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <div class="px-4 py-4">
-                        <nav class="space-y-2">
-                            <a href="./dashboard.php" class="block px-4 py-2 text-sm font-medium text-gray-900 rounded-lg sidebar-item hover:bg-gray-100"><i class="fas fa-tachometer-alt mr-3"></i>Dashboard</a>
-                            <a href="./orders.php" class="block px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100"><i class="fas fa-shopping-bag mr-3"></i>My Orders</a>
-                            <a href="./wishlist.php" class="block px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100"><i class="fas fa-heart mr-3"></i>Wishlist</a>
-                            <a href="./addresses.php" class="block px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100"><i class="fas fa-map-marker-alt mr-3"></i>Addresses</a>
-                            <a href="./payments.php" class="block px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100"><i class="fas fa-credit-card mr-3"></i>Payment Methods</a>
-                            <a href="./support.php" class="block px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100"><i class="fas fa-headset mr-3"></i>Support</a>
-                            <a href="./profile.php" class="block px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100 active"><i class="fas fa-user-cog mr-3"></i>Profile Settings</a>
-                            <a href="#" class="block px-4 py-2 text-sm font-medium text-red-600 rounded-lg sidebar-item hover:bg-red-50"><i class="fas fa-sign-out-alt mr-3"></i>Logout</a>
-                        </nav>
-                    </div>
-                </div>
-            </div>
+
             
             <!-- Main Content Area -->
             <main class="flex-1 overflow-y-auto p-6">
                 <!-- Profile Header -->
-                <div class="profile-card bg-white rounded-lg shadow overflow-hidden mb-6 h-[18rem]">
+                <div class="profile-card bg-white rounded-lg shadow overflow-hidden mb-6">
                     <div class="bg-gradient-to-r from-blue-500 to-blue-700 h-48 relative" id="cover-container">
                         {{-- @if ($bannerImage) --}}
                         <img 
@@ -217,9 +194,9 @@
                     
                     <div class="px-6 pb-6 -mt-12">
                         <div class="flex flex-col md:flex-row md:items-end md:justify-between">
-                            <div class="flex items-end">
+                            <div class="flex flex-col sm:flex-row items-center sm:items-end text-center sm:text-left">
                                 <div class="relative">
-                                    <img class="w-32 h-32 rounded-full border-4 border-white" 
+                                    <img class="w-32 h-32 rounded-full border-4 border-white mx-auto" 
                                         src="{{ asset('storage/customer/profile/' . $basic_info->profile_image) }}" 
                                         alt="Profile"
                                         id="profile-image">
@@ -253,14 +230,14 @@
                                     </span>
                                 </div>
                                 
-                                <div class="ml-6 mb-4">
+                                <div class="ml-0 sm:ml-6 mt-4 sm:mt-0 mb-4">
                                     <h2 class="text-2xl font-bold text-gray-900">{{ $basic_info->first_name }} {{ $basic_info->last_name }}</h2>
                                     <p class="text-gray-600">Gold Member</p>
                                 </div>
                             </div>
                             
-                            <div class="mt-4 md:mt-0">
-                                <a href="/customer/profile/edit" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 focus:outline-none">
+                            <div class="mt-4 md:mt-0 w-full md:w-auto text-center md:text-right">
+                                <a href="/customer/profile/edit" class="inline-block w-full md:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 focus:outline-none">
                                     <i class="fas fa-user-edit mr-2"></i>Edit Profile
                                 </a>
                             </div>
@@ -813,21 +790,7 @@
 
 
     
-    <!-- Internal JavaScript -->
     <script>
-        // Mobile sidebar toggle
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileSidebar = document.getElementById('mobile-sidebar');
-            const closeSidebar = document.getElementById('close-sidebar');
-            
-            document.querySelector('header button').addEventListener('click', function() {
-                mobileSidebar.classList.remove('hidden');
-            });
-            
-            closeSidebar.addEventListener('click', function() {
-                mobileSidebar.classList.add('hidden');
-            });
-        });
         
         // Show notification
         function showNotification(message, type = 'info') {

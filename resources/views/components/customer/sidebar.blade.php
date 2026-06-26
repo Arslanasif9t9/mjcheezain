@@ -1,61 +1,69 @@
 @props(['basic_info' => null])
 
-<div class="hidden md:flex md:flex-shrink-0">
-    <div class="flex flex-col w-64 bg-white border-r border-gray-200">
-        <div class="flex items-center justify-center h-16 px-4 bg-blue-600">
-            <span class="text-white font-bold text-xl">mjcheezain</span>
-        </div>                
-        <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
-            <div class="flex items-center px-4 py-3 mb-4 bg-gray-100 rounded-lg">
-                <img class="w-10 h-10 rounded-full" src="{{ $basic_info->profile_image ? asset('storage/customer/profile/' . $basic_info->profile_image) : asset('storage/default_profile.webp') }}" alt="User">
-                <div class="ml-3">
-                    <p class="text-sm font-medium text-gray-900">{{ $basic_info->first_name ?? '' }} {{ $basic_info->last_name ?? '' }}</p>
-                    <p class="text-xs text-gray-500">Gold Member</p>
-                </div>
-            </div>
-            
-            <nav class="flex-1 space-y-2">
-                <a href="/customer/dashboard" class="flex items-center px-4 py-2 text-sm font-medium text-gray-900 rounded-lg sidebar-item hover:bg-gray-100 active">
-                    <i class="fas fa-tachometer-alt mr-3"></i>
-                    Dashboard
-                </a>
-                <a href="/customer/orders" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                    <i class="fas fa-shopping-bag mr-3"></i>
-                    My Orders
-                </a>
-                <a href="/customer/notifications" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100 relative">
-                    <i class="fas fa-shopping-bag mr-3"></i>
-                    Notifications
-                    @php $unreadCount = DB::table('notifications')->where('user_id', $basic_info->user_id)->where('is_read', 0)->count(); @endphp
-                    @if ($unreadCount != 0)
-                        <div id="noti-num" class="w-5 h-5 text-sm absolute right-4 bg-red-600 text-white flex justify-center items-center rounded-full">
-                            {{ $unreadCount }}
-                        </div>
-                    @endif
-                </a>
-                <a href="/customer/wishlist" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                    <i class="fas fa-heart mr-3"></i>
-                    Wishlist
-                </a>
-                <a href="/customer/addresses" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                    <i class="fas fa-map-marker-alt mr-3"></i>
-                    Addresses
-                </a>
-                <a href="/customer/profile" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                    <i class="fas fa-user-cog mr-3"></i>
-                    Profile Settings
-                </a>
-            </nav>
-            
-            <div class="mt-auto mb-4">
-                <button id="logoutBtn" class="flex items-center w-full px-4 py-2 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50 transition-all duration-200">
-                    <i class="fas fa-sign-out-alt mr-3"></i>
-                    Logout
-                </button>
+<!-- Backdrop Overlay for Mobile -->
+<div id="customerSidebarBackdrop" onclick="toggleCustomerMobileSidebar()" 
+     class="fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 pointer-events-none z-45 md:hidden"></div>
+
+<aside id="customerSidebar" 
+       class="fixed md:sticky top-0 left-0 h-[100vh] w-64 bg-white border-r border-gray-200 flex flex-col transform -translate-x-full transition-transform duration-300 md:translate-x-0 z-50 shadow-xl md:shadow-none">
+    
+    <div class="flex items-center justify-between h-16 px-4 bg-blue-600 md:justify-center flex-shrink-0">
+        <span class="text-white font-bold text-xl">mjcheezain</span>
+        <!-- Close button visible only on mobile -->
+        <button onclick="toggleCustomerMobileSidebar()" class="text-white focus:outline-none md:hidden text-lg">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>                
+    <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
+        <div class="flex items-center px-4 py-3 mb-4 bg-gray-100 rounded-lg">
+            <img class="w-10 h-10 rounded-full" src="{{ $basic_info && $basic_info->profile_image ? asset('storage/customer/profile/' . $basic_info->profile_image) : asset('storage/default_profile.webp') }}" alt="User">
+            <div class="ml-3">
+                <p class="text-sm font-medium text-gray-900">{{ $basic_info->first_name ?? '' }} {{ $basic_info->last_name ?? '' }}</p>
+                <p class="text-xs text-gray-500">Gold Member</p>
             </div>
         </div>
+        
+        <nav class="flex-1 space-y-2">
+            <a href="/customer/dashboard" class="flex items-center px-4 py-2 text-sm font-medium text-gray-900 rounded-lg sidebar-item hover:bg-gray-100 active">
+                <i class="fas fa-tachometer-alt mr-3"></i>
+                Dashboard
+            </a>
+            <a href="/customer/orders" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
+                <i class="fas fa-shopping-bag mr-3"></i>
+                My Orders
+            </a>
+            <a href="/customer/notifications" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100 relative">
+                <i class="fas fa-shopping-bag mr-3"></i>
+                Notifications
+                @php $unreadCount = $basic_info ? DB::table('notifications')->where('user_id', $basic_info->user_id)->where('is_read', 0)->count() : 0; @endphp
+                @if ($unreadCount != 0)
+                    <div id="noti-num" class="w-5 h-5 text-sm absolute right-4 bg-red-600 text-white flex justify-center items-center rounded-full">
+                        {{ $unreadCount }}
+                    </div>
+                @endif
+            </a>
+            <a href="/customer/wishlist" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
+                <i class="fas fa-heart mr-3"></i>
+                Wishlist
+            </a>
+            <a href="/customer/addresses" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
+                <i class="fas fa-map-marker-alt mr-3"></i>
+                Addresses
+            </a>
+            <a href="/customer/profile" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
+                <i class="fas fa-user-cog mr-3"></i>
+                Profile Settings
+            </a>
+        </nav>
+        
+        <div class="mt-auto mb-4">
+            <button id="logoutBtn" class="flex items-center w-full px-4 py-2 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50 transition-all duration-200">
+                <i class="fas fa-sign-out-alt mr-3"></i>
+                Logout
+            </button>
+        </div>
     </div>
-</div>
+</aside>
 
 <!-- Premium Logout Modal -->
 <div id="logoutModal" class="fixed inset-0 z-[9999] flex items-center justify-center hidden">
@@ -226,6 +234,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 500);
     });
     
+    function toggleCustomerMobileSidebar() {
+        const sidebar = document.getElementById('customerSidebar');
+        const backdrop = document.getElementById('customerSidebarBackdrop');
+        if (!sidebar || !backdrop) return;
+        
+        sidebar.classList.toggle('-translate-x-full');
+        
+        if (sidebar.classList.contains('-translate-x-full')) {
+            backdrop.classList.add('opacity-0', 'pointer-events-none');
+            backdrop.classList.remove('opacity-100', 'pointer-events-auto');
+        } else {
+            backdrop.classList.remove('opacity-0', 'pointer-events-none');
+            backdrop.classList.add('opacity-100', 'pointer-events-auto');
+        }
+    }
+    window.toggleCustomerMobileSidebar = toggleCustomerMobileSidebar;
+
     function activateSidebarLink() {
         // Get current URL path
         const currentPath = window.location.pathname;
@@ -240,6 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const routePatterns = [
             { pattern: /^\/customer\/dashboard/, selector: 'a[href="/customer/dashboard"]' },
             { pattern: /^\/customer\/orders/, selector: 'a[href="/customer/orders"]' },
+            { pattern: /^\/customer\/notifications?/, selector: 'a[href="/customer/notifications"]' },
             { pattern: /^\/customer\/wishlist/, selector: 'a[href="/customer/wishlist"]' },
             { pattern: /^\/customer\/addresses/, selector: 'a[href="/customer/addresses"]' },
             { pattern: /^\/customer\/profile/, selector: 'a[href="/customer/profile"]' }
@@ -273,6 +299,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize sidebar activation
     activateSidebarLink();
     
+    // Find any hamburger menu button in the page header
+    const headerToggleBtns = document.querySelectorAll('header button');
+    headerToggleBtns.forEach(btn => {
+        const icon = btn.querySelector('.fa-bars');
+        if (icon) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleCustomerMobileSidebar();
+            });
+        }
+    });
+
     // Optional: Add click handler to update active state immediately on click
     document.querySelectorAll('.sidebar-item').forEach(item => {
         item.addEventListener('click', function() {
@@ -285,6 +323,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Add active class to clicked item
             this.classList.add('active', 'bg-blue-50', 'text-blue-700');
             this.classList.remove('text-gray-700');
+            
+            // Close mobile sidebar on click if open
+            const sidebar = document.getElementById('customerSidebar');
+            if (sidebar && !sidebar.classList.contains('-translate-x-full')) {
+                toggleCustomerMobileSidebar();
+            }
         });
     });
 });

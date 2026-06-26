@@ -1,11 +1,11 @@
 @props(['products', 'activeTab'])
 
 <!-- Products Table -->
-<div class="bg-white shadow rounded p-4">
-    <div class="overflow-x-auto min-w-[600px] max-w-full">
-    <table class="min-w-full text-left w-full">
-        <thead class="border-b bg-gray-50">
-            <tr>
+<div class="bg-white shadow-sm rounded-xl border border-gray-100 overflow-hidden">
+    <div class="overflow-x-auto w-full">
+    <table class="min-w-[950px] w-full text-left">
+        <thead class="border-b bg-gray-55/60">
+            <tr class="text-xs font-semibold uppercase tracking-wider text-gray-500">
                 <th class="p-4">ID</th>
                 <th class="p-4">Image</th>
                 <th class="p-4">Product Name</th>
@@ -98,22 +98,22 @@
                         <td class="p-2 whitespace-nowrap">
                             {{ $position_map[$product->position] ?? ucfirst($product->position) }}
                         </td>
-                        <td class="p-2 flex space-x-3">
-                            <button>
+                        <td class="p-2 whitespace-nowrap">
+                            <div class="flex items-center gap-2">
                                 <a href="{{ route('vendor.products.edit', $product->id) }}" 
-                                    class="text-blue-500 hover:text-blue-700 transition" title="Edit">
-                                        <i class="fas fa-edit"></i>
+                                    class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition flex items-center justify-center border border-blue-100 shadow-sm" title="Edit">
+                                         <i class="fas fa-edit text-xs"></i>
                                 </a>
-                            </button>
-                            <form method="POST" action="{{ route('vendor.products.delete') }}" 
-                                class="delete-product-form inline">
-                                @csrf
-                                @method('DELETE')
-                                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                <button type="submit" class="bg-white hover:bg-white text-red-500 hover:text-red-700 transition" title="Delete">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </form>
+                                <form method="POST" action="{{ route('vendor.products.delete') }}" 
+                                    class="delete-product-form inline m-0">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <button type="submit" class="w-8 h-8 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition flex items-center justify-center border border-red-100 shadow-sm" title="Delete">
+                                        <i class="fa-solid fa-trash text-xs"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @endforeach

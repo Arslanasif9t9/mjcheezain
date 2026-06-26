@@ -18,23 +18,23 @@
                 <input id="userTypeSign" type="hidden" name="type" value="">
                 <input type="text" name="name" placeholder="Name" class="bg-gray-100 border-none py-3 px-4 my-2 w-full rounded-lg" required/>
                 
-                <div class="relative w-full">
-                    <input type="email" name="email" id="email" placeholder="Email" class="bg-gray-100 border-none py-3 px-4 my-2 w-full rounded-lg pr-24" required/>
+                <div class="relative w-full my-2">
+                    <input type="email" name="email" id="email" placeholder="Email" class="bg-gray-100 border-none py-3 px-4 w-full rounded-lg pr-24" required/>
                     <button type="button" id="getOtpBtn" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white border-none py-2 px-4 rounded-lg text-xs cursor-pointer">Get OTP</button>
                 </div>
                 
                 <div id="otpTimer" class="otp-timer text-sm text-red-500 my-2"></div>
                 <input type="number" name="otp" placeholder="4 digit OTP" class="bg-gray-100 border-none py-3 px-4 my-2 w-full rounded-lg" required min="1000" max="9999"/>
                 
-                <div class="relative w-full">
-                    <input type="password" name="password" id="signupPassword" placeholder="Password" class="bg-gray-100 border-none py-3 px-4 my-2 w-full rounded-lg pr-10" required minlength="6"/>
+                <div class="relative w-full my-2">
+                    <input type="password" name="password" id="signupPassword" placeholder="Password" class="bg-gray-100 border-none py-3 px-4 w-full rounded-lg pr-10" required minlength="6"/>
                     <button type="button" class="password-toggle absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 bg-transparent border-none cursor-pointer">
                         <i class="far fa-eye"></i>
                     </button>
                 </div>
                 
-                <div class="relative w-full">
-                    <input type="password" name="password_confirmation" id="signupConfirmPassword" placeholder="Re-Password" class="bg-gray-100 border-none py-3 px-4 my-2 w-full rounded-lg pr-10" required minlength="6"/>
+                <div class="relative w-full my-2">
+                    <input type="password" name="password_confirmation" id="signupConfirmPassword" placeholder="Re-Password" class="bg-gray-100 border-none py-3 px-4 w-full rounded-lg pr-10" required minlength="6"/>
                     <button type="button" class="password-toggle absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 bg-transparent border-none cursor-pointer">
                         <i class="far fa-eye"></i>
                     </button>
@@ -42,6 +42,11 @@
                 
                 <div id="signupMessage" class="message my-2 text-sm w-full"></div>
                 <button type="submit" id="signupBtn" class="bg-blue-500 text-white border-none rounded-lg py-3 px-12 font-semibold text-sm tracking-wider uppercase transition-transform duration-80 ease-in mt-4">Sign Up</button>
+                
+                <p class="text-sm text-gray-600 mt-6 md:hidden">
+                    Already have an account? 
+                    <button type="button" id="mobileSignIn" class="text-blue-500 font-semibold hover:underline focus:outline-none ml-1">Sign In</button>
+                </p>
             </form>
         </div>
 
@@ -52,8 +57,8 @@
                 <input id="userTypeLog" type="hidden" name="type" value="">
                 <input type="email" name="id" placeholder="Email" class="bg-gray-100 border-none py-3 px-4 my-2 w-full rounded-lg" required/>
                 
-                <div class="relative w-full">
-                    <input type="password" name="password" id="loginPassword" placeholder="Password" class="bg-gray-100 border-none py-3 px-4 my-2 w-full rounded-lg pr-10" required/>
+                <div class="relative w-full my-2">
+                    <input type="password" name="password" id="loginPassword" placeholder="Password" class="bg-gray-100 border-none py-3 px-4 w-full rounded-lg pr-10" required/>
                     <button type="button" class="password-toggle absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 bg-transparent border-none cursor-pointer">
                         <i class="far fa-eye"></i>
                     </button>
@@ -62,6 +67,11 @@
                 <a id="forgot" href="#" class="text-gray-500 text-sm my-2 no-underline">Forgot your password?</a>
                 <div id="loginMessage" class="message my-2 text-sm w-full"></div>
                 <button type="submit" id="loginBtn" class="bg-blue-500 text-white border-none rounded-lg py-3 px-12 font-semibold text-sm tracking-wider uppercase transition-transform duration-80 ease-in mt-4">Sign In</button>
+                
+                <p class="text-sm text-gray-600 mt-6 md:hidden">
+                    Don't have an account? 
+                    <button type="button" id="mobileSignUp" class="text-blue-500 font-semibold hover:underline focus:outline-none ml-1">Sign Up</button>
+                </p>
             </form>
         </div>
 
@@ -224,6 +234,24 @@
             clearMessages();
         });
 
+        // Mobile toggle buttons
+        const mobileSignUp = document.getElementById('mobileSignUp');
+        const mobileSignIn = document.getElementById('mobileSignIn');
+        
+        if (mobileSignUp) {
+            mobileSignUp.addEventListener('click', () => {
+                container.classList.add("right-panel-active");
+                clearMessages();
+            });
+        }
+        
+        if (mobileSignIn) {
+            mobileSignIn.addEventListener('click', () => {
+                container.classList.remove("right-panel-active");
+                clearMessages();
+            });
+        }
+
         // Clear all messages
         function clearMessages() {
             signupMessage.style.display = 'none';
@@ -376,32 +404,86 @@
     </script>
 
     <style>
-        .right-panel-active .sign-in-container {
-            transform: translateX(100%);
+        /* Desktop styles (width >= 768px) */
+        @media (min-width: 768px) {
+            .right-panel-active .sign-in-container {
+                transform: translateX(100%);
+            }
+
+            .right-panel-active .sign-up-container {
+                transform: translateX(100%);
+                opacity: 1;
+                z-index: 25;
+            }
+
+            .right-panel-active .overlay-container {
+                transform: translateX(-100%);
+            }
+
+            .right-panel-active .overlay {
+                transform: translateX(50%);
+            }
+
+            .right-panel-active .overlay-left {
+                transform: translateX(0);
+            }
+
+            .right-panel-active .overlay-right {
+                transform: translateX(20%);
+            }
         }
 
-        .right-panel-active .sign-up-container {
-            transform: translateX(100%);
-            opacity: 1;
-            z-index: 25;
+        /* Mobile styles (width < 768px) */
+        @media (max-width: 767px) {
+            .container {
+                min-height: auto !important;
+                height: auto !important;
+                padding: 1.5rem 0 !important;
+                margin: 1.5rem !important;
+                max-width: 100% !important;
+                width: 92% !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: center !important;
+            }
+
+            .form-container {
+                position: relative !important;
+                width: 100% !important;
+                height: auto !important;
+                opacity: 1 !important;
+                z-index: 10 !important;
+                left: 0 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+
+            /* Hide inactive form on mobile */
+            .sign-up-container {
+                display: none !important;
+            }
+
+            .right-panel-active .sign-in-container {
+                display: none !important;
+            }
+
+            .right-panel-active .sign-up-container {
+                display: block !important;
+                opacity: 1 !important;
+                z-index: 20 !important;
+            }
+
+            .overlay-container {
+                display: none !important;
+            }
+
+            form {
+                padding: 1.5rem 2rem !important;
+                height: auto !important;
+            }
         }
 
-        .right-panel-active .overlay-container {
-            transform: translateX(-100%);
-        }
-
-        .right-panel-active .overlay {
-            transform: translateX(50%);
-        }
-
-        .right-panel-active .overlay-left {
-            transform: translateX(0);
-        }
-
-        .right-panel-active .overlay-right {
-            transform: translateX(20%);
-        }
-
+        /* Global style helpers */
         .loading {
             display: inline-block;
             width: 16px;

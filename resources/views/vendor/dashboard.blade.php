@@ -73,9 +73,5 @@
 
     <!-- Logout Modal Component -->
     <x-logout-modal />
-
-    <script src="../script/logout.js"></script>
-    <script src="../script/vendor_navbar.js"></script>
-    <script src="../script/notification.js"></script>
 </body>
 @endsection

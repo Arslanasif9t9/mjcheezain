@@ -1,17 +1,25 @@
 @props(['profilePicture'])
 
-<div class="header flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-semibold">Overview</h1>
-    <div class="flex items-center w-[70%]">
-        <i class='fa-solid fa-magnifying-glass relative left-8 z-10'></i>
-        <input type="text" placeholder="Search product, order or customer..."
-            class="px-4 py-2 pl-12 border rounded border-0 outline-0 w-full rounded-full" />
+<div class="header flex justify-between items-center mb-6 pl-14 md:pl-0 gap-4">
+    <h1 class="text-xl md:text-3xl font-extrabold text-gray-800 tracking-tight whitespace-nowrap">Overview</h1>
+    
+    <!-- Desktop Search -->
+    <div class="hidden md:flex items-center w-[50%] lg:w-[60%] relative">
+        <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
+        </span>
+        <input type="text" placeholder="Search products, orders or customer..."
+            class="px-4 py-2.5 pl-11 border border-gray-200 outline-none w-full rounded-full bg-white text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all shadow-sm" />
     </div>
-    <div class="text-xl">
-        <a href="./profile.php">
-            <button class="bg-white w-10 h-10 rounded-full">
-                <i class="fa-solid fa-user"></i>
-            </button>
+
+    <!-- User Section -->
+    <div class="flex items-center gap-3">
+        <a href="{{ route('vendor.profile') }}" class="group flex items-center gap-2">
+            <div class="relative w-10 h-10 rounded-full overflow-hidden border border-gray-200 group-hover:border-red-500 transition-colors shadow-sm">
+                <img src="{{ asset('storage/vendor/profile/' . ($profilePicture ?? 'default_profile.webp')) }}" 
+                     alt="Profile" 
+                     class="w-full h-full object-cover">
+            </div>
         </a>
     </div>
 </div>

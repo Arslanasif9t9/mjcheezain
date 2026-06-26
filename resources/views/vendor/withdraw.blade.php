@@ -63,9 +63,9 @@
         />
         
         <!-- Main Content -->
-        <div class="flex-1 ml-0 lg:ml72 p-4 lg:p-8 transition-all duration-300">
+        <div class="flex-1 p-4 lg:p-8 transition-all duration-300 min-w-0">
             <!-- Page Header -->
-            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 pb-6 border-b border-gray-200">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 pb-6 border-b border-gray-200 pl-12 md:pl-0">
                 <div class="mb-4 lg:mb-0">
                     <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 flex items-center">
                         <i class="fas fa-wallet text-primary-500 mr-3"></i>
@@ -124,7 +124,7 @@
                     </div>
                     <div class="mb-2">
                         <div class="text-3xl lg:text-4xl font-bold text-blue-600">
-                            ₹{{ number_format($balance->available_balance, 2) }}
+                            Rs. {{ number_format($balance->available_balance, 2) }}
                         </div>
                         <p class="text-gray-500 text-sm mt-2">This amount is ready for immediate withdrawal</p>
                     </div>
@@ -147,7 +147,7 @@
                     </div>
                     <div class="mb-2">
                         <div class="text-3xl lg:text-4xl font-bold text-amber-600">
-                            ₹{{ number_format($balance->pending_balance, 2) }}
+                            Rs. {{ number_format($balance->pending_balance, 2) }}
                         </div>
                         <p class="text-gray-500 text-sm mt-2">Will be available after processing period</p>
                     </div>
@@ -176,20 +176,20 @@
                                     Withdrawal Amount <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
-                                    <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-600 font-bold">₹</span>
+                                    <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold text-sm">PKR</span>
                                     <input type="number" 
                                            id="amount"
                                            name="amount"
-                                           class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                                           class="w-full pl-14 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
                                            placeholder="Enter amount"
                                            min="100"
                                            step="0.01"
                                            max="{{ $balance->available_balance }}"
                                            required>
                                 </div>
-                                <div class="text-sm text-gray-500 mt-2">
-                                    Minimum: ₹100 | Maximum: ₹{{ number_format($balance->available_balance, 2) }}
-                                </div>
+                                <div class="text-sm text-gray-505 mt-2">
+                                    Minimum: Rs. 100 | Maximum: Rs. {{ number_format($balance->available_balance, 2) }}
+                                </div>    </div>
                             </div>
                             
                             <!-- Bank Name -->
@@ -266,7 +266,7 @@
                             <ul class="space-y-2 text-gray-700">
                                 <li class="flex items-start">
                                     <i class="fas fa-circle text-primary-500 text-xs mt-2 mr-3"></i>
-                                    <span>Minimum withdrawal amount is <strong>₹100</strong></span>
+                                    <span>Minimum withdrawal amount is <strong>Rs. 100</strong></span>
                                 </li>
                                 <li class="flex items-start">
                                     <i class="fas fa-circle text-primary-500 text-xs mt-2 mr-3"></i>
@@ -282,7 +282,7 @@
                                 </li>
                                 <li class="flex items-start">
                                     <i class="fas fa-circle text-primary-500 text-xs mt-2 mr-3"></i>
-                                    <span>Transaction fee of <strong>₹10</strong> applies for withdrawals below ₹1000</span>
+                                    <span>Transaction fee of <strong>Rs. 10</strong> applies for withdrawals below Rs. 1000</span>
                                 </li>
                                 <li class="flex items-start">
                                     <i class="fas fa-circle text-primary-500 text-xs mt-2 mr-3"></i>
@@ -292,14 +292,14 @@
                         </div>
                         
                         <!-- Form Buttons -->
-                        <div class="flex flex-wrap gap-4 mt-8">
+                        <div class="flex flex-col sm:flex-row gap-4 mt-8">
                             <button type="submit" 
-                                    class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+                                    class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
                                 <i class="fas fa-paper-plane mr-3"></i>
                                 Submit Withdrawal Request
                             </button>
                             <button type="reset" 
-                                    class="inline-flex items-center px-8 py-4 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-colors duration-200">
+                                    class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-colors duration-200">
                                 <i class="fas fa-redo mr-3"></i>
                                 Clear Form
                             </button>
@@ -374,7 +374,7 @@
                 
                 if (value < 100 && this.value !== '') {
                     this.value = 100;
-                    showToast('Minimum withdrawal amount is ₹100', 'info');
+                    showToast('Minimum withdrawal amount is Rs. 100', 'info');
                 }
             });
             
@@ -384,7 +384,7 @@
                 
                 if (isNaN(amount) || amount < 100) {
                     e.preventDefault();
-                    showToast('Please enter a valid amount (minimum ₹100)', 'error');
+                    showToast('Please enter a valid amount (minimum Rs. 100)', 'error');
                     return false;
                 }
                 
@@ -396,7 +396,7 @@
                 
                 // Show confirmation dialog for large amounts
                 if (amount > 10000) {
-                    if (!confirm(`You are about to withdraw ₹${amount.toFixed(2)}. Continue?`)) {
+                    if (!confirm(`You are about to withdraw Rs. ${amount.toFixed(2)}. Continue?`)) {
                         e.preventDefault();
                         return false;
                     }

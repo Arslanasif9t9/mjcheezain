@@ -136,17 +136,17 @@
             cartState.items.forEach(item => {
                 const itemTotal = (item.price * item.quantity).toFixed(2);
                 cartItemsHTML += `
-                    <div class="flex items-start border-b pb-4 hover:bg-gray-50 p-2 rounded-lg transition duration-200" data-cart-id="${item.id}">
-                        <div class="flex-shrink-0 mr-4">
-                            <div class="w-32 h-32 bg-gray-100 border border-gray-200 rounded-lg flex items-center justify-center overflow-hidden shadow-sm">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center border-b pb-4 hover:bg-gray-50 p-2 rounded-lg transition duration-200 gap-4" data-cart-id="${item.id}">
+                        <div class="flex-shrink-0">
+                            <div class="w-20 h-20 sm:w-32 sm:h-32 bg-gray-100 border border-gray-200 rounded-lg flex items-center justify-center overflow-hidden shadow-sm">
                                 ${item.image_path ? 
                                     `<img src="https://arslan.mjcheezain.com/storage/vendor/products/images/${item.image_path}" alt="${item.product_name}" class="w-full h-full object-cover hover:scale-105 transition duration-300">` : 
                                     '<span class="text-gray-400 text-xs">No Image</span>'
                                 }
                             </div>
                         </div>
-                        <div class="flex-grow self-center">
-                            <h2 class="text-lg font-semibold text-gray-800 hover:text-umart-blue transition duration-200">${item.product_name}</h2>
+                        <div class="flex-grow min-w-0">
+                            <h2 class="text-base sm:text-lg font-semibold text-gray-800 hover:text-umart-blue transition duration-200 truncate">${item.product_name}</h2>
                             <p class="text-sm text-gray-500 mt-1">Price: <span class="font-semibold">$${item.price}</span></p>
                             <div class="flex items-center mt-2">
                                 <div class="flex text-star-yellow text-sm">
@@ -154,21 +154,22 @@
                                 </div>
                                 <span class="text-xs text-gray-500 ml-2">(${item.review_count || 0} Reviews)</span>
                             </div>
-                            
                         </div>
-                        <div class="flex flex-col items-end space-y-2">
-                            <button onclick="removeItemImmediately(${item.id})" class="text-gray-400 hover:text-red-500 transition duration-200 p-1 rounded-full hover:bg-red-50" title="Remove Item">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
+                        <div class="flex flex-row sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto mt-3 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100 gap-4">
                             <div class="flex items-center border border-gray-300 rounded-lg shadow-sm">
-                                <button onclick="updateQuantityImmediately(${item.id}, -1)" class="p-2 text-gray-600 hover:bg-gray-100 hover:text-umart-blue transition duration-200 quantity-decrease-${item.id} ${item.quantity <= 1 ? 'opacity-50 cursor-not-allowed' : ''}">-</button>
-                                <span class="px-4 py-1 border-x border-gray-300 font-medium quantity-display-${item.id}">${item.quantity}</span>
-                                <button onclick="updateQuantityImmediately(${item.id}, 1)" class="p-2 text-gray-600 hover:bg-gray-100 hover:text-umart-blue transition duration-200 quantity-increase-${item.id}">+</button>
+                                <button onclick="updateQuantityImmediately(${item.id}, -1)" class="p-1.5 px-2.5 text-gray-600 hover:bg-gray-100 hover:text-umart-blue transition duration-200 quantity-decrease-${item.id} ${item.quantity <= 1 ? 'opacity-50 cursor-not-allowed' : ''}">-</button>
+                                <span class="px-3 py-1 border-x border-gray-300 font-medium quantity-display-${item.id}">${item.quantity}</span>
+                                <button onclick="updateQuantityImmediately(${item.id}, 1)" class="p-1.5 px-2.5 text-gray-600 hover:bg-gray-100 hover:text-umart-blue transition duration-200 quantity-increase-${item.id}">+</button>
                             </div>
-                            <div class="mt-2 text-xl font-bold text-gray-900 item-total-${item.id}">
-                                $${itemTotal}
+                            <div class="flex items-center gap-4">
+                                <div class="text-lg sm:text-xl font-bold text-gray-900 item-total-${item.id}">
+                                    $${itemTotal}
+                                </div>
+                                <button onclick="removeItemImmediately(${item.id})" class="text-gray-400 hover:text-red-500 transition duration-200 p-1.5 rounded-full hover:bg-red-50" title="Remove Item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                     </div>

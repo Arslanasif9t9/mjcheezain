@@ -9,7 +9,6 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="./CDN tailwind.js"></script>
     <!-- font-awesome  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google font  -->
@@ -18,9 +17,6 @@
     <link
         href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
         rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="./CDN tailwind.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Internal CSS */
         .sidebar-item.active {
@@ -83,7 +79,7 @@
                 </div>
 
                 <!-- Center - Search bar -->
-                <div class="hidden flex-1 max-w-md mx-4">
+                <div class="hidden md:flex flex-1 max-w-md mx-4">
                     <div class="relative w-full">
                         <input type="text" placeholder="Search..."
                             class="w-full py-2 pl-4 pr-10 text-sm bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">
@@ -94,7 +90,7 @@
                 </div>
 
                 <!-- Right side - Icons and user menu -->
-                <div class="hidden flex items-center space-x-4">
+                <div class="hidden md:flex items-center space-x-4">
                     <!-- Notification dropdown -->
                     <div class="relative">
                         <button id="notification-button"
@@ -151,29 +147,7 @@
                 </div>
             </header>
 
-            <!-- Mobile Sidebar (hidden by default) -->
-            <div id="mobile-sidebar" class="hidden fixed inset-0 z-50 bg-black bg-opacity-50">
-                <div class="fixed inset-y-0 left-0 w-64 bg-white">
-                    <div class="flex items-center justify-between h-16 px-4 bg-blue-600">
-                        <span class="text-white font-bold text-xl">cheezain</span>
-                        <button id="close-sidebar" class="text-white focus:outline-none">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <div class="px-4 py-4">
-                        <nav class="space-y-2">
-                            <a href="./dashboard.php" class="block px-4 py-2 text-sm font-medium text-gray-900 rounded-lg sidebar-item hover:bg-gray-100"><i class="fas fa-tachometer-alt mr-3"></i>Dashboard</a>
-                            <a href="./orders.php" class="block px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100"><i class="fas fa-shopping-bag mr-3"></i>My Orders</a>
-                            <a href="./wishlist.php" class="block px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100 active"><i class="fas fa-heart mr-3"></i>Wishlist</a>
-                            <a href="./addresses.php" class="block px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100"><i class="fas fa-map-marker-alt mr-3"></i>Addresses</a>
-                            <a href="./payments.php" class="block px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100"><i class="fas fa-credit-card mr-3"></i>Payment Methods</a>
-                            <a href="./support.php" class="block px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100"><i class="fas fa-headset mr-3"></i>Support</a>
-                            <a href="./profile.php" class="block px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100"><i class="fas fa-user-cog mr-3"></i>Profile Settings</a>
-                            <a href="#" class="block px-4 py-2 text-sm font-medium text-red-600 rounded-lg sidebar-item hover:bg-red-50"><i class="fas fa-sign-out-alt mr-3"></i>Logout</a>
-                        </nav>
-                    </div>
-                </div>
-            </div>
+
             
             <!-- Main Content Area -->
             <main class="flex-1 overflow-y-auto p-6">
@@ -254,19 +228,6 @@
     
     <!-- Internal JavaScript -->
     <script>
-        // Mobile sidebar toggle
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileSidebar = document.getElementById('mobile-sidebar');
-            const closeSidebar = document.getElementById('close-sidebar');
-            
-            document.querySelector('header button').addEventListener('click', function() {
-                mobileSidebar.classList.remove('hidden');
-            });
-            
-            closeSidebar.addEventListener('click', function() {
-                mobileSidebar.classList.add('hidden');
-            });
-        });
         
         // Remove item from wishlist
         function removeFromWishlist(button, productId) {
@@ -416,7 +377,7 @@
                                     <img src="https://arslan.mjcheezain.com/storage/vendor/products/images/${product.image_path || './uploads/default_img.png'}" alt="${product.name}" class="w-32 h-32 rounded-lg object-cover">
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <div class="flex justify-between">
+                                    <div class="flex flex-col sm:flex-row sm:justify-between gap-2">
                                         <div>
                                             <h3 class="text-lg font-medium text-gray-900 mb-1">${product.name}</h3>
                                             <p class="text-sm text-gray-500 mb-2">${product.category} • ${product.brand}</p>
@@ -424,34 +385,31 @@
                                                 <div class="flex text-yellow-400">
                                                     ${getStars(product.rating || 0)}
                                                 </div>
-                                                <!-- <span class="text-xs text-gray-500 ml-1">(${Math.floor(Math.random() * 200) + 50} reviews)</span> -->
                                             </div>
                                         </div>
-                                        <div class="flex flex-col items-end">
-                                            <div class="flex items-center">
-                                                <span class="text-xl font-bold text-gray-900"><small class="font-normal"><del>$${product.selling_price}</del></small> $${product.mrp}</span>
-                                                <span class="ml-2 text-sm ${
-                                                    product.quantity > 10 ? 'text-green-600 bg-green-100' : 
-                                                    product.quantity > 0 ? 'text-yellow-600 bg-yellow-100' : 
-                                                    'text-red-600 bg-red-100'
-                                                } px-2 py-1 rounded-full">
-                                                    ${
-                                                        product.quantity > 10 ? 'In Stock' : 
-                                                        product.quantity > 0 ? 'Limited Stock' : 
-                                                        'Out of Stock'
-                                                    }
-                                                </span>
-                                            </div>
+                                        <div class="flex flex-row sm:flex-col items-center sm:items-end gap-2 mt-2 sm:mt-0">
+                                            <span class="text-xl font-bold text-gray-900"><small class="font-normal"><del>$${product.selling_price}</del></small> $${product.mrp}</span>
+                                            <span class="text-sm ${
+                                                product.quantity > 10 ? 'text-green-600 bg-green-100' : 
+                                                product.quantity > 0 ? 'text-yellow-600 bg-yellow-100' : 
+                                                'text-red-600 bg-red-100'
+                                            } px-2 py-1 rounded-full">
+                                                ${
+                                                    product.quantity > 10 ? 'In Stock' : 
+                                                    product.quantity > 0 ? 'Limited Stock' : 
+                                                    'Out of Stock'
+                                                }
+                                            </span>
                                         </div>
                                     </div>
-                                    <div class="flex flex-wrap items-center justify-between mt-4">
-                                        <div class="flex items-center space-x-3">
-                                            <a href="/product/${product.id}" target="_blank" class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">
+                                    <div class="flex items-center justify-between mt-4 gap-4">
+                                        <a href="/product/${product.id}" target="_blank" class="flex-1 sm:flex-none">
+                                            <button class="w-full sm:w-auto px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none text-center">
                                                 <i class="fas fa-eye mr-2"></i>View Details
-                                            </a>
-                                        </div>
+                                            </button>
+                                        </a>
                                         <!-- Heart Icon -->
-                                        <button id="heart-btn" onclick="favToggle(${product.id})" data-product-id="${product.id}" class="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition">
+                                        <button id="heart-btn" onclick="favToggle(${product.id})" data-product-id="${product.id}" class="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition flex-shrink-0">
                                             <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
                                                 stroke="currentColor" stroke-width="2" class="w-6 h-6 text-red-500">
                                                 <path stroke-linecap="round" stroke-linejoin="round"

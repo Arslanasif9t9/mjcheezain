@@ -61,11 +61,8 @@
         <!-- Main Content -->
         <div class="flex flex-col flex-1 overflow-hidden">
             <!-- Top Navigation -->
-            <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
+            <header class="flex items-center justify-between pl-16 pr-6 py-4 bg-white border-b border-gray-200 md:pl-6">
                 <div class="flex items-center">
-                    <button class="md:hidden mr-4 text-gray-500 focus:outline-none" onclick="toggleSidebar()">
-                        <i class="fas fa-bars"></i>
-                    </button>
                     <h1 class="text-xl font-semibold text-gray-800">Notifications</h1>
                 </div>
                 

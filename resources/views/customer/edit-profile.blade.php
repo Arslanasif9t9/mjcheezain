@@ -8,7 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="./CDN tailwind.js"></script>
     <!-- font-awesome  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google font  -->
@@ -17,9 +16,6 @@
     <link
         href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
         rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="./CDN tailwind.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Internal CSS */
         .sidebar-item.active {
@@ -79,7 +75,21 @@
         <x-customer.sidebar :basic_info="$basic_info"/>
         
         <!-- Main Content Area -->
-        <main class="flex-1 overflow-y-auto p-6">
+        <div class="flex flex-col flex-1 overflow-hidden">
+            <!-- Top Navigation -->
+            <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
+                <!-- Left side - Mobile menu and title -->
+                <div class="flex items-center">
+                    <button class="md:hidden mr-4 text-gray-500 focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="text-xl font-semibold text-gray-800">Profile Settings</h1>
+                </div>
+            </header>
+
+
+
+            <main class="flex-1 overflow-y-auto p-4 md:p-6">
             
             <!-- Profile Settings Tabs -->
             {{-- <div class="border-b border-gray-200 mb-6">
@@ -400,6 +410,7 @@
                 <?php endif; ?> --}}
             </div>
         </main>
+        </div>
     </div>
     
     <!-- Delete Account Modal -->
@@ -448,67 +459,66 @@
 
 
     
-    <!-- Internal JavaScript -->
     <script>
-        // Mobile sidebar toggle
         document.addEventListener('DOMContentLoaded', function() {
-            // const mobileSidebar = document.getElementById('mobile-sidebar');
-            // const closeSidebar = document.getElementById('close-sidebar');
-            
-            // document.querySelector('header button').addEventListener('click', function() {
-            //     mobileSidebar.classList.remove('hidden');
-            // });
-            // console.log("-------------------------------");
-            // console.log(document.getElementById('profile-upload'));
-            // console.log("-------------------------------");
-            
-            // closeSidebar.addEventListener('click', function() {
-            //     mobileSidebar.classList.add('hidden');
-            // });
             
             // Profile picture upload
-            document.getElementById('profile-upload').addEventListener('change', function(e) {
-                if (e.target.files && e.target.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        document.getElementById('profile-preview').src = event.target.result;
-                    };
-                    reader.readAsDataURL(e.target.files[0]);
-                }
-            });
+            const profileUpload = document.getElementById('profile-upload');
+            if (profileUpload) {
+                profileUpload.addEventListener('change', function(e) {
+                    if (e.target.files && e.target.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            const preview = document.getElementById('profile-preview');
+                            if (preview) {
+                                preview.src = event.target.result;
+                            }
+                        };
+                        reader.readAsDataURL(e.target.files[0]);
+                    }
+                });
+            }
             
             // Toggle password visibility
             document.querySelectorAll('[type="password"] + button').forEach(button => {
                 button.addEventListener('click', function() {
                     const input = this.previousElementSibling;
                     const icon = this.querySelector('i');
-                    if (input.type === 'password') {
-                        input.type = 'text';
-                        icon.classList.remove('fa-eye');
-                        icon.classList.add('fa-eye-slash');
-                    } else {
-                        input.type = 'password';
-                        icon.classList.remove('fa-eye-slash');
-                        icon.classList.add('fa-eye');
+                    if (input && icon) {
+                        if (input.type === 'password') {
+                            input.type = 'text';
+                            icon.classList.remove('fa-eye');
+                            icon.classList.add('fa-eye-slash');
+                        } else {
+                            input.type = 'password';
+                            icon.classList.remove('fa-eye-slash');
+                            icon.classList.add('fa-eye');
+                        }
                     }
                 });
             });
             
             // Form submissions
-            document.getElementById('profile-form').addEventListener('submit', function(e) {
-                // e.preventDefault();
-                showNotification('Profile updated successfully', 'success');
-            });
+            const profileForm = document.getElementById('profile-form');
+            if (profileForm) {
+                profileForm.addEventListener('submit', function(e) {
+                    showNotification('Profile updated successfully', 'success');
+                });
+            }
             
-            document.getElementById('security-form').addEventListener('submit', function(e) {
-                // e.preventDefault();
-                showNotification('Password updated successfully', 'success');
-            });
+            const securityForm = document.getElementById('security-form');
+            if (securityForm) {
+                securityForm.addEventListener('submit', function(e) {
+                    showNotification('Password updated successfully', 'success');
+                });
+            }
             
-            document.getElementById('notifications-form').addEventListener('submit', function(e) {
-                // e.preventDefault();
-                showNotification('Notification preferences saved', 'success');
-            });
+            const notificationsForm = document.getElementById('notifications-form');
+            if (notificationsForm) {
+                notificationsForm.addEventListener('submit', function(e) {
+                    showNotification('Notification preferences saved', 'success');
+                });
+            }
         });
         
         // Account deletion functions

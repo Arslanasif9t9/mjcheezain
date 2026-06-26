@@ -833,7 +833,7 @@
                 </div>
             </div>
 
-            <div class="max-w-7xl mx-auto p-6 text-gray-800 grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="max-w-7xl mx-auto p-4 sm:p-6 text-gray-800 grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="lg:col-span-2">
                     <h1 class="text-3xl font-bold mb-2 text-gray-900">
                         {{ isset($product) ? 'Edit Product' : 'Add New Product' }}
@@ -1242,7 +1242,7 @@
 
                 <!-- Right Column: Preview Box -->
                 <div class="lg:col-span-1">
-                    <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 fixed top-6 max-h-[calc(100vh-4rem)] overflow-y-auto preview-box">
+                    <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-4 sm:p-6 lg:sticky lg:top-6 max-h-[calc(100vh-4rem)] overflow-y-auto preview-box w-full">
                         <h2 class="text-xl font-bold text-gray-800 mb-4 pb-3 border-b border-gray-100 text-center flex items-center justify-center">
                             <i class="fas fa-eye text-blue-500 mr-2"></i> Live Preview
                         </h2>

@@ -67,9 +67,9 @@
         />
         
         <!-- Main Content -->
-        <div class="flex-1 ml-0 lg:ml72 p-4 lg:p-8 transition-all duration-300">
+        <div class="flex-1 p-4 lg:p-8 transition-all duration-300 min-w-0">
             <!-- Page Header -->
-            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 pb-6 border-b border-gray-200">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 pb-6 border-b border-gray-200 pl-12 md:pl-0">
                 <div class="mb-4 lg:mb-0">
                     <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 flex items-center">
                         <i class="fas fa-chart-line text-primary-500 mr-3"></i>
@@ -202,7 +202,7 @@
                     </div>
                     
                     <div class="overflow-x-auto">
-                        <table class="w-full">
+                        <table class="w-full min-w-[800px]">
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="py-4 px-6 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date & Time</th>
@@ -325,7 +325,7 @@
                     </div>
                     
                     <div class="overflow-x-auto">
-                        <table class="w-full">
+                        <table class="w-full min-w-[800px]">
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="py-4 px-6 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Request Date</th>

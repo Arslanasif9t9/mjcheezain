@@ -3,10 +3,10 @@
 @endphp
 
 <!-- Main Section Container (Targeted by JS and initially hidden) -->
-    <section id="{{ $id }}-products-section" class="py-16 px-4 sm:px-6 lg:px-8 max-w-full mx-auto hidden">
+    <section id="{{ $id }}-products-section" class="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-full mx-auto">
         
         <!-- Category Title (Acts as the component header) -->
-        <h2 id="{{ $id}}-title" class="{{$related == true ? 'hidden' : ''}} text-3xl font-bold text-gray-900 mb-8 sm:text-left">
+        <h2 id="{{ $id}}-title" class="{{$related == true ? 'hidden' : ''}} text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8 sm:text-left text-center">
             <!-- Title injected by JS -->
         </h2>
         

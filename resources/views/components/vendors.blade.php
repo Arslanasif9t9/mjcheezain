@@ -174,42 +174,42 @@
                 
                 // HTML for a single vendor card
                 card.innerHTML = `
-                    <div class="relative  overflow-hidden">
+                    <div class="relative h-32 sm:h-40 md:h-48 overflow-hidden bg-gray-50">
                         <img src="${vendor.image_url}" alt="${vendor.name} store front" 
                              class="w-full h-full object-cover transition duration-500 ease-in-out group-hover:scale-105 brightness-90">
                         ${vendor.is_verified ? `
                             <!-- Verified Badge -->
-                            <span class="absolute top-3 right-3 px-3 py-1 text-xs font-semibold rounded-full bg-yellow-400 text-gray-900 shadow-md">
+                            <span class="absolute top-2.5 right-2.5 px-2 py-0.5 text-[10px] sm:text-xs font-semibold rounded-full bg-yellow-400 text-gray-900 shadow-sm">
                                 Verified
                             </span>
                         ` : ''}
                     </div>
 
-                    <div class="p-4">
-                        <h3 class="text-xl font-bold text-gray-900 truncate mb-1">${vendor.name}</h3>
-                        <p class="text-sm text-gray-600 mb-3 truncate">${vendor.tagline}</p>
+                    <div class="p-3 sm:p-4">
+                        <h3 class="text-sm sm:text-lg md:text-xl font-bold text-gray-900 truncate mb-0.5">${vendor.name}</h3>
+                        <p class="text-[11px] sm:text-sm text-gray-500 mb-2 truncate">${vendor.tagline}</p>
                         
                         <!-- Location -->
-                        <div class="flex items-center text-sm text-gray-500">
-                            <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.485L12 21.485l-5.657-5.002C3.343 13.485 2 11.235 2 9c0-5.523 4.477-10 10-10s10 4.477 10 10c0 2.235-1.343 4.485-3.343 6.485z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 9a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                            <span>${vendor.location}</span>
+                        <div class="flex items-center text-xs sm:text-sm text-gray-400">
+                            <svg class="w-3.5 h-3.5 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.485L12 21.485l-5.657-5.002C3.343 13.485 2 11.235 2 9c0-5.523 4.477-10 10-10s10 4.477 10 10c0 2.235-1.343 4.485-3.343 6.485z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 9a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            <span class="truncate">${vendor.location}</span>
                         </div>
 
                         <!-- Stats -->
-                        <div class="flex justify-between items-center text-sm text-gray-600 border-t border-gray-100 mt-1">
+                        <div class="flex justify-between items-center text-xs sm:text-sm text-gray-500 border-t border-gray-100 pt-2 mt-2">
                             <div class="flex items-center">
-                                <span class="text-yellow-500 text-lg mr-1">★</span>
+                                <span class="text-yellow-500 text-base mr-0.5">★</span>
                                 <span class="font-semibold">${vendor.rating}</span>
                             </div>
-                            <div class="text-xs text-gray-400">
+                            <div class="text-[10px] sm:text-xs text-gray-400">
                                 ${vendor.product_count} products
                             </div>
                         </div>
                     </div>
 
                     <!-- Button at the bottom -->
-                    <div class="pl-4 pr-4 pb-4 pt-0">
-                         <a href="#" class="block w-full text-center py-2 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-700 transition duration-300">
+                    <div class="px-3 pb-3 sm:px-4 sm:pb-4">
+                         <a href="#" class="block w-full text-center py-1.5 sm:py-2 bg-gray-900 text-white text-xs sm:text-sm font-semibold rounded-lg hover:bg-gray-800 transition duration-200">
                             Visit Store
                         </a>
                     </div>

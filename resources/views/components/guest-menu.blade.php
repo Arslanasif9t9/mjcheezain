@@ -1,101 +1,81 @@
 <!-- 🔹 START: Header Buttons -->
-<div class="text-right flex self-end bg-gray-400 text-white rounded-[5px] my-1 px-2 py-1 ml-auto">
+<div class="flex items-center ml-auto">
 
     <!-- 🔸 SIGN UP DROPDOWN -->
     <div class="relative group">
         <button 
-            class="text-white px-3 py-2 text-sm font-medium flex items-center"
-            onmouseover="showDropdown(this)"
-            onmouseout="hideDropdown(this)"
+            class="text-gray-600 hover:text-blue-600 px-2 sm:px-3 py-2 text-xs sm:text-sm font-semibold transition duration-150 flex items-center focus:outline-none"
+            onclick="toggleDropdownMenu(this, event)"
         >
-            <span class="hover-text">Sign Up &nbsp; <i class="fa fa-caret-down"></i></span>
+            <span class="hover-text flex items-center">Sign Up <i class="fa fa-caret-down ml-1 text-[10px]"></i></span>
         </button>
 
         <div 
-            class="absolute w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden"
+            class="absolute right-0 mt-1 w-44 bg-white border border-gray-100 rounded-lg shadow-xl py-1 z-50 hidden group-hover:block"
             style="z-index: 100;"
-            onmouseover="keepDropdown(this, true)"
-            onmouseout="keepDropdown(this, false)"
         >
             <a href="/login-user?type=customer-signup&page={{ request()->path() }}" 
-               class="login-btn block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 text-left"
+               class="block px-4 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 text-left transition duration-150"
                onclick="userType('customer', 'sign')">Customer Sign Up</a>
 
             <a href="/login-user?type=vendor-signup&page={{ request()->path() }}" 
-               class="login-btn block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 text-left"
+               class="block px-4 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 text-left transition duration-150"
                onclick="userType('vendor', 'sign')">Vendor Sign Up</a>
         </div>
     </div>
 
-    <div class="text-gray-500 mx-1">|</div>
+    <div class="text-gray-300 mx-1 select-none">|</div>
 
     <!-- 🔸 LOGIN DROPDOWN -->
     <div class="relative group">
         <button 
-            class="text-white px-3 py-2 text-sm font-medium flex items-center"
-            onmouseover="showDropdown(this)"
-            onmouseout="hideDropdown(this)"
+            class="text-gray-600 hover:text-blue-600 px-2 sm:px-3 py-2 text-xs sm:text-sm font-semibold transition duration-150 flex items-center focus:outline-none"
+            onclick="toggleDropdownMenu(this, event)"
         >
-            <span class="hover-text">Login &nbsp; <i class="fa fa-caret-down"></i></span>
+            <span class="hover-text flex items-center">Login <i class="fa fa-caret-down ml-1 text-[10px]"></i></span>
         </button>
 
         <div 
-            class="absolute w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden"
+            class="absolute right-0 mt-1 w-44 bg-white border border-gray-100 rounded-lg shadow-xl py-1 z-50 hidden group-hover:block"
             style="z-index: 100;"
-            onmouseover="keepDropdown(this, true)"
-            onmouseout="keepDropdown(this, false)"
         >
             <a href="/login-user?type=customer-login&page={{ request()->path() }}" 
-               class="login-btn block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 text-left" onclick="userType('customer', 'log')">Customer Login</a>
+               class="block px-4 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 text-left transition duration-150" onclick="userType('customer', 'log')">Customer Login</a>
 
             <a href="/login-user?type=vendor-login&page={{ request()->path() }}" 
-               class="login-btn block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 text-left" onclick="userType('vendor', 'log')">Vendor Login</a>
+               class="block px-4 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 text-left transition duration-150" onclick="userType('vendor', 'log')">Vendor Login</a>
         </div>
     </div>
 </div>
 
 <!-- 🔹 END: Header Buttons -->
 
-
-<!-- Login/Signup Modal -->
-{{-- <div class="hidde"> --}}
-    {{-- <x-auth-modal /> --}}
-{{-- </div> --}}
-
 <!-- ✅ SCRIPT SECTION -->
 <script>
-    // Show dropdown on hover
-    function showDropdown(button) {
-        const text = button.querySelector('.hover-text');
+    // Toggle dropdown on click / touch tap
+    function toggleDropdownMenu(button, event) {
+        event.stopPropagation();
         const dropdown = button.nextElementSibling;
-        if (text) text.style.color = 'blue';
-        if (dropdown) dropdown.classList.remove('hidden');
-    }
-
-    // Hide dropdown when leaving button (if not hovering dropdown)
-    function hideDropdown(button) {
-        const text = button.querySelector('.hover-text');
-        const dropdown = button.nextElementSibling;
-        if (text) text.style.color = 'white';
-        if (dropdown) {
-            setTimeout(() => {
-                if (!dropdown.matches(':hover') && !button.matches(':hover')) {
-                    dropdown.classList.add('hidden');
-                }
-            }, 150);
-        }
-    }
-
-    // Keep dropdown open while hovering over it
-    function keepDropdown(dropdown, hovering) {
-        if (!hovering) {
-            setTimeout(() => {
-                if (!dropdown.previousElementSibling.matches(':hover') && !dropdown.matches(':hover')) {
-                    dropdown.classList.add('hidden');
-                }
-            }, 150);
-        } else {
+        const isHidden = dropdown.classList.contains('hidden');
+        
+        // Close all other dropdowns
+        document.querySelectorAll('.group .absolute').forEach(drop => {
+            if (drop !== dropdown) {
+                drop.classList.add('hidden');
+            }
+        });
+        
+        if (isHidden) {
             dropdown.classList.remove('hidden');
+        } else {
+            dropdown.classList.add('hidden');
         }
     }
+
+    // Close dropdowns on outside click
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.group .absolute').forEach(drop => {
+            drop.classList.add('hidden');
+        });
+    });
 </script>

@@ -85,18 +85,6 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-    {{-- @if(session('error'))
-        <x-alert type="error" message="{{ session('error') }}" />
-    @endif
-
-    @if(session('loginError'))
-        <x-alert type="error" message="{{ session('loginError') }}" />
-    @endif
-
-    @if(session('success'))
-        <x-alert type="success" message="{{ session('success') }}" />
-    @endif --}}
-`
     <x-header :user="$user ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
 
     <main id="main">

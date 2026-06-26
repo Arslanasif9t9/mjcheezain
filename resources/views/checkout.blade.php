@@ -126,7 +126,7 @@
                                             <input type="tel" name="phone" placeholder="Phone Number" class="w-full border border-gray-300 rounded px-3 py-2 text-sm">
                                             <textarea name="address_line1" placeholder="Address Line 1" rows="2" class="w-full border border-gray-300 rounded px-3 py-2 text-sm"></textarea>
                                             <input type="text" name="address_line2" placeholder="Address Line 2 (Optional)" class="w-full border border-gray-300 rounded px-3 py-2 text-sm">
-                                            <div class="grid grid-cols-4 gap-3">
+                                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                                                 <input type="text" name="city" placeholder="City" class="border border-gray-300 rounded px-3 py-2 text-sm">
                                                 <input type="text" name="state" placeholder="State" class="border border-gray-300 rounded px-3 py-2 text-sm">
                                                 <input type="text" name="zip_code" placeholder="Zip Code" class="border border-gray-300 rounded px-3 py-2 text-sm">
@@ -370,12 +370,12 @@
                         </div>
 
                         <!-- Form Actions -->
-                        <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 pt-6 border-t border-gray-200">
-                            <a href="/cart" onclick="" class="text-primary hover:text-blue-700 font-semibold transition-colors duration-300 flex items-center space-x-2">
+                        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 border-t border-gray-200">
+                            <a href="/cart" class="text-primary hover:text-blue-700 font-semibold transition-colors duration-300 flex items-center justify-center sm:justify-start space-x-2 w-full sm:w-auto">
                                 <i class="fas fa-arrow-left"></i>
                                 <span>Return to Cart</span>
                             </a>
-                            <button type="submit" class="bg-primary hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-300 flex items-center space-x-2">
+                            <button type="submit" class="bg-primary hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-300 flex items-center justify-center space-x-2 w-full sm:w-auto">
                                 <i class="fas fa-lock"></i>
                                 <span>Pay Rs. {{ number_format($total, 2) }}</span>
                             </button>

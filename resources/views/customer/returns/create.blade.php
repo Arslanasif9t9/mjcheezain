@@ -14,11 +14,11 @@
     </style>
 </head>
 <body class="bg-gray-50">
-    <div class="container mx-auto p-6 max-w-4xl">
-        <div class="bg-white rounded-2xl shadow-lg p-8">
+    <div class="container mx-auto p-4 sm:p-6 max-w-4xl">
+        <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-8">
             <!-- Header -->
             <div class="mb-8">
-                <div class="flex items-center justify-between mb-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
                     <h1 class="text-2xl font-bold text-gray-800">Return Item Request</h1>
                     <a href="{{ route('customer.orders') }}" class="text-blue-600 hover:text-blue-800">
                         <i class="fas fa-arrow-left mr-2"></i> Back to Orders
@@ -43,14 +43,14 @@
             </div>
 
             <!-- Product Details -->
-            <div class="mb-8 bg-white border border-gray-200 rounded-xl p-6">
+            <div class="mb-8 bg-white border border-gray-200 rounded-xl p-4 sm:p-6">
                 <h2 class="text-lg font-bold text-gray-800 mb-4">Product Details</h2>
-                <div class="flex items-start gap-4">
+                <div class="flex flex-col sm:flex-row items-start gap-4">
                     @if($cart->product_image)
                         <img src="{{ asset('storage/vendor/products/images/' . $cart->product_image) }}" 
-                             class="w-24 h-24 rounded-lg object-cover border border-gray-200">
+                             class="w-24 h-24 rounded-lg object-cover border border-gray-200 w-full sm:w-24">
                     @endif
-                    <div class="flex-1">
+                    <div class="flex-1 w-full">
                         <h3 class="font-bold text-lg text-gray-800">{{ $cart->product_name }}</h3>
                         <div class="grid grid-cols-2 gap-4 mt-3">
                             <div>
@@ -158,7 +158,7 @@
                 </div>
 
                 <!-- Return Policy -->
-                <div class="mb-8 bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+                <div class="mb-8 bg-yellow-50 border border-yellow-200 rounded-xl p-4 sm:p-6">
                     <h3 class="font-bold text-yellow-800 mb-3"><i class="fas fa-exclamation-circle mr-2"></i> Return Policy</h3>
                     <ul class="text-sm text-yellow-700 space-y-2">
                         <li>• Returns must be initiated within 30 days of delivery</li>
@@ -170,18 +170,18 @@
                 </div>
 
                 <!-- Submit Button -->
-                <div class="flex justify-between items-center">
-                    <div class="text-sm text-gray-500">
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div class="text-sm text-gray-500 text-center sm:text-left">
                         <i class="fas fa-info-circle mr-1"></i>
                         By submitting, you agree to our return policy
                     </div>
-                    <div class="flex gap-3">
+                    <div class="flex flex-col-reverse sm:flex-row gap-3 w-full sm:w-auto">
                         <button type="button" onclick="window.history.back()" 
-                                class="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200">
+                                class="w-full sm:w-auto px-6 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 text-center">
                             Cancel
                         </button>
                         <button type="submit" id="submitBtn"
-                                class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 flex items-center">
+                                class="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 flex items-center justify-center">
                             <i class="fas fa-paper-plane mr-2"></i> Submit Return Request
                         </button>
                     </div>

@@ -424,94 +424,94 @@
         />
 
         <!-- Main Content -->
-        <main class="flex-1 p-6">
+        <main class="flex-1 p-4 sm:p-6 pt-16 sm:pt-6 overflow-y-auto">
             <!-- Header -->
-            <div class="flex justify-between items-center mb-8">
+            <div class="flex flex-col lg:flex-row justify-between items-stretch lg:items-center mb-8 gap-4">
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-800">Return Requests</h1>
-                    <p class="text-gray-600 mt-2">Manage and track all return requests for your products</p>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-800 tracking-tight">Return Requests</h1>
+                    <p class="text-sm text-gray-550 mt-1">Manage and track all return requests for your products</p>
                 </div>
                 
-                <div class="relative w-1/3">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-gray-400"></i>
+                <div class="relative w-full lg:w-1/3">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-3 text-gray-400"></i>
                     <input id="searchInput" type="text" placeholder="Search returns..." 
-                           class="border border-gray-300 px-12 py-3 rounded-xl w-full focus:outline-none focus:ring-3 focus:ring-orange-500/30 focus:border-orange-500 bg-white shadow-sm">
-                    <button class="absolute right-3 top-2.5 bg-orange-600 text-white p-2 rounded-lg hover:bg-orange-700 transition">
+                           class="border border-gray-300 pl-11 pr-12 py-2.5 rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-orange-500/25 focus:border-orange-550 bg-white shadow-sm text-sm">
+                    <button class="absolute right-2 top-1.5 bg-orange-600 text-white px-3 py-1.5 rounded-lg hover:bg-orange-700 transition text-sm">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
             </div>
 
             <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                <div class="stat-card bg-white p-5 rounded-xl border-l-4 border-orange-500 card">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+                <div class="stat-card bg-white p-4 rounded-xl border-l-4 border-orange-500 shadow-sm hover:shadow transition-shadow card">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-500 text-sm mb-1">Total Requests</p>
-                            <p class="text-2xl font-bold text-gray-800">{{ $stats['total'] }}</p>
+                            <p class="text-gray-500 text-xs mb-1">Total Requests</p>
+                            <p class="text-xl font-bold text-gray-800">{{ $stats['total'] }}</p>
                         </div>
-                        <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-undo text-orange-600 text-xl"></i>
+                        <div class="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-undo text-orange-600 text-sm"></i>
                         </div>
                     </div>
                 </div>
                 
-                <div class="stat-card bg-white p-5 rounded-xl border-l-4 border-yellow-500 card">
+                <div class="stat-card bg-white p-4 rounded-xl border-l-4 border-yellow-500 shadow-sm hover:shadow transition-shadow card">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-500 text-sm mb-1">Pending</p>
-                            <p class="text-2xl font-bold text-gray-800">{{ $stats['pending'] }}</p>
+                            <p class="text-gray-500 text-xs mb-1">Pending</p>
+                            <p class="text-xl font-bold text-gray-800">{{ $stats['pending'] }}</p>
                         </div>
-                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-clock text-yellow-600 text-xl"></i>
+                        <div class="w-10 h-10 bg-yellow-50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-clock text-yellow-650 text-sm"></i>
                         </div>
                     </div>
                 </div>
                 
-                <div class="stat-card bg-white p-5 rounded-xl border-l-4 border-green-500 card">
+                <div class="stat-card bg-white p-4 rounded-xl border-l-4 border-green-500 shadow-sm hover:shadow transition-shadow card">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-500 text-sm mb-1">Approved</p>
-                            <p class="text-2xl font-bold text-gray-800">{{ $stats['approved'] }}</p>
+                            <p class="text-gray-500 text-xs mb-1">Approved</p>
+                            <p class="text-xl font-bold text-gray-800">{{ $stats['approved'] }}</p>
                         </div>
-                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                        <div class="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-check-circle text-green-650 text-sm"></i>
                         </div>
                     </div>
                 </div>
                 
-                <div class="stat-card bg-white p-5 rounded-xl border-l-4 border-blue-500 card">
+                <div class="stat-card bg-white p-4 rounded-xl border-l-4 border-blue-500 shadow-sm hover:shadow transition-shadow card">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-500 text-sm mb-1">Processing</p>
-                            <p class="text-2xl font-bold text-gray-800">{{ $stats['processing'] }}</p>
+                            <p class="text-gray-500 text-xs mb-1">Processing</p>
+                            <p class="text-xl font-bold text-gray-800">{{ $stats['processing'] }}</p>
                         </div>
-                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-cog text-blue-600 text-xl"></i>
+                        <div class="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-cog text-blue-650 text-sm"></i>
                         </div>
                     </div>
                 </div>
                 
-                <div class="stat-card bg-white p-5 rounded-xl border-l-4 border-teal-500 card">
+                <div class="stat-card bg-white p-4 rounded-xl border-l-4 border-teal-500 shadow-sm hover:shadow transition-shadow card">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-500 text-sm mb-1">Refunded</p>
-                            <p class="text-2xl font-bold text-gray-800">{{ $stats['refunded'] }}</p>
+                            <p class="text-gray-500 text-xs mb-1">Refunded</p>
+                            <p class="text-xl font-bold text-gray-800">{{ $stats['refunded'] }}</p>
                         </div>
-                        <div class="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-money-bill-wave text-teal-600 text-xl"></i>
+                        <div class="w-10 h-10 bg-teal-50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-money-bill-wave text-teal-650 text-sm"></i>
                         </div>
                     </div>
                 </div>
                 
-                <div class="stat-card bg-white p-5 rounded-xl border-l-4 border-red-500 card">
+                <div class="stat-card bg-white p-4 rounded-xl border-l-4 border-red-500 shadow-sm hover:shadow transition-shadow card">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-500 text-sm mb-1">Rejected</p>
-                            <p class="text-2xl font-bold text-gray-800">{{ $stats['rejected'] }}</p>
+                            <p class="text-gray-500 text-xs mb-1">Rejected</p>
+                            <p class="text-xl font-bold text-gray-800">{{ $stats['rejected'] }}</p>
                         </div>
-                        <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-times-circle text-red-600 text-xl"></i>
+                        <div class="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-times-circle text-red-650 text-sm"></i>
                         </div>
                     </div>
                 </div>
@@ -550,9 +550,9 @@
             </div>
 
             <!-- Returns Table -->
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full">
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+                <div class="overflow-x-auto w-full">
+                    <table class="min-w-[1100px] w-full text-left">
                         <thead class="table-header">
                             <tr>
                                 <th class="text-left">Return ID</th>

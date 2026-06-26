@@ -34,22 +34,22 @@
     </style>
 </head>
 <body class="bg-gray-50">
-    <div class="container mx-auto p-6 max-w-6xl">
+    <div class="container mx-auto p-4 sm:p-6 max-w-6xl">
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
             <!-- Header -->
-            <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-white">
-                <div class="flex justify-between items-start">
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-4 sm:p-8 text-white">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                         <h1 class="text-2xl font-bold mb-2">Track Return Request</h1>
                         <p class="opacity-90">Return ID: RET-{{ str_pad($return->id, 6, '0', STR_PAD_LEFT) }}</p>
                     </div>
-                    <a href="{{ route('customer.returns.index') }}" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg">
+                    <a href="{{ route('customer.returns.index') }}" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg w-full sm:w-auto text-center">
                         <i class="fas fa-arrow-left mr-2"></i> Back to Returns
                     </a>
                 </div>
             </div>
 
-            <div class="p-8">
+            <div class="p-4 sm:p-8">
                 <!-- Status Summary -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <div class="bg-blue-50 rounded-xl p-5">
@@ -155,25 +155,25 @@
 
                 <!-- Action Buttons -->
                 @if($return->status === 'pending')
-                <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+                <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 sm:p-6">
                     <h3 class="font-bold text-yellow-800 mb-3"><i class="fas fa-exclamation-circle mr-2"></i> Action Required</h3>
                     <p class="text-yellow-700 mb-4">Your return request is pending vendor approval. You can cancel it if needed.</p>
                     <button onclick="cancelReturn({{ $return->id }})" 
-                            class="px-5 py-2.5 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700">
+                            class="w-full sm:w-auto px-5 py-2.5 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 text-center justify-center flex items-center">
                         <i class="fas fa-times mr-2"></i> Cancel Return Request
                     </button>
                 </div>
                 @endif
 
                 <!-- Support Section -->
-                <div class="mt-8 bg-gray-50 rounded-xl p-6">
+                <div class="mt-8 bg-gray-50 rounded-xl p-4 sm:p-6">
                     <h3 class="font-bold text-gray-800 mb-3"><i class="fas fa-headset mr-2"></i> Need Help?</h3>
                     <p class="text-gray-600 mb-4">If you have questions about your return, contact our support team.</p>
-                    <div class="flex gap-3">
-                        <button class="px-5 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700">
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button class="w-full sm:w-auto px-5 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 text-center justify-center flex items-center">
                             <i class="fas fa-comment-dots mr-2"></i> Chat Support
                         </button>
-                        <button class="px-5 py-2.5 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300">
+                        <button class="w-full sm:w-auto px-5 py-2.5 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 text-center justify-center flex items-center">
                             <i class="fas fa-phone mr-2"></i> Call Support
                         </button>
                     </div>

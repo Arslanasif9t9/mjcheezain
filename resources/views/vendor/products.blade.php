@@ -39,7 +39,7 @@
         />
     
     <!-- Main Content -->
-    <main class="flex-1 p-6">
+    <main class="flex-1 p-4 sm:p-6 pt-16 sm:pt-6">
         <!-- Products Header Component -->
         <x-vendor.products-header 
             :completionPercentage="$completion_percentage"

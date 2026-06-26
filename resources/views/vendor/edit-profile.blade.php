@@ -123,7 +123,7 @@
 
         <!-- Main Content -->
         <main class="bg-gray-100 flex-1 p-6 overflow-y-auto scrollbar-hide">
-            <div class="container mx-auto p-4 max-w-4xl">
+            <div class="container mx-auto p-4 max-w-4xl pt-16 md:pt-4">
                 
                 <x-vendor.progress-bar />
                 <x-vendor.tab-navigation />

@@ -1,25 +1,34 @@
 // resources/js/search.js
-const input = document.getElementById('search-input');
+const inputs = document.querySelectorAll('#search-input, #search-input-mobile');
 const main = document.getElementById('main');
 const allMain = document.querySelectorAll('main');
 
 let debounceTimer;
 
-input.addEventListener('input', function() {
-    clearTimeout(debounceTimer);
-    
-    const searchTerm = input.value.trim();
-    
-    if (searchTerm.length < 2) {
-        // main.innerHTML = '';
-        return;
-    }
-    
-    debounceTimer = setTimeout(() => {
-        allMain.forEach(main => main.classList.add('hidden'));
-        const main = document.getElementById('main').classList.remove('hidden');
-        searchProducts(searchTerm);
-    }, 300);
+inputs.forEach(input => {
+    input.addEventListener('input', function() {
+        clearTimeout(debounceTimer);
+        
+        const searchTerm = input.value.trim();
+        
+        if (searchTerm.length < 2) {
+            return;
+        }
+
+        // Sync values across desktop and mobile inputs
+        inputs.forEach(otherInput => {
+            if (otherInput !== input) {
+                otherInput.value = searchTerm;
+            }
+        });
+        
+        debounceTimer = setTimeout(() => {
+            allMain.forEach(m => m.classList.add('hidden'));
+            const mainContainer = document.getElementById('main');
+            if (mainContainer) mainContainer.classList.remove('hidden');
+            searchProducts(searchTerm);
+        }, 300);
+    });
 });
 
 async function searchProducts(searchTerm) {

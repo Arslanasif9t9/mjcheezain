@@ -1,10 +1,5 @@
-var image = [];
-
-
-
-        // categories fetch 
+// categories fetch 
         const mockFetchProducts = async (categoryName) => {
-            // console.log("Simulating API fetch for category:", categoryName);
             categoryName = {
                 name: categoryName
             };
@@ -19,76 +14,17 @@ var image = [];
                 });
             response = await response.json();
             
-            // Mock data structure
-            // const allProducts = [
-                //     {
-                    //         "name": "Gourmet Cheese Wheel",
-                    //         "description": "A rich and creamy cheese perfect for any occasion.",
-                    //         "price": "$25.99",
-                    //         "image_url": "https://placehold.co/400x300/e0e0e0/333333?text=Cheese+1"
-            //     },
-            //     {
-            //         "name": "Assorted Cheese Platter",
-            //         "description": "A selection of premium cheeses to delight your palate.",
-            //         "price": "$45.00",
-            //         "image_url": "https://placehold.co/400x300/d0d0d0/333333?text=Cheese+2"
-            //     },
-            //     {
-            //         "name": "Classic Cheddar Block",
-            //         "description": "Perfect for sandwiches and snacking.",
-            //         "price": "$15.49",
-            //         "image_url": "https://placehold.co/400x300/c0c0c0/333333?text=Cheese+3"
-            //     },
-            //     {
-                //         "name": "Creamy Brie Wheel",
-                //         "description": "Soft and smooth, ideal for appetizers.",
-                //         "price": "$18.99",
-                //         "image_url": "https://placehold.co/400x300/b0b0b0/333333?text=Cheese+4"
-                //     },
-                //     {
-                    //         "name": "Blue Cheese Wedge",
-                    //         "description": "Distinctive marbled texture for a bold taste.",
-                    //         "price": "$18.75",
-                    //         "image_url": "https://placehold.co/400x300/a0a0a0/333333?text=Cheese+5"
-            //     },
-            //     {
-            //         "name": "Shredded Mozzarella",
-            //         "description": "Ideal for pizza toppings and melting.",
-            //         "price": "$12.99",
-            //         "image_url": "https://placehold.co/400x300/909090/333333?text=Cheese+6"
-            //     },
-            //     {
-            //         "name": "Smoked Gouda",
-            //         "description": "Rich, nutty flavor with a smoky finish.",
-            //         "price": "$22.50",
-            //         "image_url": "https://placehold.co/400x300/808080/333333?text=Cheese+7"
-            //     },
-            //     {
-            //         "name": "Goat Cheese Logs",
-            //         "description": "Tangy and soft, great for salads.",
-            //         "price": "$14.00",
-            //         "image_url": "https://placehold.co/400x300/707070/333333?text=Cheese+8"
-            //     },
-            //     {
-            //         "name": "Extra Product",
-            //         "description": "Should not be displayed as it exceeds the 8-product limit.",
-            //         "price": "$1.00",
-            //         "image_url": "https://placehold.co/400x300/606060/333333?text=Cheese+9"
-            //     }
-            // ];
+            const allProducts = response.data || [];
+            const imagesMap = response.images || {};
 
-            const allProducts = response.data;
-            image = response.images;
-            // console.log(image);
-
-            // Return a limited array (max 8 products)
+            // Return a limited array (max 8 products) and images map
             return new Promise(resolve => {
                 // Simulate network delay
                 setTimeout(() => {
                     if (allProducts.length < 1) {
-                        resolve([]); // Simulate no products found
+                        resolve({ products: [], images: {} }); // Simulate no products found
                     } else {
-                        resolve(allProducts.slice(0, 8)); // Return up to 8 products
+                        resolve({ products: allProducts.slice(0, 8), images: imagesMap }); // Return up to 8 products
                     }
                 }, 100);
             });
@@ -103,14 +39,14 @@ var image = [];
             // Clear previous content
             grid.innerHTML = '';
             titleElement.textContent = '';
-            section.classList.add('hidden'); // Ensure it's hidden before checking data
 
             try {
-                const products = await mockFetchProducts(categoryName);
+                const { products, images } = await mockFetchProducts(categoryName);
                 
                 if (products.length === 0) {
-                    // 1. If no products are fetched, the section remains hidden
+                    // 1. If no products are fetched, hide the section
                     console.log(`No products found for "${categoryName}". Section hidden.`);
+                    section.classList.add('hidden');
                     return;
                 }
 
@@ -118,51 +54,71 @@ var image = [];
                 titleElement.textContent = categoryName;
                 section.classList.remove('hidden');
 
+                // Check if current hash matches this section
+                if (window.location.hash === `#${id}-products-section`) {
+                    setTimeout(() => {
+                        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 200);
+                }
+
                 // 3. Render Product Cards
                 products.forEach(product => {
-                    let i = 0;
-                    console.log(image[product.id][0].image_path)
+                    const productImages = images[product.id];
+                    const hasImage = productImages && productImages.length > 0 && productImages[0].image_path;
+                    const imgUrl = hasImage 
+                        ? `/storage/vendor/products/images/${productImages[0].image_path}` 
+                        : `/img/default_img.png`;
+
                     const card = document.createElement('div');
                     
                     // Card styling
-                    card.className = 'bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-300';
+                    card.className = 'bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-300 min-w-0 flex flex-col justify-between relative';
                     
                     // Product Card HTML Structure
                     card.innerHTML = `
-                        <a href="/product/${product.id}" class="relative no-underline">
-                            <div class="absolute top-3 right-3 flex space-x-3 z-[9]">
-                                <!-- Heart Icon -->
-                                <button id="heart-btn" data-product-id="26" class="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition">
-                                    <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="w-6 h-6 text-gray-700">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.682l-7.682-7.682a4.5 4.5 0 010-6.364z"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="relative overflow-hidden aspect-w-4 aspect-h-3">
-                                <img src="https://arslan.mjcheezain.com/storage/vendor/products/images/${image[product.id][0].image_path}" alt="${product.name}" 
-                                    class="w-full h-[210px] object-cover transition duration-300 ease-in-out group-hover:scale-125">
+                        <!-- Wishlist Button -->
+                        <div class="absolute top-2.5 right-2.5 z-10">
+                            <button id="heart-btn" data-product-id="${product.id}" class="p-1.5 sm:p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-gray-100 transition active:scale-95" onclick="event.preventDefault(); event.stopPropagation();">
+                                <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="w-4.5 h-4.5 sm:w-5 sm:h-5 text-gray-700">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.682l-7.682-7.682a4.5 4.5 0 010-6.364z"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Product Link -->
+                        <a href="/product/${product.id}" class="no-underline flex flex-col flex-grow">
+                            <!-- Product Image -->
+                            <div class="relative overflow-hidden aspect-w-4 aspect-h-3 bg-gray-50">
+                                <img src="${imgUrl}" alt="${product.name}" 
+                                    class="w-full h-36 sm:h-48 md:h-[210px] object-cover transition duration-500 ease-in-out group-hover:scale-105">
                             </div>
 
-                            <div class="p-4">
-                                <h3 class="text-lg font-bold text-gray-900 mb-1 truncate">${product.name}</h3>
-                                <p class="text-sm text-gray-600 h-10 overflow-hidden">${product.description}</p>
-                                
-                                <div class="flex justify-between items-baseline my-3">
-                                    <span class="text-xl font-extrabold text-gray-900">${(product.selling_price*1.17).toFixed(2)}</span>
-                                    <div class="flex items-center">
-                                    <span class="font-semibold">4.99 </span>
-                                        <span class="text-yellow-500 text-lg mr-1"> ★</span>
-                                    </div>                          
+                            <!-- Product Details -->
+                            <div class="p-3 sm:p-4 flex-grow flex flex-col justify-between">
+                                <div>
+                                    <h3 class="text-xs sm:text-base font-bold text-gray-900 mb-0.5 truncate group-hover:text-blue-600 transition-colors duration-200">${product.name}</h3>
+                                    <p class="text-[11px] sm:text-xs text-gray-500 h-7 sm:h-10 overflow-hidden line-clamp-2 leading-tight mb-2">${product.description}</p>
                                 </div>
-                                <!-- Quick View Button -->
-                                <a href="/product/${product.id}">
-                                    <button class="px-4 py-2 text-sm font-semibold text-white bg-gray-900 rounded-lg w-full 
-                                                    hover:bg-gray-700 transition duration-300 shadow-md">
-                                        Quick View
-                                    </button>
-                                </a>
+                                
+                                <div>
+                                    <!-- Price and Rating -->
+                                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 my-2">
+                                        <span class="text-sm sm:text-base font-extrabold text-gray-900">Rs. ${(product.selling_price*1.17).toFixed(2)}</span>
+                                        <div class="flex items-center text-gray-500">
+                                            <span class="text-[10px] sm:text-xs font-semibold">4.9</span>
+                                            <span class="text-yellow-400 text-xs sm:text-sm ml-0.5">★</span>
+                                        </div>                          
+                                    </div>
+                                </div>
                             </div>
                         </a>
+
+                        <!-- Action Button container (avoid nesting buttons in anchors) -->
+                        <div class="px-3 pb-3 sm:px-4 sm:pb-4">
+                            <button onclick="window.location.href='/product/${product.id}'" class="px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs md:text-sm font-semibold text-white bg-gray-900 rounded-lg w-full hover:bg-gray-800 active:bg-black transition duration-200 shadow-sm">
+                                Quick View
+                            </button>
+                        </div>
                     `;
                     grid.appendChild(card);
                 });
@@ -172,3 +128,28 @@ var image = [];
                 section.classList.add('hidden'); // Hide on error
             }
         };
+
+        // Smooth scroll for internal hash links
+        function initSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href === '#' || !href.startsWith('#')) return;
+                    const targetElement = document.getElementById(href.substring(1));
+                    if (targetElement) {
+                        e.preventDefault();
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                        history.pushState(null, null, href);
+                    }
+                });
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initSmoothScroll);
+        } else {
+            initSmoothScroll();
+        }

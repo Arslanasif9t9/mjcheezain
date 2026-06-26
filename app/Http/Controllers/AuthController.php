@@ -185,14 +185,14 @@ class AuthController extends Controller
                 return response()->json([
                     'success' => true,
                     'type' => 'vendor',
-                    'message' => 'Vendor account created successfully!',
+                    'message' => 'Vendor account logged in successfully!',
                     'redirect' => url('/vendor/dashboard'),
                 ]);
             } else {
                 return response()->json([
                     'success' => true,
                     'type' => 'customer',
-                    'message' => 'Customer account created successfully!',
+                    'message' => 'Customer account logged in successfully!',
                     'redirect' => url('/customer/dashboard'),
                 ]);
             }

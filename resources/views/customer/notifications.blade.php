@@ -57,7 +57,7 @@
             <!-- Top Navigation -->
             <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
                 <div class="flex items-center">
-                    <button class="md:hidden mr-4 text-gray-500 focus:outline-none" onclick="toggleSidebar()">
+                    <button class="md:hidden mr-4 text-gray-500 focus:outline-none">
                         <i class="fas fa-bars"></i>
                     </button>
                     <h1 class="text-xl font-semibold text-gray-800">Notifications</h1>
@@ -163,13 +163,6 @@
     </div>
 
     <script>
-        // Mobile sidebar toggle
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.hidden.md\\:flex');
-            if (sidebar) {
-                sidebar.classList.toggle('hidden');
-            }
-        }
         
         // Mark notification as read when clicked
         document.addEventListener('DOMContentLoaded', function() {

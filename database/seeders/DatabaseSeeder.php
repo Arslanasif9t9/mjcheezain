@@ -3,8 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\VendorBasicInfo;
+use App\Models\CustomerProfile;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +15,42 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // 1. Seed a test Vendor account
+        $vendorUser = User::create([
+            'type' => 'vendor',
+            'full_name' => 'Test Vendor',
+            'username' => 'testvendor',
+            'email' => 'vendor@example.com',
+            'phone' => '1234567890',
+            'password' => Hash::make('password'),
+        ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        VendorBasicInfo::create([
+            'user_id' => $vendorUser->user_id,
+            'full_name' => 'Test Vendor',
+            'store_name' => 'Test Vendor Store',
+            'email' => 'vendor@example.com',
+            'phone' => '1234567890',
+            'profile_visibility' => true,
+        ]);
+
+        // 2. Seed a test Customer account
+        $customerUser = User::create([
+            'type' => 'customer',
+            'full_name' => 'Test Customer',
+            'username' => 'testcustomer',
+            'email' => 'customer@example.com',
+            'phone' => '0987654321',
+            'password' => Hash::make('password'),
+        ]);
+
+        CustomerProfile::create([
+            'user_id' => $customerUser->user_id,
+            'first_name' => 'Test',
+            'last_name' => 'Customer',
+            'email' => 'customer@example.com',
+            'phone' => '0987654321',
         ]);
     }
 }
+

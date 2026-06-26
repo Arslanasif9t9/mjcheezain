@@ -27,13 +27,12 @@
             bottom: 0;
         }
         .product-image-container {
-            min-width: 200px;
-            max-width: 200px;
+            width: 100%;
         }
-        @media (max-width: 768px) {
+        @media (min-width: 768px) {
             .product-image-container {
-                min-width: 120px;
-                max-width: 120px;
+                min-width: 200px;
+                max-width: 200px;
             }
         }
     </style>
@@ -206,13 +205,19 @@
 
     <script>
         // Toggle between grid and list view
-        document.getElementById('grid-view-btn').addEventListener('click', function() {
-            window.location.href = '';
-        });
+        const gridBtn = document.getElementById('grid-view-btn');
+        if (gridBtn) {
+            gridBtn.addEventListener('click', function() {
+                window.location.href = '';
+            });
+        }
 
-        document.getElementById('list-view-btn').addEventListener('click', function() {
-            window.location.href = '';
-        });
+        const listBtn = document.getElementById('list-view-btn');
+        if (listBtn) {
+            listBtn.addEventListener('click', function() {
+                window.location.href = '';
+            });
+        }
 
         // Add to cart functionality
         document.querySelectorAll('[class*="Add to Cart"]').forEach(button => {

@@ -25,7 +25,7 @@ class SalesController extends Controller
 
             foreach ($months as $month) {
                 $count = DB::table('orders')
-                    ->where(DB::raw('DATE_FORMAT(order_date, "%Y-%m")'), $month['month_key'])
+                    ->where('order_date', 'like', $month['month_key'] . '%')
                     ->count();
 
                 $labels[] = $month['month_name'];

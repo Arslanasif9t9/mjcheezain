@@ -1,8 +1,10 @@
 @props(['labels', 'data'])
 
-<div class="col-span-2 bg-white shadow rounded p-4">
-    <div class="font-semibold mb-2">Monthly Orders - Last 6 Months Sales</div>
-    <canvas id="ordersChart"></canvas>
+<div class="md:col-span-2 bg-white shadow-sm rounded-xl p-6 border border-gray-100">
+    <div class="font-bold text-gray-800 mb-4 text-lg">Monthly Orders - Last 6 Months Sales</div>
+    <div class="relative w-full h-[280px]">
+        <canvas id="ordersChart"></canvas>
+    </div>
 </div>
 
 <script>
@@ -22,6 +24,8 @@
                 }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     y: {
                         beginAtZero: true,

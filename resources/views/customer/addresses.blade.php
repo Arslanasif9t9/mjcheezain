@@ -9,7 +9,6 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="./CDN tailwind.js"></script>
     <!-- font-awesome  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google font  -->
@@ -18,9 +17,6 @@
     <link
         href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
         rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="./CDN tailwind.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Internal CSS */
         .sidebar-item.active {
@@ -81,7 +77,7 @@
                 </div>
 
                 <!-- Center - Search bar -->
-                <div class="hidden flex-1 max-w-md mx-4">
+                <div class="hidden md:flex flex-1 max-w-md mx-4">
                     <div class="relative w-full">
                         <input type="text" placeholder="Search..."
                             class="w-full py-2 pl-4 pr-10 text-sm bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">
@@ -92,7 +88,7 @@
                 </div>
 
                 <!-- Right side - Icons and user menu -->
-                <div class="hidden flex items-center space-x-4">
+                <div class="hidden md:flex items-center space-x-4">
                     <!-- Notification dropdown -->
                     <div class="relative">
                         <button id="notification-button"
@@ -149,29 +145,7 @@
                 <script src="../script/notification_dropdown.js"></script>
             </header>
 
-            <!-- Mobile Sidebar (hidden by default) -->
-            <div id="mobile-sidebar" class="hidden fixed inset-0 z-50 bg-black bg-opacity-50">
-                <div class="fixed inset-y-0 left-0 w-64 bg-white">
-                    <div class="flex items-center justify-between h-16 px-4 bg-blue-600">
-                        <span class="text-white font-bold text-xl">cheezain</span>
-                        <button id="close-sidebar" class="text-white focus:outline-none">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <div class="px-4 py-4">
-                        <nav class="space-y-2">
-                            <a href="./dashboard.php" class="block px-4 py-2 text-sm font-medium text-gray-900 rounded-lg sidebar-item hover:bg-gray-100"><i class="fas fa-tachometer-alt mr-3"></i>Dashboard</a>
-                            <a href="./orders.php" class="block px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100"><i class="fas fa-shopping-bag mr-3"></i>My Orders</a>
-                            <a href="./wishlist.php" class="block px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100"><i class="fas fa-heart mr-3"></i>Wishlist</a>
-                            <a href="./addresses.php" class="block px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100 active"><i class="fas fa-map-marker-alt mr-3"></i>Addresses</a>
-                            <a href="./payments.php" class="block px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100"><i class="fas fa-credit-card mr-3"></i>Payment Methods</a>
-                            <a href="./support.php" class="block px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100"><i class="fas fa-headset mr-3"></i>Support</a>
-                            <a href="./profile.php" class="block px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100"><i class="fas fa-user-cog mr-3"></i>Profile Settings</a>
-                            <a href="#" class="block px-4 py-2 text-sm font-medium text-red-600 rounded-lg sidebar-item hover:bg-red-50"><i class="fas fa-sign-out-alt mr-3"></i>Logout</a>
-                        </nav>
-                    </div>
-                </div>
-            </div>
+
             
             <!-- Main Content Area -->
             <main class="flex-1 overflow-y-auto p-6">
@@ -368,29 +342,10 @@
     
     <!-- Internal JavaScript -->
     <script>
-        // Mobile sidebar toggle
         document.addEventListener('DOMContentLoaded', function() {
-            initializeSidebar();
             initializeAddressForm();
             activateCurrentSidebarLink();
         });
-
-        function initializeSidebar() {
-            const mobileSidebar = document.getElementById('mobile-sidebar');
-            const closeSidebar = document.getElementById('close-sidebar');
-            
-            if (document.querySelector('header button')) {
-                document.querySelector('header button').addEventListener('click', function() {
-                    mobileSidebar.classList.remove('hidden');
-                });
-            }
-            
-            if (closeSidebar) {
-                closeSidebar.addEventListener('click', function() {
-                    mobileSidebar.classList.add('hidden');
-                });
-            }
-        }
 
         function activateCurrentSidebarLink() {
             const currentPath = window.location.pathname;

@@ -30,7 +30,7 @@
         }
         
         body {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f5 100%);
         }
         
@@ -196,15 +196,23 @@
                 </button>
             </div>
 
+            <!-- Mobile Filter Backdrop -->
+            <div id="filter-overlay" class="hidden fixed inset-0 bg-black/50 z-40 lg:hidden" onclick="toggleSidebar()"></div>
+
             <!-- Sidebar Filters -->
-            <aside id="sidebar" class="hidden lg:block lg:w-80 flex-shrink-0">
-                <div class="glass-card p-6 rounded-2xl sticky top-24 space-y-6 max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-hide">
+            <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 sm:w-80 bg-white/95 backdrop-blur-md z-50 transform -translate-x-full transition-transform duration-300 ease-in-out p-6 shadow-2xl overflow-y-auto lg:static lg:w-80 lg:bg-transparent lg:shadow-none lg:p-0 lg:translate-x-0 lg:z-auto lg:block flex-shrink-0">
+                <div class="glass-card p-6 rounded-2xl sticky top-24 space-y-6 max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-hide lg:border-none lg:shadow-none lg:bg-transparent">
                     <div class="flex items-center justify-between">
                         <h3 class="text-xl font-semibold flex items-center gap-2" style="font-family: 'Playfair Display', serif;">
                             <i class="fas fa-filter text-[#e8461e]"></i>
                             Filters
                         </h3>
-                        <button onclick="clearAllFilters()" id="clear-btn" class="text-sm text-[#e8461e] hover:underline hidden">Clear All</button>
+                        <div class="flex items-center gap-2">
+                            <button onclick="clearAllFilters()" id="clear-btn" class="text-sm text-[#e8461e] hover:underline hidden">Clear All</button>
+                            <button onclick="toggleSidebar()" class="lg:hidden text-gray-500 hover:text-gray-800 p-1">
+                                <i class="fas fa-times text-lg"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Loading State -->
@@ -886,7 +894,21 @@
 
         // Toggle sidebar on mobile
         function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('hidden');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('filter-overlay');
+            const isOpen = sidebar.classList.contains('-translate-x-0');
+            
+            if (isOpen) {
+                sidebar.classList.remove('-translate-x-0');
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            } else {
+                sidebar.classList.remove('-translate-x-full');
+                sidebar.classList.add('-translate-x-0');
+                overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
         }
 
         // Open product modal

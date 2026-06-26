@@ -27,13 +27,24 @@ class VendorController extends Controller
         // dd($vendorBasicInfo);
 
         // ✅ Orders (last 6 months)
-        $orders = DB::table('orders')
-            ->selectRaw("DATE_FORMAT(order_date, '%Y-%m') as month, COUNT(*) as total_orders")
-            ->where('vendor_id', $vendor_id)
-            ->whereRaw("order_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)")
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
+        $driver = DB::connection()->getDriverName();
+        if ($driver === 'sqlite') {
+            $orders = DB::table('orders')
+                ->selectRaw("strftime('%Y-%m', order_date) as month, COUNT(*) as total_orders")
+                ->where('vendor_id', $vendor_id)
+                ->whereRaw("order_date >= date('now', '-6 month')")
+                ->groupBy('month')
+                ->orderBy('month')
+                ->get();
+        } else {
+            $orders = DB::table('orders')
+                ->selectRaw("DATE_FORMAT(order_date, '%Y-%m') as month, COUNT(*) as total_orders")
+                ->where('vendor_id', $vendor_id)
+                ->whereRaw("order_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)")
+                ->groupBy('month')
+                ->orderBy('month')
+                ->get();
+        }
 
         // Prepare 6-month chart data
         $months = [];
