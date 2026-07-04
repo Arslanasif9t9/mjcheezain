@@ -714,7 +714,7 @@
             </div>
             
             <!-- Additional Options -->
-            <div id="additionalOptions" class="mb-6 hidden">
+            {{-- <div id="additionalOptions" class="mb-6 hidden">
                 <h4 class="font-semibold text-gray-700 mb-3">Additional Information</h4>
                 
                 <!-- Step Selection -->
@@ -723,7 +723,7 @@
                     <select id="stepSelect" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <option value="">Select Step</option>
                         <option value="request_submitted">Request Submitted</option>
-                        <option value="request_approved">Request Approved</option>
+                        <option value="approved">Approved</option>
                         <option value="shipped_to_vendor">Original Shipped to Vendor</option>
                         <option value="received_by_vendor">Received by Vendor</option>
                         <option value="replacement_verified">Replacement Verified</option>
@@ -749,7 +749,7 @@
                               rows="3" 
                               placeholder="Add any notes about this status update..."></textarea>
                 </div>
-            </div>
+            </div> --}}
             
             <!-- Action Buttons -->
             <div class="pt-4 border-t border-gray-200">
@@ -880,10 +880,10 @@
             }
             
             // Reset additional options
-            document.getElementById('stepSelect').value = '';
-            document.getElementById('trackingNumber').value = '';
-            document.getElementById('statusNotes').value = '';
-            document.getElementById('additionalOptions').classList.add('hidden');
+            // document.getElementById('stepSelect').value = '';
+            // document.getElementById('trackingNumber').value = '';
+            // document.getElementById('statusNotes').value = '';
+            // document.getElementById('additionalOptions').classList.add('hidden');
             
             // Disable update button initially
             document.getElementById('updateStatusBtn').disabled = true;
@@ -935,12 +935,12 @@
             }
             
             // Show/hide additional options based on status
-            const additionalOptions = document.getElementById('additionalOptions');
-            if (['approved', 'processing', 'completed'].includes(status)) {
-                additionalOptions.classList.remove('hidden');
-            } else {
-                additionalOptions.classList.add('hidden');
-            }
+            // const additionalOptions = document.getElementById('additionalOptions');
+            // if (['approved', 'processing', 'completed'].includes(status)) {
+            //     additionalOptions.classList.remove('hidden');
+            // } else {
+            //     additionalOptions.classList.add('hidden');
+            // }
             
             // Enable/disable update button
             const updateBtn = document.getElementById('updateStatusBtn');
@@ -972,9 +972,9 @@
             const data = {
                 replacement_id: currentReplacementId,
                 status: selectedStatus,
-                current_step: document.getElementById('stepSelect').value,
-                tracking_number: document.getElementById('trackingNumber').value,
-                notes: document.getElementById('statusNotes').value,
+                current_step: '',
+                tracking_number: '',
+                notes: '',
                 _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             };
             

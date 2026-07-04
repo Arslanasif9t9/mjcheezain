@@ -14,6 +14,7 @@
             content: ''; position: absolute; left: 0; top: 0; 
             width: 24px; height: 24px; border-radius: 50%; 
             border: 3px solid #e5e7eb; background: white;
+            z-index: 1;
         }
         .timeline-step.completed:before { 
             border-color: #10b981; background: #10b981; 
@@ -25,6 +26,10 @@
         .timeline-step:after {
             content: ''; position: absolute; left: 11px; top: 24px;
             width: 2px; height: calc(100% + 6px); background: #d1d5db;
+            z-index: 0;
+        }
+        .timeline-step.completed:after {
+            background: #10b981;
         }
         .timeline-step:last-child:after { display: none; }
         @keyframes pulse {

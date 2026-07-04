@@ -126,7 +126,7 @@ class VendorReturnController extends Controller
         $validator = Validator::make($request->all(), [
             'return_id' => 'required|integer|exists:return_requests,id',
             'status' => 'required|in:pending,approved,rejected,processing,refunded,completed',
-            'step' => 'required|in:request_submitted,under_review,approved,pickup_scheduled,pickup_completed,item_received,quality_check,refund_processing,refunded,completed',
+            'step' => 'nullable|string|max:50',
             'tracking_number' => 'nullable|string|max:100',
             'pickup_date' => 'nullable|date',
             'refund_method' => 'nullable|in:original_payment,wallet,store_credit',
@@ -161,8 +161,19 @@ class VendorReturnController extends Controller
             }
             
             // Prepare update data
+            $statusToStep = [
+                'pending'    => 'request_submitted',
+                'approved'   => 'approved',
+                'processing' => 'item_received',
+                'refunded'   => 'refunded',
+                'completed'  => 'completed',
+                'rejected'   => 'request_submitted',
+            ];
+
+            $autoStep = $statusToStep[$request->status] ?? 'request_submitted';
+
             $updateData = [
-                'status' => $request->status,
+                'status'     => $request->status,
                 'updated_at' => now()
             ];
             
@@ -194,11 +205,11 @@ class VendorReturnController extends Controller
                 ->update($updateData);
             
             // Add to tracking
-            $stepDescription = $this->getStepDescription($request->step, $request->notes);
-            
+            $stepDescription = $this->getStepDescription($autoStep, $request->notes);
+
             DB::table('return_tracking')->insert([
                 'return_id' => $request->return_id,
-                'step' => $request->step,
+                'step' => $autoStep,
                 'status' => 'completed',
                 'description' => $stepDescription,
                 'created_at' => now()

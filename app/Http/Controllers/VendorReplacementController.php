@@ -163,14 +163,24 @@ class VendorReplacementController extends Controller
             }
             
             // Prepare update data
-            $updateData = [
-                'status' => $request->status,
-                'updated_at' => now()
+            $statusToStep = [
+                'pending'    => 'request_submitted',
+                'approved'   => 'approved',
+                'processing' => 'replacement_processing',
+                'completed'  => 'replacement_delivered',
+                'rejected'   => 'request_submitted',
+                'cancelled'  => 'request_submitted',
             ];
-            
-            if ($request->filled('current_step')) {
-                $updateData['current_step'] = $request->current_step;
-            }
+
+            $autoStep = $request->filled('current_step')
+                ? $request->current_step
+                : ($statusToStep[$request->status] ?? 'request_submitted');
+
+            $updateData = [
+                'status'       => $request->status,
+                'current_step' => $autoStep,
+                'updated_at'   => now()
+            ];
             
             if ($request->filled('tracking_number')) {
                 $updateData['tracking_number'] = $request->tracking_number;
@@ -190,7 +200,7 @@ class VendorReplacementController extends Controller
             
             DB::table('replacement_tracking')->insert([
                 'replacement_id' => $request->replacement_id,
-                'step' => $request->current_step ?? $request->status,
+                'step' => $autoStep,
                 'status' => 'completed',
                 'description' => $request->notes ?? $stepDescription,
                 'created_at' => now()

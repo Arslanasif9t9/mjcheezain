@@ -1,6 +1,7 @@
 @props(['user', 'profile', 'dashboardPage', 'imgPath'])
 
     {{-- <div id="app" class="min-h-screen"> --}}
+<<<<<<< Updated upstream
         
         <!-- Navbar Header -->
         <header class="bg-white sticky top-0 z-50 border-b border-gray-100" style="margin-top: -20px">
@@ -74,6 +75,83 @@
                     </nav>
 
                     <!-- Profile / Guest auth menus -->
+=======
+
+        <!-- ===== HEADER ===== -->
+        <header class="bg-white sticky top-0 z-50 shadow-sm border-b border-gray-100" style="margin-top: -20px">
+
+            <!-- TOP BAR -->
+            <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center gap-3">
+
+                <!-- Logo + Name -->
+                <a href="/" class="flex items-center gap-2 shrink-0">
+                    <img src="{{ asset('img/short_logo.jpeg') }}" class="w-9 h-9 rounded-full object-cover border border-gray-200">
+                    <div class="hidden sm:block leading-tight">
+                        <p class="font-bold text-gray-900 text-sm leading-none">MJ Cheezain</p>
+                        <p class="text-gray-400 text-[10px]">Elegance in every choice</p>
+                    </div>
+                </a>
+
+                <!-- Search Bar -->
+                <!-- Search Bar — icon only on mobile, full on desktop -->
+                <div class="flex-1 flex justify-end md:justify-start">
+                    <!-- Desktop search (always visible) -->
+                    <div class="hidden md:flex items-center flex-1 bg-gray-100 rounded-full px-4 py-2 gap-2 max-w-md">
+                        <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                        <input type="text" placeholder="Search products..." id="search-input"
+                            class="bg-transparent text-sm text-gray-700 focus:outline-none w-full placeholder-gray-400">
+                    </div>
+
+                    <!-- Mobile search icon + expandable overlay -->
+                    <button onclick="toggleMobileSearch()" class="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none p-1">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Mobile Search Overlay (full width, slides down) -->
+                <div id="mobile-search-bar" class="hidden absolute top-0 left-0 right-0 bg-white z-50 px-4 py-3 flex items-center gap-3 shadow-md">
+                    <svg class="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input type="text" placeholder="Search products..." id="search-input-mobile"
+                        class="flex-1 text-sm text-gray-700 focus:outline-none placeholder-gray-400 border-none outline-none">
+                    <button onclick="toggleMobileSearch()" class="text-gray-500 hover:text-gray-900 text-sm font-medium">
+                        Cancel
+                    </button>
+                </div>
+
+                <!-- Right: Desktop Nav + Auth -->
+                <div class="flex items-center gap-4 shrink-0">
+
+                    <!-- Desktop Nav Links (hidden on mobile) -->
+                    <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
+                        <a href="/" class="hover:text-gray-900 transition">Home</a>
+                        <a href="/cosmetics" class="hover:text-gray-900 transition">Cosmetics</a>
+                        <a href="/auto-parts" class="hover:text-gray-900 transition">Auto Parts</a>
+                        <a href="/customer/wishlist" class="hover:text-gray-900 transition">
+                            <i class="fa-solid fa-heart"></i> Wishlist
+                        </a>
+                        <a href="/cart" class="hover:text-gray-900 transition">
+                            <i class="fa-solid fa-cart-shopping"></i> Cart
+                        </a>
+                    </nav>
+
+                    <!-- Cart icon (mobile only) -->
+                    <a href="/cart" class="md:hidden text-gray-600 hover:text-gray-900">
+                        <i class="fa-solid fa-cart-shopping text-xl"></i>
+                    </a>
+
+                    <!-- Hamburger (mobile only) -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl" id="hamburger-icon"></i>
+                    </button>
+
+                    <!-- Auth Buttons -->
+>>>>>>> Stashed changes
                     @auth
                         <x-user-profile :user="$user" :profile="$profile" :dashboardPage="$dashboardPage" :imgPath="$imgPath" />
                     @else
@@ -82,6 +160,7 @@
                 </div>
             </div>
 
+<<<<<<< Updated upstream
             <!-- Mobile Subheader Search Bar (Visible only on Mobile) -->
             <div class="md:hidden px-4 pb-3 pt-1 border-t border-gray-50 bg-white">
                 <div class="flex items-center w-full bg-gray-50 rounded-lg p-2 shadow-inner border border-gray-200">
@@ -90,6 +169,105 @@
                     <svg class="w-4 h-4 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
             </div>
+=======
+            <!-- MOBILE MENU DROPDOWN -->
+            <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-3 space-y-2">
+                <a href="/" class="flex items-center gap-3 py-2 text-sm text-gray-700 hover:text-gray-900 border-b border-gray-50">
+                    <i class="fa-solid fa-house w-5 text-center text-gray-400"></i> Home
+                </a>
+                <a href="/cosmetics" class="flex items-center gap-3 py-2 text-sm text-gray-700 hover:text-gray-900 border-b border-gray-50">
+                    <i class="fa-solid fa-spa w-5 text-center text-gray-400"></i> Cosmetics
+                </a>
+                <a href="/auto-parts" class="flex items-center gap-3 py-2 text-sm text-gray-700 hover:text-gray-900 border-b border-gray-50">
+                    <i class="fa-solid fa-car w-5 text-center text-gray-400"></i> Auto Parts
+                </a>
+                <a href="/customer/wishlist" class="flex items-center gap-3 py-2 text-sm text-gray-700 hover:text-gray-900 border-b border-gray-50">
+                    <i class="fa-solid fa-heart w-5 text-center text-gray-400"></i> Wishlist
+                </a>
+                <a href="/cart" class="flex items-center gap-3 py-2 text-sm text-gray-700 border-b border-gray-50">
+                    <i class="fa-solid fa-cart-shopping w-5 text-center text-gray-400"></i> Cart
+                </a>
+                @auth
+                    <a href="{{ $dashboardPage }}" class="flex items-center gap-3 py-2 text-sm text-gray-700 border-b border-gray-50">
+                        <i class="fa-solid fa-user w-5 text-center text-gray-400"></i> My Dashboard
+                    </a>
+                @else
+                    <div class="pt-2 flex flex-col gap-2">
+                        <a href="/login-user?type=customer-login&page={{ request()->path() }}" class="w-full text-center py-2 rounded-full bg-gray-900 text-white text-sm font-medium">
+                            Customer Login
+                        </a>
+                        <a href="/login-user?type=vendor-login&page={{ request()->path() }}" class="w-full text-center py-2 rounded-full border border-gray-900 text-gray-900 text-sm font-medium">
+                            Vendor Login
+                        </a>
+                        <a href="/login-user?type=customer-signup&page={{ request()->path() }}" class="w-full text-center py-2 rounded-full bg-white border border-gray-200 text-gray-600 text-sm">
+                            Sign Up
+                        </a>
+                    </div>
+                @endauth
+            </div>
+
+            <!-- BRANDS ROW (horizontal scroll, single row always) -->
+            <div class="border-t border-gray-100 bg-gray-50">
+                <div id="brands-row" class="flex items-center gap-2 px-4 py-2 overflow-x-auto whitespace-nowrap" style="-ms-overflow-style:none; scrollbar-width:none;">
+                    <a href="/" class="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full bg-gray-900 text-white shrink-0">
+                        All
+                    </a>
+                    <a href="/cosmetics" class="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-full bg-white text-gray-700 border border-gray-200 hover:bg-gray-100 transition shrink-0">
+                        <i class="fa-solid fa-spa text-pink-400 text-[10px]"></i> MJ Cosmetics
+                    </a>
+                    <a href="/auto-parts" class="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-full bg-white text-gray-700 border border-gray-200 hover:bg-gray-100 transition shrink-0">
+                        <i class="fa-solid fa-car text-blue-400 text-[10px]"></i> Auto Parts
+                    </a>
+                    <a href="/cosmetics" class="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-full bg-white text-gray-700 border border-gray-200 hover:bg-gray-100 transition shrink-0">
+                        <i class="fa-solid fa-spray-can text-purple-400 text-[10px]"></i> Fragrances
+                    </a>
+                    <a href="/" class="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-full bg-white text-gray-700 border border-gray-200 hover:bg-gray-100 transition shrink-0">
+                        <i class="fa-solid fa-dumbbell text-green-400 text-[10px]"></i> Gym & Fitness
+                    </a>
+                    <a href="/" class="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-full bg-white text-gray-700 border border-gray-200 hover:bg-gray-100 transition shrink-0">
+                        <i class="fa-solid fa-gift text-orange-400 text-[10px]"></i> Gifts
+                    </a>
+                    <a href="/" class="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-full bg-white text-gray-700 border border-gray-200 hover:bg-gray-100 transition shrink-0">
+                        <i class="fa-solid fa-house text-teal-400 text-[10px]"></i> Home & Living
+                    </a>
+                </div>
+            </div>
+
+            <script>
+                function toggleMobileMenu() {
+                    const menu = document.getElementById('mobile-menu');
+                    const icon = document.getElementById('hamburger-icon');
+                    menu.classList.toggle('hidden');
+                    if (menu.classList.contains('hidden')) {
+                        icon.className = 'fa-solid fa-bars text-xl';
+                    } else {
+                        icon.className = 'fa-solid fa-xmark text-xl';
+                    }
+                }
+
+                function toggleMobileSearch() {
+                    const bar = document.getElementById('mobile-search-bar');
+                    bar.classList.toggle('hidden');
+                    if (!bar.classList.contains('hidden')) {
+                        bar.querySelector('input').focus();
+                    }
+                }
+
+                function toggleDropdown(elementId) {
+                    const dropdown = document.getElementById(elementId);
+                    if (dropdown) dropdown.classList.toggle('hidden');
+                }
+
+                document.addEventListener('click', (event) => {
+                    const menu = document.getElementById('mobile-menu');
+                    const hamburger = document.querySelector('[onclick="toggleMobileMenu()"]');
+                    if (menu && hamburger && !menu.contains(event.target) && !hamburger.contains(event.target)) {
+                        menu.classList.add('hidden');
+                        document.getElementById('hamburger-icon').className = 'fa-solid fa-bars text-xl';
+                    }
+                });
+            </script>
+>>>>>>> Stashed changes
         </header>
 
         <!-- Backdrop Overlay for Mobile Drawer -->
@@ -198,7 +376,11 @@
         </script>
 
         <!-- Main Content Area -->
+<<<<<<< Updated upstream
         <main class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+=======
+        <main class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 pb-20 md:pb-8">
+>>>>>>> Stashed changes
             
             <!-- Title Section -->
             <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6 flex flex-col sm:flex-row sm:items-center gap-4">
@@ -210,20 +392,50 @@
                 <span>MJ Cheezain</span>
             </h1>
 
+<<<<<<< Updated upstream
             <!-- Filter Tags (Horizontally scrollable on Mobile, wrapped on Desktop) -->
             <div class="mb-10">
                 <div class="flex flex-row overflow-x-auto pb-2 gap-2 whitespace-nowrap md:flex-wrap md:overflow-x-visible md:pb-0 scrollbar-none">
                     <button class="px-4 py-1.5 text-sm font-medium rounded-full bg-gray-900 text-white transition duration-200 shadow-sm">All</button>
                     <a href="/cosmetics" class="no-underline"><button class="px-4 py-1.5 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm"><span class="PFDI">MJ</span> Cosmetics</button></a>
                     <a href="/auto-parts" class="no-underline"><button class="px-4 py-1.5 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm"><span class="PFDI">Auto</span> parts</button></a>
+=======
+            <!-- Filter Tags -->
+            <div class="flex flex-wrap gap-2 mb-6">
+                <!-- Utility function for button styles to keep it DRY (Note: x-init is decorative placeholder here) -->
+                <script>
+                    function filterButton(text, active = false) {
+                        const baseClasses = "px-4 py-1 text-sm font-medium rounded-full transition duration-200 shadow-sm";
+                        if (active) {
+                            return `<button class="${baseClasses} bg-gray-900 text-white">${text}</button>`;
+                        } else {
+                            return `<button class="${baseClasses} bg-white text-gray-700 hover:bg-gray-200 border border-gray-200">${text}</button>`;
+                        }
+                    }
+                </script>
+                <div class="flex flex-wrap gap-2" x-init>
+                    <button class="px-4 py-1 text-sm font-medium rounded-full bg-gray-900 text-white transition duration-200 shadow-sm">All</button>
+                    <a href="cosmetics"><button class="px-4 py-1 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm"><span class="PFDI">MJ</span>Cosmetics</button></a>
+                    <a href="auto-parts"><button class="px-4 py-1 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm"><span class="PFDI">Auto</span>parts</button></a>
+                    {{-- <button class="px-4 py-1 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm">New Arrivals</button>
+                    <button class="px-4 py-1 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm">Collections</button>
+                    <button class="px-4 py-1 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm">Followed</button>
+                    <button class="px-4 py-1 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm">View Activity</button> --}}
+>>>>>>> Stashed changes
                 </div>
             </div>
 
             <!-- Content Grid Layout -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
+<<<<<<< Updated upstream
                 <!-- 1. Large Featured Card (Responsive height) -->
                 <div class="lg:col-span-2 relative h-[250px] sm:h-[350px] lg:h-[503px] rounded-2xl overflow-hidden shadow-xl group cursor-pointer transition transform duration-300">
+=======
+                <!-- 1. Large Featured Card (Spans 2 columns on large screens) -->
+                <div class="lg:col-span-2 relative h-[260px] sm:h-[380px] lg:h-[503px] rounded-2xl overflow-hidden shadow-xl group cursor-pointer transition transform duration-300">
+                    <!-- Zoom Effect Applied Here -->
+>>>>>>> Stashed changes
                     <img src="{{ asset('img/hero-1.jpeg') }}" 
                          alt="Luxury Fragrance" class="w-full h-full object-cover brightness-95 group-hover:scale-110 transition duration-500">
                     
@@ -238,11 +450,20 @@
                     </div>
                 </div>
                 
+<<<<<<< Updated upstream
                 <!-- 2. Column of Smaller Cards -->
                 <div class="lg:col-span-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
 
                     <!-- Top Small Card: Lipstick -->
                     <div class="relative h-[160px] sm:h-[220px] lg:h-[240px] rounded-2xl overflow-hidden shadow-lg group cursor-pointer transition transform duration-300">
+=======
+                <!-- 2. Column of Smaller Cards (Spans 1 column on large screens) -->
+                <div class="lg:col-span-1 grid grid-cols-2 lg:grid-cols-1 gap-4 lg:space-y-0">
+
+                    <!-- Top Small Card: Lipstick -->
+                    <div class="relative h-[160px] sm:h-[200px] lg:h-[240px] rounded-2xl overflow-hidden shadow-lg group cursor-pointer transition transform duration-300">
+                         <!-- Zoom Effect Applied Here -->
+>>>>>>> Stashed changes
                         <img src="{{ asset('img/hero-2.jpeg') }}" 
                              alt="Red Lipstick" class="w-full h-full object-cover brightness-95 group-hover:scale-110 transition duration-500">
                         <div class="absolute top-0 left-0 p-4">
@@ -253,7 +474,12 @@
                     </div>
 
                     <!-- Bottom Small Card: Apparel/Model -->
+<<<<<<< Updated upstream
                     <div class="relative h-[160px] sm:h-[220px] lg:h-[240px] rounded-2xl overflow-hidden shadow-lg group cursor-pointer transition transform duration-300">
+=======
+                    <div class="relative h-[160px] sm:h-[200px] lg:h-[240px] rounded-2xl overflow-hidden shadow-lg group cursor-pointer transition transform duration-300">
+                         <!-- Zoom Effect Applied Here -->
+>>>>>>> Stashed changes
                         <img src="{{ asset('img/hero-3.jpeg') }}" 
                              alt="Summer Apparel" class="w-full h-full object-cover brightness-95 group-hover:scale-110 transition duration-500">
                         <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/50 to-transparent">
@@ -285,42 +511,3 @@
 
 
 
-
-
-
-
-{{-- <header class="bg-black text-white shadow-lg header-front position-sticky top-0" style="z-index: 1003;">
-    <div class="container mx-auto items-center justify-between px-4 md:px-20 py-0">
-        <div class="m-auto grid grid-cols-1 md:grid-cols-3 items-center">
-            <img src="{{ asset('img/logo-mj7.png') }}" alt="Company Logo" class="h-16 w-28 justify-self-center md:justify-self-start opacity-0 hidden md:block">
-            <img src="{{ asset('img/logo-ss.png') }}" alt="Company Logo" class="h-32 justify-self-center pr-0 md:mr-24 brightness-200">
-            <p class="text-right text-sm hidden md:block">
-                <span><i class="fa fa-phone"></i> 03**-*******</span> 
-                &nbsp; &nbsp; &nbsp; &nbsp; 
-                <span><i class="fa fa-envelope"></i> aqi*********@gmail.com</span>
-            </p>
-        </div>
-    </div>
-    
-    <div class="text-left py-2 bg-gray-800 md:px-16 w-full">
-        <p class="text-sm font-bold px-3">
-            <a href="/cosmatics" style="color: whitesmoke; text-decoration: none;">
-                <i class="fas fa-tools"></i> COSMETICS
-            </a>
-        </p>
-    </div>
-</header>
-
-<!-- Search Bar -->
-<div class="flex flex-col md:flex-row items-center justify-between space-x-4 px-2 md:mx-16 mt-8 rounded-[4px]">
-    <x-search-bar />
-    
-    <!-- User Authentication Section -->
-    @auth
-        <x-user-profile :user="$user" :profile="$profile" :dashboardPage="$dashboardPage" :imgPath="$imgPath" />
-    @else
-        <x-guest-menu />
-    @endauth
-</div>
-
-<hr class="my-2"> --}}

@@ -184,15 +184,16 @@
 
         .timeline-connector {
             position: absolute;
-            top: 25px;
-            left: 75px;
-            width: 75px;
+            top: 22px;
+            left: 50px;
+            width: 100px;
             height: 3px;
             background: #e5e7eb;
             z-index: 0;
         }
 
-        .timeline-step.completed + .timeline-step .timeline-connector {
+        .timeline-step.completed .timeline-connector,
+        .timeline-step.current .timeline-connector {
             background: #3b82f6;
         }
 
@@ -656,7 +657,8 @@
                                                                 
                                                                 <button class="px-4 py-2 bg-red-500 text-white border border-red-600 rounded-lg text-sm font-medium hover:bg-red-600 flex items-center justify-center return-product-btn w-full sm:w-auto"
                                                                         data-product-id="{{ $cart->product_id }}"
-                                                                        data-order-id="{{ $order->id }}">
+                                                                        data-order-id="{{ $order->id }}"
+                                                                        data-cart-id="{{ $cart->id }}">
                                                                     <i class="fas fa-undo mr-2"></i>Return
                                                                 </button>
                                                             @endif
@@ -899,6 +901,7 @@
                 const productId = button.getAttribute('data-product-id');
                 const productName = button.getAttribute('data-product-name');
                 const orderId = button.getAttribute('data-order-id');
+                const cartId = button.getAttribute('data-cart-id');
                 const isRated = button.getAttribute('data-is-rated') === 'true';
                 
                 if (isRated) {
@@ -917,9 +920,9 @@
             
             if (e.target.closest('.return-product-btn')) {
                 const button = e.target.closest('.return-product-btn');
-                const productId = button.getAttribute('data-product-id');
                 const orderId = button.getAttribute('data-order-id');
-                showReturnOptions(productId, orderId);
+                const cartId = button.getAttribute('data-cart-id');
+                window.open('/customer/returns/create/' + orderId + '/' + cartId, '_blank');
             }
             
             if (e.target.closest('.cancel-order-btn')) {
@@ -1227,64 +1230,64 @@
         }
 
         // Show Return Options
-        function showReturnOptions(productId, orderId) {
-            const modal = document.getElementById('returnProductModal');
-            const content = document.getElementById('returnContent');
+        // function showReturnOptions(productId, orderId, cartId) {
+        //     const modal = document.getElementById('returnProductModal');
+        //     const content = document.getElementById('returnContent');
             
-            content.innerHTML = `
-                <div>
-                    <div class="mb-6">
-                        <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-                            <h3 class="font-medium text-red-800 mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>Return Policy</h3>
-                            <ul class="text-sm text-red-700 space-y-1 ml-6 list-disc">
-                                <li>Returns must be initiated within 30 days of delivery</li>
-                                <li>Items must be in original condition</li>
-                                <li>Refunds will be processed within 7-10 business days</li>
-                                <li>Original shipping costs are non-refundable</li>
-                            </ul>
-                        </div>
+        //     content.innerHTML = `
+        //         <div>
+        //             <div class="mb-6">
+        //                 <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+        //                     <h3 class="font-medium text-red-800 mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>Return Policy</h3>
+        //                     <ul class="text-sm text-red-700 space-y-1 ml-6 list-disc">
+        //                         <li>Returns must be initiated within 30 days of delivery</li>
+        //                         <li>Items must be in original condition</li>
+        //                         <li>Refunds will be processed within 7-10 business days</li>
+        //                         <li>Original shipping costs are non-refundable</li>
+        //                     </ul>
+        //                 </div>
                         
-                        <p class="text-sm text-gray-600 mb-6">Please choose the type of return you'd like to initiate:</p>
+        //                 <p class="text-sm text-gray-600 mb-6">Please choose the type of return you'd like to initiate:</p>
                         
-                        <div class="space-y-4">
-                            <button onclick="openReturnModal(${orderId}, ${productId})" 
-                                    class="w-full p-4 border border-red-300 rounded-lg text-left hover:bg-red-50 transition-colors">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-4">
-                                        <i class="fas fa-undo text-red-600"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-medium text-gray-900">Return Item</h4>
-                                        <p class="text-sm text-gray-600">Return this item for a refund</p>
-                                    </div>
-                                </div>
-                            </button>
+        //                 <div class="space-y-4">
+        //                     <button onclick="openReturnModal(${orderId}, ${cartId})" 
+        //                             class="w-full p-4 border border-red-300 rounded-lg text-left hover:bg-red-50 transition-colors">
+        //                         <div class="flex items-center">
+        //                             <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-4">
+        //                                 <i class="fas fa-undo text-red-600"></i>
+        //                             </div>
+        //                             <div>
+        //                                 <h4 class="font-medium text-gray-900">Return Item</h4>
+        //                                 <p class="text-sm text-gray-600">Return this item for a refund</p>
+        //                             </div>
+        //                         </div>
+        //                     </button>
                             
-                            <button onclick="initiateReturn(${productId}, ${orderId}, 'return_report')" 
-                                    class="w-full p-4 border border-red-300 rounded-lg text-left hover:bg-red-50 transition-colors">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-4">
-                                        <i class="fas fa-exclamation-triangle text-red-600"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-medium text-gray-900">Return & Report</h4>
-                                        <p class="text-sm text-gray-600">Return item and report an issue</p>
-                                    </div>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
+        //                     <button onclick="initiateReturn(${productId}, ${orderId}, 'return_report')" 
+        //                             class="w-full p-4 border border-red-300 rounded-lg text-left hover:bg-red-50 transition-colors">
+        //                         <div class="flex items-center">
+        //                             <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-4">
+        //                                 <i class="fas fa-exclamation-triangle text-red-600"></i>
+        //                             </div>
+        //                             <div>
+        //                                 <h4 class="font-medium text-gray-900">Return & Report</h4>
+        //                                 <p class="text-sm text-gray-600">Return item and report an issue</p>
+        //                             </div>
+        //                         </div>
+        //                     </button>
+        //                 </div>
+        //             </div>
                     
-                    <div class="flex justify-end">
-                        <button onclick="closeReturnModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            `;
+        //             <div class="flex justify-end">
+        //                 <button onclick="closeReturnModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+        //                     Cancel
+        //                 </button>
+        //             </div>
+        //         </div>
+        //     `;
             
-            modal.classList.remove('hidden');
-        }
+        //     modal.classList.remove('hidden');
+        // }
 
         function openReturnModal(orderId, productId) {
             window.open(`/customer/returns/create/${orderId}/${productId}`, '_blank');
@@ -1498,7 +1501,7 @@
                     color: 'blue'
                 },
                 {
-                    id: 'request_approved',
+                    id: 'approved',
                     label: 'Approved',
                     icon: 'fa-check-circle',
                     description: 'Request approved by vendor',
@@ -1565,14 +1568,15 @@
                     ? new Date(trackingSteps[step.id]).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
                     : '';
                 
+                const connectorColor = (index < currentStepIndex) ? 'background:#3b82f6' : 'background:#e5e7eb';
                 timelineHTML += `
-                    <div class="timeline-step ${stepClass}">
-                        <div class="step-icon">
+                    <div class="timeline-step ${stepClass}" style="position:relative;display:inline-block;width:120px;text-align:center;z-index:1;">
+                        <div class="step-icon" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:1rem;border:3px solid ${index <= currentStepIndex ? '#3b82f6' : '#e5e7eb'};background:${index <= currentStepIndex ? '#3b82f6' : 'white'};color:${index <= currentStepIndex ? 'white' : '#9ca3af'};">
                             <i class="fas ${step.icon}"></i>
                         </div>
-                        ${index < steps.length - 1 ? '<div class="timeline-connector"></div>' : ''}
-                        <div class="step-label">${step.label}</div>
-                        ${stepTime ? `<div class="text-xs text-gray-500 mt-1">${stepTime}</div>` : ''}
+                        ${index < steps.length - 1 ? '<div style="position:absolute;top:22px;left:calc(50% + 22px);width:calc(100% - 44px);height:3px;' + connectorColor + ';z-index:0;"></div>' : ''}
+                        <div class="step-label" style="font-size:0.7rem;font-weight:600;color:${index <= currentStepIndex ? '#3b82f6' : '#9ca3af'};margin-top:4px;">${step.label}</div>
+                        ${stepTime ? '<div style="font-size:0.65rem;color:#6b7280;margin-top:2px;">' + stepTime + '</div>' : ''}
                     </div>
                 `;
             });
