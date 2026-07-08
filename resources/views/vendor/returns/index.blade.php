@@ -786,7 +786,7 @@
             </div>
             
             <!-- Additional Options -->
-            <div id="additionalOptions" class="mb-6">
+            {{-- <div id="additionalOptions" class="mb-6">
                 <h4 class="font-semibold text-gray-700 mb-3">Additional Information</h4>
                 
                 <!-- Step Selection -->
@@ -842,7 +842,7 @@
                               rows="3" 
                               placeholder="Add any notes about this status update..."></textarea>
                 </div>
-            </div>
+            </div> --}}
             
             <!-- Action Buttons -->
             <div class="pt-4 border-t border-gray-200">
@@ -972,11 +972,11 @@
             }
             
             // Reset additional options
-            document.getElementById('stepSelect').value = '';
-            document.getElementById('trackingNumber').value = '';
-            document.getElementById('pickupDate').value = '';
-            document.getElementById('refundMethod').value = '';
-            document.getElementById('statusNotes').value = '';
+            // document.getElementById('stepSelect').value = '';
+            // document.getElementById('trackingNumber').value = '';
+            // document.getElementById('pickupDate').value = '';
+            // document.getElementById('refundMethod').value = '';
+            // document.getElementById('statusNotes').value = '';
             
             // Disable update button initially
             document.getElementById('updateStatusBtn').disabled = true;
@@ -1056,11 +1056,11 @@
             const data = {
                 return_id: currentReturnId,
                 status: selectedStatus,
-                step: document.getElementById('stepSelect').value,
-                tracking_number: document.getElementById('trackingNumber').value,
-                pickup_date: document.getElementById('pickupDate').value,
-                refund_method: document.getElementById('refundMethod').value,
-                notes: document.getElementById('statusNotes').value,
+                step: '',
+                tracking_number: '',
+                pickup_date: '',
+                refund_method: '',
+                notes: '',
                 _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             };
             
