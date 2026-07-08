@@ -12,7 +12,7 @@
                 "rating": 4.9,
                 "product_count": 156,
                 "is_verified": true,
-                "image_url": "https://placehold.co/400x400/8b7d79/f5f5f5?text=Lumière+Paris"
+                "image_url": "https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=400&auto=format&fit=crop"
             },
             {
                 "id": 2,
@@ -22,7 +22,7 @@
                 "rating": 5,
                 "product_count": 89,
                 "is_verified": true,
-                "image_url": "https://placehold.co/400x400/f0f0f0/333333?text=Bella+Essence"
+                "image_url": "https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=400&auto=format&fit=crop"
             },
             {
                 "id": 3,
@@ -32,7 +32,7 @@
                 "rating": 4.8,
                 "product_count": 203,
                 "is_verified": true,
-                "image_url": "https://placehold.co/400x400/333333/f5f5f5?text=Luxe+Tokyo"
+                "image_url": "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=400&auto=format&fit=crop"
             },
             {
                 "id": 4,
@@ -42,7 +42,7 @@
                 "rating": 4.9,
                 "product_count": 124,
                 "is_verified": true,
-                "image_url": "https://placehold.co/400x400/8b7d79/f5f5f5?text=Maison+Beauté"
+                "image_url": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=400&auto=format&fit=crop"
             },
             {
                 "id": 5,
@@ -52,7 +52,7 @@
                 "rating": 4.7,
                 "product_count": 92,
                 "is_verified": false,
-                "image_url": "https://placehold.co/400x400/d4af37/333333?text=Golden+Glow"
+                "image_url": "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400&auto=format&fit=crop"
             },
             {
                 "id": 6,
@@ -62,7 +62,7 @@
                 "rating": 5,
                 "product_count": 45,
                 "is_verified": true,
-                "image_url": "https://placehold.co/400x400/5c5c5c/f0f0f0?text=Aether+%26+Co."
+                "image_url": "https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=400&auto=format&fit=crop"
             },
             {
                 "id": 7,
@@ -72,7 +72,7 @@
                 "rating": 4.6,
                 "product_count": 310,
                 "is_verified": false,
-                "image_url": "https://placehold.co/400x400/e9c46a/333333?text=Silk+Road"
+                "image_url": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400&auto=format&fit=crop"
             },
             {
                 "id": 8,
@@ -82,7 +82,7 @@
                 "rating": 4.8,
                 "product_count": 188,
                 "is_verified": true,
-                "image_url": "https://placehold.co/400x400/34495e/f0f0f0?text=Urban+Edge"
+                "image_url": "https://images.unsplash.com/photo-1513094735237-8f2714d57c13?q=80&w=400&auto=format&fit=crop"
             },
             {
                 "id": 9,
@@ -92,7 +92,7 @@
                 "rating": 4.9,
                 "product_count": 76,
                 "is_verified": true,
-                "image_url": "https://placehold.co/400x400/c7f9cc/333333?text=Pure+Botanicals"
+                "image_url": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=400&auto=format&fit=crop"
             },
             {
                 "id": 10,
@@ -102,7 +102,7 @@
                 "rating": 4.5,
                 "product_count": 55,
                 "is_verified": false,
-                "image_url": "https://placehold.co/400x400/a86464/f0f0f0?text=The+Vintage+Spot"
+                "image_url": "https://images.unsplash.com/photo-1594913785162-e678537db36f?q=80&w=400&auto=format&fit=crop"
             }
         ]
     </script>
@@ -122,11 +122,10 @@
         
         <!-- Vendor Grid - Responsive 2-row layout (up to 5 columns) -->
         <div id="vendor-grid" 
-             class="grid gap-6 
+             class="grid gap-3 md:gap-6 
                     grid-cols-2          /* 2 columns on small mobile */
                     sm:grid-cols-3       /* 3 columns on tablet */
                     lg:grid-cols-4       /* 4 columns on small desktop */
-                    {{-- xl:grid-cols-5       /* 5 columns on large desktop (2 rows for 10 vendors) */ --}}
                     auto-rows-fr">
             <!-- Vendor cards will be injected here by JavaScript -->
         </div>
@@ -161,57 +160,46 @@
                 // Show the section if vendors are present
                 section.classList.remove('hidden');
             }
-            
+
             // Limit vendors to 10 for the 2-row layout request
             const vendorsToDisplay = vendors.slice(0, 4);
 
             // 3. Render Vendor Cards
             vendorsToDisplay.forEach(vendor => {
-                const card = document.createElement('div');
+                const card = document.createElement('a');
+                card.href = `/vendor-products/${vendor.id}`;
                 
-                // Tailwind classes for the card container (same style as the uploaded image)
-                card.className = 'bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-2xl transition duration-300 transform hover:-translate-y-1';
+                // Tailwind classes for the card container
+                card.className = 'bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 overflow-hidden group transition-all duration-300 transform hover:-translate-y-1 block no-underline';
                 
                 // HTML for a single vendor card
                 card.innerHTML = `
-                    <div class="relative h-32 sm:h-40 md:h-48 overflow-hidden bg-gray-50">
+                    <div class="relative h-28 sm:h-32 md:h-36 overflow-hidden bg-gray-50">
                         <img src="${vendor.image_url}" alt="${vendor.name} store front" 
-                             class="w-full h-full object-cover transition duration-500 ease-in-out group-hover:scale-105 brightness-90">
+                             class="w-full h-full object-cover transition duration-700 ease-in-out group-hover:scale-105 brightness-95">
+                        
+                        <!-- Rating Badge Overlay -->
+                        <div class="absolute bottom-2 left-2 bg-white/95 backdrop-blur-sm px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-800 shadow-sm flex items-center space-x-1">
+                            <span class="text-amber-500">★</span>
+                            <span>${vendor.rating}</span>
+                        </div>
+
                         ${vendor.is_verified ? `
-                            <!-- Verified Badge -->
-                            <span class="absolute top-2.5 right-2.5 px-2 py-0.5 text-[10px] sm:text-xs font-semibold rounded-full bg-yellow-400 text-gray-900 shadow-sm">
-                                Verified
+                            <!-- Verified Badge Overlay -->
+                            <span class="absolute top-2 right-2 px-1.5 py-0.5 text-[9px] font-bold rounded bg-blue-600 text-white shadow-sm flex items-center space-x-0.5">
+                                <i class="fa-solid fa-circle-check"></i>
                             </span>
                         ` : ''}
                     </div>
 
-                    <div class="p-3 sm:p-4">
-                        <h3 class="text-sm sm:text-lg md:text-xl font-bold text-gray-900 truncate mb-0.5">${vendor.name}</h3>
-                        <p class="text-[11px] sm:text-sm text-gray-500 mb-2 truncate">${vendor.tagline}</p>
-                        
-                        <!-- Location -->
-                        <div class="flex items-center text-xs sm:text-sm text-gray-400">
-                            <svg class="w-3.5 h-3.5 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.485L12 21.485l-5.657-5.002C3.343 13.485 2 11.235 2 9c0-5.523 4.477-10 10-10s10 4.477 10 10c0 2.235-1.343 4.485-3.343 6.485z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 9a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                            <span class="truncate">${vendor.location}</span>
-                        </div>
-
-                        <!-- Stats -->
-                        <div class="flex justify-between items-center text-xs sm:text-sm text-gray-500 border-t border-gray-100 pt-2 mt-2">
-                            <div class="flex items-center">
-                                <span class="text-yellow-500 text-base mr-0.5">★</span>
-                                <span class="font-semibold">${vendor.rating}</span>
-                            </div>
-                            <div class="text-[10px] sm:text-xs text-gray-400">
-                                ${vendor.product_count} products
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Button at the bottom -->
-                    <div class="px-3 pb-3 sm:px-4 sm:pb-4">
-                         <a href="#" class="block w-full text-center py-1.5 sm:py-2 bg-gray-900 text-white text-xs sm:text-sm font-semibold rounded-lg hover:bg-gray-800 transition duration-200">
-                            Visit Store
-                        </a>
+                    <div class="p-3">
+                        <h3 class="text-sm font-bold text-gray-900 truncate group-hover:text-pink-600 transition duration-150 mb-0.5">${vendor.name}</h3>
+                        <p class="text-[10px] text-gray-400 font-medium truncate flex items-center m-0">
+                            <i class="fa-solid fa-location-dot mr-1"></i>
+                            <span>${vendor.location}</span>
+                            <span class="mx-1">•</span>
+                            <span>${vendor.product_count} items</span>
+                        </p>
                     </div>
                 `;
                 grid.appendChild(card);
