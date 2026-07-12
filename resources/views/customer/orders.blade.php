@@ -385,7 +385,7 @@
             <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
                 <!-- Left side - Mobile menu and title -->
                 <div class="flex items-center">
-                    <button class="md:hidden mr-4 text-gray-500 focus:outline-none">
+                    <button class="hidden mr-4 text-gray-500 focus:outline-none">
                         <i class="fas fa-bars"></i>
                     </button>
                     <h1 class="text-xl font-semibold text-gray-800">Orders</h1>
@@ -409,7 +409,7 @@
             </header>
 
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-y-auto p-6">
+            <main class="flex-1 overflow-y-auto p-6 pb-24 md:pb-6">
                 <!-- Order Filter Tabs -->
                 <div class="bg-white rounded-lg shadow mb-6">
                     <div class="border-b border-gray-200">
@@ -692,6 +692,7 @@
                     @endforeach
                 </div>
             </main>
+            <x-customer.mobile-nav />
         </div>
     </div>
 

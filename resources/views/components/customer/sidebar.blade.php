@@ -1,11 +1,10 @@
 @props(['basic_info' => null])
 
-<!-- Backdrop Overlay for Mobile -->
-<div id="customerSidebarBackdrop" onclick="toggleCustomerMobileSidebar()" 
-     class="fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 pointer-events-none z-45 md:hidden"></div>
+<!-- Backdrop Overlay (Hidden on Mobile as sidebar is removed) -->
+<div id="customerSidebarBackdrop" class="hidden"></div>
 
 <aside id="customerSidebar" 
-       class="fixed md:sticky top-0 left-0 h-[100vh] w-64 bg-white border-r border-gray-200 flex flex-col transform -translate-x-full transition-transform duration-300 md:translate-x-0 z-50 shadow-xl md:shadow-none">
+       class="hidden md:flex fixed md:sticky top-0 left-0 h-[100vh] w-64 bg-white border-r border-gray-200 flex-col z-50">
     
     <div class="flex items-center justify-between h-16 px-4 bg-blue-600 md:justify-center flex-shrink-0">
         <span class="text-white font-bold text-xl">mjcheezain</span>

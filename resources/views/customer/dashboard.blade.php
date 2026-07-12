@@ -81,7 +81,7 @@
             <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
                 <!-- Left side - Mobile menu and title -->
                 <div class="flex items-center">
-                    <button class="md:hidden mr-4 text-gray-500 focus:outline-none">
+                    <button class="hidden mr-4 text-gray-500 focus:outline-none">
                         <i class="fas fa-bars"></i>
                     </button>
                     <h1 class="text-xl font-semibold text-gray-800">Dashboard</h1>
@@ -158,7 +158,7 @@
 
 
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-y-auto p-6">
+            <main class="flex-1 overflow-y-auto p-6 pb-24 md:pb-6">
                 <!-- Welcome Panel -->
                 <div class="bg-white rounded-lg shadow p-6 mb-6">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -313,36 +313,9 @@
                     </a>
                 </div> -->
 
-                <!-- Recent Activity Section -->
-                {{-- <div class="profile-card bg-white rounded-lg shadow p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-lg font-medium text-gray-900">Recent Activity</h3>
-                                <button class="text-blue-600 hover:text-blue-800 focus:outline-none">
-                                    <i class="fas fa-ellipsis-h"></i>
-                                </button>
-                            </div>
-                            <div class="space-y-4">
-                                <div class="flex">
-                                    <div class="flex-shrink-0 mr-4">
-                                        <div class="bg-<?= $color ?>-100 p-3 rounded-full">
-                                            <i class="fas fa-<?= $icon ?> text-<?= $color ?>-600"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm font-medium text-gray-900"><?= htmlspecialchars($activity['title']) ?></p>
-                                        <p class="text-sm text-gray-500"><?= htmlspecialchars($activity['value']) ?> • <?= htmlspecialchars($activity['points']) ?></p>
-                                        <p class="text-xs text-gray-400 mt-1"><?= $time_ago ?></p>
-                                    </div>
-                                </div>
-                                <?php } ?>
-                            </div>
-                            <div class="mt-4 text-center">
-                                <button class="text-blue-600 text-sm font-medium hover:text-blue-800 focus:outline-none">
-                                    View All Activity
-                                </button>
-                            </div>
-                </div> --}}
+
             </main>
+            <x-customer.mobile-nav />
         </div>
     </div>
 
@@ -473,7 +446,6 @@
             }
         });
     </script>
-
 </body>
 
 </html>

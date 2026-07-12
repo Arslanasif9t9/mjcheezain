@@ -69,10 +69,10 @@
             <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
                 <!-- Left side - Mobile menu and title -->
                 <div class="flex items-center">
-                    <button class="md:hidden mr-4 text-gray-500 focus:outline-none">
+                    <button class="hidden mr-4 text-gray-500 focus:outline-none">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h1 class="text-xl font-semibold text-gray-800">Dashboard</h1>
+                    <h1 class="text-xl font-semibold text-gray-800">Profile</h1>
                 </div>
 
                 <!-- Center - Search bar -->
@@ -146,7 +146,7 @@
 
             
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-y-auto p-6">
+            <main class="flex-1 overflow-y-auto p-6 pb-24 md:pb-6">
                 <!-- Profile Header -->
                 <div class="profile-card bg-white rounded-lg shadow overflow-hidden mb-6">
                     <div class="bg-gradient-to-r from-blue-500 to-blue-700 h-48 relative" id="cover-container">
@@ -614,6 +614,24 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Saved Addresses Section (Theme matching home screen) -->
+                        <div class="profile-card bg-white rounded-lg shadow p-6 mb-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-pink-100 p-2.5 rounded-lg text-[#FF7DA0]">
+                                        <i class="fas fa-map-marker-alt text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-900">Saved Addresses</h3>
+                                        <p class="text-xs text-gray-500">Manage your shipping and billing locations</p>
+                                    </div>
+                                </div>
+                                <a href="/customer/addresses" class="inline-block text-center px-4 py-2 bg-gradient-to-r from-[#FF7DA0] to-[#FFC275] hover:opacity-90 text-white rounded-lg text-sm font-semibold shadow-sm transition-all">
+                                    Manage Addresses
+                                </a>
+                            </div>
+                        </div>
                         
                         <!-- Recent Activity -->
                         {{-- <div class="profile-card bg-white rounded-lg shadow p-6">
@@ -785,6 +803,7 @@
                     </div>
                 </div>
             </main>
+            <x-customer.mobile-nav />
         </div>
     </div>
 

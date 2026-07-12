@@ -57,7 +57,7 @@
             <!-- Top Navigation -->
             <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
                 <div class="flex items-center">
-                    <button class="md:hidden mr-4 text-gray-500 focus:outline-none">
+                    <button class="hidden mr-4 text-gray-500 focus:outline-none">
                         <i class="fas fa-bars"></i>
                     </button>
                     <h1 class="text-xl font-semibold text-gray-800">Notifications</h1>
@@ -89,7 +89,7 @@
             </header>
             
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-y-auto p-6">
+            <main class="flex-1 overflow-y-auto p-6 pb-24 md:pb-6">
                 <div class="max-w-4xl mx-auto">
                     <!-- Notification Header -->
                     <div class="flex items-center justify-between mb-6">
@@ -159,6 +159,7 @@
                     @endif --}}
                 </div>
             </main>
+            <x-customer.mobile-nav />
         </div>
     </div>
 
