@@ -18,75 +18,75 @@
     }
 @endphp
 
-<!-- Mobile Bottom Navigation Bar -->
-<div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200/80 shadow-[0_-4px_16px_rgba(0,0,0,0.06)] z-[9999] px-2 py-2 flex justify-around items-center pb-safe">
-    
-    <!-- Tab 1: Home (Dashboard) -->
-    <a href="/customer/dashboard" class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200 no-underline {{ $isHome ? 'text-[#FF7DA0]' : 'text-gray-400 hover:text-gray-600' }}">
-        <div class="relative flex flex-col items-center">
-            <i class="fas fa-home text-lg"></i>
-            <span class="text-[10px] font-semibold mt-1">Home</span>
-            @if($isHome)
-                <div class="w-1 h-1 rounded-full bg-[#FF7DA0] mt-0.5 animate-pulse"></div>
-            @endif
-        </div>
-    </a>
+<!-- Mobile Bottom Navigation Bar (Floating Levelled Dock with Premium Micro-Animations) -->
+<div class="md:hidden fixed bottom-4 left-0 right-0 z-[9999] px-4 pointer-events-none">
+    <div class="max-w-md mx-auto bg-white/85 backdrop-blur-xl border border-white/30 rounded-3xl shadow-[0_16px_36px_rgba(0,0,0,0.1)] px-3 py-2.5 flex justify-around items-center pointer-events-auto">
+        
+        <!-- Tab 1: Home (Dashboard) -->
+        <a href="/customer/dashboard" class="flex flex-col items-center justify-center flex-1 no-underline transition-all duration-300 active:scale-95">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 {{ $isHome ? 'bg-gradient-to-tr from-[#FF7DA0] to-[#FFC275] text-white shadow-md shadow-[#FF7DA0]/30 active-bounce scale-105' : 'bg-slate-50/80 border border-slate-100/50 text-slate-400 hover:bg-slate-100/80 hover:text-slate-600' }}">
+                <i class="fas fa-home text-base"></i>
+            </div>
+            <span class="text-[9px] mt-1.5 tracking-wide transition-all duration-300 {{ $isHome ? 'font-bold text-[#FF7DA0] scale-105' : 'font-semibold text-slate-400' }}">Home</span>
+        </a>
 
-    <!-- Tab 2: Cart (My Orders) -->
-    <a href="/customer/orders" class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200 no-underline {{ $isOrders ? 'text-[#FF7DA0]' : 'text-gray-400 hover:text-gray-600' }}">
-        <div class="relative flex flex-col items-center">
-            <i class="fas fa-shopping-bag text-lg"></i>
-            <span class="text-[10px] font-semibold mt-1">Orders</span>
-            @if($isOrders)
-                <div class="w-1 h-1 rounded-full bg-[#FF7DA0] mt-0.5 animate-pulse"></div>
-            @endif
-        </div>
-    </a>
+        <!-- Tab 2: Orders (Cart) -->
+        <a href="/customer/orders" class="flex flex-col items-center justify-center flex-1 no-underline transition-all duration-300 active:scale-95">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 {{ $isOrders ? 'bg-gradient-to-tr from-[#FF7DA0] to-[#FFC275] text-white shadow-md shadow-[#FF7DA0]/30 active-bounce scale-105' : 'bg-slate-50/80 border border-slate-100/50 text-slate-400 hover:bg-slate-100/80 hover:text-slate-600' }}">
+                <i class="fas fa-shopping-bag text-base"></i>
+            </div>
+            <span class="text-[9px] mt-1.5 tracking-wide transition-all duration-300 {{ $isOrders ? 'font-bold text-[#FF7DA0] scale-105' : 'font-semibold text-slate-400' }}">Orders</span>
+        </a>
 
-    <!-- Tab 3: Wishlist -->
-    <a href="/customer/wishlist" class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200 no-underline {{ $isWishlist ? 'text-[#FF7DA0]' : 'text-gray-400 hover:text-gray-600' }}">
-        <div class="relative flex flex-col items-center">
-            <i class="fas fa-heart text-lg"></i>
-            <span class="text-[10px] font-semibold mt-1">Wishlist</span>
-            @if($isWishlist)
-                <div class="w-1 h-1 rounded-full bg-[#FF7DA0] mt-0.5 animate-pulse"></div>
-            @endif
-        </div>
-    </a>
+        <!-- Tab 3: Wishlist -->
+        <a href="/customer/wishlist" class="flex flex-col items-center justify-center flex-1 no-underline transition-all duration-300 active:scale-95">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 {{ $isWishlist ? 'bg-gradient-to-tr from-[#FF7DA0] to-[#FFC275] text-white shadow-md shadow-[#FF7DA0]/30 active-bounce scale-105' : 'bg-slate-50/80 border border-slate-100/50 text-slate-400 hover:bg-slate-100/80 hover:text-slate-600' }}">
+                <i class="fas fa-heart text-base"></i>
+            </div>
+            <span class="text-[9px] mt-1.5 tracking-wide transition-all duration-300 {{ $isWishlist ? 'font-bold text-[#FF7DA0] scale-105' : 'font-semibold text-slate-400' }}">Wishlist</span>
+        </a>
 
-    <!-- Tab 4: Notifications -->
-    <a href="/customer/notifications" class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200 no-underline relative {{ $isNotifications ? 'text-[#FF7DA0]' : 'text-gray-400 hover:text-gray-600' }}">
-        <div class="relative flex flex-col items-center">
-            <i class="fas fa-bell text-lg"></i>
-            <!-- Unread Badge count -->
-            @if($unreadNotifications > 0)
-                <span class="absolute -top-1.5 -right-2 bg-red-500 text-white text-[9px] font-bold w-4.5 h-4.5 rounded-full flex items-center justify-center shadow-sm border border-white">
-                    {{ $unreadNotifications }}
-                </span>
-            @endif
-            <span class="text-[10px] font-semibold mt-1">Alerts</span>
-            @if($isNotifications)
-                <div class="w-1 h-1 rounded-full bg-[#FF7DA0] mt-0.5 animate-pulse"></div>
-            @endif
-        </div>
-    </a>
+        <!-- Tab 4: Notifications (Alerts) -->
+        <a href="/customer/notifications" class="flex flex-col items-center justify-center flex-1 no-underline transition-all duration-300 active:scale-95">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 relative {{ $isNotifications ? 'bg-gradient-to-tr from-[#FF7DA0] to-[#FFC275] text-white shadow-md shadow-[#FF7DA0]/30 active-bounce scale-105' : 'bg-slate-50/80 border border-slate-100/50 text-slate-400 hover:bg-slate-100/80 hover:text-slate-600' }}">
+                <i class="fas fa-bell text-base"></i>
+                <!-- Badge count -->
+                @if($unreadNotifications > 0)
+                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white {{ $isNotifications ? 'animate-bounce' : '' }}">
+                        {{ $unreadNotifications }}
+                    </span>
+                @endif
+            </div>
+            <span class="text-[9px] mt-1.5 tracking-wide transition-all duration-300 {{ $isNotifications ? 'font-bold text-[#FF7DA0] scale-105' : 'font-semibold text-slate-400' }}">Alerts</span>
+        </a>
 
-    <!-- Tab 5: Profile -->
-    <a href="/customer/profile" class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200 no-underline {{ $isProfile ? 'text-[#FF7DA0]' : 'text-gray-400 hover:text-gray-600' }}">
-        <div class="relative flex flex-col items-center">
-            <i class="fas fa-user text-lg"></i>
-            <span class="text-[10px] font-semibold mt-1">Profile</span>
-            @if($isProfile)
-                <div class="w-1 h-1 rounded-full bg-[#FF7DA0] mt-0.5 animate-pulse"></div>
-            @endif
-        </div>
-    </a>
+        <!-- Tab 5: Profile -->
+        <a href="/customer/profile" class="flex flex-col items-center justify-center flex-1 no-underline transition-all duration-300 active:scale-95">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 {{ $isProfile ? 'bg-gradient-to-tr from-[#FF7DA0] to-[#FFC275] text-white shadow-md shadow-[#FF7DA0]/30 active-bounce scale-105' : 'bg-slate-50/80 border border-slate-100/50 text-slate-400 hover:bg-slate-100/80 hover:text-slate-600' }}">
+                <i class="fas fa-user text-base"></i>
+            </div>
+            <span class="text-[9px] mt-1.5 tracking-wide transition-all duration-300 {{ $isProfile ? 'font-bold text-[#FF7DA0] scale-105' : 'font-semibold text-slate-400' }}">Profile</span>
+        </a>
 
+    </div>
 </div>
 
-<!-- CSS style for safe-area layout adaptation in modern browser chrome -->
+<!-- Navigation Styles & Keyframes -->
 <style>
     .pb-safe {
         padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+    }
+    
+    @keyframes activeBounce {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-2px);
+        }
+    }
+    
+    .active-bounce i {
+        animation: activeBounce 2s ease-in-out infinite;
     }
 </style>
