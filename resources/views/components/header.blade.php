@@ -6,10 +6,14 @@
                 background: linear-gradient(to right, #FF7DA0, #FFC275) !important;
             }
         }
+        .font-serif-italic {
+            font-family: 'PT Serif', Georgia, serif;
+            font-style: italic;
+        }
     </style>
 
     <!-- Navbar Header -->
-    <header class="mobile-gradient-header md:bg-none md:bg-white sticky top-0 z-50 border-b border-pink-600/10 md:border-gray-100 transition-all duration-300">
+    <header class="mobile-gradient-header md:bg-none md:bg-white fixed md:sticky top-0 left-0 right-0 w-full z-50 border-b border-pink-600/10 md:border-gray-100 transition-all duration-300">
         <div id="header-container" class="max-w-full mx-auto px-2 md:px-6 lg:px-8 py-3.5 md:py-3 flex justify-between items-center transition-all duration-300">
             
             <!-- Search Bar (Left on Desktop) -->
@@ -74,15 +78,18 @@
             <div id="mobile-search-container" class="flex md:hidden flex-col w-full space-y-2.5 transition-all duration-300">
                 <!-- Top Row: Hamburger + Brand Name + Auth Links -->
                 <div class="flex items-center justify-between w-full px-1">
-                    <!-- Left side: Hamburger Menu + Logo Image (Scroll-only) -->
+                    <!-- Left side: Hamburger Menu + Logo Image & Stylish Text (Scroll-only) -->
                     <div class="flex items-center space-x-2">
                         <!-- Hamburger Menu Toggle Button -->
                         <button onclick="toggleMobileMenu()" class="text-[#000000] focus:outline-none p-1 hover:opacity-75 transition-colors" aria-label="Toggle Menu">
                             <i class="fa-solid fa-bars text-xl"></i>
                         </button>
 
-                        <!-- Logo image: hidden by default, visible on scroll -->
-                        <img id="mobile-brand-logo" src="{{ asset('img/short_logo.jpeg') }}" class="w-6 h-6 rounded-full object-cover border border-white/20 transition-all duration-300 opacity-0 max-w-0 overflow-hidden pointer-events-none">
+                        <!-- Logo & Brand Text: hidden by default, visible on scroll -->
+                        <div id="mobile-brand-wrapper" class="flex items-center space-x-1.5 transition-all duration-300 opacity-0 max-w-0 overflow-hidden pointer-events-none">
+                            <img src="{{ asset('img/short_logo.jpeg') }}" class="w-6 h-6 rounded-full object-cover border border-white/20 flex-shrink-0">
+                            <span class="font-serif-italic font-bold text-gray-900 text-sm whitespace-nowrap">MJ Cheezain</span>
+                        </div>
                     </div>
 
                     <!-- Right side: Search trigger (on scroll) + Sign Up / Login / Profile dropdowns -->
@@ -92,45 +99,48 @@
                             <i class="fa-solid fa-magnifying-glass text-base"></i>
                         </button>
                         
-                        @guest
-                            <!-- Sign Up Dropdown -->
-                            <div class="relative">
-                                <button onclick="toggleDropdown('mobile-signup-dropdown')" class="flex items-center text-gray-900 hover:text-pink-600 transition-colors focus:outline-none py-1">
-                                    Sign Up
-                                    <svg class="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                </button>
-                                <div id="mobile-signup-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
-                                    <a href="{{ url('login-user?type=customer-signup&page=' . request()->path()) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Customer Register</a>
-                                    <a href="{{ url('login-user?type=vendor-signup&page=' . request()->path()) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Vendor Register</a>
+                        <!-- Auth links wrapper (hidden on scroll) -->
+                        <div id="mobile-auth-wrapper" class="flex items-center space-x-1.5 transition-all duration-300 opacity-1 pointer-events-auto">
+                            @guest
+                                <!-- Sign Up Dropdown -->
+                                <div class="relative">
+                                    <button onclick="toggleDropdown('mobile-signup-dropdown')" class="flex items-center text-gray-900 hover:text-pink-600 transition-colors focus:outline-none py-1">
+                                        Sign Up
+                                        <svg class="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </button>
+                                    <div id="mobile-signup-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
+                                        <a href="{{ url('login-user?type=customer-signup&page=' . request()->path()) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Customer Register</a>
+                                        <a href="{{ url('login-user?type=vendor-signup&page=' . request()->path()) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Vendor Register</a>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <span class="text-gray-400 font-light">|</span>
-                            
-                            <!-- Login Dropdown -->
-                            <div class="relative">
-                                <button onclick="toggleDropdown('mobile-login-dropdown')" class="flex items-center text-gray-900 hover:text-pink-600 transition-colors focus:outline-none py-1">
-                                    Login
-                                    <svg class="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                </button>
-                                <div id="mobile-login-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
-                                    <a href="{{ url('login-user?type=customer-login&page=' . request()->path()) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Customer Login</a>
-                                    <a href="{{ url('login-user?type=vendor-login&page=' . request()->path()) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Vendor Login</a>
+                                
+                                <span class="text-gray-400 font-light">|</span>
+                                
+                                <!-- Login Dropdown -->
+                                <div class="relative">
+                                    <button onclick="toggleDropdown('mobile-login-dropdown')" class="flex items-center text-gray-900 hover:text-pink-600 transition-colors focus:outline-none py-1">
+                                        Login
+                                        <svg class="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </button>
+                                    <div id="mobile-login-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
+                                        <a href="{{ url('login-user?type=customer-login&page=' . request()->path()) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Customer Login</a>
+                                        <a href="{{ url('login-user?type=vendor-login&page=' . request()->path()) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Vendor Login</a>
+                                    </div>
                                 </div>
-                            </div>
-                        @else
-                            <!-- Logged in state -->
-                            <div class="relative">
-                                <button onclick="toggleDropdown('mobile-user-dropdown')" class="flex items-center text-gray-900 hover:text-pink-600 transition-colors focus:outline-none py-1">
-                                    Account
-                                    <svg class="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                </button>
-                                <div id="mobile-user-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
-                                    <a href="{{ url(Auth::user()->type . '/dashboard') }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Dashboard</a>
-                                    <a href="{{ url('logout') }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Logout</a>
+                            @else
+                                <!-- Logged in state -->
+                                <div class="relative">
+                                    <button onclick="toggleDropdown('mobile-user-dropdown')" class="flex items-center text-gray-900 hover:text-pink-600 transition-colors focus:outline-none py-1">
+                                        Account
+                                        <svg class="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </button>
+                                    <div id="mobile-user-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
+                                        <a href="{{ url(Auth::user()->type . '/dashboard') }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Dashboard</a>
+                                        <a href="{{ url('logout') }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Logout</a>
+                                    </div>
                                 </div>
-                            </div>
-                        @endguest
+                            @endguest
+                        </div>
                     </div>
                 </div>
 
@@ -246,7 +256,7 @@
     </div>
 
     <!-- Main Content Area -->
-    <main class="max-w-full mx-auto px-2 md:px-6 lg:px-8 py-4 mt-0 md:mt-0">
+    <main class="max-w-full mx-auto px-2 md:px-6 lg:px-8 py-4 mt-[140px] md:mt-0">
         
         <!-- Title Section -->
         <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6 flex flex-col sm:flex-row sm:items-center gap-4">
@@ -351,7 +361,7 @@
             const wrapper = document.getElementById('mobile-search-wrapper');
             const trigger = document.getElementById('mobile-search-trigger');
             const container = document.getElementById('mobile-search-container');
-            const logo = document.getElementById('mobile-brand-logo');
+            const brandWrapper = document.getElementById('mobile-brand-wrapper');
             
             if (wrapper) {
                 wrapper.style.maxHeight = '80px';
@@ -363,11 +373,10 @@
                 trigger.style.opacity = '0';
                 trigger.style.pointerEvents = 'none';
             }
-            if (logo) {
-                logo.style.maxWidth = '0px';
-                logo.style.opacity = '0';
-                logo.style.marginRight = '0px';
-                logo.style.pointerEvents = 'none';
+            if (brandWrapper) {
+                brandWrapper.style.maxWidth = '0px';
+                brandWrapper.style.opacity = '0';
+                brandWrapper.style.pointerEvents = 'none';
             }
             if (container) {
                 container.classList.add('space-y-2.5');
@@ -386,7 +395,7 @@
             const wrapper = document.getElementById('mobile-search-wrapper');
             const trigger = document.getElementById('mobile-search-trigger');
             const container = document.getElementById('mobile-search-container');
-            const logo = document.getElementById('mobile-brand-logo');
+            const brandWrapper = document.getElementById('mobile-brand-wrapper');
             
             if (wrapper) {
                 wrapper.style.maxHeight = '0px';
@@ -398,11 +407,10 @@
                 trigger.style.opacity = '1';
                 trigger.style.pointerEvents = 'auto';
             }
-            if (logo) {
-                logo.style.maxWidth = '200px';
-                logo.style.opacity = '1';
-                logo.style.marginRight = '12px';
-                logo.style.pointerEvents = 'auto';
+            if (brandWrapper && window.scrollY > 50) {
+                brandWrapper.style.maxWidth = '250px';
+                brandWrapper.style.opacity = '1';
+                brandWrapper.style.pointerEvents = 'auto';
             }
             if (container) {
                 container.classList.remove('space-y-2.5');
@@ -427,7 +435,8 @@
             const trigger = document.getElementById('mobile-search-trigger');
             const headerContainer = document.getElementById('header-container');
             const mobileSearchContainer = document.getElementById('mobile-search-container');
-            const logo = document.getElementById('mobile-brand-logo');
+            const brandWrapper = document.getElementById('mobile-brand-wrapper');
+            const authWrapper = document.getElementById('mobile-auth-wrapper');
             
             // Check if mobile elements are currently visible/rendered
             const isMobile = mobileSearchContainer && window.getComputedStyle(mobileSearchContainer).display !== 'none';
@@ -441,6 +450,16 @@
                     }
                     if (!isSearchExpanded) {
                         collapseMobileSearch();
+                    }
+                    if (brandWrapper && !isSearchExpanded) {
+                        brandWrapper.style.maxWidth = '250px';
+                        brandWrapper.style.opacity = '1';
+                        brandWrapper.style.pointerEvents = 'auto';
+                    }
+                    if (authWrapper) {
+                        authWrapper.style.maxWidth = '0px';
+                        authWrapper.style.opacity = '0';
+                        authWrapper.style.pointerEvents = 'none';
                     }
                 } else {
                     if (headerContainer) {
@@ -458,11 +477,15 @@
                         trigger.style.opacity = '0';
                         trigger.style.pointerEvents = 'none';
                     }
-                    if (logo) {
-                        logo.style.maxWidth = '0px';
-                        logo.style.opacity = '0';
-                        logo.style.marginRight = '0px';
-                        logo.style.pointerEvents = 'none';
+                    if (brandWrapper) {
+                        brandWrapper.style.maxWidth = '0px';
+                        brandWrapper.style.opacity = '0';
+                        brandWrapper.style.pointerEvents = 'none';
+                    }
+                    if (authWrapper) {
+                        authWrapper.style.maxWidth = '200px';
+                        authWrapper.style.opacity = '1';
+                        authWrapper.style.pointerEvents = 'auto';
                     }
                 }
             }
