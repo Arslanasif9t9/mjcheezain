@@ -1,8 +1,16 @@
 @props(['user', 'profile', 'dashboardPage', 'imgPath'])
 
+    <style>
+        @media (max-width: 767px) {
+            .mobile-gradient-header {
+                background: linear-gradient(to right, #FF7DA0, #FFC275) !important;
+            }
+        }
+    </style>
+
     <!-- Navbar Header -->
-    <header class="bg-gradient-to-r from-pink-500 to-orange-500 md:bg-none md:bg-white sticky top-0 z-50 border-b border-pink-600/10 md:border-gray-100 transition-all duration-300" style="margin-top: -20px">
-        <div id="header-container" class="max-w-full mx-auto px-2 md:px-6 lg:px-8 py-3 flex justify-between items-center transition-all duration-300">
+    <header class="mobile-gradient-header md:bg-none md:bg-white sticky top-0 z-50 border-b border-pink-600/10 md:border-gray-100 transition-all duration-300">
+        <div id="header-container" class="max-w-full mx-auto px-2 md:px-6 lg:px-8 py-3.5 md:py-3 flex justify-between items-center transition-all duration-300">
             
             <!-- Search Bar (Left on Desktop) -->
             <div class="hidden md:flex items-center w-full max-w-lg bg-gray-50 rounded-lg p-2 mr-6 shadow-inner">
@@ -63,35 +71,80 @@
             </div>
 
             <!-- Mobile Header Layout (Visible only on Mobile) -->
-            <div id="mobile-search-container" class="flex md:hidden items-center justify-between w-full">
-                <!-- Brand logo on the left (Only visible when scrolled down) -->
-                <div id="mobile-brand-logo" class="transition-all duration-300 opacity-0 max-w-0 overflow-hidden pointer-events-none flex items-center">
-                    <img src="{{ asset('img/short_logo.jpeg') }}" class="w-6 h-6 rounded-full mr-1.5 object-cover border border-white/20">
-                    <span class="font-serif italic font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-pink-100 to-white text-base sm:text-lg tracking-wide drop-shadow-sm whitespace-nowrap">MJ Cheezain</span>
-                </div>
+            <div id="mobile-search-container" class="flex md:hidden flex-col w-full space-y-2.5 transition-all duration-300">
+                <!-- Top Row: Hamburger + Brand Name + Auth Links -->
+                <div class="flex items-center justify-between w-full px-1">
+                    <!-- Left side: Hamburger Menu + Logo Image (Scroll-only) -->
+                    <div class="flex items-center space-x-2">
+                        <!-- Hamburger Menu Toggle Button -->
+                        <button onclick="toggleMobileMenu()" class="text-[#000000] focus:outline-none p-1 hover:opacity-75 transition-colors" aria-label="Toggle Menu">
+                            <i class="fa-solid fa-bars text-xl"></i>
+                        </button>
 
-                <!-- Search Bar Wrapper (Expands/collapses smoothly) -->
-                <div id="mobile-search-wrapper" class="flex-grow mr-2 transition-all duration-300 ease-in-out" style="max-width: 500px; opacity: 1; pointer-events: auto;">
-                    <div class="flex items-center w-full bg-white/95 backdrop-blur-sm rounded-xl p-2 px-3 shadow-inner border border-white/20">
-                        <input type="text" placeholder="Search..." 
-                               class="w-full bg-transparent text-sm text-gray-800 focus:outline-none placeholder-gray-500" id="search-input-mobile">
-                        <svg class="w-5 h-5 text-pink-600 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
+                        <!-- Logo image: hidden by default, visible on scroll -->
+                        <img id="mobile-brand-logo" src="{{ asset('img/short_logo.jpeg') }}" class="w-6 h-6 rounded-full object-cover border border-white/20 transition-all duration-300 opacity-0 max-w-0 overflow-hidden pointer-events-none">
+                    </div>
+
+                    <!-- Right side: Search trigger (on scroll) + Sign Up / Login / Profile dropdowns -->
+                    <div class="flex items-center text-xs sm:text-sm font-semibold text-gray-800 space-x-1.5">
+                        <!-- Collapsed Search Icon (Visible on Scroll) -->
+                        <button id="mobile-search-trigger" onclick="expandMobileSearch()" class="text-[#000000] focus:outline-none p-1.5 transition-all duration-300" style="max-width: 0px; opacity: 0; pointer-events: none; overflow: hidden;" aria-label="Search">
+                            <i class="fa-solid fa-magnifying-glass text-base"></i>
+                        </button>
+                        
+                        @guest
+                            <!-- Sign Up Dropdown -->
+                            <div class="relative">
+                                <button onclick="toggleDropdown('mobile-signup-dropdown')" class="flex items-center text-gray-900 hover:text-pink-600 transition-colors focus:outline-none py-1">
+                                    Sign Up
+                                    <svg class="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                <div id="mobile-signup-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
+                                    <a href="{{ url('login-user?type=customer-signup&page=' . request()->path()) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Customer Register</a>
+                                    <a href="{{ url('login-user?type=vendor-signup&page=' . request()->path()) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Vendor Register</a>
+                                </div>
+                            </div>
+                            
+                            <span class="text-gray-400 font-light">|</span>
+                            
+                            <!-- Login Dropdown -->
+                            <div class="relative">
+                                <button onclick="toggleDropdown('mobile-login-dropdown')" class="flex items-center text-gray-900 hover:text-pink-600 transition-colors focus:outline-none py-1">
+                                    Login
+                                    <svg class="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                <div id="mobile-login-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
+                                    <a href="{{ url('login-user?type=customer-login&page=' . request()->path()) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Customer Login</a>
+                                    <a href="{{ url('login-user?type=vendor-login&page=' . request()->path()) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Vendor Login</a>
+                                </div>
+                            </div>
+                        @else
+                            <!-- Logged in state -->
+                            <div class="relative">
+                                <button onclick="toggleDropdown('mobile-user-dropdown')" class="flex items-center text-gray-900 hover:text-pink-600 transition-colors focus:outline-none py-1">
+                                    Account
+                                    <svg class="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                <div id="mobile-user-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
+                                    <a href="{{ url(Auth::user()->type . '/dashboard') }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Dashboard</a>
+                                    <a href="{{ url('logout') }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Logout</a>
+                                </div>
+                            </div>
+                        @endguest
                     </div>
                 </div>
 
-                <!-- Right side icons container (Search icon + Hamburger lines) -->
-                <div class="flex items-center space-x-1">
-                    <!-- Collapsed Search Icon (Visible on Scroll) -->
-                    <button id="mobile-search-trigger" onclick="expandMobileSearch()" class="text-white focus:outline-none p-2 transition-all duration-300" style="max-width: 0px; opacity: 0; pointer-events: none; overflow: hidden;" aria-label="Search">
-                        <i class="fa-solid fa-magnifying-glass text-lg"></i>
-                    </button>
-
-                    <!-- Mobile Menu Toggle Button (Three lines on top right) -->
-                    <button onclick="toggleMobileMenu()" class="text-white focus:outline-none p-2 pr-0 hover:text-pink-100 transition-colors" aria-label="Toggle Menu">
-                        <i class="fa-solid fa-bars text-xl"></i>
-                    </button>
+                <!-- Bottom Row: Search Bar Wrapper (Takes full space below) -->
+                <div id="mobile-search-wrapper" class="w-full transition-all duration-300 ease-in-out origin-top overflow-hidden" style="max-height: 80px; opacity: 1; pointer-events: auto;">
+                    <div class="flex items-center w-full bg-[#FFFFFF] rounded-xl p-1.5 pl-3 pr-1.5 shadow-inner border border-white/20">
+                        <input type="text" placeholder="Search cosmetics, apparel, accessories..." 
+                               class="w-full bg-transparent text-sm text-gray-800 focus:outline-none placeholder-gray-500" id="search-input-mobile">
+                        <button type="button" onclick="const input = document.getElementById('search-input-mobile'); if (input) { input.dispatchEvent(new Event('input')); }" class="bg-[#C57614] hover:bg-[#A35F0E] text-white p-2 rounded-lg flex items-center justify-center transition-colors" aria-label="Submit Search">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -193,7 +246,7 @@
     </div>
 
     <!-- Main Content Area -->
-    <main class="max-w-full mx-auto px-2 md:px-6 lg:px-8 py-8">
+    <main class="max-w-full mx-auto px-2 md:px-6 lg:px-8 py-4 mt-0 md:mt-0">
         
         <!-- Title Section -->
         <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6 flex flex-col sm:flex-row sm:items-center gap-4">
@@ -208,9 +261,9 @@
         <!-- Filter Tags (Horizontally scrollable on Mobile, wrapped on Desktop) -->
         <div class="mb-10">
             <div class="flex flex-row overflow-x-auto pb-2 gap-2 whitespace-nowrap md:flex-wrap md:overflow-x-visible md:pb-0 scrollbar-none">
-                <button class="px-4 py-1.5 text-sm font-medium rounded-full bg-gray-900 text-white transition duration-200 shadow-sm">All</button>
-                <a href="/cosmetics" class="no-underline"><button class="px-4 py-1.5 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm"><span class="PFDI">MJ</span> Cosmetics</button></a>
-                <a href="/auto-parts" class="no-underline"><button class="px-4 py-1.5 text-sm font-medium rounded-full bg-white text-gray-700 hover:bg-gray-200 border border-gray-200 transition duration-200 shadow-sm"><span class="PFDI">Auto</span> parts</button></a>
+                <button class="btn-brand-gradient px-4 py-1.5 text-sm font-medium rounded-full transition duration-200 shadow-sm">All</button>
+                <a href="/cosmetics" class="no-underline"><button class="px-4 py-1.5 text-sm font-medium rounded-full bg-white text-gray-700 hover:text-pink-600 hover:border-pink-200 border border-gray-200 transition duration-200 shadow-sm"><span class="PFDI">MJ</span> Cosmetics</button></a>
+                <a href="/auto-parts" class="no-underline"><button class="px-4 py-1.5 text-sm font-medium rounded-full bg-white text-gray-700 hover:text-pink-600 hover:border-pink-200 border border-gray-200 transition duration-200 shadow-sm"><span class="PFDI">Auto</span> parts</button></a>
             </div>
             <!-- Golden Divider Line -->
             <div class="h-[3px] bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600 rounded-full w-full mt-4 shadow-sm"></div>
@@ -297,12 +350,12 @@
         function expandMobileSearch() {
             const wrapper = document.getElementById('mobile-search-wrapper');
             const trigger = document.getElementById('mobile-search-trigger');
+            const container = document.getElementById('mobile-search-container');
             const logo = document.getElementById('mobile-brand-logo');
             
             if (wrapper) {
-                wrapper.style.maxWidth = '500px';
+                wrapper.style.maxHeight = '80px';
                 wrapper.style.opacity = '1';
-                wrapper.style.marginRight = '8px';
                 wrapper.style.pointerEvents = 'auto';
             }
             if (trigger) {
@@ -316,23 +369,28 @@
                 logo.style.marginRight = '0px';
                 logo.style.pointerEvents = 'none';
             }
+            if (container) {
+                container.classList.add('space-y-2.5');
+            }
             isSearchExpanded = true;
             
             setTimeout(() => {
                 const mobileInput = document.getElementById('search-input-mobile');
-                if (mobileInput) mobileInput.focus();
+                if (mobileInput && typeof mobileInput.focus === 'function') {
+                    mobileInput.focus();
+                }
             }, 300);
         }
 
         function collapseMobileSearch() {
             const wrapper = document.getElementById('mobile-search-wrapper');
             const trigger = document.getElementById('mobile-search-trigger');
+            const container = document.getElementById('mobile-search-container');
             const logo = document.getElementById('mobile-brand-logo');
             
             if (wrapper) {
-                wrapper.style.maxWidth = '0px';
+                wrapper.style.maxHeight = '0px';
                 wrapper.style.opacity = '0';
-                wrapper.style.marginRight = '0px';
                 wrapper.style.pointerEvents = 'none';
             }
             if (trigger) {
@@ -346,20 +404,39 @@
                 logo.style.marginRight = '12px';
                 logo.style.pointerEvents = 'auto';
             }
+            if (container) {
+                container.classList.remove('space-y-2.5');
+            }
             isSearchExpanded = false;
         }
+
+        // Header elevation shadow on scroll (adds depth once content scrolls underneath)
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header.mobile-gradient-header');
+            if (!header) return;
+            if (window.scrollY > 10) {
+                header.classList.add('shadow-md');
+            } else {
+                header.classList.remove('shadow-md');
+            }
+        });
 
         // Mobile scroll animation logic
         window.addEventListener('scroll', function() {
             const wrapper = document.getElementById('mobile-search-wrapper');
             const trigger = document.getElementById('mobile-search-trigger');
-            const logo = document.getElementById('mobile-brand-logo');
             const headerContainer = document.getElementById('header-container');
+            const mobileSearchContainer = document.getElementById('mobile-search-container');
+            const logo = document.getElementById('mobile-brand-logo');
             
-            if (window.innerWidth < 768) { // Mobile size only
-                if (window.scrollY > 50) {
+            // Check if mobile elements are currently visible/rendered
+            const isMobile = mobileSearchContainer && window.getComputedStyle(mobileSearchContainer).display !== 'none';
+            const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (isMobile) {
+                if (scrollY > 50) {
                     if (headerContainer) {
-                        headerContainer.classList.remove('py-3');
+                        headerContainer.classList.remove('py-3.5');
                         headerContainer.classList.add('py-1.5');
                     }
                     if (!isSearchExpanded) {
@@ -368,13 +445,12 @@
                 } else {
                     if (headerContainer) {
                         headerContainer.classList.remove('py-1.5');
-                        headerContainer.classList.add('py-3');
+                        headerContainer.classList.add('py-3.5');
                     }
                     isSearchExpanded = false;
                     if (wrapper) {
-                        wrapper.style.maxWidth = '500px';
+                        wrapper.style.maxHeight = '80px';
                         wrapper.style.opacity = '1';
-                        wrapper.style.marginRight = '8px';
                         wrapper.style.pointerEvents = 'auto';
                     }
                     if (trigger) {

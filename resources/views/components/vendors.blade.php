@@ -108,15 +108,17 @@
     </script>
 
     <!-- Main Section Container (Will be hidden if no data is present) -->
-    <section id="featured-vendors-section" class="py-16 px-8 sm:px-6 lg:px-8 max-w-full mx-auto hidden">
+    <section id="featured-vendors-section" class="py-10 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-full mx-auto hidden">
 
         <!-- Heading - Using font-serif utility class for an elegant look -->
-            <h2 class="font-serif text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+            <span class="section-kicker">Trusted Sellers</span>
+            <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-2 sm:mb-2">
                 Featured Vendors
             </h2>
+            <div class="brand-divider brand-divider-left"></div>
             
             <!-- Subtitle -->
-            <p class="text-lg text-gray-600 mb-12">
+            <p class="text-sm sm:text-lg text-gray-600 mt-4 mb-8 sm:mb-12">
                 Discover trusted premium sellers from Pakistan and beyond.
             </p>
         
@@ -127,7 +129,11 @@
                     sm:grid-cols-3       /* 3 columns on tablet */
                     lg:grid-cols-4       /* 4 columns on small desktop */
                     auto-rows-fr">
-            <!-- Vendor cards will be injected here by JavaScript -->
+            <!-- Skeleton placeholders shown instantly; JS below replaces this innerHTML once real vendor cards are ready -->
+            <div class="skeleton-shimmer rounded-2xl h-40 sm:h-48"></div>
+            <div class="skeleton-shimmer rounded-2xl h-40 sm:h-48"></div>
+            <div class="skeleton-shimmer rounded-2xl h-40 sm:h-48 hidden sm:block"></div>
+            <div class="skeleton-shimmer rounded-2xl h-40 sm:h-48 hidden lg:block"></div>
         </div>
 
     </section>
@@ -164,29 +170,32 @@
             // Limit vendors to 10 for the 2-row layout request
             const vendorsToDisplay = vendors.slice(0, 4);
 
+            // Clear the skeleton placeholders before rendering real cards
+            grid.innerHTML = '';
+
             // 3. Render Vendor Cards
             vendorsToDisplay.forEach(vendor => {
                 const card = document.createElement('a');
                 card.href = `/vendor-products/${vendor.id}`;
                 
                 // Tailwind classes for the card container
-                card.className = 'bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 overflow-hidden group transition-all duration-300 transform hover:-translate-y-1 block no-underline';
+                card.className = 'card-hover-glow bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 overflow-hidden group transition-all duration-300 block no-underline';
                 
                 // HTML for a single vendor card
                 card.innerHTML = `
                     <div class="relative h-28 sm:h-32 md:h-36 overflow-hidden bg-gray-50">
-                        <img src="${vendor.image_url}" alt="${vendor.name} store front" 
-                             class="w-full h-full object-cover transition duration-700 ease-in-out group-hover:scale-105 brightness-95">
+                        <img src="${vendor.image_url}" alt="${vendor.name} store front" loading="lazy" onload="this.classList.add('is-loaded')"
+                             class="fade-in-img w-full h-full object-cover transition duration-700 ease-in-out group-hover:scale-105 brightness-95">
                         
                         <!-- Rating Badge Overlay -->
-                        <div class="absolute bottom-2 left-2 bg-white/95 backdrop-blur-sm px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-800 shadow-sm flex items-center space-x-1">
+                        <div class="absolute bottom-2 left-2 bg-white/95 backdrop-blur-sm px-1.5 py-0.5 rounded-full text-[10px] font-bold text-gray-800 shadow-sm flex items-center space-x-1">
                             <span class="text-amber-500">★</span>
                             <span>${vendor.rating}</span>
                         </div>
 
                         ${vendor.is_verified ? `
                             <!-- Verified Badge Overlay -->
-                            <span class="absolute top-2 right-2 px-1.5 py-0.5 text-[9px] font-bold rounded bg-blue-600 text-white shadow-sm flex items-center space-x-0.5">
+                            <span class="absolute top-2 right-2 px-1.5 py-0.5 text-[9px] font-bold rounded-full btn-brand-gradient shadow-sm flex items-center space-x-0.5">
                                 <i class="fa-solid fa-circle-check"></i>
                             </span>
                         ` : ''}

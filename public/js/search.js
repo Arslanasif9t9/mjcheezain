@@ -36,7 +36,7 @@ async function searchProducts(searchTerm) {
         // Show loading spinner with your design theme
 
         main.innerHTML = `
-            <div class="py-16 px-8 sm:px-6 lg:px-8 max-w-full mx-auto">
+            <div class="py-10 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-full mx-auto">
                 <h2 class="font-serif text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
                     Search Results
                 </h2>
@@ -65,7 +65,7 @@ async function searchProducts(searchTerm) {
     } catch (error) {
         console.error('Error:', error);
         main.innerHTML = `
-            <div class="py-16 px-8 sm:px-6 lg:px-8 max-w-full mx-auto">
+            <div class="py-10 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-full mx-auto">
                 <h2 class="font-serif text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
                     Search Results
                 </h2>
@@ -82,7 +82,7 @@ async function searchProducts(searchTerm) {
 function displayProducts(products, searchTerm) {
     if (!products || products.length === 0) {
         main.innerHTML = `
-            <div class="py-16 px-8 sm:px-6 lg:px-8 max-w-full mx-auto">
+            <div class="py-10 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-full mx-auto">
                 <h2 class="font-serif text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
                     Search Results
                 </h2>
@@ -101,7 +101,7 @@ function displayProducts(products, searchTerm) {
     }
     
     main.innerHTML = `
-        <div class="py-16 px-8 sm:px-6 lg:px-8 max-w-full mx-auto">
+        <div class="py-10 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-full mx-auto">
             <h2 class="font-serif text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
                 Search Results
             </h2>
@@ -249,68 +249,69 @@ function displayProducts(products, searchTerm) {
 
         // /*
         card.innerHTML = `
-        <a href="/product/${product.id}" class="relative no-underline">
-            <div class="absolute top-3 right-3 flex space-x-3 z-[9]">
-                <!-- Heart Icon -->
-                <button id="heart-btn" data-product-id="26" class="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition">
-                    <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="w-6 h-6 text-gray-700">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.682l-7.682-7.682a4.5 4.5 0 010-6.364z"></path>
-                    </svg>
-                </button>
-            </div>
-            <div class="relative overflow-hidden aspect-w-4 aspect-h-3">
-                <!-- Product Image -->
-                <img src="https://arslan.mjcheezain.com/storage/vendor/products/images/${productImage || 'default.jpg'}" 
-                    alt="${product.name || 'Product'}" 
-                    class="w-full h-[210px] object-cover transition duration-300 ease-in-out group-hover:scale-125">
-                
-                <!-- Discount Badge -->
-                ${discountPercentage > 0 ? `
-                    <span class="absolute top-3 right-3 px-3 py-1 text-xs font-semibold rounded-full bg-red-500 text-white shadow-md">
-                        ${discountPercentage}% OFF
-                    </span>
-                ` : ''}
-            </div>
-
-            <div class="p-4">
-                <!-- Product Name -->
-                <h3 class="text-lg font-bold text-gray-900 mb-1 truncate">${product.name || 'Product Name'}</h3>
-                
-                <!-- Description -->
-                <p class="text-sm text-gray-600 h-10 overflow-hidden mb-2">
-                    ${product.description || 'No description available'}
-                </p>
-                
-                <!-- Price & Rating -->
-                <div class="flex justify-between items-baseline my-3">
-                    <!-- Price -->
-                    <div class="flex flex-col">
-                        <span class="text-xl font-extrabold text-gray-900">
-                            $${product.selling_price*1.17 || '0.00'}
-                        </span>
-                        ${discountPercentage > 0 && product.original_price ? `
-                            <span class="text-sm text-gray-500 line-through">$${product.original_price}</span>
-                        ` : ''}
-                    </div>
+        <div class="relative">
+            <a href="/product/${product.id}" class="relative no-underline block">
+                <div class="absolute top-3 right-3 flex space-x-3 z-[9]">
+                    <!-- Heart Icon -->
+                    <button id="heart-btn" data-product-id="${product.id}" onclick="event.preventDefault(); event.stopPropagation();" class="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 active:scale-95 transition">
+                        <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="w-5 h-5 sm:w-6 sm:h-6 text-gray-700">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.682l-7.682-7.682a4.5 4.5 0 010-6.364z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="relative overflow-hidden aspect-[4/3]">
+                    <!-- Product Image -->
+                    <img src="https://arslan.mjcheezain.com/storage/vendor/products/images/${productImage || 'default.jpg'}" 
+                        alt="${product.name || 'Product'}" loading="lazy"
+                        class="w-full h-full object-cover transition duration-300 ease-in-out group-hover:scale-125">
                     
-                    <!-- Rating -->
-                    <div class="flex items-center">
-                        <span class="font-semibold">${product.rating ? product.rating : '0.0'}</span>
-                        <span class="text-yellow-500 text-lg ml-1">★</span>
+                    <!-- Discount Badge -->
+                    ${discountPercentage > 0 ? `
+                        <span class="absolute top-3 left-3 px-3 py-1 text-xs font-semibold rounded-full bg-red-500 text-white shadow-md">
+                            ${discountPercentage}% OFF
+                        </span>
+                    ` : ''}
+                </div>
+
+                <div class="p-3 sm:p-4">
+                    <!-- Product Name -->
+                    <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-1 truncate">${product.name || 'Product Name'}</h3>
+                    
+                    <!-- Description -->
+                    <p class="text-xs sm:text-sm text-gray-600 h-9 sm:h-10 overflow-hidden mb-2">
+                        ${product.description || 'No description available'}
+                    </p>
+                    
+                    <!-- Price & Rating -->
+                    <div class="flex justify-between items-baseline my-2 sm:my-3">
+                        <!-- Price -->
+                        <div class="flex flex-col">
+                            <span class="text-lg sm:text-xl font-extrabold text-gray-900">
+                                $${(product.selling_price*1.17 || 0).toFixed(2)}
+                            </span>
+                            ${discountPercentage > 0 && product.original_price ? `
+                                <span class="text-xs sm:text-sm text-gray-500 line-through">$${product.original_price}</span>
+                            ` : ''}
+                        </div>
+                        
+                        <!-- Rating -->
+                        <div class="flex items-center">
+                            <span class="text-sm sm:text-base font-semibold">${product.rating ? product.rating : '0.0'}</span>
+                            <span class="text-yellow-500 text-base sm:text-lg ml-1">★</span>
+                        </div>
                     </div>
                 </div>
-                
-                <!-- Quick View Button -->
-                <a href="/product/${product.id}">
-                    <button class="px-4 py-2 text-sm font-semibold text-white bg-gray-900 rounded-lg w-full 
-                                hover:bg-gray-700 transition duration-300 shadow-md">
-                        Quick View
-                    </button>
-                </a>
+            </a>
+
+            <!-- Quick View Button (kept outside the <a> to avoid invalid nested anchors, which broke tap targets on mobile) -->
+            <div class="px-3 pb-3 sm:px-4 sm:pb-4">
+                <button onclick="window.location.href='/product/${product.id}'" class="px-4 py-2.5 text-sm font-semibold text-white bg-gray-900 rounded-lg w-full 
+                            hover:bg-gray-700 active:bg-black transition duration-300 shadow-md">
+                    Quick View
+                </button>
             </div>
-        </a>
+        </div>
         `;
-        // */
         
         grid.appendChild(card);
     });

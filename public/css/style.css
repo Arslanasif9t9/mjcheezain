@@ -49,9 +49,15 @@ body {
 
 .car-engines {
     max-width: 100vw;
-    padding: 3rem 7rem;
+    padding: 2rem 1rem;
     margin: 0 auto;
     margin-top: -75px;
+}
+@media (min-width: 640px) {
+    .car-engines { padding: 2.5rem 3rem; }
+}
+@media (min-width: 1024px) {
+    .car-engines { padding: 3rem 7rem; }
 }
 .car-engines h2{
     font-weight: bold;
@@ -132,8 +138,153 @@ body {
     grid-row: span 2;
 }
 
-section {
-    max-width: 78vw;
+/* This used to apply max-width: 78vw to EVERY <section> on every screen size,
+   including phones — fighting with the Tailwind width/padding classes already
+   set on each section and making the whole page look cramped and off-center
+   on mobile. It's now scoped to large desktop screens only, where the legacy
+   pages that relied on it still expect a narrower centered column. */
+@media (min-width: 1200px) {
+    section {
+        max-width: 78vw;
+    }
+}
+
+/* ===================================================================
+   VISUAL POLISH — shared brand utilities
+   Brand accent gradient: rose (#FF7DA0) -> gold (#FFC275), used across
+   the header, active filter pills, and CTA buttons for a consistent,
+   premium feel instead of plain flat gray-900 everywhere.
+   =================================================================== */
+
+.section-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #C57614;
+    margin-bottom: 0.5rem;
+}
+.section-kicker::before {
+    content: "";
+    display: inline-block;
+    width: 1.5rem;
+    height: 2px;
+    background: linear-gradient(to right, #FF7DA0, #FFC275);
+    border-radius: 999px;
+}
+
+.brand-divider {
+    height: 3px;
+    width: 56px;
+    margin: 0.75rem auto 0;
+    border-radius: 999px;
+    background: linear-gradient(to right, #FF7DA0, #FFC275);
+}
+.brand-divider.brand-divider-left {
+    margin-left: 0;
+}
+
+.btn-brand-gradient {
+    background: linear-gradient(to right, #FF7DA0, #FFC275);
+    color: #fff;
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+.btn-brand-gradient:hover {
+    filter: brightness(1.06);
+}
+.btn-brand-gradient:active {
+    transform: scale(0.97);
+}
+
+.card-hover-glow {
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    transform: translate3d(0, 0, 0); /* Force GPU composition layer to prevent paint flickering */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+.card-hover-glow img {
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+@media (hover: hover) {
+    .card-hover-glow:hover {
+        transform: translateY(-4px) translate3d(0, 0, 0);
+        box-shadow: 0 16px 32px -8px rgba(255, 125, 160, 0.28), 0 4px 12px rgba(0,0,0,0.06);
+    }
+}
+
+/* Fade images in once loaded, instead of popping in abruptly */
+.fade-in-img {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+.fade-in-img.is-loaded {
+    opacity: 1;
+}
+
+/* Skeleton shimmer placeholders shown while product/vendor cards load,
+   so the grid never flashes blank white while the fetch is in flight. */
+.skeleton-shimmer {
+    position: relative;
+    overflow: hidden;
+    background-color: #f1f1f3;
+}
+.skeleton-shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+    animation: skeleton-sweep 1.4s infinite;
+}
+@keyframes skeleton-sweep {
+    100% { transform: translateX(100%); }
+}
+
+/* Floating back-to-top button */
+#back-to-top {
+    position: fixed;
+    right: 1rem;
+    bottom: 1.25rem;
+    z-index: 60;
+    width: 42px;
+    height: 42px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to right, #FF7DA0, #FFC275);
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(12px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+#back-to-top.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.footer-heading {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.6rem;
+}
+.footer-heading::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 28px;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(to right, #FF7DA0, #FFC275);
 }
 
 
@@ -161,9 +312,6 @@ section {
     .main-con {
         display: flex;
         flex-direction: column;
-    }
-    section {
-        max-width: 85vw;
     }
     section a.w-\[17vw\] {
         width: 18vw;

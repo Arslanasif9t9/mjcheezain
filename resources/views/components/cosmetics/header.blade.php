@@ -1,6 +1,14 @@
 @props(['user', 'vendor', 'profile', 'dashboardPage', 'imgPath'])
 <!-- The 'sticky top-0' classes make the header stay at the top when scrolling -->
-<header class="sticky top-0 z-50 bg-white shadow-md">
+    <style>
+        @media (max-width: 767px) {
+            .mobile-gradient-header {
+                background: linear-gradient(to right, #FF7DA0, #FFC275) !important;
+                box-shadow: none !important;
+            }
+        }
+    </style>
+<header class="sticky top-0 z-50 bg-white mobile-gradient-header shadow-md">
     <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div class="flex items-center justify-between">
             
@@ -60,7 +68,7 @@
                             Store
                         </a>
                     @endif
-                    <button onclick="toggleMobileMenu()" class="text-gray-700 focus:outline-none p-2 rounded-lg hover:bg-gray-100" aria-label="Toggle Menu">
+                    <button onclick="toggleMobileMenu()" class="text-[#000000] focus:outline-none p-2 rounded-lg hover:opacity-75 transition-colors" aria-label="Toggle Menu">
                         <i class="fa-solid fa-bars text-xl"></i>
                     </button>
                 </div>
@@ -68,18 +76,19 @@
         </div>
         
         <!-- Mobile Search Bar -->
-        <div class="md:hidden mt-3 relative">
-            <input
-                type="text"
-                placeholder="Search products..."
-                class="w-full p-2.5 pl-9 border border-gray-300 rounded-full text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 text-sm"
-                id="search-input-mobile"
-            >
-            <div class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
+        <div class="md:hidden mt-3 pb-1">
+            <div class="flex items-center w-full bg-[#FFFFFF] rounded-xl p-1.5 pl-3 pr-1.5 shadow-inner border border-white/20">
+                <input
+                    type="text"
+                    placeholder="Search products..."
+                    class="w-full bg-transparent text-sm text-gray-800 focus:outline-none placeholder-gray-500"
+                    id="search-input-mobile"
+                >
+                <button type="button" onclick="const input = document.getElementById('search-input-mobile'); if (input) { input.dispatchEvent(new Event('input')); }" class="bg-[#C57614] hover:bg-[#A35F0E] text-white p-2 rounded-lg flex items-center justify-center transition-colors" aria-label="Submit Search">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
             </div>
         </div>
     </div>
