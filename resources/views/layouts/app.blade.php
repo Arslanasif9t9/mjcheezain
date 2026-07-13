@@ -170,7 +170,7 @@
             }
         }
     </script>
-    <script src="{{ asset('js/category_fetch.js') }}"></script>
+    <script src="{{ asset('js/category_fetch_v2.js') }}?v={{ time() }}"></script>
     
     @stack('scripts')
 </body>

@@ -297,11 +297,11 @@
                 </div>
             </div>
             
-            <!-- 2. Column of Smaller Cards -->
-            <div class="lg:col-span-1 grid grid-cols-2 lg:grid-cols-1 gap-3 md:gap-6">
+            <!-- 2. Horizontal scrollable list on mobile, stacked column on desktop -->
+            <div class="lg:col-span-1 flex overflow-x-auto gap-4 scrollbar-none snap-x snap-mandatory lg:grid lg:grid-cols-1 lg:overflow-x-visible lg:gap-6 py-2 px-1" id="mobile-scroll-container">
 
                 <!-- Top Small Card: Lipstick -->
-                <div class="scroll-animate opacity-0 translate-y-12 transition-all duration-700 ease-out relative h-[160px] sm:h-[220px] lg:h-[240px] rounded-2xl overflow-hidden shadow-lg group cursor-pointer">
+                <div class="scroll-animate opacity-0 translate-y-12 transition-all duration-700 ease-out relative h-[250px] sm:h-[350px] lg:h-[240px] w-[80vw] lg:w-auto flex-shrink-0 snap-start rounded-2xl overflow-hidden shadow-lg group cursor-pointer">
                     <img src="{{ asset('img/hero-2.jpeg') }}" 
                          alt="Red Lipstick" class="w-full h-full object-cover brightness-95 group-hover:scale-110 transition duration-500">
                     <div class="absolute top-0 left-0 p-4">
@@ -312,7 +312,7 @@
                 </div>
 
                 <!-- Bottom Small Card: Apparel/Model -->
-                <div class="scroll-animate opacity-0 translate-y-12 transition-all duration-700 ease-out relative h-[160px] sm:h-[220px] lg:h-[240px] rounded-2xl overflow-hidden shadow-lg group cursor-pointer" style="transition-delay: 150ms;">
+                <div class="scroll-animate opacity-0 translate-y-12 transition-all duration-700 ease-out relative h-[250px] sm:h-[350px] lg:h-[240px] w-[80vw] lg:w-auto flex-shrink-0 snap-start rounded-2xl overflow-hidden shadow-lg group cursor-pointer" style="transition-delay: 150ms;">
                     <img src="{{ asset('img/hero-3.jpeg') }}" 
                          alt="Summer Apparel" class="w-full h-full object-cover brightness-95 group-hover:scale-110 transition duration-500">
                     <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/50 to-transparent">
@@ -520,5 +520,30 @@
 
             const animElements = document.querySelectorAll('.scroll-animate');
             animElements.forEach(el => observer.observe(el));
+
+            // Mobile horizontal peek animation
+            const container = document.getElementById('mobile-scroll-container');
+            if (container && window.innerWidth < 1024) {
+                setTimeout(() => {
+                    try {
+                        container.scrollTo({
+                            left: container.offsetWidth * 0.8,
+                            behavior: 'smooth'
+                        });
+                    } catch (e) {
+                        container.scrollLeft = container.offsetWidth * 0.8;
+                    }
+                    setTimeout(() => {
+                        try {
+                            container.scrollTo({
+                                left: 0,
+                                behavior: 'smooth'
+                            });
+                        } catch (e) {
+                            container.scrollLeft = 0;
+                        }
+                    }, 1000);
+                }, 1000);
+            }
         });
     </script>

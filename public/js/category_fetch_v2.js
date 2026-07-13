@@ -110,9 +110,6 @@
             const titleElement = document.getElementById(`${id}-title`);
             const grid = document.getElementById(`${id}-product-grid`);
 
-            // Note: grid still shows its skeleton placeholders here — we only
-            // swap them out once the real cards are ready (see fragment below),
-            // so the section never flashes blank while data is loading.
             titleElement.textContent = '';
 
             try {

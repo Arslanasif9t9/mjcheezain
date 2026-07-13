@@ -37,14 +37,18 @@
 
     <script>
        document.addEventListener('DOMContentLoaded', () => {
-            const categoryProp = `{{ $category }}`.replaceAll('&amp;', '&');
+            const categoryProp = "{!! $category !!}";
             const id = `{{ $id }}`;
             const grid = document.getElementById(`${id}-product-grid`);
             const wrapper = document.getElementById(`${id}-scroll-wrapper`);
             const leftBtn = document.getElementById(`${id}-scroll-left`);
             const rightBtn = document.getElementById(`${id}-scroll-right`);
 
-            loadCategoryProducts(categoryProp, id);
+            try {
+                loadCategoryProducts(categoryProp, id);
+            } catch (err) {
+                console.error("Error calling loadCategoryProducts:", err);
+            }
 
             // --- Scroll Logic ---
             function updateButtons() {

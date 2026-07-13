@@ -31,13 +31,15 @@
     </section>
 
     <script>
-
         document.addEventListener('DOMContentLoaded', () => {
-            const categoryProp = `{{ $category }}`.replaceAll('&amp;', '&'); 
+            const categoryProp = "{!! $category !!}"; 
             const id = `{{ $id }}`;
             
-            loadCategoryProducts(categoryProp, id);
-
+            try {
+                loadCategoryProducts(categoryProp, id);
+            } catch (err) {
+                console.error("Error calling loadCategoryProducts:", err);
+            }
         });
     </script>
 

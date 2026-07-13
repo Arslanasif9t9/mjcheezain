@@ -117,7 +117,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/search-products', [SearchController::class, 'searchProducts'])->name('search.products');
 
 Route::get('/products/savings', [ProductController::class, 'biggestSavings']);
-Route::post('/products/category', [ProductController::class, 'byCategory']);
+Route::get('/products/category', [ProductController::class, 'byCategory']);
 
 
 
