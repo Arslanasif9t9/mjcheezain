@@ -96,7 +96,7 @@ class ProfileImageController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error')
             ], 500);
         }
     }
@@ -151,7 +151,7 @@ class ProfileImageController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error')
             ], 500);
         }
     }
@@ -241,7 +241,7 @@ class ProfileImageController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error')
             ], 500);
         }
     }
@@ -296,7 +296,7 @@ class ProfileImageController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error')
             ], 500);
         }
     }

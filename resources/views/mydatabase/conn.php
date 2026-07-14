@@ -1,9 +1,9 @@
 <?php
-// Database connection parameters
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "u425346958_db";
+// Database connection parameters (from .env — never hardcode credentials)
+$servername = env('DB_HOST', 'localhost');
+$username = env('DB_USERNAME', 'root');
+$password = env('DB_PASSWORD', '');
+$dbname = env('DB_DATABASE', 'u425346958_db');
 
 // Create connetion
 $conn = new mysqli($servername, $username, $password, $dbname);

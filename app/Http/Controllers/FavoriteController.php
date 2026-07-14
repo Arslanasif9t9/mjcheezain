@@ -64,7 +64,7 @@ class FavoriteController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error updating favorites: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error updating favorites')
             ], 500);
         }
     }
@@ -162,7 +162,7 @@ class FavoriteController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error fetching wishlist: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error fetching wishlist')
             ], 500);
         }
     }

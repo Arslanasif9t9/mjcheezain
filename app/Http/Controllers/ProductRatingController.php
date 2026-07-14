@@ -92,7 +92,7 @@ class ProductRatingController extends Controller
             
             return response()->json([
                 'success' => false,
-                'message' => 'Error submitting rating: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error submitting rating')
             ], 500);
         }
     }
@@ -214,7 +214,7 @@ class ProductRatingController extends Controller
             
             return response()->json([
                 'success' => false,
-                'message' => 'Error submitting request: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error submitting request')
             ], 500);
         }
     }
@@ -260,7 +260,7 @@ class ProductRatingController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error loading tracking: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error loading tracking')
             ], 500);
         }
     }
@@ -320,7 +320,7 @@ class ProductRatingController extends Controller
             
             return response()->json([
                 'success' => false,
-                'message' => 'Error updating status: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error updating status')
             ], 500);
         }
     }
@@ -382,7 +382,7 @@ class ProductRatingController extends Controller
             
             return response()->json([
                 'success' => false,
-                'message' => 'Error cancelling request: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error cancelling request')
             ], 500);
         }
     }
@@ -425,7 +425,7 @@ class ProductRatingController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error initiating return: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error initiating return')
             ], 500);
         }
     }
@@ -486,7 +486,7 @@ class ProductRatingController extends Controller
             
             return response()->json([
                 'success' => false,
-                'message' => 'Error cancelling order: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error cancelling order')
             ], 500);
         }
     }

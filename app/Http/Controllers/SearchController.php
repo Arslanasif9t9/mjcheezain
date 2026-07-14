@@ -123,7 +123,7 @@ class SearchController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'Database error',
-                'message' => $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Search failed')
             ], 500);
         }
         

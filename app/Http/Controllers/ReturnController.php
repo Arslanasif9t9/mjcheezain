@@ -167,7 +167,7 @@ class ReturnController extends Controller
             
             return response()->json([
                 'success' => false,
-                'message' => 'Error submitting return request: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error submitting return request')
             ], 500);
         }
     }
@@ -274,7 +274,7 @@ class ReturnController extends Controller
             
             return response()->json([
                 'success' => false,
-                'message' => 'Error cancelling return: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error cancelling return')
             ], 500);
         }
     }

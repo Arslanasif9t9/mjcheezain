@@ -235,7 +235,7 @@ class AutoPartsProductController extends Controller
             
     //         return response()->json([
     //             'success' => false,
-    //             'message' => 'Failed to save product: ' . $e->getMessage(),
+    //             'message' => \App\Support\ErrorReason::friendly($e, 'Failed to save product'),
     //             'errors' => ['general' => [$e->getMessage()]]
     //         ], 500);
     //     }
@@ -600,7 +600,7 @@ class AutoPartsProductController extends Controller
             
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to update product: ' . $e->getMessage(),
+                'message' => \App\Support\ErrorReason::friendly($e, 'Failed to update product'),
                 'errors' => ['general' => [$e->getMessage()]]
             ], 500);
         }
@@ -675,7 +675,7 @@ class AutoPartsProductController extends Controller
             
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to delete product: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Failed to delete product')
             ], 500);
         }
     }

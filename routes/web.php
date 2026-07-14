@@ -51,22 +51,24 @@ Route::get('/api/search', [SearchController::class, 'searchProducts']);
 Route::view('/comming', 'comming-soon');
 Route::post('/subscribe', [HomeController::class, 'subscribe']);
 
-Route::get('/test-mail', function() {
-    try {
-        $email = "arslanahmadt58@gmail.com";
-        // Send OTP via email
-            Mail::send('emails.otp', ['otp' => '1234'], function($message) use ($email) {
+// Dev-only utilities: never exposed in production
+if (app()->environment('local')) {
+    Route::get('/test-mail', function () {
+        try {
+            $email = "arslanahmadt58@gmail.com";
+            // Send OTP via email
+            Mail::send('emails.otp', ['otp' => '1234'], function ($message) use ($email) {
                 $message->to($email)
                         ->subject('Your OTP Code');
             });
             return "Email sent successfully!";
-    } catch (\Exception $e) {
-        return "Error: " . $e->getMessage();
-    }
-});
+        } catch (\Exception $e) {
+            return "Error: " . $e->getMessage();
+        }
+    });
 
-
-Route::view('createDB', 'mydatabase/creation');
+    Route::view('createDB', 'mydatabase/creation');
+}
 
 
 // Public routes

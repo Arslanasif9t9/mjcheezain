@@ -5,11 +5,11 @@ if (!isset($_SESSION['user_id']) || $_SESSION['type'] !== 'vendor') {
     die("Unauthorized access");
 }
 
-// Database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "cheezaindb";
+// Database connection (from .env — never hardcode credentials)
+$servername = function_exists('env') ? env('DB_HOST', 'localhost') : 'localhost';
+$username = function_exists('env') ? env('DB_USERNAME', 'root') : 'root';
+$password = function_exists('env') ? env('DB_PASSWORD', '') : '';
+$dbname = function_exists('env') ? env('DB_DATABASE', 'cheezaindb') : 'cheezaindb';
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {

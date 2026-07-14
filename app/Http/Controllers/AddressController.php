@@ -91,7 +91,7 @@ class AddressController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error saving address: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error saving address')
             ], 500);
         }
     }

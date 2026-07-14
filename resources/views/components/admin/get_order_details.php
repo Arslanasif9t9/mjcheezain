@@ -1,5 +1,11 @@
 <?php
-$mysqli = new mysqli("localhost", "root", "", "cheezaindb");
+// Database connection (from .env — never hardcode credentials)
+$mysqli = new mysqli(
+    function_exists('env') ? env('DB_HOST', 'localhost') : 'localhost',
+    function_exists('env') ? env('DB_USERNAME', 'root') : 'root',
+    function_exists('env') ? env('DB_PASSWORD', '') : '',
+    function_exists('env') ? env('DB_DATABASE', 'cheezaindb') : 'cheezaindb'
+);
 if ($mysqli->connect_error) die("DB error");
 
 // Get order ID

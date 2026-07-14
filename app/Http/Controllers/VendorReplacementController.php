@@ -218,7 +218,7 @@ class VendorReplacementController extends Controller
             
             return response()->json([
                 'success' => false,
-                'message' => 'Error updating status: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error updating status')
             ], 500);
         }
     }

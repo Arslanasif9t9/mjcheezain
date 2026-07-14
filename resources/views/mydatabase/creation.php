@@ -1,9 +1,9 @@
 <?php
-// Database connection parameters
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "cheezaindb";
+// Database connection parameters (from .env — never hardcode credentials)
+$servername = env('DB_HOST', 'localhost');
+$username = env('DB_USERNAME', 'root');
+$password = env('DB_PASSWORD', '');
+$dbname = env('DB_DATABASE', 'cheezaindb');
 
 // Create connection
 $conn = new mysqli($servername, $username, $password);

@@ -212,7 +212,7 @@ class AutoPartsProductShowController extends Controller
     } catch (\Exception $e) {
         return response()->json([
             'success' => false,
-            'message' => 'Error fetching products: ' . $e->getMessage()
+            'message' => \App\Support\ErrorReason::friendly($e, 'Error fetching products')
         ], 500);
     }
 }
@@ -309,7 +309,7 @@ class AutoPartsProductShowController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error fetching filters: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error fetching filters')
             ], 500);
         }
     }
@@ -407,7 +407,7 @@ class AutoPartsProductShowController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error fetching product: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error fetching product')
             ], 500);
         }
     }
@@ -456,10 +456,7 @@ class AutoPartsProductShowController extends Controller
                 ->first();
 
             if (!$product) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Product not found'
-                ], 404);
+                abort(404);
             }
 
             // Get all images
@@ -537,10 +534,8 @@ class AutoPartsProductShowController extends Controller
             // ]);
 
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error fetching product: ' . $e->getMessage()
-            ], 500);
+            // Full page route: let the global handler render the friendly error page
+            throw $e;
         }
     }
 
@@ -610,7 +605,7 @@ class AutoPartsProductShowController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error fetching related products: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error fetching related products')
             ], 500);
         }
     }

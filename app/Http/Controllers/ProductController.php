@@ -114,7 +114,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error updating product: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error updating product')
             ]);
         }
     }
@@ -160,7 +160,7 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error deleting product: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error deleting product')
             ]);
         }
     }

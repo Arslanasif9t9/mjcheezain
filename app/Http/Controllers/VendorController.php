@@ -307,7 +307,7 @@ class VendorController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error updating basic information: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error updating basic information')
             ], 500);
         }
     }
@@ -404,7 +404,7 @@ class VendorController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error updating store details: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error updating store details')
             ], 500);
         }
     }
@@ -451,7 +451,7 @@ class VendorController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error updating address: ' . $e->getMessage(),
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error updating address'),
             ], 500);
         }
     }
@@ -746,7 +746,7 @@ class VendorController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to delete product: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Failed to delete product')
             ], 500);
         }
     }
@@ -906,7 +906,7 @@ class VendorController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to update vendor status: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Failed to update vendor status')
             ], 500);
         }
     }
@@ -984,7 +984,7 @@ class VendorController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error loading vendor details: ' . $e->getMessage()
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error loading vendor details')
             ], 500);
         }
     }
