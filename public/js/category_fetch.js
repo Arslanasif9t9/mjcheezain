@@ -166,7 +166,7 @@
                             <!-- Product Image -->
                             <div class="relative overflow-hidden aspect-[4/3] bg-gray-50">
                                 <img src="${imgUrl}" alt="${product.name}" loading="lazy" onload="this.classList.add('is-loaded')"
-                                    class="fade-in-img w-full h-28 sm:h-36 md:h-44 object-cover transition duration-500 ease-in-out group-hover:scale-105">
+                                    class="fade-in-img w-full h-full object-cover transition duration-500 ease-in-out group-hover:scale-105">
                             </div>
 
                             <!-- Product Details -->

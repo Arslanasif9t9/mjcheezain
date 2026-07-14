@@ -48,14 +48,17 @@
     <!-- Material Icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0">
     
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ asset('css/login&signup.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/d-mode.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <!-- Custom CSS (cache-busted by file modification time so live users
+         always get the latest styles after a deploy) -->
+    <link rel="stylesheet" href="{{ asset('css/login&signup.css') }}?v={{ @filemtime(public_path('css/login&signup.css')) ?: 1 }}">
+    <link rel="stylesheet" href="{{ asset('css/d-mode.css') }}?v={{ @filemtime(public_path('css/d-mode.css')) ?: 1 }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ @filemtime(public_path('css/style.css')) ?: 1 }}">
 
     <style>
         html { -webkit-text-size-adjust: 100%; }
-        html, body { overflow-x: hidden; max-width: 100vw; }
+        /* overflow-x: clip (not hidden) — hidden creates a scroll container on
+           body which silently breaks position:sticky on the header */
+        html, body { overflow-x: clip; max-width: 100vw; }
         body { -webkit-tap-highlight-color: transparent; }
         img, svg { max-width: 100%; }
         .search-bar { border: 1px solid #ccc; border-radius: 4px; }
