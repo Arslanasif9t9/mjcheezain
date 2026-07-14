@@ -14,15 +14,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+
+      - name: Validate FTP settings
+        id: ftp
+        env:
+          RAW_SERVER: ${{ secrets.FTP_SERVER }}
+          RAW_DIR: ${{ secrets.FTP_SERVER_DIR }}
+        run: |
+          # Strip whitespace, protocol prefix (ftp://), and any trailing path from the host
+          SERVER=$(printf '%s' "$RAW_SERVER" | tr -d '[:space:]' | sed -E 's#^[a-zA-Z]+://##; s#/.*$##')
+          if [ -z "$SERVER" ]; then
+            echo "::error::FTP_SERVER secret is empty or contains only whitespace."
+            exit 1
+          fi
+          echo "::add-mask::$SERVER"
+          if ! getent hosts "$SERVER" > /dev/null 2>&1; then
+            echo "::error::FTP_SERVER does not resolve via DNS (getaddrinfo ENOTFOUND). Open Hostinger hPanel -> Files -> FTP Accounts and use the numeric 'FTP IP' address as the FTP_SERVER secret instead of the hostname."
+            exit 1
+          fi
+          echo "FTP server DNS lookup: OK"
+
+          # Normalize server dir to /path/ form
+          DIR=$(printf '%s' "$RAW_DIR" | tr -d '[:space:]')
+          [ -z "$DIR" ] && DIR="/public_html/"
+          case "$DIR" in /*) ;; *) DIR="/$DIR" ;; esac
+          case "$DIR" in */) ;; *) DIR="$DIR/" ;; esac
+          echo "::add-mask::$DIR"
+
+          echo "server=$SERVER" >> "$GITHUB_OUTPUT"
+          echo "dir=$DIR" >> "$GITHUB_OUTPUT"
 
       - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
-          server: ${{ secrets.FTP_SERVER }}
+          server: ${{ steps.ftp.outputs.server }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          server-dir: ${{ steps.ftp.outputs.dir }}
           dangerous-clean-slate: false
           exclude: |
             **/.git*
