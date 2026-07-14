@@ -29,11 +29,14 @@ jobs:
             exit 1
           fi
           echo "::add-mask::$SERVER"
-          if ! getent hosts "$SERVER" > /dev/null 2>&1; then
+          if printf '%s' "$SERVER" | grep -qE '^[0-9]{1,3}(\.[0-9]{1,3}){3}$'; then
+            echo "FTP server is an IP address: OK"
+          elif getent hosts "$SERVER" > /dev/null 2>&1; then
+            echo "FTP server DNS lookup: OK"
+          else
             echo "::error::FTP_SERVER does not resolve via DNS (getaddrinfo ENOTFOUND). Open Hostinger hPanel -> Files -> FTP Accounts and use the numeric 'FTP IP' address as the FTP_SERVER secret instead of the hostname."
             exit 1
           fi
-          echo "FTP server DNS lookup: OK"
 
           # Normalize server dir to /path/ form
           DIR=$(printf '%s' "$RAW_DIR" | tr -d '[:space:]')
