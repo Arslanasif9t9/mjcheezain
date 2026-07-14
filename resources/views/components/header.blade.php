@@ -13,27 +13,41 @@
 
         /* Smooth mobile header scroll animation:
            search bar glides up + gently fades, brand name slides in with a
-           slight delay so the two motions feel choreographed, not snappy. */
+           tiny delay so the two motions feel choreographed, not snappy. */
         #mobile-search-wrapper {
-            transition: max-height .4s cubic-bezier(.4, 0, .2, 1),
-                        opacity .28s ease,
-                        transform .4s cubic-bezier(.4, 0, .2, 1),
-                        margin-top .4s cubic-bezier(.4, 0, .2, 1);
+            transition: max-height .22s cubic-bezier(.4, 0, .2, 1),
+                        opacity .16s ease,
+                        transform .22s cubic-bezier(.4, 0, .2, 1),
+                        margin-top .22s cubic-bezier(.4, 0, .2, 1);
             will-change: max-height, opacity, transform;
         }
         #mobile-search-wrapper.search-collapsed {
-            transform: translateY(-12px) scale(.97);
+            transform: translateY(-10px) scale(.97);
             margin-top: 0;
         }
         #mobile-brand-wrapper {
-            transition: max-width .35s cubic-bezier(.4, 0, .2, 1),
-                        opacity .25s ease,
-                        transform .35s cubic-bezier(.4, 0, .2, 1);
-            transform: translateX(-8px);
+            transition: max-width .2s cubic-bezier(.4, 0, .2, 1),
+                        opacity .15s ease,
+                        transform .2s cubic-bezier(.4, 0, .2, 1);
+            transform: translateX(-6px);
         }
         #mobile-brand-wrapper.brand-visible {
-            transition-delay: .12s;
+            transition-delay: .05s;
             transform: translateX(0);
+        }
+
+        /* Compact header on scroll: much shorter, and the hamburger jumps to
+           the right side next to the search icon while the brand name sits
+           flush left. */
+        #header-container {
+            transition: padding .22s cubic-bezier(.4, 0, .2, 1);
+        }
+        #header-container.header-compact {
+            padding-top: .3rem !important;
+            padding-bottom: .3rem !important;
+        }
+        #header-container.header-compact #mobile-menu-btn {
+            order: 7;
         }
     </style>
 
@@ -101,24 +115,22 @@
 
             <!-- Mobile Header Layout (Visible only on Mobile) -->
             <div id="mobile-search-container" class="flex md:hidden flex-col w-full space-y-2.5 transition-all duration-300">
-                <!-- Top Row: Hamburger + Brand Name + Auth Links -->
-                <div class="flex items-center justify-between w-full px-1">
-                    <!-- Left side: Hamburger Menu + Logo Image & Stylish Text (Scroll-only) -->
-                    <div class="flex items-center space-x-2">
-                        <!-- Hamburger Menu Toggle Button -->
-                        <button onclick="toggleMobileMenu()" class="text-[#000000] focus:outline-none p-1 hover:opacity-75 transition-colors" aria-label="Toggle Menu">
-                            <i class="fa-solid fa-bars text-xl"></i>
-                        </button>
+                <!-- Top Row: Hamburger + Brand Name + Auth Links.
+                     All items are direct flex children so CSS `order` can move
+                     the hamburger to the right side in the compact (scrolled) state. -->
+                <div class="flex items-center w-full px-1 gap-1.5">
+                    <!-- Hamburger Menu Toggle Button (moves to the right on scroll) -->
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-[#000000] focus:outline-none p-1 hover:opacity-75 transition-colors" aria-label="Toggle Menu">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
 
-                        <!-- Logo & Brand Text: hidden by default, visible on scroll -->
-                        <div id="mobile-brand-wrapper" class="flex items-center space-x-1.5 transition-all duration-300 opacity-0 max-w-0 overflow-hidden pointer-events-none">
-                            <img src="{{ asset('img/short_logo.jpeg') }}" class="w-6 h-6 rounded-full object-cover border border-white/20 flex-shrink-0">
-                            <span class="font-serif-italic font-bold text-gray-900 text-sm whitespace-nowrap">MJ Cheezain</span>
-                        </div>
+                    <!-- Brand Text: hidden by default, sits flush left on scroll -->
+                    <div id="mobile-brand-wrapper" class="flex items-center transition-all duration-300 opacity-0 max-w-0 overflow-hidden pointer-events-none">
+                        <span class="font-serif-italic font-bold text-gray-900 text-sm whitespace-nowrap">MJ Cheezain</span>
                     </div>
 
                     <!-- Inline Search: expands inside this same row when the search icon is tapped -->
-                    <div id="mobile-inline-search" class="flex-1 min-w-0 mx-1.5 transition-all duration-300 ease-in-out overflow-hidden" style="max-width: 0px; opacity: 0; pointer-events: none;">
+                    <div id="mobile-inline-search" class="flex-1 min-w-0 mx-1.5 transition-all duration-300 ease-in-out overflow-hidden" style="max-width: 0px; opacity: 0; pointer-events: none; flex-grow: 999;">
                         <div class="flex items-center w-full bg-white rounded-full py-1 pl-3 pr-1 shadow-inner border border-white/20">
                             <input type="text" id="search-input-inline" placeholder="Search products..."
                                    class="w-full min-w-0 bg-transparent text-sm text-gray-800 focus:outline-none placeholder-gray-500">
@@ -127,6 +139,9 @@
                             </button>
                         </div>
                     </div>
+
+                    <!-- Spacer: keeps the right-side group pushed to the right edge -->
+                    <div class="flex-1"></div>
 
                     <!-- Right side: Search trigger (on scroll) + Sign Up / Login / Profile dropdowns -->
                     <div class="flex items-center text-xs sm:text-sm font-semibold text-gray-800 space-x-1.5">
@@ -336,8 +351,8 @@
             <!-- 2. Horizontal scrollable list on mobile, stacked column on desktop -->
             <div class="lg:col-span-1 flex overflow-x-auto gap-4 scrollbar-none snap-x snap-mandatory lg:grid lg:grid-cols-1 lg:overflow-x-visible lg:gap-6 py-2 px-1" id="mobile-scroll-container">
 
-                <!-- Top Small Card: Lipstick -->
-                <div class="scroll-animate opacity-0 translate-y-12 transition-all duration-700 ease-out relative h-[250px] sm:h-[350px] lg:h-[240px] w-[80vw] lg:w-auto flex-shrink-0 snap-start rounded-2xl overflow-hidden shadow-lg group cursor-pointer">
+                <!-- Top Small Card: Lipstick (tall Amazon-style card on mobile) -->
+                <div class="scroll-animate opacity-0 translate-y-12 transition-all duration-700 ease-out relative h-[430px] sm:h-[480px] lg:h-[240px] w-[80vw] lg:w-auto flex-shrink-0 snap-start rounded-2xl overflow-hidden shadow-lg group cursor-pointer">
                     <img src="{{ asset('img/hero-2.jpeg') }}" 
                          alt="Red Lipstick" class="w-full h-full object-cover brightness-95 group-hover:scale-110 transition duration-500">
                     <div class="absolute top-0 left-0 p-4">
@@ -347,8 +362,8 @@
                     </div>
                 </div>
 
-                <!-- Bottom Small Card: Apparel/Model -->
-                <div class="scroll-animate opacity-0 translate-y-12 transition-all duration-700 ease-out relative h-[250px] sm:h-[350px] lg:h-[240px] w-[80vw] lg:w-auto flex-shrink-0 snap-start rounded-2xl overflow-hidden shadow-lg group cursor-pointer" style="transition-delay: 150ms;">
+                <!-- Bottom Small Card: Apparel/Model (tall Amazon-style card on mobile) -->
+                <div class="scroll-animate opacity-0 translate-y-12 transition-all duration-700 ease-out relative h-[430px] sm:h-[480px] lg:h-[240px] w-[80vw] lg:w-auto flex-shrink-0 snap-start rounded-2xl overflow-hidden shadow-lg group cursor-pointer" style="transition-delay: 150ms;">
                     <img src="{{ asset('img/hero-3.jpeg') }}" 
                          alt="Summer Apparel" class="w-full h-full object-cover brightness-95 group-hover:scale-110 transition duration-500">
                     <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/50 to-transparent">
@@ -478,8 +493,7 @@
 
             if (compact) {
                 if (headerContainer) {
-                    headerContainer.classList.remove('py-3.5');
-                    headerContainer.classList.add('py-1.5');
+                    headerContainer.classList.add('header-compact');
                 }
                 // The full-width search line glides up and fades out
                 if (wrapper) {
@@ -504,8 +518,7 @@
                 }
             } else {
                 if (headerContainer) {
-                    headerContainer.classList.remove('py-1.5');
-                    headerContainer.classList.add('py-3.5');
+                    headerContainer.classList.remove('header-compact');
                 }
                 isSearchExpanded = false;
                 const inlineSearch = document.getElementById('mobile-inline-search');
@@ -589,29 +602,43 @@
             const animElements = document.querySelectorAll('.scroll-animate');
             animElements.forEach(el => observer.observe(el));
 
-            // Mobile horizontal peek animation
+            // Mobile hero cards auto-scroll carousel: every few seconds the row
+            // gently slides to the other card (ping-pong left <-> right).
+            // Pauses when the user touches or scrolls it, then resumes.
             const container = document.getElementById('mobile-scroll-container');
             if (container && window.innerWidth < 1024) {
-                setTimeout(() => {
+                const SLIDE_EVERY_MS = 3500;
+                const RESUME_AFTER_MS = 5000;
+                let slideDirection = 1;
+                let autoTimer = null;
+                let resumeTimer = null;
+
+                function autoSlide() {
+                    const maxScroll = container.scrollWidth - container.clientWidth;
+                    if (maxScroll <= 0) return;
+                    const target = slideDirection > 0 ? maxScroll : 0;
                     try {
-                        container.scrollTo({
-                            left: container.offsetWidth * 0.8,
-                            behavior: 'smooth'
-                        });
+                        container.scrollTo({ left: target, behavior: 'smooth' });
                     } catch (e) {
-                        container.scrollLeft = container.offsetWidth * 0.8;
+                        container.scrollLeft = target;
                     }
-                    setTimeout(() => {
-                        try {
-                            container.scrollTo({
-                                left: 0,
-                                behavior: 'smooth'
-                            });
-                        } catch (e) {
-                            container.scrollLeft = 0;
-                        }
-                    }, 1000);
-                }, 1000);
+                    slideDirection *= -1;
+                }
+
+                function startAutoSlide() {
+                    if (!autoTimer) autoTimer = setInterval(autoSlide, SLIDE_EVERY_MS);
+                }
+
+                function pauseAutoSlide() {
+                    clearInterval(autoTimer);
+                    autoTimer = null;
+                    clearTimeout(resumeTimer);
+                    resumeTimer = setTimeout(startAutoSlide, RESUME_AFTER_MS);
+                }
+
+                container.addEventListener('touchstart', pauseAutoSlide, { passive: true });
+                container.addEventListener('wheel', pauseAutoSlide, { passive: true });
+                startAutoSlide();
             }
         });
     </script>

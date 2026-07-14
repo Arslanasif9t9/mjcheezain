@@ -122,14 +122,18 @@
                 Discover trusted premium sellers from Pakistan and beyond.
             </p>
         
-        <!-- Vendor Slider (horizontal left-right scroll) -->
-        <div id="vendor-grid"
-             class="flex overflow-x-auto gap-3 md:gap-6 pb-3 snap-x snap-mandatory scrollbar-none scroll-smooth">
+        <!-- Vendor Grid - Responsive 2-row layout (up to 5 columns) -->
+        <div id="vendor-grid" 
+             class="grid gap-3 md:gap-6 
+                    grid-cols-2          /* 2 columns on small mobile */
+                    sm:grid-cols-3       /* 3 columns on tablet */
+                    lg:grid-cols-4       /* 4 columns on small desktop */
+                    auto-rows-fr">
             <!-- Skeleton placeholders shown instantly; JS below replaces this innerHTML once real vendor cards are ready -->
-            <div class="skeleton-shimmer rounded-2xl h-40 sm:h-48 w-[55vw] sm:w-56 md:w-64 flex-shrink-0"></div>
-            <div class="skeleton-shimmer rounded-2xl h-40 sm:h-48 w-[55vw] sm:w-56 md:w-64 flex-shrink-0"></div>
-            <div class="skeleton-shimmer rounded-2xl h-40 sm:h-48 w-[55vw] sm:w-56 md:w-64 flex-shrink-0 hidden sm:block"></div>
-            <div class="skeleton-shimmer rounded-2xl h-40 sm:h-48 w-[55vw] sm:w-56 md:w-64 flex-shrink-0 hidden lg:block"></div>
+            <div class="skeleton-shimmer rounded-2xl h-40 sm:h-48"></div>
+            <div class="skeleton-shimmer rounded-2xl h-40 sm:h-48"></div>
+            <div class="skeleton-shimmer rounded-2xl h-40 sm:h-48 hidden sm:block"></div>
+            <div class="skeleton-shimmer rounded-2xl h-40 sm:h-48 hidden lg:block"></div>
         </div>
 
     </section>
@@ -175,7 +179,7 @@
                 card.href = `/vendor-products/${vendor.id}`;
                 
                 // Tailwind classes for the card container
-                card.className = 'card-hover-glow bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 overflow-hidden group transition-all duration-300 block no-underline w-[55vw] sm:w-56 md:w-64 flex-shrink-0 snap-start';
+                card.className = 'card-hover-glow bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 overflow-hidden group transition-all duration-300 block no-underline';
                 
                 // HTML for a single vendor card
                 card.innerHTML = `
