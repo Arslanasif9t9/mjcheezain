@@ -55,6 +55,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ steps.ftp.outputs.dir }}
+          timeout: 120000
           dangerous-clean-slate: false
           exclude: |
             **/.git*
