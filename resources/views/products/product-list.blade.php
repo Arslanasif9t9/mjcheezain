@@ -1,170 +1,168 @@
-<div class="mx-auto px-4 py-12">
-        {{-- <h1 class="text-3xl font-bold text-center mb-8">Product List Display</h1> --}}
-        
-        <!-- Main Section Container -->
-        <section id="products-section" class="py-12 px-4 sm:px-6 lg:px-8  mx-auto bg-white rounded-lg shadow-md">
-            
-            <!-- Category Title -->
-            <h2 id="section-title" class="text-3xl font-bold text-gray-900 mb-8 border-b pb-4">
-                Gourmet Cheeses
+<style>
+    .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+    .scrollbar-none::-webkit-scrollbar { display: none; }
+
+    /* ss4-style flat listing card */
+    .listing-card {
+        transition: box-shadow 0.25s ease, transform 0.25s ease;
+    }
+    .listing-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255, 125, 160, 0.15);
+    }
+
+    /* Category chip active state */
+    .chip-active {
+        color: #111827;
+        font-weight: 700;
+        border-bottom: 3px solid #E85D85;
+    }
+</style>
+
+<div class="mx-auto px-2 sm:px-4 py-6 sm:py-10">
+
+    <section id="products-section" class="py-5 sm:py-8 px-2 sm:px-6 lg:px-8 mx-auto bg-white rounded-2xl shadow-sm relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-[3px]" style="background: linear-gradient(to right, #FF7DA0, #FFC275);"></div>
+
+        <!-- Title -->
+        <div class="text-center mb-4 sm:mb-6 px-2">
+            <span class="section-kicker justify-center">MJ Cheezain</span>
+            <h2 id="section-title" class="font-serif text-2xl sm:text-4xl font-extrabold text-gray-900 mb-2">
+                All Products
             </h2>
-            
-            <!-- Products List - Vertical layout -->
-            <div id="product-list" class="space-y-6">
-                <!-- Product cards will be injected here by JavaScript -->
-            </div>
+            <div class="brand-divider"></div>
+        </div>
 
-        </section>
-    </div>
+        <!-- Category Chips (ss4-style tab row, horizontally scrollable) -->
+        <div id="category-chips" class="flex overflow-x-auto whitespace-nowrap scrollbar-none gap-5 sm:gap-7 border-b border-gray-100 mb-4 sm:mb-6 px-1 text-sm sm:text-base text-gray-500">
+            <button data-cat="" class="chip-active flex-shrink-0 pb-2.5 transition-colors" onclick="filterByCategory(this, '')">All</button>
+            <!-- category chips injected by JS -->
+        </div>
 
-    <script>
-        // Mock product data
-        const mockProducts = [
-            {
-                id: 1,
-                name: "Aged Cheddar",
-                description: "Rich and sharp, aged for 12 months to develop a complex flavor profile.",
-                price: 18.99,
-                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=150&h=150&fit=crop&crop=center",
-                rating: 4.5,
-                inStock: true
-            },
-            {
-                id: 2,
-                name: "Brie de Meaux",
-                description: "Soft, creamy French cheese with a delicate, buttery flavor.",
-                price: 24.50,
-                image: "https://images.unsplash.com/photo-1567306301408-9b74779a11af?w=150&h=150&fit=crop&crop=center",
-                rating: 4.8,
-                inStock: true
-            },
-            {
-                id: 3,
-                name: "Gouda",
-                description: "Semi-hard cheese with a rich, unique flavor and smooth texture.",
-                price: 15.75,
-                image: "https://images.unsplash.com/photo-1541529086526-db283c563270?w=150&h=150&fit=crop&crop=center",
-                rating: 4.3,
-                inStock: false
-            },
-            {
-                id: 4,
-                name: "Roquefort",
-                description: "A famous blue cheese from France with a sharp, tangy flavor.",
-                price: 28.25,
-                image: "https://images.unsplash.com/photo-1563720223485-8d8e7d2c8c7b?w=150&h=150&fit=crop&crop=center",
-                rating: 4.7,
-                inStock: true
-            },
-            {
-                id: 5,
-                name: "Manchego",
-                description: "Spanish cheese made from sheep's milk with a distinctive flavor.",
-                price: 22.40,
-                image: "https://images.unsplash.com/photo-1552767059-ce182ead6c1b?w=150&h=150&fit=crop&crop=center",
-                rating: 4.4,
-                inStock: true
-            },
-            {
-                id: 6,
-                name: "Mozzarella di Bufala",
-                description: "Fresh Italian cheese made from buffalo milk, perfect for caprese.",
-                price: 16.90,
-                image: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=150&h=150&fit=crop&crop=center",
-                rating: 4.6,
-                inStock: true
-            },
-            {
-                id: 7,
-                name: "Gruyère",
-                description: "Hard yellow cheese from Switzerland with a slightly nutty flavor.",
-                price: 19.75,
-                image: "https://images.unsplash.com/photo-1594489573251-376b3ed19b8c?w=150&h=150&fit=crop&crop=center",
-                rating: 4.5,
-                inStock: false
-            },
-            {
-                id: 8,
-                name: "Camembert",
-                description: "Soft, creamy, surface-ripened cheese with a rich, buttery flavor.",
-                price: 21.30,
-                image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=150&h=150&fit=crop&crop=center",
-                rating: 4.7,
-                inStock: true
-            }
-        ];
+        <!-- Products Masonry (ss4-style: staggered columns, cards of varying heights) -->
+        <div id="product-list" class="columns-2 sm:columns-3 lg:columns-4 xl:columns-5 gap-2 sm:gap-4">
+            <!-- Skeletons shown while loading (staggered heights to match the masonry feel) -->
+            <div class="skeleton-shimmer rounded-lg h-56 mb-2 break-inside-avoid"></div>
+            <div class="skeleton-shimmer rounded-lg h-40 mb-2 break-inside-avoid"></div>
+            <div class="skeleton-shimmer rounded-lg h-48 mb-2 break-inside-avoid hidden sm:block"></div>
+            <div class="skeleton-shimmer rounded-lg h-64 mb-2 break-inside-avoid hidden lg:block"></div>
+        </div>
 
-        // Function to render products in list format
-        function renderProductList(products, containerId) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = '';
-            
-            products.forEach(product => {
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card bg-white rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row';
-                
-                // Generate star rating
-                const stars = generateStarRating(product.rating);
-                
-                productCard.innerHTML = `
-                    <div class="md:w-1/4">
-                        <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
-                    </div>
-                    <div class="p-6 md:w-3/4 flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-start">
-                                <h3 class="text-xl font-semibold text-gray-900">${product.name}</h3>
-                                <span class="text-lg font-bold text-indigo-700">$${product.price.toFixed(2)}</span>
-                            </div>
-                            <div class="flex items-center mt-2">
-                                ${stars}
-                                <span class="text-sm text-gray-500 ml-2">${product.rating}</span>
-                            </div>
-                            <p class="text-gray-600 mt-3">${product.description}</p>
-                        </div>
-                        <div class="mt-4 flex justify-between items-center">
-                            <span class="${product.inStock ? 'text-green-600' : 'text-red-600'} font-medium">
-                                ${product.inStock ? '<i class="fas fa-check-circle mr-1"></i> In Stock' : '<i class="fas fa-times-circle mr-1"></i> Out of Stock'}
-                            </span>
-                            <button ${!product.inStock ? 'disabled' : ''} 
-                                class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors ${!product.inStock ? 'opacity-50 cursor-not-allowed' : ''}">
-                                <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                `;
-                
-                container.appendChild(productCard);
+        <!-- Empty state -->
+        <div id="list-empty" class="hidden text-center py-16">
+            <div class="text-gray-300 text-6xl mb-4">🛍️</div>
+            <p class="text-gray-500 text-lg">No products found</p>
+        </div>
+
+    </section>
+</div>
+
+<script>
+    let allListingProducts = [];
+    let allListingImages = {};
+
+    async function loadAllProducts() {
+        try {
+            const response = await fetch('/products/all', {
+                headers: { 'Accept': 'application/json' }
             });
-        }
+            const result = await response.json();
 
-        // Function to generate star rating HTML
-        function generateStarRating(rating) {
-            let stars = '';
-            const fullStars = Math.floor(rating);
-            const hasHalfStar = rating % 1 !== 0;
-            
-            // Full stars
-            for (let i = 0; i < fullStars; i++) {
-                stars += '<i class="fas fa-star text-yellow-400"></i>';
-            }
-            
-            // Half star
-            if (hasHalfStar) {
-                stars += '<i class="fas fa-star-half-alt text-yellow-400"></i>';
-            }
-            
-            // Empty stars
-            const emptyStars = 5 - Math.ceil(rating);
-            for (let i = 0; i < emptyStars; i++) {
-                stars += '<i class="far fa-star text-yellow-400"></i>';
-            }
-            
-            return stars;
-        }
+            allListingProducts = result.data || [];
+            allListingImages = result.images || {};
 
-        // Initialize the product list when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            renderProductList(mockProducts, 'product-list');
+            buildCategoryChips(allListingProducts);
+            renderListing(allListingProducts);
+        } catch (error) {
+            console.error('Failed to load products:', error);
+            document.getElementById('product-list').innerHTML = '';
+            document.getElementById('list-empty').classList.remove('hidden');
+        }
+    }
+
+    function buildCategoryChips(products) {
+        const chipRow = document.getElementById('category-chips');
+        const categories = [...new Set(products.map(p => p.category).filter(Boolean))];
+        categories.forEach(cat => {
+            const btn = document.createElement('button');
+            btn.className = 'flex-shrink-0 pb-2.5 hover:text-gray-900 transition-colors';
+            btn.textContent = cat;
+            btn.setAttribute('data-cat', cat);
+            btn.onclick = function () { filterByCategory(this, cat); };
+            chipRow.appendChild(btn);
         });
-    </script>
+    }
+
+    function filterByCategory(chipEl, category) {
+        document.querySelectorAll('#category-chips button').forEach(b => b.classList.remove('chip-active'));
+        chipEl.classList.add('chip-active');
+        const filtered = category ? allListingProducts.filter(p => p.category === category) : allListingProducts;
+        renderListing(filtered);
+    }
+
+    function renderListing(products) {
+        const grid = document.getElementById('product-list');
+        const empty = document.getElementById('list-empty');
+
+        if (!products.length) {
+            grid.innerHTML = '';
+            empty.classList.remove('hidden');
+            return;
+        }
+        empty.classList.add('hidden');
+
+        const fragment = document.createDocumentFragment();
+
+        // Varying image ratios so columns stagger up/down like ss4 (not perfect rows)
+        const RATIOS = ['aspect-[3/4]', 'aspect-square', 'aspect-[4/5]', 'aspect-[3/3.9]', 'aspect-[5/4]', 'aspect-[3/4.4]'];
+
+        products.forEach((product, index) => {
+            const productImages = allListingImages[product.id];
+            const hasImage = productImages && productImages.length > 0 && productImages[0].image_path;
+            const imgUrl = hasImage
+                ? `/storage/vendor/products/images/${productImages[0].image_path}`
+                : '/img/default_img.png';
+
+            // Same price maths as the single-product page (selling price + 17% GST)
+            const price = product.selling_price * 1.17;
+            const hasDiscount = product.mrp && parseFloat(product.mrp) > price;
+            const discountPct = hasDiscount ? Math.round(((product.mrp - price) / product.mrp) * 100) : 0;
+
+            const ratio = RATIOS[index % RATIOS.length];
+
+            const card = document.createElement('a');
+            card.href = `/product/${product.id}`;
+            card.className = 'listing-card bg-white border border-gray-100 rounded-lg overflow-hidden no-underline block mb-2 sm:mb-4 break-inside-avoid';
+
+            card.innerHTML = `
+                <!-- Edge-to-edge image with a varying ratio for the masonry stagger -->
+                <div class="${ratio} bg-gray-50 overflow-hidden">
+                    <img src="${imgUrl}" alt="${product.name}" loading="lazy"
+                         class="w-full h-full object-cover transition duration-500 ease-in-out hover:scale-105">
+                </div>
+                <div class="px-2 pt-2 pb-2.5 sm:px-3 sm:pt-2.5 sm:pb-3">
+                    <!-- Name: two lines, left aligned -->
+                    <h3 class="text-[13px] sm:text-sm text-gray-800 leading-snug line-clamp-2 min-h-[2.4em] m-0">${product.name}</h3>
+
+                    <!-- Bold price row -->
+                    <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
+                        <span class="text-base sm:text-lg font-extrabold text-gray-900 whitespace-nowrap">Rs. ${price.toFixed(0)}</span>
+                        ${hasDiscount ? `<span class="text-[11px] sm:text-xs text-gray-400 line-through whitespace-nowrap">Rs. ${parseFloat(product.mrp).toFixed(0)}</span>` : ''}
+                    </div>
+
+                    <!-- Promo line (ss4-style red/pink accent) -->
+                    ${hasDiscount
+                        ? `<p class="text-[11px] sm:text-xs font-semibold mt-1 m-0" style="color: #E85D85;">🔥 ${discountPct}% OFF</p>`
+                        : `<p class="text-[11px] sm:text-xs text-gray-400 mt-1 m-0"><span class="text-yellow-400">★</span> 4.9 rated</p>`
+                    }
+                </div>
+            `;
+            fragment.appendChild(card);
+        });
+
+        grid.innerHTML = '';
+        grid.appendChild(fragment);
+    }
+
+    document.addEventListener('DOMContentLoaded', loadAllProducts);
+</script>

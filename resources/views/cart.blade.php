@@ -6,8 +6,8 @@
             theme: {
                 extend: {
                     colors: {
-                        'umart-blue': '#0F4C81',
-                        'light-bg': '#F4F7FF',
+                        'umart-blue': '#E85D85',
+                        'light-bg': '#FFF6F0',
                         'star-yellow': '#FFC700',
                     }
                 }
@@ -19,10 +19,10 @@
 @section('body')
     <x-cosmetics.header :user="$user ?? null" :vendor="$vendor ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
 
-    <div id="main" class="mx-auto py-10 px-4 sm:px-6 lg:px-8" style="max-width: 100rem;">
-        <div class="bg-white p-6 rounded-lg shadow-md relative">
+    <div id="main" class="mx-auto py-6 sm:py-10 px-2 sm:px-6 lg:px-8" style="max-width: 100rem;">
+        <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-md relative border-t-4" style="border-image: linear-gradient(to right, #FF7DA0, #FFC275) 1;">
             <div class="flex justify-between items-center mb-6 border-b pb-4">
-                <h1 class="text-3xl font-bold text-gray-800">Cart</h1>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Cart</h1>
                 <button id="clearCartBtn" class="text-sm text-red-500 hover:text-red-700 font-medium">Clear Cart List</button>
             </div>
 
@@ -46,22 +46,22 @@
                         <div class="space-y-3 text-gray-600 mb-4">
                             <div class="flex justify-between">
                                 <span class="font-medium">Subtotal</span>
-                                <span id="subtotal" class="font-semibold">$0</span>
+                                <span id="subtotal" class="font-semibold">Rs. 0</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="font-medium">Shipping Fee</span>
-                                <span id="shippingFee" class="font-semibold">$0</span>
+                                <span id="shippingFee" class="font-semibold">Rs. 0</span>
                             </div>
                         </div>
 
                         <div class="border-t border-gray-300 pt-4 mt-4">
-                            <div class="flex justify-between text-2xl font-bold text-gray-900">
+                            <div class="flex justify-between text-xl sm:text-2xl font-bold text-gray-900">
                                 <span>Total</span>
-                                <span id="totalAmount" class="text-umart-blue">$0</span>
+                                <span id="totalAmount" class="text-umart-blue">Rs. 0</span>
                             </div>
                         </div>
 
-                        <button id="checkoutBtn" class="w-full mt-6 bg-umart-blue hover:bg-umart-blue/90 text-white py-3 rounded-lg font-semibold text-lg transition duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-umart-blue disabled:hover:shadow-md" disabled>
+                        <button id="checkoutBtn" class="w-full mt-6 text-white py-3 rounded-full font-bold text-base sm:text-lg tracking-wide transition duration-300 shadow-md hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-md" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 6px 18px rgba(255, 125, 160, 0.3);" disabled>
                             PROCEED TO CHECKOUT
                         </button>
                         
@@ -78,7 +78,7 @@
         <x-footer />
     </div>
 
-    <script src="{{ asset('js/search.js') }}"></script>
+    <script src="{{ asset('js/search.js') }}?v={{ time() }}"></script>
     <script>
         // Store cart state in memory for quick updates
         let cartState = {
@@ -136,34 +136,34 @@
             cartState.items.forEach(item => {
                 const itemTotal = (item.price * item.quantity).toFixed(2);
                 cartItemsHTML += `
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center border-b pb-4 hover:bg-gray-50 p-2 rounded-lg transition duration-200 gap-4" data-cart-id="${item.id}">
-                        <div class="flex-shrink-0">
-                            <div class="w-20 h-20 sm:w-32 sm:h-32 bg-gray-100 border border-gray-200 rounded-lg flex items-center justify-center overflow-hidden shadow-sm">
-                                ${item.image_path ? 
-                                    `<img src="https://arslan.mjcheezain.com/storage/vendor/products/images/${item.image_path}" alt="${item.product_name}" class="w-full h-full object-cover hover:scale-105 transition duration-300">` : 
+                    <div class="flex items-start border-b border-pink-100 pb-4 hover:bg-pink-50/40 p-2 rounded-xl transition duration-200 gap-3 sm:gap-5" data-cart-id="${item.id}">
+                        <!-- Left: bigger image with quantity control BELOW it -->
+                        <div class="flex-shrink-0 flex flex-col items-center gap-2.5">
+                            <div class="w-28 h-28 sm:w-36 sm:h-36 bg-gray-50 border border-pink-100 rounded-xl flex items-center justify-center overflow-hidden shadow-sm">
+                                ${item.image_path ?
+                                    `<img src="https://arslan.mjcheezain.com/storage/vendor/products/images/${item.image_path}" alt="${item.product_name}" class="w-full h-full object-cover hover:scale-105 transition duration-300">` :
                                     '<span class="text-gray-400 text-xs">No Image</span>'
                                 }
                             </div>
+                            <div class="flex items-center bg-white border border-pink-200 rounded-full shadow-sm overflow-hidden">
+                                <button onclick="updateQuantityImmediately(${item.id}, -1)" class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-pink-50 hover:text-umart-blue font-bold transition duration-200 quantity-decrease-${item.id} ${item.quantity <= 1 ? 'opacity-50 cursor-not-allowed' : ''}">&minus;</button>
+                                <span class="px-3 py-1 border-x border-pink-100 font-semibold text-sm quantity-display-${item.id}">${item.quantity}</span>
+                                <button onclick="updateQuantityImmediately(${item.id}, 1)" class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-pink-50 hover:text-umart-blue font-bold transition duration-200 quantity-increase-${item.id}">+</button>
+                            </div>
                         </div>
+                        <!-- Right: product details -->
                         <div class="flex-grow min-w-0">
-                            <h2 class="text-base sm:text-lg font-semibold text-gray-800 hover:text-umart-blue transition duration-200 truncate">${item.product_name}</h2>
-                            <p class="text-sm text-gray-500 mt-1">Price: <span class="font-semibold">$${item.price}</span></p>
+                            <h2 class="text-base sm:text-lg font-semibold text-gray-800 hover:text-umart-blue transition duration-200 line-clamp-2">${item.product_name}</h2>
+                            <p class="text-sm text-gray-500 mt-1">Price: <span class="font-semibold text-gray-800">Rs. ${item.price}</span></p>
                             <div class="flex items-center mt-2">
                                 <div class="flex text-star-yellow text-sm">
                                     ${generateStarRating(item.rating || 4)}
                                 </div>
                                 <span class="text-xs text-gray-500 ml-2">(${item.review_count || 0} Reviews)</span>
                             </div>
-                        </div>
-                        <div class="flex flex-row sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto mt-3 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100 gap-4">
-                            <div class="flex items-center border border-gray-300 rounded-lg shadow-sm">
-                                <button onclick="updateQuantityImmediately(${item.id}, -1)" class="p-1.5 px-2.5 text-gray-600 hover:bg-gray-100 hover:text-umart-blue transition duration-200 quantity-decrease-${item.id} ${item.quantity <= 1 ? 'opacity-50 cursor-not-allowed' : ''}">-</button>
-                                <span class="px-3 py-1 border-x border-gray-300 font-medium quantity-display-${item.id}">${item.quantity}</span>
-                                <button onclick="updateQuantityImmediately(${item.id}, 1)" class="p-1.5 px-2.5 text-gray-600 hover:bg-gray-100 hover:text-umart-blue transition duration-200 quantity-increase-${item.id}">+</button>
-                            </div>
-                            <div class="flex items-center gap-4">
-                                <div class="text-lg sm:text-xl font-bold text-gray-900 item-total-${item.id}">
-                                    $${itemTotal}
+                            <div class="flex items-center justify-between mt-3 sm:mt-4">
+                                <div class="text-lg sm:text-xl font-bold item-total-${item.id}" style="color: #E85D85;">
+                                    Rs. ${itemTotal}
                                 </div>
                                 <button onclick="removeItemImmediately(${item.id})" class="text-gray-400 hover:text-red-500 transition duration-200 p-1.5 rounded-full hover:bg-red-50" title="Remove Item">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -187,14 +187,14 @@
             const checkoutBtn = document.getElementById('checkoutBtn');
 
             if (cartState.items.length === 0) {
-                subtotalElement.textContent = '$0';
-                shippingFeeElement.textContent = '$0';
-                totalAmountElement.textContent = '$0';
+                subtotalElement.textContent = 'Rs. 0';
+                shippingFeeElement.textContent = 'Rs. 0';
+                totalAmountElement.textContent = 'Rs. 0';
                 checkoutBtn.disabled = true;
             } else {
-                subtotalElement.textContent = `$${cartState.totals.subtotal.toFixed(2)}`;
-                shippingFeeElement.textContent = `$${cartState.totals.shipping_fee.toFixed(2)}`;
-                totalAmountElement.textContent = `$${cartState.totals.total.toFixed(2)}`;
+                subtotalElement.textContent = `Rs. ${cartState.totals.subtotal.toFixed(2)}`;
+                shippingFeeElement.textContent = `Rs. ${cartState.totals.shipping_fee.toFixed(2)}`;
+                totalAmountElement.textContent = `Rs. ${cartState.totals.total.toFixed(2)}`;
                 checkoutBtn.disabled = false;
             }
         }
@@ -327,7 +327,7 @@
                 // Update item total
                 if (itemTotal) {
                     const newTotal = (item.price * newQuantity).toFixed(2);
-                    itemTotal.textContent = `$${newTotal}`;
+                    itemTotal.textContent = `Rs. ${newTotal}`;
                     itemTotal.classList.add('text-green-600');
                     setTimeout(() => {
                         itemTotal.classList.remove('text-green-600');
@@ -430,8 +430,18 @@
             }
         }
 
-        // Checkout button handler
+        // Checkout button handler — guests get the auth popup instead of the checkout page
+        const isLoggedIn = @json(auth()->check());
         document.getElementById('checkoutBtn').addEventListener('click', function() {
+            if (!isLoggedIn) {
+                const loginUrl = '/login-user?type=customer-login&page=checkout';
+                if (typeof window.apOpen === 'function') {
+                    window.apOpen(loginUrl);
+                } else {
+                    window.location.href = loginUrl;
+                }
+                return;
+            }
             // Sync any pending changes before checkout
             syncCartToDatabase().then(() => {
                 window.location.href = '/checkout';

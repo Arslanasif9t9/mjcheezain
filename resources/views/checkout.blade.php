@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - AlKuwait</title>
+    <title>Checkout | MJ Cheezain</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; }
+    </style>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#1e40af',
-                        secondary: '#f97316',
-                        accent: '#f59e0b',
+                        primary: '#E85D85',
+                        secondary: '#FFC275',
+                        accent: '#FF7DA0',
                         fashion: {
                             pink: '#ec4899',
                             purple: '#a855f7',
@@ -49,15 +56,16 @@
             <div class="flex flex-col lg:flex-row gap-8">
                 <!-- Checkout Form -->
                 <div class="lg:w-2/3">
-                    <form id="checkout-form" action="{{ route('checkout.process') }}" method="POST" class="bg-white rounded-xl shadow-sm p-6">
+                    <form id="checkout-form" action="{{ route('checkout.process') }}" method="POST" class="bg-white rounded-2xl shadow-sm p-4 sm:p-6 relative overflow-hidden">
                         @csrf
+                        <div class="absolute top-0 left-0 w-full h-[3px]" style="background: linear-gradient(to right, #FF7DA0, #FFC275);"></div>
                         <h1 class="text-2xl font-bold text-gray-800 mb-6">Checkout</h1>
 
                         <!-- Saved Addresses -->
                         <div class="mb-8">
                             <div class="flex justify-between items-center mb-4">
                                 <h2 class="text-lg font-semibold text-gray-800">Select Delivery Address</h2>
-                                <a href="/customer/addresses" class="text-primary hover:text-blue-700 text-sm font-medium">
+                                <a href="/customer/addresses" class="text-primary hover:text-pink-600 text-sm font-medium">
                                     <i class="fas fa-plus mr-1"></i> Manage Addresses
                                 </a>
                             </div>
@@ -102,7 +110,7 @@
                                 @else
                                     <div class="p-4 border border-dashed border-gray-300 rounded-lg text-center">
                                         <p class="text-gray-600 mb-3">No addresses found. Please add a delivery address.</p>
-                                        <a href="/customer/addresses" class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700">
+                                        <a href="/customer/addresses" class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90">
                                             <i class="fas fa-plus mr-2"></i> Add New Address
                                         </a>
                                     </div>
@@ -134,7 +142,7 @@
                                             </div>
                                             <div class="flex justify-end space-x-2">
                                                 <button type="button" onclick="cancelNewAddress()" class="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50">Cancel</button>
-                                                <button type="button" id="save-new-address" class="px-4 py-2 text-sm bg-primary text-white rounded hover:bg-blue-700">Save Address</button>
+                                                <button type="button" id="save-new-address" class="px-4 py-2 text-sm bg-primary text-white rounded hover:opacity-90">Save Address</button>
                                             </div>
                                         </div>
                                     </div>
@@ -371,11 +379,11 @@
 
                         <!-- Form Actions -->
                         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 border-t border-gray-200">
-                            <a href="/cart" class="text-primary hover:text-blue-700 font-semibold transition-colors duration-300 flex items-center justify-center sm:justify-start space-x-2 w-full sm:w-auto">
+                            <a href="/cart" class="text-primary hover:text-pink-600 font-semibold transition-colors duration-300 flex items-center justify-center sm:justify-start space-x-2 w-full sm:w-auto">
                                 <i class="fas fa-arrow-left"></i>
                                 <span>Return to Cart</span>
                             </a>
-                            <button type="submit" class="bg-primary hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-300 flex items-center justify-center space-x-2 w-full sm:w-auto">
+                            <button type="submit" class="text-white px-8 py-3 rounded-full font-bold transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center space-x-2 w-full sm:w-auto" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 6px 18px rgba(255, 125, 160, 0.35);">
                                 <i class="fas fa-lock"></i>
                                 <span>Pay Rs. {{ number_format($total, 2) }}</span>
                             </button>
@@ -385,7 +393,8 @@
 
                 <!-- Order Summary -->
                 <div class="lg:w-1/3">
-                    <div class="bg-white rounded-xl shadow-sm p-6 sticky top-24">
+                    <div class="bg-white rounded-2xl shadow-sm p-4 sm:p-6 sticky top-24 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-[3px]" style="background: linear-gradient(to right, #FF7DA0, #FFC275);"></div>
                         <h2 class="text-xl font-semibold text-gray-800 mb-4">Order Summary</h2>
                         
                         <!-- Order Items -->
@@ -474,7 +483,7 @@
                             </div>
                             <div class="flex items-center text-gray-600">
                                 <i class="fas fa-envelope mr-3 text-primary"></i>
-                                <span>support@alkuwait.com</span>
+                                <span>support@mjcheezain.com</span>
                             </div>
                             <div class="flex items-center text-gray-600">
                                 <i class="fas fa-clock mr-3 text-primary"></i>
@@ -540,14 +549,14 @@
                 <button onclick="closeSuccessModal()" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-300">
                     Continue Shopping
                 </button>
-                <a href="/customer/orders" class="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 text-center">
+                <a href="/customer/orders" class="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-colors duration-300 text-center">
                     Track Order
                 </a>
             </div>
         </div>
     </div>
 
-    <script src="{{ asset('js/search.js') }}"></script>
+    <script src="{{ asset('js/search.js') }}?v={{ time() }}"></script>
     <script>
         // Form submission
         document.getElementById('checkout-form').addEventListener('submit', function(e) {

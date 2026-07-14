@@ -86,18 +86,18 @@
 @section('body')
     <x-cosmetics.header :user="$user ?? null" :vendor="$vendor ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
 
-    <div id="main" class="mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div id="main" class="mx-auto px-0 pt-0 pb-12 sm:px-6 lg:px-8 sm:py-12">
 
         <!-- Product Summary Section -->
-        <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 mb-12">
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 mb-12">
 
             <!-- Left Column: Images -->
             <div class="col-span-3 relative">
                 <!-- Main Image with icons -->
                 <div class="relative">
                     <img id="main-image"
-                        src="{{ asset('storage/vendor/products/images/'.$imageMain->image_path) }}" 
-                        class="border-2 border-blue-900 w-full h-[40vh] sm:h-[60vh] lg:h-[72vh] aspect-square object-contain rounded-lg overflow-hidden">
+                        src="{{ asset('storage/vendor/products/images/'.$imageMain->image_path) }}"
+                        class="border-0 sm:border-2 sm:border-blue-900 w-full h-[55vh] sm:h-[60vh] lg:h-[72vh] aspect-square object-contain rounded-none sm:rounded-lg overflow-hidden">
                     {{-- <img id="main-image"
                         src="https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg" 
                         class="border-2 border-blue-900 w-full h-[72vh] aspect-square object-cover rounded-lg overflow-hidden"> --}}
@@ -124,7 +124,7 @@
                 </div>
 
                 <!-- Thumbnails Slider -->
-                <div class="relative w-full mt-4">
+                <div class="relative w-full mt-4 px-2 sm:px-0">
                     <button id="scroll-left"
                         class="absolute left-0 top-1/2 -translate-y-1/2 bg-blue-900 text-white p-2 rounded-full z-10 hover:bg-blue-800 transition-colors">
                         &#10094;
@@ -145,8 +145,8 @@
             </div>
 
             <!-- Right Column: Product Info & CTA -->
-            <div class="mt-4 md:mt-32 col-span-2 relative">
-                <h1 class="text-3xl font-bold mb-2">{{ $product->name }}</h1>
+            <div class="mt-4 md:mt-32 col-span-2 relative px-4 sm:px-0">
+                <h1 class="text-2xl sm:text-3xl font-bold mb-2">{{ $product->name }}</h1>
 
                 <!-- Discount Badge -->
                 @php
@@ -155,8 +155,8 @@
                 @endphp
                 @if ($product->mrp > $product->selling_price)
 
-                    <div class="absolute top-12 right-20 bg-red-600 text-white px-4 py-2 rounded-xl shadow-lg 
-                                text-lg font-bold transform translate-x-4 -translate-y-4 z-10">
+                    <div class="inline-block mb-2 sm:mb-0 sm:absolute sm:top-12 sm:right-20 bg-red-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full sm:rounded-xl shadow-lg
+                                text-sm sm:text-lg font-bold sm:transform sm:translate-x-4 sm:-translate-y-4 z-10">
                         🔥 {{ $discount }}% OFF
                     </div>
                 @endif
@@ -184,7 +184,7 @@
                 </div>
 
                 <!-- Price -->
-                <p class="text-3xl font-extrabold text-gray-900 mb-4">
+                <p class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">
                     PKR 
                     @if ($product->mrp)
                         {{ $gst }} <br>
@@ -236,30 +236,32 @@
                     </div>
                 </div>
 
-                <!-- Action Buttons -->
-                <div class="flex space-x-4 mb-6">
-                    <button id="addToCartBtn" 
-                   
-                    @if ($user && $product->user_id == $user->user_id)
-                        style="background-color: #9ca3af; cursor: not-allowed; opacity: 0.6"
-                        disable
-                    @else
-                        onclick="addToCart()"
-                    @endif 
-                        class="flex-1 py-3 px-6 bg-black text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95 flex items-center justify-center"
-                        >
-                        <i class="fas fa-cart-plus mr-2"></i>
-                        Add to Cart
-                    </button>
-                    <button class="flex-1 py-3 px-6 border border-blue-700 text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition duration-150"
+                <!-- Action Buttons: Buy Now (left, brand gradient) + Add to Cart (right, brand outline) -->
+                <div class="flex gap-3 sm:gap-4 mb-6">
+                    <button class="flex-1 py-3 px-4 sm:px-6 text-white font-bold rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl active:scale-95 flex items-center justify-center text-sm sm:text-base"
                     @if ($user && $product->user_id == $user->user_id)
                         style="background-color: #9ca3af; cursor: not-allowed; opacity: 0.6"
                         disable
                     @else
                         id="wh-btn"
-                    @endif 
+                        style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 6px 18px rgba(255, 125, 160, 0.35);"
+                    @endif
                     >
+                        <i class="fas fa-bolt mr-2"></i>
                         Buy Now
+                    </button>
+                    <button id="addToCartBtn"
+
+                    @if ($user && $product->user_id == $user->user_id)
+                        style="background-color: #9ca3af; cursor: not-allowed; opacity: 0.6; color: #ffffff;"
+                        disable
+                    @else
+                        onclick="addToCart()"
+                    @endif
+                        class="flex-1 py-3 px-4 sm:px-6 bg-white border-2 border-pink-400 text-pink-600 font-bold rounded-full transition-all duration-300 transform hover:scale-105 hover:bg-pink-50 hover:shadow-lg active:scale-95 flex items-center justify-center text-sm sm:text-base"
+                        >
+                        <i class="fas fa-cart-plus mr-2"></i>
+                        Add to Cart
                     </button>
                 </div>
 
@@ -307,19 +309,21 @@
             </div>
         </div>
 
-        <!-- Bottom Cart Summary -->
-        <div id="cartSummary" class="fixed bottom-0 left-0 w-full h-20 bg-white shadow-lg border-t border-gray-200 flex items-center justify-between px-6 transform translate-y-full transition-transform duration-500 z-50">
-            <div class="flex items-center">
-                <div id="cartIcon" class="relative mr-4">
-                    <i class="fas fa-shopping-cart text-2xl text-purple-600"></i>
-                    <span id="itemCount" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">0</span>
+        <!-- Bottom Cart Summary (brand-themed) -->
+        <div id="cartSummary" class="fixed bottom-0 left-0 w-full h-20 bg-white shadow-2xl flex items-center justify-between px-4 sm:px-6 transform translate-y-full transition-transform duration-500 z-50">
+            <!-- Brand gradient top strip -->
+            <div class="absolute top-0 left-0 w-full h-[3px]" style="background: linear-gradient(to right, #FF7DA0, #FFC275);"></div>
+            <div class="flex items-center min-w-0">
+                <div id="cartIcon" class="relative mr-3 sm:mr-4 flex-shrink-0">
+                    <i class="fas fa-shopping-cart text-2xl" style="color: #E85D85;"></i>
+                    <span id="itemCount" class="absolute -top-2 -right-2 text-white rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center text-[10px] sm:text-xs font-bold" style="background: linear-gradient(115deg, #FF7DA0, #E85D85);">0</span>
                 </div>
-                <div>
-                    <p class="font-semibold text-gray-800"><span id="totalItems">0</span> items in cart</p>
-                    <p class="text-sm text-gray-600">Total: PKR <span id="totalPrice">0.00</span></p>
+                <div class="min-w-0">
+                    <p class="font-semibold text-gray-800 text-sm sm:text-base truncate"><span id="totalItems">0</span> items in cart</p>
+                    <p class="text-xs sm:text-sm text-gray-600 truncate">Total: PKR <span id="totalPrice">0.00</span></p>
                 </div>
             </div>
-            <button id="viewCartBtn" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-md">
+            <button id="viewCartBtn" class="text-white font-bold py-2.5 px-5 sm:px-7 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg text-sm sm:text-base flex-shrink-0 ml-3" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 4px 14px rgba(255, 125, 160, 0.35);">
                 View Cart
             </button>
         </div>
@@ -687,26 +691,26 @@
         </script>
 
         <!-- Tabs Section -->
-        <div class="mb-12 grid grid-cols-1 md:grid-cols-2">
+        <div class="mb-12 grid grid-cols-1 md:grid-cols-2 px-4 sm:px-0">
             
             <div>
-                <!-- Tab Headers/Buttons -->
-                <div class="flex border-b border-gray-200 text-gray-500 text-lg space-x-8">
+                <!-- Tab Headers/Buttons (horizontally scrollable on mobile so nothing overflows) -->
+                <div class="flex border-b border-gray-200 text-gray-500 text-sm sm:text-lg space-x-5 sm:space-x-8 overflow-x-auto whitespace-nowrap scrollbar-none">
                     <!-- NOTE: The 'tab-button' class and onClick event are essential for JS functionality -->
-                    <button id="tab-description-btn" onclick="switchTab('description')" 
-                            class="tab-button border-b-2 border-primary-blue text-gray-900 font-semibold px-1 pb-3 transition duration-150">
+                    <button id="tab-description-btn" onclick="switchTab('description')"
+                            class="tab-button flex-shrink-0 border-b-2 border-primary-blue text-gray-900 font-semibold px-1 pb-3 transition duration-150">
                         Description
                     </button>
-                    <button id="tab-specifications-btn" onclick="switchTab('specifications')" 
-                            class="tab-button border-b-2 border-transparent px-1 pb-3 transition duration-150 hover:text-gray-900">
+                    <button id="tab-specifications-btn" onclick="switchTab('specifications')"
+                            class="tab-button flex-shrink-0 border-b-2 border-transparent px-1 pb-3 transition duration-150 hover:text-gray-900">
                         Specifications
                     </button>
-                    <button id="tab-reviews-btn" onclick="switchTab('reviews')" 
-                            class="tab-button border-b-2 border-transparent px-1 pb-3 transition duration-150 hover:text-gray-900">
+                    <button id="tab-reviews-btn" onclick="switchTab('reviews')"
+                            class="tab-button flex-shrink-0 border-b-2 border-transparent px-1 pb-3 transition duration-150 hover:text-gray-900">
                         Reviews
                     </button>
-                    <button id="tab-vendorinfo-btn" onclick="switchTab('vendorinfo')" 
-                            class="tab-button border-b-2 border-transparent px-1 pb-3 transition duration-150 hover:text-gray-900">
+                    <button id="tab-vendorinfo-btn" onclick="switchTab('vendorinfo')"
+                            class="tab-button flex-shrink-0 border-b-2 border-transparent px-1 pb-3 transition duration-150 hover:text-gray-900">
                         Vendor Info
                     </button>
                 </div>
@@ -783,39 +787,39 @@
                             <!-- Rating Breakdown -->
                             <div class="md:col-span-2 space-y-2">
                                 <div class="flex items-center space-x-2">
-                                    <span class="text-sm">5 Star</span>
+                                    <span class="text-sm w-12 flex-shrink-0 whitespace-nowrap">5 Star</span>
                                     <div class="w-full bg-gray-200 rounded-full h-2">
                                         <div class="bg-star-yellow h-2 rounded-full" style="width: 80%;"></div>
                                     </div>
-                                    <span class="text-sm text-gray-500">80%</span>
+                                    <span class="text-sm text-gray-500 w-10 flex-shrink-0 text-right">80%</span>
                                 </div>
                                 <div class="flex items-center space-x-2">
-                                    <span class="text-sm">4 Star</span>
+                                    <span class="text-sm w-12 flex-shrink-0 whitespace-nowrap">4 Star</span>
                                     <div class="w-full bg-gray-200 rounded-full h-2">
                                         <div class="bg-star-yellow h-2 rounded-full" style="width: 15%;"></div>
                                     </div>
-                                    <span class="text-sm text-gray-500">15%</span>
+                                    <span class="text-sm text-gray-500 w-10 flex-shrink-0 text-right">15%</span>
                                 </div>
                                 <div class="flex items-center space-x-2">
-                                    <span class="text-sm">3 Star</span>
+                                    <span class="text-sm w-12 flex-shrink-0 whitespace-nowrap">3 Star</span>
                                     <div class="w-full bg-gray-200 rounded-full h-2">
                                         <div class="bg-star-yellow h-2 rounded-full" style="width: 3%;"></div>
                                     </div>
-                                    <span class="text-sm text-gray-500">3%</span>
+                                    <span class="text-sm text-gray-500 w-10 flex-shrink-0 text-right">3%</span>
                                 </div>
                                 <div class="flex items-center space-x-2">
-                                    <span class="text-sm">2 Star</span>
+                                    <span class="text-sm w-12 flex-shrink-0 whitespace-nowrap">2 Star</span>
                                     <div class="w-full bg-gray-200 rounded-full h-2">
                                         <div class="bg-star-yellow h-2 rounded-full" style="width: 2%;"></div>
                                     </div>
-                                    <span class="text-sm text-gray-500">2%</span>
+                                    <span class="text-sm text-gray-500 w-10 flex-shrink-0 text-right">2%</span>
                                 </div>
                                 <div class="flex items-center space-x-2">
-                                    <span class="text-sm">1 Star</span>
+                                    <span class="text-sm w-12 flex-shrink-0 whitespace-nowrap">1 Star</span>
                                     <div class="w-full bg-gray-200 rounded-full h-2">
                                         <div class="bg-star-yellow h-2 rounded-full" style="width: 0%;"></div>
                                     </div>
-                                    <span class="text-sm text-gray-500">0%</span>
+                                    <span class="text-sm text-gray-500 w-10 flex-shrink-0 text-right">0%</span>
                                 </div>
                             </div>
                         </div>
@@ -823,17 +827,19 @@
 
                     <!-- Tab 4: Vendor Info Content -->
                     <div id="content-vendorinfo" class="tab-content hidden">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
-                                <img src="{{ asset('storage/vendor/profile/' . $vendor->profile_picture) }}" class="w-full h-full">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+                                <img src="{{ asset('storage/vendor/profile/' . $vendor->profile_picture) }}" class="w-full h-full object-cover">
                             </div>
-                            <div>
-                                <p class="font-semibold text-lg flex items-center">
-                                    {{ $vendor->full_name }}
-                                    <span class="ml-2 h-2 w-2 bg-primary-blue rounded-full"></span>
-                                    <span class="ml-1 text-sm text-primary-blue">{{ $vendorUser->verified ? "Verified" : "Unverified" }}</span>
+                            <div class="min-w-0 flex-1">
+                                <p class="font-semibold text-base sm:text-lg flex items-center flex-wrap gap-x-1.5">
+                                    <span class="truncate max-w-full">{{ $vendor->full_name }}</span>
+                                    <span class="inline-flex items-center whitespace-nowrap">
+                                        <span class="h-2 w-2 bg-primary-blue rounded-full mr-1"></span>
+                                        <span class="text-sm text-primary-blue">{{ $vendorUser->verified ? "Verified" : "Unverified" }}</span>
+                                    </span>
                                 </p>
-                                <a href="/vendor-products/{{ $vendor->user_id }}" class="text-sm text-primary-blue hover:text-blue-700 transition duration-150">
+                                <a href="/vendor-products/{{ $vendor->user_id }}" class="text-sm text-primary-blue hover:text-blue-700 transition duration-150 break-words inline-block">
                                     View all products from this vendor &rarr;
                                 </a>
                             </div>
@@ -843,12 +849,12 @@
             </div>
 
             <!-- Video Element - Autoplay, loop, and muted are mandatory for background videos -->
-            <div class="w-full flex justify-center items-center py-10 bg-gradient-to-b from-pink50 to-white">
+            <div class="w-full flex justify-center items-center py-6 sm:py-10 bg-gradient-to-b from-pink50 to-white">
                 <div class="relative w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl border-4 border-pink-200 hover:border-pink-400 transition-all duration-300">
                     <video
                         controls
                         poster="{{ asset('img/video-poster.jpg') }}"
-                        class="w-full rounded-2xl h-[366px]">
+                        class="w-full rounded-2xl h-auto sm:h-[366px]">
                         <source src="{{ asset('storage/vendor/products/videos/'.$product->video) }}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -869,10 +875,10 @@
 
         </div>
 
-        <div class="mb-4">
-            <div class="flex justify-between align-center">
-                <h3 class="text-xl font-semibold mt-8 mb-0">Customer Reviews</h3>
-                <div class="flex items-center space-x-2 mt-8">
+        <div class="mb-4 px-4 sm:px-0">
+            <div class="flex flex-wrap items-center justify-between gap-x-3">
+                <h3 class="text-lg sm:text-xl font-semibold mt-8 mb-0">Customer Reviews</h3>
+                <div class="flex items-center space-x-2 mt-2 sm:mt-8">
                     @if($reviewCount > 0)
                         <span class="text-yellow-500 text-lg font-bold">{{ number_format($avgRating, 1) }} &#9733;</span>
                         <span class="text-gray-500 text-sm">({{ $reviewCount }} reviews)</span>
@@ -942,8 +948,8 @@
     <x-footer />
 
 
-    <script src="{{ asset('js/search.js') }}"></script>
-    <script src="{{ asset('js/category_fetch.js') }}"></script>
+    <script src="{{ asset('js/search.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/category_fetch.js') }}?v={{ time() }}"></script>
     <script>
         tailwind.config = {
             theme: {

@@ -1,5 +1,5 @@
 // resources/js/search.js
-const inputs = document.querySelectorAll('#search-input, #search-input-mobile');
+const inputs = document.querySelectorAll('#search-input, #search-input-mobile, #search-input-inline');
 const main = document.getElementById('main');
 const allMain = document.querySelectorAll('main');
 

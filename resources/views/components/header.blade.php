@@ -92,6 +92,17 @@
                         </div>
                     </div>
 
+                    <!-- Inline Search: expands inside this same row when the search icon is tapped -->
+                    <div id="mobile-inline-search" class="flex-1 min-w-0 mx-1.5 transition-all duration-300 ease-in-out overflow-hidden" style="max-width: 0px; opacity: 0; pointer-events: none;">
+                        <div class="flex items-center w-full bg-white rounded-full py-1 pl-3 pr-1 shadow-inner border border-white/20">
+                            <input type="text" id="search-input-inline" placeholder="Search products..."
+                                   class="w-full min-w-0 bg-transparent text-sm text-gray-800 focus:outline-none placeholder-gray-500">
+                            <button type="button" onclick="collapseMobileSearch()" class="text-gray-500 hover:text-gray-800 p-1.5 flex-shrink-0 focus:outline-none" aria-label="Close Search">
+                                <i class="fa-solid fa-xmark text-base"></i>
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- Right side: Search trigger (on scroll) + Sign Up / Login / Profile dropdowns -->
                     <div class="flex items-center text-xs sm:text-sm font-semibold text-gray-800 space-x-1.5">
                         <!-- Collapsed Search Icon (Visible on Scroll) -->
@@ -356,16 +367,16 @@
         // Mobile Search Expand/Collapse Logic
         let isSearchExpanded = false;
 
+        // Opens the search INLINE inside the top row (icon turns into an input + close X)
         function expandMobileSearch() {
-            const wrapper = document.getElementById('mobile-search-wrapper');
+            const inline = document.getElementById('mobile-inline-search');
             const trigger = document.getElementById('mobile-search-trigger');
-            const container = document.getElementById('mobile-search-container');
             const brandWrapper = document.getElementById('mobile-brand-wrapper');
-            
-            if (wrapper) {
-                wrapper.style.maxHeight = '80px';
-                wrapper.style.opacity = '1';
-                wrapper.style.pointerEvents = 'auto';
+
+            if (inline) {
+                inline.style.maxWidth = '100%';
+                inline.style.opacity = '1';
+                inline.style.pointerEvents = 'auto';
             }
             if (trigger) {
                 trigger.style.maxWidth = '0px';
@@ -377,31 +388,27 @@
                 brandWrapper.style.opacity = '0';
                 brandWrapper.style.pointerEvents = 'none';
             }
-            if (container) {
-                container.classList.add('space-y-2.5');
-            }
             isSearchExpanded = true;
-            
+
             setTimeout(() => {
-                const mobileInput = document.getElementById('search-input-mobile');
-                if (mobileInput && typeof mobileInput.focus === 'function') {
-                    mobileInput.focus();
+                const inlineInput = document.getElementById('search-input-inline');
+                if (inlineInput && typeof inlineInput.focus === 'function') {
+                    inlineInput.focus();
                 }
             }, 300);
         }
 
         function collapseMobileSearch() {
-            const wrapper = document.getElementById('mobile-search-wrapper');
+            const inline = document.getElementById('mobile-inline-search');
             const trigger = document.getElementById('mobile-search-trigger');
-            const container = document.getElementById('mobile-search-container');
             const brandWrapper = document.getElementById('mobile-brand-wrapper');
-            
-            if (wrapper) {
-                wrapper.style.maxHeight = '0px';
-                wrapper.style.opacity = '0';
-                wrapper.style.pointerEvents = 'none';
+
+            if (inline) {
+                inline.style.maxWidth = '0px';
+                inline.style.opacity = '0';
+                inline.style.pointerEvents = 'none';
             }
-            if (trigger) {
+            if (trigger && window.scrollY > 50) {
                 trigger.style.maxWidth = '50px';
                 trigger.style.opacity = '1';
                 trigger.style.pointerEvents = 'auto';
@@ -410,9 +417,6 @@
                 brandWrapper.style.maxWidth = '250px';
                 brandWrapper.style.opacity = '1';
                 brandWrapper.style.pointerEvents = 'auto';
-            }
-            if (container) {
-                container.classList.remove('space-y-2.5');
             }
             isSearchExpanded = false;
         }
@@ -447,6 +451,12 @@
                         headerContainer.classList.remove('py-3.5');
                         headerContainer.classList.add('py-1.5');
                     }
+                    // The full-width search line below the top row always hides on scroll
+                    if (wrapper) {
+                        wrapper.style.maxHeight = '0px';
+                        wrapper.style.opacity = '0';
+                        wrapper.style.pointerEvents = 'none';
+                    }
                     if (!isSearchExpanded) {
                         collapseMobileSearch();
                     }
@@ -466,6 +476,12 @@
                         headerContainer.classList.add('py-3.5');
                     }
                     isSearchExpanded = false;
+                    const inlineSearch = document.getElementById('mobile-inline-search');
+                    if (inlineSearch) {
+                        inlineSearch.style.maxWidth = '0px';
+                        inlineSearch.style.opacity = '0';
+                        inlineSearch.style.pointerEvents = 'none';
+                    }
                     if (wrapper) {
                         wrapper.style.maxHeight = '80px';
                         wrapper.style.opacity = '1';
@@ -547,3 +563,8 @@
             }
         });
     </script>
+
+
+@once
+    <x-auth-popup />
+@endonce

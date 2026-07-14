@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#FF7DA0">
@@ -154,7 +155,7 @@
     {{-- <x-auth-modal /> --}}
 
     <!-- Scripts -->
-    <script src="{{ asset('js/search.js') }}"></script>
+    <script src="{{ asset('js/search.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('js/login&signup.js') }}"></script>
     <script src="{{ asset('js/javascript.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>

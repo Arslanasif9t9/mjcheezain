@@ -118,6 +118,7 @@ Route::get('/search-products', [SearchController::class, 'searchProducts'])->nam
 
 Route::get('/products/savings', [ProductController::class, 'biggestSavings']);
 Route::get('/products/category', [ProductController::class, 'byCategory']);
+Route::get('/products/all', [ProductController::class, 'allProducts']);
 
 
 

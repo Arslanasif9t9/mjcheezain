@@ -82,7 +82,10 @@ class HomeController extends Controller
 
         // 👉 Add this for products
         $product = Product::where('id', $id)->first();
-        if($product->position != 'approved' && $product->user_id != $user->user_id) {
+        if (!$product) {
+            abort(404);
+        }
+        if($product->position != 'approved' && $product->user_id != ($user->user_id ?? null)) {
             return 'blocked';
         }
         $vendor = VendorBasicInfo::where('user_id', $product->user_id)->first();

@@ -9,18 +9,36 @@
         }
     </style>
 <header class="sticky top-0 z-50 bg-white mobile-gradient-header shadow-md">
-    <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-3">
+    <div id="cos-header-container" class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-3 transition-all duration-300">
         <div class="flex items-center justify-between">
-            
-            <!-- Left Section: Logo/Brand -->
-            <div class="flex items-center flex-shrink-0">
-                <img src="{{ asset('img/short_logo.jpeg') }}" class="w-10 h-6 sm:w-16 md:w-32 sm:h-8 object-contain">
-                <div class="ml-2">
-                    <span class="text-lg sm:text-2xl font-bold text-gray-900 tracking-tight">MJ Cheezain</span>
-                    <p class="hidden sm:block text-gray-400" style="font-size: 0.6rem; font-weight: 400; margin-top: -2px;">Elegance in every choice</p>
+
+            <!-- Left Section: Hamburger (mobile) + Logo/Brand -->
+            <div class="flex items-center flex-shrink-0 min-w-0">
+                <button onclick="toggleMobileMenu()" class="md:hidden text-[#000000] focus:outline-none p-1 mr-1.5 hover:opacity-75 transition-colors" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <div id="cos-brand-wrap" class="flex items-center transition-all duration-300 overflow-hidden whitespace-nowrap">
+                    <!-- Compact square logo on mobile, wide logo on tablet/desktop -->
+                    <img src="{{ asset('img/logo-world-removebg-preview.png') }}" class="sm:hidden w-9 h-9 object-contain flex-shrink-0">
+                    <img src="{{ asset('img/short_logo.jpeg') }}" class="hidden sm:block sm:w-16 md:w-32 sm:h-8 object-contain flex-shrink-0">
+                    <div class="ml-2">
+                        <span class="text-lg sm:text-2xl font-bold text-gray-900 tracking-tight">MJ Cheezain</span>
+                        <p class="hidden sm:block text-gray-400" style="font-size: 0.6rem; font-weight: 400; margin-top: -2px;">Elegance in every choice</p>
+                    </div>
                 </div>
             </div>
-            
+
+            <!-- Inline Mobile Search: expands inside this same row when the search icon is tapped -->
+            <div id="mobile-inline-search" class="md:hidden flex-1 min-w-0 mx-1.5 transition-all duration-300 ease-in-out overflow-hidden" style="max-width: 0px; opacity: 0; pointer-events: none;">
+                <div class="flex items-center w-full bg-white rounded-full py-1 pl-3 pr-1 shadow-inner border border-white/20">
+                    <input type="text" id="search-input-inline" placeholder="Search products..."
+                           class="w-full min-w-0 bg-transparent text-sm text-gray-800 focus:outline-none placeholder-gray-500">
+                    <button type="button" onclick="collapseMobileSearch()" class="text-gray-500 hover:text-gray-800 p-1.5 flex-shrink-0 focus:outline-none" aria-label="Close Search">
+                        <i class="fa-solid fa-xmark text-base"></i>
+                    </button>
+                </div>
+            </div>
+
             <!-- Center Section: Search Bar (Desktop only) -->
             <div class="hidden md:flex flex-grow justify-center mx-4 lg:mx-16">
                 <div class="w-full max-w-2xl relative">
@@ -46,8 +64,8 @@
                     <a href="/product-listing" class="text-gray-700 hover:text-blue-600 font-semibold p-2 rounded-lg transition duration-200">Product Listings</a>
                     
                     @if($vendor ?? null)
-                        <a href="/vendor-products/{{ $vendor->user_id }}" class="px-4 py-2 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-800 transition text-sm">
-                            View Store
+                        <a href="/vendor-products/{{ $vendor->user_id }}" class="px-5 py-2 text-white font-bold rounded-full shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);">
+                            <i class="fa-solid fa-store mr-1.5"></i>View Store
                         </a>
                     @endif
                 </nav>
@@ -63,20 +81,21 @@
 
                 <!-- Mobile Action Buttons -->
                 <div class="flex items-center space-x-2 md:hidden">
+                    <!-- Collapsed Search Icon (appears on scroll) -->
+                    <button id="mobile-search-trigger" onclick="expandMobileSearch()" class="text-[#000000] focus:outline-none p-1.5 transition-all duration-300 overflow-hidden" style="max-width: 0px; opacity: 0; pointer-events: none;" aria-label="Search">
+                        <i class="fa-solid fa-magnifying-glass text-base"></i>
+                    </button>
                     @if($vendor ?? null)
-                        <a href="/vendor-products/{{ $vendor->user_id }}" class="px-3 py-1.5 bg-black text-white text-xs font-semibold rounded-lg hover:bg-gray-800 transition">
-                            Store
+                        <a href="/vendor-products/{{ $vendor->user_id }}" class="px-3.5 py-1.5 text-white text-xs font-bold rounded-full shadow-md hover:opacity-90 transition whitespace-nowrap" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);">
+                            <i class="fa-solid fa-store mr-1"></i>Store
                         </a>
                     @endif
-                    <button onclick="toggleMobileMenu()" class="text-[#000000] focus:outline-none p-2 rounded-lg hover:opacity-75 transition-colors" aria-label="Toggle Menu">
-                        <i class="fa-solid fa-bars text-xl"></i>
-                    </button>
                 </div>
             </div>
         </div>
         
-        <!-- Mobile Search Bar -->
-        <div class="md:hidden mt-3 pb-1">
+        <!-- Mobile Search Bar (full-width line — hides on scroll) -->
+        <div id="mobile-search-line" class="md:hidden mt-3 pb-1 transition-all duration-300 ease-in-out overflow-hidden" style="max-height: 80px; opacity: 1;">
             <div class="flex items-center w-full bg-[#FFFFFF] rounded-xl p-1.5 pl-3 pr-1.5 shadow-inner border border-white/20">
                 <input
                     type="text"
@@ -95,20 +114,37 @@
 </header>
 
 <!-- Backdrop Overlay for Mobile Drawer -->
-<div id="mobile-overlay" class="hidden fixed inset-0 bg-black/50 z-[98]" onclick="toggleMobileMenu()"></div>
+<div id="mobile-overlay" class="hidden fixed inset-0 bg-black/50 z-[98]" onclick="toggleMobileMenu()">
+    <button class="absolute top-4 left-[17rem] text-white p-2 focus:outline-none" aria-label="Close Menu">
+        <i class="fa-solid fa-xmark text-3xl"></i>
+    </button>
+</div>
 
 <!-- Mobile Drawer Menu -->
 <div id="mobile-drawer" class="fixed inset-y-0 left-0 w-64 bg-white z-[99] shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden border-r border-gray-100 flex flex-col justify-between">
     <div class="overflow-y-auto flex-1">
-        <!-- Drawer Header -->
-        <div class="p-4 border-b border-gray-100 flex justify-between items-center">
-            <div class="flex items-center">
-                <img src="{{ asset('img/short_logo.jpeg') }}" class="w-8 h-8 rounded-full mr-2 object-cover">
-                <span class="font-bold text-gray-900">MJ Cheezain</span>
+        <!-- Drawer Header (ss1-style: Sign in top-right + Browse Brand) -->
+        <div class="p-4 pb-5" style="background: linear-gradient(to right, #FF7DA0, #FFC275);">
+            <div class="flex justify-end">
+                @guest
+                    <a href="/login-user?type=customer-login&page={{ request()->path() }}" class="flex items-center gap-1.5 text-gray-900 font-semibold text-sm no-underline hover:opacity-75 transition">
+                        Sign in
+                        <i class="fa-regular fa-user text-base"></i>
+                    </a>
+                @else
+                    <a href="{{ $dashboardPage }}" class="flex items-center gap-1.5 text-gray-900 font-semibold text-sm no-underline hover:opacity-75 transition truncate max-w-[12rem]">
+                        {{ $user->full_name ?? $user->username }}
+                        <i class="fa-regular fa-user text-base"></i>
+                    </a>
+                @endguest
             </div>
-            <button onclick="toggleMobileMenu()" class="text-gray-500 focus:outline-none p-2 rounded-lg hover:bg-gray-100">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
+            <div class="mt-3 flex items-center">
+                <img src="{{ asset('img/short_logo.jpeg') }}" class="w-9 h-9 rounded-full mr-2.5 object-cover border border-white/40">
+                <div>
+                    <span class="block text-gray-900 font-bold text-base leading-tight">Browse</span>
+                    <span class="block text-gray-900 font-extrabold text-2xl leading-tight">MJ Cheezain</span>
+                </div>
+            </div>
         </div>
 
         <!-- Navigation Links inside Drawer -->
@@ -294,3 +330,118 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeDropdowns();
 });
 </script>
+
+<script>
+// Mobile scroll header: search line collapses on scroll into an icon;
+// tapping the icon expands the input INLINE in the top row with a close X.
+(function () {
+    let cosSearchExpanded = false;
+
+    function cosIsMobile() {
+        const line = document.getElementById('mobile-search-line');
+        return line && window.getComputedStyle(line).display !== 'none';
+    }
+
+    window.expandMobileSearch = function () {
+        const inline = document.getElementById('mobile-inline-search');
+        const trigger = document.getElementById('mobile-search-trigger');
+        const brand = document.getElementById('cos-brand-wrap');
+        if (inline) {
+            inline.style.maxWidth = '100%';
+            inline.style.opacity = '1';
+            inline.style.pointerEvents = 'auto';
+        }
+        if (trigger) {
+            trigger.style.maxWidth = '0px';
+            trigger.style.opacity = '0';
+            trigger.style.pointerEvents = 'none';
+        }
+        if (brand) {
+            brand.style.maxWidth = '0px';
+            brand.style.opacity = '0';
+        }
+        cosSearchExpanded = true;
+        setTimeout(function () {
+            const i = document.getElementById('search-input-inline');
+            if (i && typeof i.focus === 'function') i.focus();
+        }, 300);
+    };
+
+    window.collapseMobileSearch = function () {
+        const inline = document.getElementById('mobile-inline-search');
+        const trigger = document.getElementById('mobile-search-trigger');
+        const brand = document.getElementById('cos-brand-wrap');
+        if (inline) {
+            inline.style.maxWidth = '0px';
+            inline.style.opacity = '0';
+            inline.style.pointerEvents = 'none';
+        }
+        if (trigger && cosIsMobile() && window.scrollY > 50) {
+            trigger.style.maxWidth = '50px';
+            trigger.style.opacity = '1';
+            trigger.style.pointerEvents = 'auto';
+        }
+        if (brand) {
+            brand.style.maxWidth = '500px';
+            brand.style.opacity = '1';
+        }
+        cosSearchExpanded = false;
+    };
+
+    window.addEventListener('scroll', function () {
+        if (!cosIsMobile()) return;
+        const line = document.getElementById('mobile-search-line');
+        const trigger = document.getElementById('mobile-search-trigger');
+        const container = document.getElementById('cos-header-container');
+
+        if (window.scrollY > 50) {
+            if (container) {
+                container.classList.remove('py-3');
+                container.classList.add('py-1.5');
+            }
+            if (line) {
+                line.style.maxHeight = '0px';
+                line.style.opacity = '0';
+                line.style.marginTop = '0px';
+                line.style.pointerEvents = 'none';
+            }
+            if (!cosSearchExpanded && trigger) {
+                trigger.style.maxWidth = '50px';
+                trigger.style.opacity = '1';
+                trigger.style.pointerEvents = 'auto';
+            }
+        } else {
+            if (container) {
+                container.classList.remove('py-1.5');
+                container.classList.add('py-3');
+            }
+            if (line) {
+                line.style.maxHeight = '80px';
+                line.style.opacity = '1';
+                line.style.marginTop = '';
+                line.style.pointerEvents = 'auto';
+            }
+            if (trigger) {
+                trigger.style.maxWidth = '0px';
+                trigger.style.opacity = '0';
+                trigger.style.pointerEvents = 'none';
+            }
+            if (cosSearchExpanded) window.collapseMobileSearch();
+        }
+    });
+
+    // Tap anywhere outside the inline search closes it (when scrolled)
+    document.addEventListener('click', function (e) {
+        if (!cosSearchExpanded) return;
+        const inline = document.getElementById('mobile-inline-search');
+        const trigger = document.getElementById('mobile-search-trigger');
+        if (inline && !inline.contains(e.target) && (!trigger || !trigger.contains(e.target))) {
+            window.collapseMobileSearch();
+        }
+    });
+})();
+</script>
+
+@once
+    <x-auth-popup />
+@endonce

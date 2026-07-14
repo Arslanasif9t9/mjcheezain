@@ -24,6 +24,23 @@ class ProductController extends Controller
         return view('products.biggest-savings', compact('products'));
     }
 
+    // Get all approved products (for the product-listing page)
+    public function allProducts()
+    {
+        $products = Product::where('position', 'approved')
+            ->orderByDesc('updated_at')
+            ->get();
+
+        $productIds = $products->pluck('id');
+        $allImages = VendorProductImage::whereIn('product_id', $productIds)->where('is_primary', 1)->get();
+        $imagesByProduct = $allImages->groupBy('product_id');
+
+        return response()->json([
+            'data' => $products,
+            'images' => $imagesByProduct
+        ]);
+    }
+
     // Get products by category
     public function byCategory(Request $request)
     {

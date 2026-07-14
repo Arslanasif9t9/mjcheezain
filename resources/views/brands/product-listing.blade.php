@@ -1,5 +1,5 @@
 @extends('layouts.structure')
-@section('title', 'Cosmetics')
+@section('title', 'Product Listing | MJ Cheezain')
 
 @section('style')
     <style>
@@ -22,6 +22,6 @@
     {{-- @include('../products.product-list', ['category' => 'Car Tools & Maintenance', 'id' => 'car']) --}}
     <x-footer />
 
-    <script src="{{ asset('js/search.js') }}"></script>
+    <script src="{{ asset('js/search.js') }}?v={{ time() }}"></script>
     {{-- <script src="{{ asset('js/category_fetch.js') }}"></script> --}}
 @endsection

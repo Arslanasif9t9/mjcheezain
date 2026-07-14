@@ -24,6 +24,10 @@
 .env.backup
 .env.production
 
+# Claude Code local data (not for push)
+/claude-code-data/
+/for-claude-code-just/
+
 # IDEs and local configurations
 .DS_Store
 Thumbs.db

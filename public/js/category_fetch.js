@@ -148,7 +148,7 @@
                     const card = document.createElement('div');
                     
                     // Card styling
-                    card.className = 'card-hover-glow bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-300 min-w-0 flex flex-col justify-between relative';
+                    card.className = 'card-hover-glow bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-300 w-[47vw] sm:w-56 md:w-64 flex-shrink-0 snap-start flex flex-col justify-between relative';
                     
                     // Product Card HTML Structure
                     card.innerHTML = `

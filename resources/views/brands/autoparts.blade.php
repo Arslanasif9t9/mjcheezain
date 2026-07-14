@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Auto Parts - MJ Cheezain</title>
@@ -172,20 +173,28 @@
         }
     </style>
 </head>
-<body class="min-h-screen">
+{{-- COMING SOON MODE: original body tag was <body class="min-h-screen"> — restore it when re-enabling the page --}}
+<body class="h-screen overflow-hidden flex flex-col">
     <!-- Header -->
     <x-cosmetics.header :user="$user ?? null" :vendor="$vendor ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
 
     <!-- Hero Section -->
     <x-auto.hero-video />
 
+    {{-- ============================================================
+         COMING SOON MODE — everything below the hero is temporarily
+         disabled (NOT deleted). To bring the full page back, change
+         @if(false) to @if(true) here AND in the script block below,
+         and restore the original body tag noted above.
+         ============================================================ --}}
+    @if(false)
     <!-- Active Filters Tags -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
         <div id="active-filters" class="flex flex-wrap items-center gap-2 min-h-10"></div>
     </div>
 
     <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-12">
         <div class="flex flex-col lg:flex-row gap-8">
             <!-- Mobile Filter Toggle -->
             <div class="lg:hidden flex justify-between items-center mb-4">
@@ -316,7 +325,7 @@
                 </div>
 
                 <!-- Products Grid -->
-                <div id="product-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 hidden"></div>
+                <div id="product-grid" class="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-6 hidden"></div>
 
                 <!-- No Results -->
                 <div id="no-results" class="hidden text-center py-16">
@@ -344,7 +353,10 @@
             <div id="modal-content" class="p-6 md:p-10"></div>
         </div>
     </div>
+    @endif
 
+    {{-- COMING SOON MODE: page scripts disabled with the markup above — change @if(false) to @if(true) to restore --}}
+    @if(false)
     <script>
         // CSRF Token
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
@@ -627,7 +639,7 @@
                 return `
                 <a href="/product/${product.vendor_product_id || product.id}" class="block">
                     <div class="product-card animate-fade-up" style="animation-delay: ${index * 0.02}s">
-                        <div class="relative overflow-hidden h-56">
+                        <div class="relative overflow-hidden h-40 sm:h-56">
                             <img src="${product.image}"
                                  alt="${product.name || 'Product'}"
                                  class="product-img w-full h-full object-cover"
@@ -638,9 +650,9 @@
                             </span>
                             ${discount ? `<span class="badge bg-green-500 text-white absolute top-3 right-3">-${discount}%</span>` : ''}
                         </div>
-                        <div class="p-5">
+                        <div class="p-3 sm:p-5">
                             <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">${product.category || 'Auto Part'}</p>
-                            <h3 class="text-lg font-semibold mb-2 leading-tight" style="font-family: 'Playfair Display', serif;">
+                            <h3 class="text-sm sm:text-lg font-semibold mb-2 leading-tight" style="font-family: 'Playfair Display', serif;">
                                 ${product.name || 'Unnamed Product'}
                             </h3>
                             <div class="flex items-center gap-2 mb-3">
@@ -648,9 +660,9 @@
                                 <span class="text-xs text-gray-400">•</span>
                                 <span class="text-xs text-gray-400">${product.model || 'Universal'}</span>
                             </div>
-                            <div class="flex items-center justify-between">
+                            <div class="flex items-center justify-between flex-wrap gap-1">
                                 <div>
-                                    <span class="text-xl font-bold text-[#e8461e]">Rs. ${(product.price || 0).toLocaleString()}</span>
+                                    <span class="text-base sm:text-xl font-bold text-[#e8461e]">Rs. ${(product.price || 0).toLocaleString()}</span>
                                     ${product.original_price ? `<span class="text-sm text-gray-400 line-through ml-2">Rs. ${product.original_price.toLocaleString()}</span>` : ''}
                                 </div>
                                 <span class="text-xs px-3 py-1 rounded-full ${(product.quantity || 0) > 0 ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-500'}">
@@ -1086,7 +1098,9 @@
         });
     </script>
 
-    <script src="{{ asset('js/search.js') }}"></script>
-    <script src="{{ asset('js/category_fetch.js') }}"></script>
+    <script src="{{ asset('js/category_fetch.js') }}?v={{ time() }}"></script>
+    @endif
+
+    <script src="{{ asset('js/search.js') }}?v={{ time() }}"></script>
 </body>
 </html>

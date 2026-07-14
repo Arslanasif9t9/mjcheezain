@@ -993,8 +993,8 @@
 
     <x-footer />
 
-    <script src="{{ asset('js/search.js') }}"></script>
-    <script src="{{ asset('js/category_fetch.js') }}"></script>
+    <script src="{{ asset('js/search.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/category_fetch.js') }}?v={{ time() }}"></script>
     <script>
         tailwind.config = {
             theme: {

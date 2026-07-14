@@ -1,13 +1,13 @@
-<footer class="bg-gray-50 border-t border-gray-100 mt-16 relative">
+<footer class="bg-gray-50 border-t border-gray-100 mt-10 sm:mt-16 relative">
     <div class="h-[3px] w-full bg-gradient-to-r from-[#FF7DA0] to-[#FFC275]"></div>
-    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        
-        <!-- Top Half: Four columns on desktop, stacking on mobile -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-10">
+    <div class="max-w-7xl mx-auto py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+
+        <!-- Top Half: compact 2 columns on mobile, expanding on larger screens -->
+        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 sm:gap-10">
             
             <!-- Column 1: About MJ CHEEZAIN -->
             <div>
-                <h3 class="footer-heading text-xl font-serif font-bold text-gray-900 mb-6">About MJ CHEEZAIN</h3>
+                <h3 class="footer-heading text-base sm:text-xl font-serif font-bold text-gray-900 mb-3 sm:mb-6">About MJ CHEEZAIN</h3>
                 <ul class="space-y-3">
                     <li><a href="/about" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">About Us</a></li>
                     <li><a href="/future-vision" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">Future Vision</a></li>
@@ -17,7 +17,7 @@
 
             <!-- Column 2: Customer Service -->
             <div>
-                <h3 class="footer-heading text-xl font-serif font-bold text-gray-900 mb-6">Customer Service</h3>
+                <h3 class="footer-heading text-base sm:text-xl font-serif font-bold text-gray-900 mb-3 sm:mb-6">Customer Service</h3>
                 <ul class="space-y-3">
                     <li><a href="/FAQs" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">FAQs</a></li>
                     <li><a href="/FAQs?tab=track-your-order" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">Track Your Order</a></li>
@@ -29,7 +29,7 @@
 
             <!-- Column 3: Vendor Zone -->
             <div>
-                <h3 class="footer-heading text-xl font-serif font-bold text-gray-900 mb-6">Vendor Zone</h3>
+                <h3 class="footer-heading text-base sm:text-xl font-serif font-bold text-gray-900 mb-3 sm:mb-6">Vendor Zone</h3>
                 <ul class="space-y-3">
                     <li><a href="/vendor-zone?tab=become-seller" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">Become a Seller</a></li>
                     <li><a href="/vendor-zone?tab=vendor-dashboard" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">Vendor Dashboard Features</a></li>
@@ -43,7 +43,7 @@
             <!-- Column 4: Legal & Social (Combined/Split in the original design) -->
             <!-- Legal & Policies (Upper part of column 4 in mobile/desktop) -->
                 <div>
-                    <h3 class="footer-heading text-xl font-serif font-bold text-gray-900 mb-6 mt-0">Legal & Policies</h3>
+                    <h3 class="footer-heading text-base sm:text-xl font-serif font-bold text-gray-900 mb-3 sm:mb-6 mt-0">Legal & Policies</h3>
                     <ul class="space-y-3">
                         <li><a href="/legal-policies" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">Terms & Conditions</a></li>
                         <li><a href="/privacy-policy" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">Privacy Policy</a></li>
@@ -51,10 +51,10 @@
                         <li><a href="/disclaimer" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">Disclaimer</a></li>
                     </ul>
                 </div>
-            <div class="grid grid-cols-1 gap-10 md:col-span-2 lg:col-span-1">
+            <div class="grid grid-cols-1 gap-10 col-span-2 md:col-span-2 lg:col-span-1">
                 <!-- Social & Contact (Lower part of column 4) -->
                 <div>
-                    <h3 class="footer-heading text-xl font-serif font-bold text-gray-900 mb-6">Social & Contact</h3>
+                    <h3 class="footer-heading text-base sm:text-xl font-serif font-bold text-gray-900 mb-3 sm:mb-6">Social & Contact</h3>
                     
                     <!-- Social Icons (Using SVG placeholders for Instagram, Facebook, etc.) -->
                     <div class="flex space-x-3 mb-8">
