@@ -10,6 +10,31 @@
             font-family: 'PT Serif', Georgia, serif;
             font-style: italic;
         }
+
+        /* Smooth mobile header scroll animation:
+           search bar glides up + gently fades, brand name slides in with a
+           slight delay so the two motions feel choreographed, not snappy. */
+        #mobile-search-wrapper {
+            transition: max-height .4s cubic-bezier(.4, 0, .2, 1),
+                        opacity .28s ease,
+                        transform .4s cubic-bezier(.4, 0, .2, 1),
+                        margin-top .4s cubic-bezier(.4, 0, .2, 1);
+            will-change: max-height, opacity, transform;
+        }
+        #mobile-search-wrapper.search-collapsed {
+            transform: translateY(-12px) scale(.97);
+            margin-top: 0;
+        }
+        #mobile-brand-wrapper {
+            transition: max-width .35s cubic-bezier(.4, 0, .2, 1),
+                        opacity .25s ease,
+                        transform .35s cubic-bezier(.4, 0, .2, 1);
+            transform: translateX(-8px);
+        }
+        #mobile-brand-wrapper.brand-visible {
+            transition-delay: .12s;
+            transform: translateX(0);
+        }
     </style>
 
     <!-- Navbar Header -->
@@ -432,79 +457,106 @@
             }
         });
 
-        // Mobile scroll animation logic
-        window.addEventListener('scroll', function() {
+        // Mobile header scroll animation — smooth and jitter-free.
+        // rAF-throttled so style writes happen at most once per frame, and a
+        // hysteresis band (collapse past 70px, expand under 25px) so the header
+        // never flickers when the user hovers around a single threshold.
+        const HEADER_COLLAPSE_AT = 70;
+        const HEADER_EXPAND_AT = 25;
+        let headerCompact = null;
+        let scrollTickPending = false;
+
+        function applyHeaderState(compact) {
+            if (headerCompact === compact) return;
+            headerCompact = compact;
+
             const wrapper = document.getElementById('mobile-search-wrapper');
             const trigger = document.getElementById('mobile-search-trigger');
             const headerContainer = document.getElementById('header-container');
-            const mobileSearchContainer = document.getElementById('mobile-search-container');
             const brandWrapper = document.getElementById('mobile-brand-wrapper');
             const authWrapper = document.getElementById('mobile-auth-wrapper');
-            
-            // Check if mobile elements are currently visible/rendered
-            const isMobile = mobileSearchContainer && window.getComputedStyle(mobileSearchContainer).display !== 'none';
-            const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
-            
-            if (isMobile) {
-                if (scrollY > 50) {
-                    if (headerContainer) {
-                        headerContainer.classList.remove('py-3.5');
-                        headerContainer.classList.add('py-1.5');
-                    }
-                    // The full-width search line below the top row always hides on scroll
-                    if (wrapper) {
-                        wrapper.style.maxHeight = '0px';
-                        wrapper.style.opacity = '0';
-                        wrapper.style.pointerEvents = 'none';
-                    }
-                    if (!isSearchExpanded) {
-                        collapseMobileSearch();
-                    }
-                    if (brandWrapper && !isSearchExpanded) {
-                        brandWrapper.style.maxWidth = '250px';
-                        brandWrapper.style.opacity = '1';
-                        brandWrapper.style.pointerEvents = 'auto';
-                    }
-                    if (authWrapper) {
-                        authWrapper.style.maxWidth = '0px';
-                        authWrapper.style.opacity = '0';
-                        authWrapper.style.pointerEvents = 'none';
-                    }
-                } else {
-                    if (headerContainer) {
-                        headerContainer.classList.remove('py-1.5');
-                        headerContainer.classList.add('py-3.5');
-                    }
-                    isSearchExpanded = false;
-                    const inlineSearch = document.getElementById('mobile-inline-search');
-                    if (inlineSearch) {
-                        inlineSearch.style.maxWidth = '0px';
-                        inlineSearch.style.opacity = '0';
-                        inlineSearch.style.pointerEvents = 'none';
-                    }
-                    if (wrapper) {
-                        wrapper.style.maxHeight = '80px';
-                        wrapper.style.opacity = '1';
-                        wrapper.style.pointerEvents = 'auto';
-                    }
-                    if (trigger) {
-                        trigger.style.maxWidth = '0px';
-                        trigger.style.opacity = '0';
-                        trigger.style.pointerEvents = 'none';
-                    }
-                    if (brandWrapper) {
-                        brandWrapper.style.maxWidth = '0px';
-                        brandWrapper.style.opacity = '0';
-                        brandWrapper.style.pointerEvents = 'none';
-                    }
-                    if (authWrapper) {
-                        authWrapper.style.maxWidth = '200px';
-                        authWrapper.style.opacity = '1';
-                        authWrapper.style.pointerEvents = 'auto';
-                    }
+
+            if (compact) {
+                if (headerContainer) {
+                    headerContainer.classList.remove('py-3.5');
+                    headerContainer.classList.add('py-1.5');
+                }
+                // The full-width search line glides up and fades out
+                if (wrapper) {
+                    wrapper.classList.add('search-collapsed');
+                    wrapper.style.maxHeight = '0px';
+                    wrapper.style.opacity = '0';
+                    wrapper.style.pointerEvents = 'none';
+                }
+                if (!isSearchExpanded) {
+                    collapseMobileSearch();
+                }
+                if (brandWrapper && !isSearchExpanded) {
+                    brandWrapper.classList.add('brand-visible');
+                    brandWrapper.style.maxWidth = '250px';
+                    brandWrapper.style.opacity = '1';
+                    brandWrapper.style.pointerEvents = 'auto';
+                }
+                if (authWrapper) {
+                    authWrapper.style.maxWidth = '0px';
+                    authWrapper.style.opacity = '0';
+                    authWrapper.style.pointerEvents = 'none';
+                }
+            } else {
+                if (headerContainer) {
+                    headerContainer.classList.remove('py-1.5');
+                    headerContainer.classList.add('py-3.5');
+                }
+                isSearchExpanded = false;
+                const inlineSearch = document.getElementById('mobile-inline-search');
+                if (inlineSearch) {
+                    inlineSearch.style.maxWidth = '0px';
+                    inlineSearch.style.opacity = '0';
+                    inlineSearch.style.pointerEvents = 'none';
+                }
+                if (wrapper) {
+                    wrapper.classList.remove('search-collapsed');
+                    wrapper.style.maxHeight = '80px';
+                    wrapper.style.opacity = '1';
+                    wrapper.style.pointerEvents = 'auto';
+                }
+                if (trigger) {
+                    trigger.style.maxWidth = '0px';
+                    trigger.style.opacity = '0';
+                    trigger.style.pointerEvents = 'none';
+                }
+                if (brandWrapper) {
+                    brandWrapper.classList.remove('brand-visible');
+                    brandWrapper.style.maxWidth = '0px';
+                    brandWrapper.style.opacity = '0';
+                    brandWrapper.style.pointerEvents = 'none';
+                }
+                if (authWrapper) {
+                    authWrapper.style.maxWidth = '200px';
+                    authWrapper.style.opacity = '1';
+                    authWrapper.style.pointerEvents = 'auto';
                 }
             }
-        });
+        }
+
+        window.addEventListener('scroll', function() {
+            if (scrollTickPending) return;
+            scrollTickPending = true;
+            requestAnimationFrame(function() {
+                scrollTickPending = false;
+                const mobileSearchContainer = document.getElementById('mobile-search-container');
+                const isMobile = mobileSearchContainer && window.getComputedStyle(mobileSearchContainer).display !== 'none';
+                if (!isMobile) return;
+
+                const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+                if (scrollY > HEADER_COLLAPSE_AT) {
+                    applyHeaderState(true);
+                } else if (scrollY < HEADER_EXPAND_AT) {
+                    applyHeaderState(false);
+                }
+                // Between the two thresholds the header keeps its current state
+            });
+        }, { passive: true });
 
         // Collapse search if clicking outside of it when scrolled down
         document.addEventListener('click', function(event) {
