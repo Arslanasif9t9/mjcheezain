@@ -1,4 +1,4 @@
-/* MJ Guide — site-wide support chatbot widget.
+/* MJGuider — site-wide support chatbot widget.
  * History: browser localStorage only, capped at 70 messages (oldest trimmed).
  * Context: last 10 messages accompany every request so the AI remembers the chat.
  * Server is stateless — see app/Services/MjGuide/. */
@@ -13,10 +13,17 @@
     var MAX_MESSAGES = 70;
     var CONTEXT_SIZE = 10;
     var WELCOME =
-        'Hi! I am MJ Guide, the assistant of your website. Agar aap ko is website ke ' +
+        'Hi! I am MJGuider, the assistant of your website. Agar aap ko is website ke ' +
         'mutalliq kisi bhi qisam ka masla, sawal ya madad chahiye ho to aap mujhse pooch sakte hain.';
+    var SUGGESTIONS = [
+        'Order kaise track karun?',
+        'Return kaise hota hai?',
+        'Contact info chahiye',
+        'Vendor kaise banun?'
+    ];
 
     var fab = document.getElementById('mjGuideFab');
+    var back = document.getElementById('mjGuideBack');
     var win = document.getElementById('mjGuideWin');
     var dot = document.getElementById('mjGuideDot');
     var msgs = document.getElementById('mjGuideMsgs');
@@ -25,9 +32,11 @@
     var send = document.getElementById('mjGuideSend');
     var clearBtn = document.getElementById('mjGuideClear');
     var closeBtn = document.getElementById('mjGuideClose');
+    var confirmBar = document.getElementById('mjGuideConfirm');
+    var confirmYes = document.getElementById('mjGuideConfirmYes');
+    var confirmNo = document.getElementById('mjGuideConfirmNo');
 
     var pending = false;
-    var clearArmTimer = null;
 
     /* ---------- localStorage history ---------- */
 
@@ -71,11 +80,25 @@
         msgs.scrollTop = msgs.scrollHeight;
     }
 
+    function renderChips() {
+        var wrap = document.createElement('div');
+        wrap.className = 'mjg-chips';
+        SUGGESTIONS.forEach(function (s) {
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.textContent = s;
+            b.addEventListener('click', function () { sendMessage(s); });
+            wrap.appendChild(b);
+        });
+        msgs.appendChild(wrap);
+    }
+
     function renderAll() {
         msgs.textContent = '';
         var arr = loadHistory();
         if (arr.length === 0) {
             bubble('assistant', WELCOME);
+            renderChips();
         } else {
             arr.forEach(function (m) { bubble(m.role, m.text); });
         }
@@ -96,46 +119,60 @@
         typingEl = null;
     }
 
-    /* ---------- open / close ---------- */
+    /* ---------- open / close (FAB hides while open; mobile locks page scroll) ---------- */
+
+    var savedOverflow = '';
 
     function isOpen() {
         return root.classList.contains('mjg-open');
+    }
+
+    function isMobile() {
+        return window.matchMedia('(max-width: 767px)').matches;
     }
 
     function openChat() {
         root.classList.add('mjg-open');
         win.setAttribute('aria-hidden', 'false');
         dot.hidden = true;
+        hideConfirm();
         renderAll();
-        if (window.matchMedia('(min-width: 768px)').matches) text.focus();
+        if (isMobile()) {
+            savedOverflow = document.body.style.overflow;
+            document.body.style.overflow = 'hidden'; // page behind the sheet must not scroll
+        } else {
+            text.focus();
+        }
     }
 
     function closeChat() {
         root.classList.remove('mjg-open');
         win.setAttribute('aria-hidden', 'true');
+        hideConfirm();
+        document.body.style.overflow = savedOverflow;
     }
 
-    fab.addEventListener('click', function () {
-        if (isOpen()) closeChat(); else openChat();
-    });
+    fab.addEventListener('click', openChat);
     closeBtn.addEventListener('click', closeChat);
+    back.addEventListener('click', closeChat);
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && isOpen()) closeChat();
+    });
 
-    /* ---------- clear chat (two-tap confirm, no blocking dialog) ---------- */
+    /* ---------- clear chat (inline confirm strip — no blocking dialog) ---------- */
+
+    function hideConfirm() {
+        confirmBar.hidden = true;
+    }
 
     clearBtn.addEventListener('click', function () {
-        if (clearBtn.classList.contains('mjg-arm')) {
-            clearTimeout(clearArmTimer);
-            clearBtn.classList.remove('mjg-arm');
-            try { localStorage.removeItem(STORE_KEY); } catch (e) { /* ignore */ }
-            renderAll();
-        } else {
-            clearBtn.classList.add('mjg-arm');
-            clearBtn.title = 'Tap again to clear chat';
-            clearArmTimer = setTimeout(function () {
-                clearBtn.classList.remove('mjg-arm');
-                clearBtn.title = 'Clear chat';
-            }, 3000);
-        }
+        confirmBar.hidden = !confirmBar.hidden;
+    });
+    confirmNo.addEventListener('click', hideConfirm);
+    confirmYes.addEventListener('click', function () {
+        try { localStorage.removeItem(STORE_KEY); } catch (e) { /* ignore */ }
+        hideConfirm();
+        renderAll();
     });
 
     /* ---------- sending ---------- */
@@ -146,20 +183,19 @@
         send.disabled = state;
     }
 
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        if (pending) return;
-        var value = text.value.trim();
-        if (!value) return;
+    function sendMessage(value) {
+        value = (value || '').trim();
+        if (!value || pending) return;
 
         // context = the last 10 messages BEFORE this new one
         var context = loadHistory().slice(-CONTEXT_SIZE).map(function (m) {
             return { role: m.role, text: m.text };
         });
 
+        var hadHistory = loadHistory().length > 0;
         pushMessage('user', value);
-        bubble('user', value);
-        text.value = '';
+        if (!hadHistory) renderAll(); // first message: drop the suggestion chips
+        else bubble('user', value);
         scrollDown();
         setPending(true);
         showTyping();
@@ -198,7 +234,25 @@
             })
             .then(function () {
                 setPending(false);
-                if (isOpen() && window.matchMedia('(min-width: 768px)').matches) text.focus();
+                if (isOpen() && !isMobile()) text.focus();
             });
+    }
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var value = text.value;
+        text.value = '';
+        sendMessage(value);
     });
+
+    /* ---------- avoid the product-page #cartSummary bar ---------- */
+
+    var cartBar = document.getElementById('cartSummary');
+    if (cartBar) {
+        var syncLift = function () {
+            root.classList.toggle('mjg-lift', !cartBar.classList.contains('translate-y-full'));
+        };
+        syncLift();
+        new MutationObserver(syncLift).observe(cartBar, { attributes: true, attributeFilter: ['class'] });
+    }
 })();

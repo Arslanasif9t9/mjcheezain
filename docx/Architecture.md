@@ -75,7 +75,7 @@ mjcheezain/
 │   ├── vendor/                    # vendor panel views
 │   ├── Admin/                     # admin panel views
 │   └── footer/                    # footer info pages
-├── app/Services/MjGuide/          # 🤖 MJ Guide chatbot backend
+├── app/Services/MjGuide/          # 🤖 MJGuider chatbot backend
 │   ├── ChatService.php            # Gemini→Grok failover + circuit breaker + system prompt
 │   ├── GeminiProvider.php / GrokProvider.php
 │   └── knowledge.md               # site knowledge base (cached 1h — cache:clear after edits)

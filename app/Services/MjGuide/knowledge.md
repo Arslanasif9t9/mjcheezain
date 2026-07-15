@@ -1,4 +1,4 @@
-# MJ Cheezain — Website Knowledge Base (for MJ Guide)
+# MJ Cheezain — Website Knowledge Base (for MJGuider)
 
 ## About the website
 - MJ Cheezain is a Pakistani multivendor e-commerce platform. Many vendors sell their products through one storefront.

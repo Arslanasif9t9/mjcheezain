@@ -42,7 +42,7 @@ Status legend: ✅ done · 🔄 in progress · ⏳ planned
 ## Phase 8 — Auto Parts Launch ⏳
 - Remove Coming Soon gate, category data, autoparts-specific theming
 
-## Phase 9 — MJ Guide (AI Support Chatbot) ✅ *(built 2026-07-15 — see `mj-guide.md` + `plan.html`)*
+## Phase 9 — MJGuider (AI Support Chatbot) ✅ *(built 2026-07-15 — see `mj-guide.md` + `plan.html`)*
 - Floating brand-themed chatbot (bottom-right, every page, all users incl. guests) — DONE
 - Gemini primary → Grok silent fallback (5-min circuit breaker), stateless `POST /mj-guide/message` (throttle 10/min) — DONE
 - History: browser localStorage only, 70-msg cap, last 10 sent as AI context; clear-chat = two-tap trash button — DONE

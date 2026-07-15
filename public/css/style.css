@@ -245,11 +245,11 @@ body {
     100% { transform: translateX(100%); }
 }
 
-/* Floating back-to-top button */
+/* Floating back-to-top button (sits ABOVE the MJGuider chat button) */
 #back-to-top {
     position: fixed;
-    right: 1rem;
-    bottom: 1.25rem;
+    right: 1.5rem;
+    bottom: 5.6rem;
     z-index: 60;
     width: 42px;
     height: 42px;
@@ -269,6 +269,13 @@ body {
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
+}
+@media (max-width: 767px) {
+    /* mobile: chat button sits at ~5.9rem (above bottom nav) — stack this one above it */
+    #back-to-top {
+        right: 0.9rem;
+        bottom: 9.6rem;
+    }
 }
 
 .footer-heading {

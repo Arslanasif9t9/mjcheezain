@@ -1,18 +1,18 @@
-# MJ Guide — AI Support Chatbot (Planning Document)
+# MJGuider — AI Support Chatbot (Planning Document)
 
 > Status: **PLANNING ONLY — no code written yet.** This document is the complete technical roadmap.
 > Visual version: `docx/plan.html` (open in browser).
 
-## 1. What Is MJ Guide
+## 1. What Is MJGuider
 
-**MJ Guide** is the website's built-in support assistant — a floating chatbot on the bottom-right corner of every page. It is NOT a general-purpose AI: it only answers questions about MJ Cheezain (contact info, login/registration help, orders, returns, vendor guidance, how to use any page).
+**MJGuider** is the website's built-in support assistant — a floating chatbot on the bottom-right corner of every page. It is NOT a general-purpose AI: it only answers questions about MJ Cheezain (contact info, login/registration help, orders, returns, vendor guidance, how to use any page).
 
 Opening message (verbatim, per owner spec):
 
-> "Hi! I am MJ Guide, the assistant of your website. Agar aap ko is website ke mutalliq kisi bhi qisam ka masla, sawal ya madad chahiye ho to aap mujhse pooch sakte hain."
+> "Hi! I am MJGuider, the assistant of your website. Agar aap ko is website ke mutalliq kisi bhi qisam ka masla, sawal ya madad chahiye ho to aap mujhse pooch sakte hain."
 
 ### Core requirements (from owner)
-1. Round floating button, bottom-right, labelled **MJ Guide** → opens a small chat window.
+1. Round floating button, bottom-right, labelled **MJGuider** → opens a small chat window.
 2. Chat text slightly larger & easily readable; full design follows site brand (pink `#E85D85`, gradient `#FF7DA0 → #FFC275`, Poppins).
 3. **Gemini API is always tried first**; on token/quota/any failure → **automatic silent fallback to Grok API**. User never notices the switch.
 4. Available to **everyone** — guest, customer, vendor. No login required.
@@ -103,7 +103,7 @@ localStorage["mj_guide_history"] = JSON array of
 No fine-tuning; "training" = a strict **system prompt** + an injected **knowledge base** (`knowledge.md`, cached).
 
 **System prompt rules (summary)**
-- You are *MJ Guide*, the official assistant of MJ Cheezain (Pakistani multivendor e-commerce, cosmetics focus).
+- You are *MJGuider*, the official assistant of MJ Cheezain (Pakistani multivendor e-commerce, cosmetics focus).
 - Answer ONLY MJ Cheezain-related questions. Off-topic → politely decline and steer back to the website.
 - Reply in the user's language (English / Urdu / Roman Urdu — mirror the user).
 - Answers short, step-by-step where helpful, friendly tone. Currency always `Rs.`
@@ -120,7 +120,7 @@ No fine-tuning; "training" = a strict **system prompt** + an injected **knowledg
 
 ## 6. UI / UX Design
 
-**Floating button** — fixed bottom-right; brand gradient pill/circle with chat icon + "MJ Guide" text; gentle pulse to invite the first click; unread dot when a reply arrives while closed.
+**Floating button** — fixed bottom-right; brand gradient pill/circle with chat icon + "MJGuider" text; gentle pulse to invite the first click; unread dot when a reply arrives while closed.
 - Desktop: `bottom: 24px; right: 24px`.
 - Mobile: `bottom: ~92px` (sits ABOVE the customer/vendor bottom tab bar), `right: 16px`.
 - z-index ≈ `9990` — above page content & `#cartSummary`, **below** the vendor drawer (`z-[10001]`) and page-loader.
@@ -128,7 +128,7 @@ No fine-tuning; "training" = a strict **system prompt** + an injected **knowledg
 **Chat window**
 - Desktop: ~`380px` wide, `min(560px, 75vh)` tall, rounded-2xl card, shadow — opens above the button.
 - Mobile: bottom sheet, full width, ~`80vh`, slide-up animation.
-- Header: brand gradient, MJ monogram avatar, "MJ Guide" + "Online" green dot, close (—) button.
+- Header: brand gradient, MJ monogram avatar, "MJGuider" + "Online" green dot, close (—) button.
 - Messages: assistant = white `app-card` bubbles left; user = pink gradient bubbles right; timestamps subtle.
 - **Font size 15–16px** (bigger than typical 13px chat text — owner wants easy readability), Poppins.
 - Typing indicator (3 bouncing dots) while waiting for the API.
@@ -162,7 +162,7 @@ No fine-tuning; "training" = a strict **system prompt** + an injected **knowledg
 
 ## 9. Open Questions (owner input needed before coding)
 
-1. **Official phone number** — site shows placeholder `03XX-XXXXXXX`; MJ Guide needs the real one.
+1. **Official phone number** — site shows placeholder `03XX-XXXXXXX`; MJGuider needs the real one.
 2. **API keys** — Gemini + Grok keys available? (Both needed in server `.env`.)
 3. **Model choice** — plan defaults: `gemini-2.0-flash` + `grok-3-mini` (both fast & cheap). OK?
 4. **"Clear chat" button** — should users be able to wipe their own history?

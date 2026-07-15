@@ -4,12 +4,23 @@
 
 ## 🔄 Currently Working On
 
-- **MJ Guide chatbot — WORKING with real Gemini, NOT pushed/deployed (owner: "abhi push nahi").** Gemini key in local `.env`, live-tested OK. Pending: `GROK_API_KEY` (fallback abhi key-less → dono fail par polite fallback msg), real phone number for `knowledge.md`, owner ka widget UI browser test, phir push approval. ⚠ Server `.env` par bhi keys manually dalni hongi (deploy .env upload nahi karta) + `php artisan config:clear`.
+- **MJGuider chatbot — WORKING with real Gemini, NOT pushed/deployed (owner: "abhi push nahi").** Gemini key in local `.env`, live-tested OK. Pending: `GROK_API_KEY` (fallback abhi key-less → dono fail par polite fallback msg), real phone number for `knowledge.md`, owner ka widget UI browser test, phir push approval. ⚠ Server `.env` par bhi keys manually dalni hongi (deploy .env upload nahi karta) + `php artisan config:clear`.
 - **⚠ GOTCHA (2026-07-15):** naye Gemini keys par 2.0/2.5 models ka free-tier quota **0** hai (429/404 dete hain) — is liye model `gemini-3.1-flash-lite` use ho raha hai (free tier OK, tested). GeminiProvider ab "thought" parts skip kar ke sirf visible text jorta hai.
 
 ## ✅ Completed
 
-### 2026-07-15 — MJ Guide chatbot: FULL BUILD (Phases A–E)
+### 2026-07-15 — MJGuider widget UI revamp (owner feedback round 1)
+- **Rename**: "MJ Guide" → **MJGuider** everywhere (FAB label, header, welcome msg, aria labels, system prompt self-name — AI tested: "Mera naam MJGuider hai"; docs sed-renamed too).
+- **FAB hides when chat open** (fade+scale); window opens in the same bottom-right corner. ESC bhi close karta hai.
+- **Desktop overlap fix**: `#back-to-top` (public/css/style.css) moved ABOVE the FAB — desktop `right:1.5rem; bottom:5.6rem`, mobile `bottom:9.6rem` (FAB 5.9rem ke oopar).
+- **Mobile premium sheet**: full-width bottom sheet 91dvh, rounded-top 24px, drag-handle, dim backdrop (tap = close), slide-up cubic-bezier, body scroll-lock while open, safe-area input padding. **z-index 10000/9999** kyunke bottom navs z-[9999] hain (pehle sheet unke neeche thi!). Vendor drawer 10001 + page-loader ab bhi oopar.
+- **Clear-chat fix**: two-tap trash (confusing tha) → inline confirm strip "Poori chat clear kar dein? [Clear karein][Cancel]".
+- **Input compact**: explicit 42px height (font 16px iOS-safe), send 40px.
+- **Custom scrollbar**: thin 5px pink thumb (webkit + Firefox scrollbar-color).
+- **Extras**: suggestion chips on empty chat (Order track/Return/Contact/Vendor — tap = send), bubble entry animation, avatar online-dot, `#cartSummary` overlap fix (MutationObserver `mjg-lift` lifts FAB jab bar visible ho — product pages).
+- Verified: JS/PHP syntax, view:cache, live server home/cosmetics/cart/login-user = 1 widget, AI self-name test pass.
+
+### 2026-07-15 — MJGuider chatbot: FULL BUILD (Phases A–E)
 - **Backend** (`app/Services/MjGuide/`): `GeminiProvider` (v1beta generateContent, 15s timeout), `GrokProvider` (x.ai chat/completions, 20s), `ChatService` (failover on 429/quota/5xx/timeout/empty, `Cache` 5-min circuit breaker `mj_guide_gemini_down`, provider logged to laravel.log, Urdu fallback reply when both fail). System prompt: MJ-Cheezain-only scope, mirrors user language, Rs. only, phone "coming soon" + support email.
 - **Knowledge base**: `app/Services/MjGuide/knowledge.md` (contacts, login/signup at /login-user, order flow COD-only, customer+vendor panel guides with real URLs verified from routes/web.php, returns/replacements, info pages, "does NOT exist yet" list). Cached 1h — `php artisan cache:clear` after editing it.
 - **API**: `POST /mj-guide/message` (`MjGuideController`, throttle:10,1, validates message ≤1000 + context ≤10 items role-whitelisted). Stateless — no DB, no migrations.
@@ -17,9 +28,9 @@
 - **Widget**: `components/mj-guide.blade.php` (@once; brand gradient FAB bottom-right, chat window 380px/bottom-sheet mobile, 15.5px msg text, 16px input (iOS no-zoom), two-tap clear button, typing dots, unread dot; z 9990/9991 — under auth-popup 9998, vendor drawer 10001, page-loader) + `public/js/mj-guide.js` (localStorage `mj_guide_history` 70-cap, last-10 context, textContent-only XSS-safe, welcome bubble when empty, 429/network notes not saved).
 - **Injection**: `customer/global-nav.blade.php` (OUTSIDE @auth → guests too), `customer/mobile-nav.blade.php`, `vendor/mobile-nav.blade.php`, `home/login.blade.php` — @once collapses overlaps.
 - **Verified**: php -l ×4, node --check, view:cache OK; live server: home/cosmetics/cart/contact/product/login-user = 1 widget each; tinker full-kernel renders (customer 67: dashboard/orders/wishlist/home; vendor 66: dashboard/products/orders/withdraw) all 200 with exactly 1 widget; endpoint 200 fallback reply (no keys), 422 invalid payload, failover logged.
-- ⚠ Widget UI browser-click test NOT done (Chrome extension unavailable) — owner should open site, click MJ Guide, send a message.
+- ⚠ Widget UI browser-click test NOT done (Chrome extension unavailable) — owner should open site, click MJGuider, send a message.
 
-### 2026-07-15 — MJ Guide chatbot: complete planning + docs (NO code)
+### 2026-07-15 — MJGuider chatbot: complete planning + docs (NO code)
 - New `docx/mj-guide.md` (full technical plan) + `docx/plan.html` (visual brand-themed plan page)
 - Plan: floating bottom-right widget (all users incl. guests, injected via `customer/global-nav` which is on every page), Gemini→Grok silent failover with 5-min circuit breaker, system-prompt training + `knowledge.md` (MJ Cheezain-only scope), rate limits + `MJ_GUIDE_ENABLED` kill-switch
 - **Owner revision (same day): history = browser localStorage ONLY, max 70 messages, NO database changes** (original DB-table plan dropped); AI ko old chat yaad rakhne ke liye last 10 messages har request ke sath context mein jate hain; server fully stateless
