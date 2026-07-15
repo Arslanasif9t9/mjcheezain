@@ -11,14 +11,14 @@ function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `custom-notification fixed top-4 right-4 p-4 rounded-lg shadow-lg bg-white border-l-4 z-50 ${
         type === 'success' ? 'border-green-500' : 
-        type === 'error' ? 'border-red-500' : 'border-blue-500'
+        type === 'error' ? 'border-red-500' : 'border-pink-400'
     }`;
     
     notification.innerHTML = `
         <div class="flex items-center">
             <i class="fas ${
                 type === 'success' ? 'fa-check-circle text-green-500' : 
-                type === 'error' ? 'fa-exclamation-circle text-red-500' : 'fa-info-circle text-blue-500'
+                type === 'error' ? 'fa-exclamation-circle text-red-500' : 'fa-info-circle text-pink-400'
             } mr-2"></i>
             <span class="text-sm font-medium text-gray-900">${message}</span>
             <button class="ml-4 text-gray-400 hover:text-gray-500" onclick="this.parentElement.parentElement.remove()">

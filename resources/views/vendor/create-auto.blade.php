@@ -70,7 +70,7 @@
 
         .image-upload-label:hover {
             border-color: var(--primary);
-            background-color: rgba(59, 130, 246, 0.05);
+            background-color: rgba(232, 93, 133, 0.05);
             transform: translateY(-2px);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
@@ -220,7 +220,7 @@
         .form-input:focus, .form-select:focus, .form-textarea:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 3px rgba(232, 93, 133, 0.1);
         }
 
         .form-input.has-error:focus, .form-select.has-error:focus, .form-textarea.has-error:focus {
@@ -238,12 +238,12 @@
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 4px 6px -1px rgba(232, 93, 133, 0.2);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 10px 15px -3px rgba(232, 93, 133, 0.3);
         }
 
         .btn-primary:disabled {
@@ -290,7 +290,7 @@
 
         .video-upload-label:hover {
             border-color: var(--primary);
-            background-color: rgba(59, 130, 246, 0.05);
+            background-color: rgba(232, 93, 133, 0.05);
             transform: translateY(-2px);
         }
 
@@ -463,7 +463,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="font-sans" style="background-color: #FFF6F0;">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
         <x-vendor.sidebar 
@@ -1680,5 +1680,6 @@
             document.getElementById('successNotification')?.classList.add('hidden');
         };
     </script>
+    <x-vendor.mobile-nav />
 </body>
 </html>

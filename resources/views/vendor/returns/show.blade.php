@@ -343,7 +343,7 @@
                         @if($return->refund_amount)
                         <div>
                             <label class="text-sm text-gray-500">Refund Amount</label>
-                            <p class="font-medium text-green-600">${{ number_format($return->refund_amount, 2) }}</p>
+                            <p class="font-medium text-green-600">Rs. {{ number_format($return->refund_amount, 2) }}</p>
                         </div>
                         @endif
                         @if($return->refund_method)
@@ -430,5 +430,6 @@
             alert('Shipping label generation feature would be implemented here.');
         }
     </script>
+    <x-vendor.mobile-nav />
 </body>
 </html>

@@ -4,7 +4,7 @@
     <!-- 🔸 SIGN UP DROPDOWN -->
     <div class="relative group">
         <button 
-            class="text-gray-600 hover:text-blue-600 px-2 sm:px-3 py-2 text-xs sm:text-sm font-semibold transition duration-150 flex items-center focus:outline-none"
+            class="text-gray-600 hover:text-[#E85D85] px-2 sm:px-3 py-2 text-xs sm:text-sm font-semibold transition duration-150 flex items-center focus:outline-none"
             onclick="toggleDropdownMenu(this, event)"
         >
             <span class="hover-text flex items-center">Sign Up <i class="fa fa-caret-down ml-1 text-[10px]"></i></span>
@@ -15,11 +15,11 @@
             style="z-index: 100;"
         >
             <a href="/login-user?type=customer-signup&page={{ request()->path() }}" 
-               class="block px-4 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 text-left transition duration-150"
+               class="block px-4 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:text-[#E85D85] text-left transition duration-150"
                onclick="userType('customer', 'sign')">Customer Sign Up</a>
 
             <a href="/login-user?type=vendor-signup&page={{ request()->path() }}" 
-               class="block px-4 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 text-left transition duration-150"
+               class="block px-4 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:text-[#E85D85] text-left transition duration-150"
                onclick="userType('vendor', 'sign')">Vendor Sign Up</a>
         </div>
     </div>
@@ -29,7 +29,7 @@
     <!-- 🔸 LOGIN DROPDOWN -->
     <div class="relative group">
         <button 
-            class="text-gray-600 hover:text-blue-600 px-2 sm:px-3 py-2 text-xs sm:text-sm font-semibold transition duration-150 flex items-center focus:outline-none"
+            class="text-gray-600 hover:text-[#E85D85] px-2 sm:px-3 py-2 text-xs sm:text-sm font-semibold transition duration-150 flex items-center focus:outline-none"
             onclick="toggleDropdownMenu(this, event)"
         >
             <span class="hover-text flex items-center">Login <i class="fa fa-caret-down ml-1 text-[10px]"></i></span>
@@ -40,10 +40,10 @@
             style="z-index: 100;"
         >
             <a href="/login-user?type=customer-login&page={{ request()->path() }}" 
-               class="block px-4 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 text-left transition duration-150" onclick="userType('customer', 'log')">Customer Login</a>
+               class="block px-4 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:text-[#E85D85] text-left transition duration-150" onclick="userType('customer', 'log')">Customer Login</a>
 
             <a href="/login-user?type=vendor-login&page={{ request()->path() }}" 
-               class="block px-4 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 text-left transition duration-150" onclick="userType('vendor', 'log')">Vendor Login</a>
+               class="block px-4 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:text-[#E85D85] text-left transition duration-150" onclick="userType('vendor', 'log')">Vendor Login</a>
         </div>
     </div>
 </div>

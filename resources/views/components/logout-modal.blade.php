@@ -18,16 +18,16 @@
 
         <!-- Message -->
         <div class="p-6">
-            <div class="flex items-start space-x-3 bg-blue-50 p-4 rounded-lg border border-blue-200">
-                <i class="fas fa-info-circle text-blue-500 mt-1 flex-shrink-0"></i>
-                <p class="text-blue-700 text-sm">You'll need to sign in again to access your dashboard.</p>
+            <div class="flex items-start space-x-3 bg-pink-50 p-4 rounded-lg border border-pink-200">
+                <i class="fas fa-info-circle text-[#E85D85] mt-1 flex-shrink-0"></i>
+                <p class="text-[#C94A72] text-sm">You'll need to sign in again to access your dashboard.</p>
             </div>
         </div>
 
         <!-- Buttons -->
         <div class="p-6 border-t border-gray-100 flex space-x-3">
             <button id="cancelLogoutBtn"
-                    class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-300 focus:ring-offset-2">
                 <i class="fas fa-times mr-2"></i>No, Cancel
             </button>
             <form id="logoutForm" action="{{ route('logout') }}" method="GET" class="flex-1">

@@ -14,8 +14,9 @@
                 #cartSummary { bottom: 3.6rem !important; }
             }
         </style>
-    @elseif (Auth::user()->type === 'vendor' && str_starts_with(request()->path(), 'vendor'))
-        {{-- Vendor panel pages get the vendor bottom tab bar on mobile --}}
+    @elseif (Auth::user()->type === 'vendor')
+        {{-- Vendors get their bottom tab bar on EVERY page (panel + storefront)
+             so they can jump back to their dashboard from anywhere --}}
         <x-vendor.mobile-nav />
     @endif
 @endauth

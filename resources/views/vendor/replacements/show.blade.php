@@ -248,5 +248,6 @@
             window.print();
         }
     </script>
+    <x-vendor.mobile-nav />
 </body>
 </html>

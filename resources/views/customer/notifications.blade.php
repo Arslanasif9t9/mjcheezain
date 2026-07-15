@@ -54,6 +54,17 @@
             <main class="flex-1 p-4 md:p-6 lg:p-8 pb-28 md:pb-8 page-enter">
                 <div class="max-w-4xl mx-auto">
                     <!-- Notification List -->
+                    @php
+                        // Brand theme mapping: DB-stored color classes may contain blue variants.
+                        // Rewrite them to brand pink equivalents before echoing (view-only fix, no DB changes).
+                        $brandizeClasses = function ($classes) {
+                            return str_replace(
+                                ['bg-blue-100', 'bg-blue-500', 'bg-blue-50', 'text-blue-800', 'text-blue-600', 'text-blue-500'],
+                                ['bg-pink-100', 'bg-[#FF7DA0]', 'bg-pink-50', 'text-[#C94A72]', 'text-[#E85D85]', 'text-[#E85D85]'],
+                                (string) $classes
+                            );
+                        };
+                    @endphp
                     <div class="app-card overflow-hidden -mt-2 md:mt-0 relative z-10">
                         @forelse($notifications as $dateGroup => $groupedNotifications)
                             <div class="@if(!$loop->last) border-b border-pink-100 @endif">
@@ -67,12 +78,12 @@
                                              data-notification-id="{{ $notification->id }}">
                                             {{-- <label class="inline-flex items-center mt-1 mr-3">
                                                 <input type="checkbox" 
-                                                       class="notification-checkbox form-checkbox h-4 w-4 text-blue-600 sr-only" 
+                                                       class="notification-checkbox form-checkbox h-4 w-4 text-[#E85D85] sr-only"
                                                        {{ $notification->is_read ? 'checked' : '' }}>
                                                 <span class="checkmark h-4 w-4 border border-gray-300 rounded-sm flex-shrink-0"></span>
                                             </label> --}}
                                             <div class="flex-shrink-0 mr-3">
-                                                <div class="p-2 rounded-full {!! $notification->icon_color !!}">
+                                                <div class="p-2 rounded-full {!! $brandizeClasses($notification->icon_color) !!}">
                                                     <i class="{{ $notification->icon_class }}"></i>
                                                 </div>
                                             </div>
@@ -84,7 +95,7 @@
                                                 </p>
                                             </div>
                                             <div class="ml-4 flex-shrink-0">
-                                                <span class="w-2 h-2 rounded-full {{ $notification->is_read ? 'bg-gray-300' : $notification->dot_color }}"></span>
+                                                <span class="w-2 h-2 rounded-full {{ $notification->is_read ? 'bg-gray-300' : $brandizeClasses($notification->dot_color) }}"></span>
                                             </div>
                                         </div>
                                     @endforeach
@@ -136,7 +147,7 @@
                     // Mark as read visually
                     if (checkbox) checkbox.checked = true;
                     if (dot) {
-                        dot.classList.remove('bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-red-500');
+                        dot.classList.remove('bg-[#FF7DA0]', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-red-500');
                         dot.classList.add('bg-gray-300');
                     }
                     this.classList.remove('bg-pink-50');
@@ -164,7 +175,7 @@
                     
                     if (checkbox.checked) {
                         // Mark as read
-                        dot.classList.remove('bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-red-500');
+                        dot.classList.remove('bg-[#FF7DA0]', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-red-500');
                         dot.classList.add('bg-gray-300');
                         
                         fetch(`/customer/notifications/${notificationId}/read`, {
@@ -181,7 +192,7 @@
                         
                         // Determine dot color based on icon type
                         if (iconClass.includes('fa-shipping-fast') || iconClass.includes('fa-comment-alt')) {
-                            dot.classList.add('bg-blue-500');
+                            dot.classList.add('bg-[#FF7DA0]');
                         } else if (iconClass.includes('fa-check-circle') || iconClass.includes('fa-thumbs-up')) {
                             dot.classList.add('bg-green-500');
                         } else if (iconClass.includes('fa-exclamation-circle')) {

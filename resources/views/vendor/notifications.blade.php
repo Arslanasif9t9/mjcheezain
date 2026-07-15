@@ -10,9 +10,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .sidebar-item.active {
-            background-color: #f3f4f6;
-            border-right: 3px solid #3b82f6;
-            color: #3b82f6;
+            background-color: #fdf2f8;
+            border-right: 3px solid #E85D85;
+            color: #E85D85;
         }
         
         /* Notification animations */
@@ -27,8 +27,8 @@
         
         /* Custom checkbox style */
         input[type="checkbox"]:checked + .checkmark {
-            background-color: #3b82f6;
-            border-color: #3b82f6;
+            background-color: #E85D85;
+            border-color: #E85D85;
         }
         
         .checkmark:after {
@@ -276,5 +276,6 @@
             });
         });
     </script>
+    <x-vendor.mobile-nav />
 </body>
 </html>

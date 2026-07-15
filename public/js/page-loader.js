@@ -68,7 +68,7 @@
         overlay.classList.add('mj-show');
         // Failsafe: never trap the user if navigation silently fails
         clearTimeout(hideTimer);
-        hideTimer = setTimeout(hide, 12000);
+        hideTimer = setTimeout(hide, 8000);
     }
 
     function hide() {
@@ -82,7 +82,7 @@
     /* ---------- triggers ---------- */
     document.addEventListener('click', function (e) {
         // Only plain left-clicks
-        if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
 
         var a = e.target.closest && e.target.closest('a[href]');
         if (!a) return;
@@ -101,16 +101,22 @@
             if (url.pathname === location.pathname && url.search === location.search && url.hash) return;
         } catch (_) { return; }
 
-        show();
+        // Defer until AFTER every other click handler has run: some links are
+        // intercepted by JS (e.g. /login-user links open the auth POPUP instead
+        // of navigating). Only show the loader if nothing called preventDefault.
+        setTimeout(function () {
+            if (!e.defaultPrevented) show();
+        }, 0);
     }, true);
 
-    // Real form navigations (not AJAX forms — those call preventDefault first)
+    // Real form navigations (not AJAX forms — those call preventDefault)
     document.addEventListener('submit', function (e) {
-        if (e.defaultPrevented) return;
         var f = e.target;
         if (f.hasAttribute && f.hasAttribute('data-no-loader')) return;
         if (f.target && f.target !== '_self') return;
-        show();
+        setTimeout(function () {
+            if (!e.defaultPrevented) show();
+        }, 0);
     }, true);
 
     // JS-driven navigations (Quick View buttons etc. use window.location.href)

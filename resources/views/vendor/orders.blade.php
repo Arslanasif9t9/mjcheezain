@@ -92,8 +92,8 @@
         }
         
         .status-option.selected {
-            background-color: #e0f2fe;
-            border-left: 4px solid #0ea5e9;
+            background-color: #fce7f3;
+            border-left: 4px solid #E85D85;
         }
         
         .modal-overlay {
@@ -417,7 +417,7 @@
                                     
                                     $statusColors = [
                                         'order placed' => 'bg-gray-500',
-                                        'processing' => 'bg-blue-500',
+                                        'processing' => 'bg-pink-500',
                                         'shipping' => 'bg-purple-500',
                                         'delivered' => 'bg-green-500',
                                         'cancelled' => 'bg-red-500',
@@ -527,7 +527,7 @@
             
             <div class="status-option" data-status="processing" onclick="selectStatus('processing')">
                 <div class="flex items-center">
-                    <span class="badge bg-blue-500 text-white mr-3">Processing</span>
+                    <span class="badge bg-pink-500 text-white mr-3">Processing</span>
                     <span>Preparing order for shipment</span>
                 </div>
                 <i class="fas fa-check text-green-500 hidden selected-icon"></i>
@@ -735,7 +735,7 @@
             if (badge) {
                 const statusColors = {
                     'order placed': 'bg-gray-500',
-                    'processing': 'bg-blue-500',
+                    'processing': 'bg-pink-500',
                     'shipping': 'bg-purple-500',
                     'delivered': 'bg-green-500',
                     'cancelled': 'bg-red-500',
@@ -785,7 +785,7 @@
                 if (badge) {
                     const statusColors = {
                         'order placed': 'bg-gray-500',
-                        'processing': 'bg-blue-500',
+                        'processing': 'bg-pink-500',
                         'shipping': 'bg-purple-500',
                         'delivered': 'bg-green-500',
                         'cancelled': 'bg-red-500',
@@ -989,5 +989,6 @@
             }, 3000);
         }
     </script>
+    <x-vendor.mobile-nav />
 </body>
 </html>

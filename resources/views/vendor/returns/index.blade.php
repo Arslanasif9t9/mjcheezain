@@ -325,8 +325,8 @@
         /* Status Colors */
         .status-pending { background-color: #fef3c7; color: #92400e; }
         .status-approved { background-color: #d1fae5; color: #065f46; }
-        .status-processing { background-color: #dbeafe; color: #1e40af; }
-        .status-refunded { background-color: #f0f9ff; color: #0369a1; }
+        .status-processing { background-color: #f3e8ff; color: #6b21a8; }
+        .status-refunded { background-color: #fce7f3; color: #C94A72; }
         .status-completed { background-color: #f0fdf4; color: #166534; }
         .status-rejected { background-color: #fee2e2; color: #991b1b; }
         
@@ -338,9 +338,9 @@
             font-weight: 600;
         }
         
-        .refund-original { background-color: #dbeafe; color: #1e40af; }
+        .refund-original { background-color: #f3e8ff; color: #6b21a8; }
         .refund-wallet { background-color: #fef3c7; color: #92400e; }
-        .refund-credit { background-color: #f0f9ff; color: #0369a1; }
+        .refund-credit { background-color: #fce7f3; color: #C94A72; }
         
         /* Image Gallery */
         .image-gallery {
@@ -1145,5 +1145,6 @@
             }, 4000);
         }
     </script>
+    <x-vendor.mobile-nav />
 </body>
 </html>

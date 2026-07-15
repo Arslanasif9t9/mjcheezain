@@ -400,7 +400,7 @@ style.textContent = `
     }
     
     #save-address-btn:disabled:hover {
-        background-color: #2563eb !important;
+        background-color: #C94A72 !important;
     }
 `;
 document.head.appendChild(style);

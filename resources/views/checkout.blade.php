@@ -158,8 +158,8 @@
                                 <label class="flex items-center p-3 border border-pink-100 rounded-xl cursor-pointer hover:border-primary has-[:checked]:border-primary has-[:checked]:bg-pink-50/40 transition-colors duration-200">
                                     <input type="radio" name="payment_method" value="knet" class="text-primary focus:ring-primary" checked>
                                     <div class="ml-2.5 flex items-center gap-2.5 flex-1 min-w-0">
-                                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                            <span class="text-blue-600 font-bold text-sm">K</span>
+                                        <div class="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <span class="text-[#E85D85] font-bold text-sm">K</span>
                                         </div>
                                         <div class="min-w-0">
                                             <span class="font-semibold text-gray-800 text-sm">KNET</span>
@@ -200,7 +200,7 @@
                                                 >
                                                 <div class="absolute left-3 top-3 flex space-x-2">
                                                     <div class="w-8 h-5 bg-red-600 rounded-sm"></div>
-                                                    <div class="w-8 h-5 bg-blue-600 rounded-sm"></div>
+                                                    <div class="w-8 h-5 bg-[#E85D85] rounded-sm"></div>
                                                     <div class="w-8 h-5 bg-yellow-600 rounded-sm"></div>
                                                 </div>
                                             </div>

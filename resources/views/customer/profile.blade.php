@@ -559,7 +559,7 @@
                                 
                                 // Icons and colors for different activity types
                                 $activity_icons = [
-                                    'order_placed' => ['icon' => 'shopping-bag', 'color' => 'blue'],
+                                    'order_placed' => ['icon' => 'shopping-bag', 'color' => 'pink'],
                                     'order_delivered' => ['icon' => 'check-circle', 'color' => 'green'],
                                     'wishlist' => ['icon' => 'heart', 'color' => 'purple'],
                                     'review' => ['icon' => 'star', 'color' => 'yellow']
@@ -604,7 +604,7 @@
                                 <?php } ?>
                             </div>
                             <div class="mt-4 text-center">
-                                <button class="text-blue-600 text-sm font-medium hover:text-blue-800 focus:outline-none">
+                                <button class="text-[#E85D85] text-sm font-medium hover:text-[#C94A72] focus:outline-none">
                                     View All Activity
                                 </button>
                             </div>
@@ -649,7 +649,7 @@
                                     <span>Priority customer support</span>
                                 </li>
                             </ul>
-                            <button class="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none">
+                            <button class="w-full mt-4 px-4 py-2 bg-[#E85D85] text-white rounded-lg hover:bg-[#C94A72] focus:outline-none">
                                 Learn More
                             </button>
                         </div> --}}
@@ -693,7 +693,7 @@
                                 </div>
                             </div>
                             {{-- <div class="mt-4 text-center">
-                                <button class="text-blue-600 text-sm font-medium hover:text-blue-800 focus:outline-none">
+                                <button class="text-[#E85D85] text-sm font-medium hover:text-[#C94A72] focus:outline-none">
                                     View All Reviews
                                 </button>
                             </div> --}}

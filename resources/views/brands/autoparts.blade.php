@@ -1061,9 +1061,9 @@
                         ` : ''}
                         
                         ${product.return_policy ? `
-                            <div class="mb-6 p-4 bg-blue-50 rounded-lg">
-                                <h4 class="font-semibold text-blue-800 mb-2">Return Policy</h4>
-                                <p class="text-sm text-blue-700">${product.return_policy}</p>
+                            <div class="mb-6 p-4 bg-pink-50 rounded-lg">
+                                <h4 class="font-semibold text-[#C94A72] mb-2">Return Policy</h4>
+                                <p class="text-sm text-[#E85D85]">${product.return_policy}</p>
                             </div>
                         ` : ''}
                         

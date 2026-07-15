@@ -23,11 +23,11 @@
                     },
                     colors: {
                         primary: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            500: '#E85D85',
+                            600: '#C94A72',
+                            700: '#B03D63',
                         },
                         success: {
                             50: '#f0fdf4',
@@ -598,5 +598,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
     </style>
+    <x-vendor.mobile-nav />
 </body>
 </html>

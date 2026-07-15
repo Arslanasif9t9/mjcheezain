@@ -107,8 +107,8 @@
         }
         
         .status-option.selected {
-            background-color: #eff6ff;
-            border-color: #3b82f6;
+            background-color: #fdf2f8;
+            border-color: #E85D85;
         }
         
         .modal-overlay {
@@ -207,9 +207,9 @@
         }
         
         .step-badge.active {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);
             color: white;
-            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 4px 14px rgba(255, 125, 160, 0.35);
         }
         
         .step-badge.completed {
@@ -304,7 +304,7 @@
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background: #3b82f6;
+            background: #E85D85;
         }
         
         .timeline-item:after {
@@ -495,7 +495,7 @@
                                     $stepColors = [
                                         'request_submitted' => 'gray',
                                         'request_approved' => 'green',
-                                        'shipped_to_vendor' => 'blue',
+                                        'shipped_to_vendor' => 'purple',
                                         'received_by_vendor' => 'purple',
                                         'replacement_verified' => 'indigo',
                                         'replacement_processing' => 'pink',
@@ -1065,5 +1065,6 @@
             }, 4000);
         }
     </script>
+    <x-vendor.mobile-nav />
 </body>
 </html>

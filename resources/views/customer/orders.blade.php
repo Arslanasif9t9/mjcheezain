@@ -454,9 +454,9 @@
                                 <div id="order-carts">
                                     @foreach ($carts as $cart)
                                         @php
-                                            $sColor = 'blue';
+                                            $sColor = 'pink';
                                             $timelineStatus = 'Order Placed';
-                                            
+
                                             switch ($cart->status) {
                                                 case 'processing':
                                                     $sColor = 'purple';
@@ -475,7 +475,7 @@
                                                     $timelineStatus = 'Delivered';
                                                     break;
                                                 default:
-                                                    $sColor = 'blue';
+                                                    $sColor = 'pink';
                                                     $timelineStatus = 'Order Placed';
                                                     break;
                                             }
@@ -732,8 +732,8 @@
                     </div>
                     
                     <!-- Estimated Delivery -->
-                    <div class="bg-blue-50 rounded-lg p-4">
-                        <p class="text-sm text-blue-600">
+                    <div class="bg-pink-50 rounded-lg p-4">
+                        <p class="text-sm text-[#E85D85]">
                             <i class="fas fa-clock mr-2"></i>
                             Estimated delivery: <span id="estimatedDelivery">Nov 20, 2023</span>
                         </p>
@@ -1138,9 +1138,9 @@
             content.innerHTML = `
                 <div>
                     <div class="mb-6">
-                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                            <h3 class="font-medium text-blue-800 mb-2"><i class="fas fa-info-circle mr-2"></i>Replacement Process</h3>
-                            <ul class="text-sm text-blue-700 space-y-1 ml-6 list-disc">
+                        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+                            <h3 class="font-medium text-purple-800 mb-2"><i class="fas fa-info-circle mr-2"></i>Replacement Process</h3>
+                            <ul class="text-sm text-purple-700 space-y-1 ml-6 list-disc">
                                 <li>Your request will be reviewed within 24 hours</li>
                                 <li>If approved, a replacement will be shipped</li>
                                 <li>You may need to return the original item</li>
@@ -1171,7 +1171,7 @@
                         
                         <div class="mb-6">
                             <label class="flex items-center">
-                                <input type="checkbox" id="agreeTerms" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2">
+                                <input type="checkbox" id="agreeTerms" class="rounded border-gray-300 text-[#E85D85] focus:ring-pink-300 mr-2">
                                 <span class="text-sm text-gray-700">I agree to the replacement terms and conditions</span>
                             </label>
                         </div>
@@ -1460,7 +1460,7 @@
                     label: 'Request Submitted',
                     icon: 'fa-paper-plane',
                     description: 'Your replacement request has been submitted',
-                    color: 'blue'
+                    color: 'pink'
                 },
                 {
                     id: 'approved',
@@ -1585,11 +1585,11 @@
                     </div>
                     
                     <!-- Current Status Card -->
-                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 mb-6 border border-blue-100">
+                    <div class="bg-gradient-to-r from-pink-50 to-orange-50 rounded-xl p-5 mb-6 border border-pink-100">
                         <div class="flex items-start">
                             <div class="flex-shrink-0 mr-4">
-                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-info-circle text-blue-600 text-xl"></i>
+                                <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-info-circle text-[#E85D85] text-xl"></i>
                                 </div>
                             </div>
                             <div class="flex-1">
@@ -1716,7 +1716,7 @@
                                 Close
                             </button>
                             <button onclick="printTracking(${replacement.id})" 
-                                    class="px-6 py-2.5 bg-white border border-blue-300 text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition-colors flex items-center">
+                                    class="px-6 py-2.5 bg-white border border-pink-200 text-[#C94A72] font-semibold rounded-lg hover:bg-pink-50 transition-colors flex items-center">
                                 <i class="fas fa-print mr-2"></i>
                                 Print Details
                             </button>
@@ -1800,7 +1800,7 @@
                     label: 'Item Picked Up',
                     icon: 'fa-truck-pickup',
                     description: 'Item has been picked up',
-                    color: 'blue'
+                    color: 'pink'
                 },
                 {
                     id: 'item_received',

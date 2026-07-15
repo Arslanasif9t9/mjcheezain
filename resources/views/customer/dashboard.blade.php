@@ -145,7 +145,7 @@
             function getStatusColor(status) {
                 switch (status) {
                     case 'processing': return 'bg-amber-100 text-amber-700';
-                    case 'shipped': return 'bg-blue-100 text-blue-700';
+                    case 'shipped': return 'bg-purple-100 text-purple-700';
                     case 'delivered': return 'bg-emerald-100 text-emerald-700';
                     case 'cancelled': return 'bg-red-100 text-red-700';
                     default: return 'bg-pink-100 text-[#E85D85]';

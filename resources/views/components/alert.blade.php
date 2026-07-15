@@ -5,9 +5,9 @@
         'error' => 'red',
         'success' => 'green',
         'warning' => 'yellow',
-        'info' => 'blue'
+        'info' => 'pink'
     ];
-    $color = $colors[$type] ?? 'blue';
+    $color = $colors[$type] ?? 'pink';
 @endphp
 
 <div class="bg-{{ $color }}-100 border border-{{ $color }}-400 text-{{ $color }}-700 px-4 py-3 rounded relative mb-4" role="alert">

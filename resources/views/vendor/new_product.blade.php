@@ -69,7 +69,7 @@
 
         .image-upload-label:hover {
             border-color: var(--primary);
-            background-color: rgba(59, 130, 246, 0.05);
+            background-color: rgba(232, 93, 133, 0.05);
             transform: translateY(-2px);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
@@ -193,7 +193,7 @@
             left: 0;
             width: 100%;
             height: 4px;
-            background: rgba(59, 130, 246, 0.1);
+            background: rgba(232, 93, 133, 0.1);
             z-index: 5;
             overflow: hidden;
         }
@@ -343,7 +343,7 @@
 
         /* Return Policy Styling */
         .return-policy {
-            background-color: #f0f9ff;
+            background-color: #fdf2f8;
             border-left: 4px solid var(--primary);
             padding: 1rem;
             border-radius: 0.375rem;
@@ -403,7 +403,7 @@
         .form-input:focus, .form-select:focus, .form-textarea:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 3px rgba(232, 93, 133, 0.1);
         }
 
         .form-input.has-error:focus, .form-select.has-error:focus, .form-textarea.has-error:focus {
@@ -421,12 +421,12 @@
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 4px 6px -1px rgba(232, 93, 133, 0.2);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 10px 15px -3px rgba(232, 93, 133, 0.3);
         }
 
         .btn-primary:disabled {
@@ -473,7 +473,7 @@
 
         .video-upload-label:hover {
             border-color: var(--primary);
-            background-color: rgba(59, 130, 246, 0.05);
+            background-color: rgba(232, 93, 133, 0.05);
             transform: translateY(-2px);
         }
 
@@ -626,17 +626,17 @@
 
         /* GST Calculation Styling */
         .gst-calc {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            border: 1px solid #bae6fd;
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+            border: 1px solid #fbcfe8;
         }
 
         .gst-calc h4 {
-            color: #0369a1;
+            color: #C94A72;
             font-weight: 600;
         }
 
         .gst-badge {
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);
             color: white;
             padding: 2px 8px;
             border-radius: 4px;
@@ -779,7 +779,7 @@
     </style>
 </head>
 
-<body class="bg-gray-50 font-sans">
+<body class="font-sans" style="background-color: #FFF6F0;">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
         <x-vendor.sidebar 
@@ -2960,5 +2960,6 @@
         `;
         document.head.appendChild(style);
     </script>
+    <x-vendor.mobile-nav />
 </body>
 </html>

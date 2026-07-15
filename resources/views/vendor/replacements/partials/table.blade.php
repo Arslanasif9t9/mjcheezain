@@ -14,7 +14,7 @@
         $stepColors = [
             'request_submitted' => 'gray',
             'request_approved' => 'green',
-            'shipped_to_vendor' => 'blue',
+            'shipped_to_vendor' => 'purple',
             'received_by_vendor' => 'purple',
             'replacement_verified' => 'indigo',
             'replacement_processing' => 'pink',
@@ -27,7 +27,7 @@
     @endphp
     
     <tr class="table-row replacement-row" data-replacement-id="{{ $replacement->id }}">
-        <td class="table-cell font-bold text-blue-600">
+        <td class="table-cell font-bold text-[#E85D85]">
             REP-{{ str_pad($replacement->id, 6, '0', STR_PAD_LEFT) }}
         </td>
         
@@ -100,7 +100,7 @@
         <td class="table-cell">
             <div class="flex gap-2">
                 <a href="{{ route('vendor.replacements.show', $replacement->id) }}"
-                   class="action-btn bg-blue-100 text-blue-700 hover:bg-blue-200">
+                   class="action-btn bg-pink-100 text-pink-700 hover:bg-pink-200">
                     <i class="fas fa-eye"></i> View
                 </a>
                 

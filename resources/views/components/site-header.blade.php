@@ -92,7 +92,7 @@
                             <p class="px-4 py-2 text-sm font-semibold text-gray-900 border-b">Notifications</p>
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 truncate">Your order #1234 has shipped.</a>
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 truncate">New discount available!</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-center text-indigo-600 hover:bg-gray-100">View All</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-center text-[#E85D85] hover:bg-gray-100">View All</a>
                         </div>
                     </div>
 
@@ -248,12 +248,10 @@
                         </a>
                     @endguest
                 </div>
-                <div class="mt-3 flex items-center">
-                    <img src="{{ asset('img/short_logo.jpeg') }}" class="w-9 h-9 rounded-full mr-2.5 object-cover border border-white/40">
-                    <div>
-                        <span class="block text-gray-900 font-bold text-base leading-tight">Browse</span>
-                        <span class="block text-gray-900 font-extrabold text-2xl leading-tight">MJ Cheezain</span>
-                    </div>
+                <div class="mt-3">
+                    <span class="block text-gray-900/80 font-semibold text-[11px] uppercase tracking-[0.25em] leading-tight">Browse</span>
+                    <span class="block text-gray-900 font-bold text-3xl leading-tight" style="font-family: 'PT Serif', Georgia, serif; font-style: italic; letter-spacing: 0.5px;">MJ Cheezain</span>
+                    <div class="mt-1.5 w-12 h-[3px] rounded-full bg-white/60"></div>
                 </div>
             </div>
 

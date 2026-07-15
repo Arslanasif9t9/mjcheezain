@@ -13,8 +13,8 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#3B82F6',
-                        secondary: '#1E40AF',
+                        primary: '#E85D85',
+                        secondary: '#C94A72',
                         accent: '#F59E0B'
                     },
                     animation: {
@@ -26,7 +26,7 @@
         }
     </script>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
+<body class="bg-gradient-to-br from-pink-50 to-pink-100 min-h-screen flex items-center justify-center p-4">
     <div class="max-w-7xl w-full">
         <!-- Header with Logo -->
         <header class="text-center mb-12">
@@ -51,19 +51,19 @@
                 
                 <!-- Countdown Timer -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 max-w-md mx-auto">
-                    <div class="bg-blue-50 rounded-lg p-4">
+                    <div class="bg-pink-50 rounded-lg p-4">
                         <div class="text-3xl font-bold text-primary" id="days">00</div>
                         <div class="text-gray-600">Days</div>
                     </div>
-                    <div class="bg-blue-50 rounded-lg p-4">
+                    <div class="bg-pink-50 rounded-lg p-4">
                         <div class="text-3xl font-bold text-primary" id="hours">00</div>
                         <div class="text-gray-600">Hours</div>
                     </div>
-                    <div class="bg-blue-50 rounded-lg p-4">
+                    <div class="bg-pink-50 rounded-lg p-4">
                         <div class="text-3xl font-bold text-primary" id="minutes">00</div>
                         <div class="text-gray-600">Minutes</div>
                     </div>
-                    <div class="bg-blue-50 rounded-lg p-4">
+                    <div class="bg-pink-50 rounded-lg p-4">
                         <div class="text-3xl font-bold text-primary" id="seconds">00</div>
                         <div class="text-gray-600">Seconds</div>
                     </div>
@@ -188,7 +188,7 @@
                 position: fixed;
                 top: 20px;
                 right: 20px;
-                background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
+                background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#E85D85'};
                 color: white;
                 padding: 15px 20px;
                 border-radius: 4px;

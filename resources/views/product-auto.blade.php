@@ -175,7 +175,7 @@
                 <div class="relative">
                     <img id="main-image"
                         src="{{ $primaryImage }}" 
-                        class="border-2 border-blue-900 w-full h-[72vh] aspect-square object-contain rounded-lg overflow-hidden">
+                        class="border-2 border-pink-200 w-full h-[72vh] aspect-square object-contain rounded-lg overflow-hidden">
                     
                     <!-- Icons -->
                     <div class="absolute top-3 right-3 flex space-x-3">
@@ -201,7 +201,7 @@
                 <!-- Thumbnails Slider -->
                 <div class="relative w-full mt-4">
                     <button id="scroll-left"
-                        class="absolute left-0 top-1/2 -translate-y-1/2 bg-blue-900 text-white p-2 rounded-full z-10 hover:bg-blue-800 transition-colors">
+                        class="absolute left-0 top-1/2 -translate-y-1/2 bg-[#E85D85] text-white p-2 rounded-full z-10 hover:bg-[#C94A72] transition-colors">
                         &#10094;
                     </button>
 
@@ -212,7 +212,7 @@
 
                     <div class="bg-white absolute right-0 top-1/2 " style="height: 60px; width: 25px; margin-top: -30px; display: flex; justify-content: center; align-items: center;">
                         <button id="scroll-right" style="margin-top: 30px"
-                            class="-translate-y-1/2 bg-blue-900 text-white p-2 rounded-full z-10 hover:bg-blue-800 transition-colors">
+                            class="-translate-y-1/2 bg-[#E85D85] text-white p-2 rounded-full z-10 hover:bg-[#C94A72] transition-colors">
                             &#10095;
                         </button>
                     </div>
@@ -264,7 +264,7 @@
                 
                 <!-- Vendor Info -->
                 <div class="mb-4">
-                    <p class="text-sm text-gray-500">Sold by <span class="font-semibold text-blue-700 hover:text-blue-800 cursor-pointer">{{ $vendorName }}</span></p>
+                    <p class="text-sm text-gray-500">Sold by <span class="font-semibold text-[#E85D85] hover:text-[#C94A72] cursor-pointer">{{ $vendorName }}</span></p>
                 </div>
                 
                 <!-- Stock Status -->
@@ -299,7 +299,7 @@
                         <i class="fas fa-cart-plus mr-2"></i>
                         Add to Cart
                     </button>
-                    <button class="flex-1 py-3 px-6 border border-blue-700 text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition duration-150"
+                    <button class="flex-1 py-3 px-6 border border-[#E85D85] text-[#E85D85] font-semibold rounded-lg hover:bg-pink-50 transition duration-150"
                     @if ($isOwner || $productQuantity <= 0)
                         style="background-color: #9ca3af; cursor: not-allowed; opacity: 0.6"
                         disabled
@@ -327,20 +327,20 @@
                 <!-- Delivery & Payment Info -->
                 <div class="space-y-3 text-sm">
                     <div class="flex items-center text-gray-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M13 8V4.835a1 1 0 01.325-.758l2.25-2.25a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-2.25 2.25a1 1 0 01-.758.325H16M3 9h11a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6a1 1 0 011-1zm0 0l-1.5 7" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-[#E85D85]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M13 8V4.835a1 1 0 01.325-.758l2.25-2.25a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-2.25 2.25a1 1 0 01-.758.325H16M3 9h11a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6a1 1 0 011-1zm0 0l-1.5 7" /></svg>
                         Delivery charges included in price
                     </div>
                     <div class="flex items-center text-gray-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-[#E85D85]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
                         Estimated Delivery: <span class="font-semibold text-gray-800 ml-1">{{ $productShippingTime }} days</span>
                     </div>
                     <div class="flex items-center justify-between text-gray-700">
                         <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-[#E85D85]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             {{ $productReturnPolicy }}
                         </div>
                         <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.172a1 1 0 000-1.414L2.83 2.83a1 1 0 00-1.414 1.414L18.182 20.618a1 1 0 001.414-1.414L9.828 8.414a1 1 0 00-1.414 0L6.414 6.414a1 1 0 00-1.414 0z" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-[#E85D85]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.172a1 1 0 000-1.414L2.83 2.83a1 1 0 00-1.414 1.414L18.182 20.618a1 1 0 001.414-1.414L9.828 8.414a1 1 0 00-1.414 0L6.414 6.414a1 1 0 00-1.414 0z" /></svg>
                             100% Original Product
                         </div>
                     </div>
@@ -360,7 +360,7 @@
                     <p class="text-sm text-gray-600">Total: PKR <span id="totalPrice">0.00</span></p>
                 </div>
             </div>
-            <button id="viewCartBtn" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-md">
+            <button id="viewCartBtn" class="bg-gradient-to-r from-[#FF7DA0] to-[#FFC275] text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-md">
                 View Cart
             </button>
         </div>
@@ -538,11 +538,11 @@
                     images.forEach((image, index) => {
                         const thumb = document.createElement('img');
                         thumb.src = image;
-                        thumb.className = 'thumb aspect-square object-cover border-2 border-blue-900 rounded-md w-32 h-16 lg:h-32 cursor-pointer hover:opacity-75 transition flex-shrink-0';
+                        thumb.className = 'thumb aspect-square object-cover border-2 border-pink-200 rounded-md w-32 h-16 lg:h-32 cursor-pointer hover:opacity-75 transition flex-shrink-0';
                         
                         // Set first thumbnail as active
                         if (index === 0) {
-                            thumb.classList.add('border-blue-700', 'border-opacity-80');
+                            thumb.classList.add('border-[#E85D85]', 'border-opacity-80');
                         }
                         
                         thumb.addEventListener('click', function() {
@@ -551,9 +551,9 @@
                             
                             // Update active thumbnail
                             document.querySelectorAll('.thumb').forEach(t => {
-                                t.classList.remove('border-blue-700', 'border-opacity-80');
+                                t.classList.remove('border-[#E85D85]', 'border-opacity-80');
                             });
-                            this.classList.add('border-blue-700', 'border-opacity-80');
+                            this.classList.add('border-[#E85D85]', 'border-opacity-80');
                         });
                         
                         slider.appendChild(thumb);
@@ -744,7 +744,7 @@
                         <p id="productText">{{ $productDescription }}</p>
                         <button
                             id="toggleBtn"
-                            class="mt-2 text-blue-600 font-medium hover:underline hidden">
+                            class="mt-2 text-[#E85D85] font-medium hover:underline hidden">
                             Read more
                         </button>
                     </div>
@@ -889,7 +889,7 @@
                                     <span class="ml-1 text-sm text-primary-blue">{{ $vendorVerified ? "Verified" : "Unverified" }}</span>
                                 </p>
                                 @if($vendorUserId)
-                                    <a href="/vendor-products/{{ $vendorUserId }}" class="text-sm text-primary-blue hover:text-blue-700 transition duration-150">
+                                    <a href="/vendor-products/{{ $vendorUserId }}" class="text-sm text-primary-blue hover:text-[#C94A72] transition duration-150">
                                         View all products from this vendor &rarr;
                                     </a>
                                 @endif
@@ -948,7 +948,7 @@
             <!-- Example Review 2 -->
             <div class="border-t pt-4 mt-4 space-y-2">
                 <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 rounded-full bg-blue-100 overflow-hidden">
+                    <div class="w-8 h-8 rounded-full bg-pink-100 overflow-hidden">
                         
                     </div>
                     <div>
@@ -967,7 +967,7 @@
             <!-- Example Review 3 -->
             <div class="border-t pt-4 mt-4 space-y-2">
                 <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 rounded-full bg-blue-100 overflow-hidden">
+                    <div class="w-8 h-8 rounded-full bg-pink-100 overflow-hidden">
                         
                     </div>
                     <div>
@@ -1001,7 +1001,7 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary-blue': '#3b82f6',
+                        'primary-blue': '#E85D85',
                         'dark-bg': '#1f2937',
                         'star-yellow': '#FFC700',
                         'verified-green': '#10b981',
