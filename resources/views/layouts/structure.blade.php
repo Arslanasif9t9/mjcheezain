@@ -58,7 +58,8 @@
     </style>
 
     @yield('style')
-    
+
+    <script src="{{ asset('js/page-loader.js') }}?v={{ time() }}"></script>
 </head>
 <body class="bg-gray-50 font-sans">
     @yield('body')

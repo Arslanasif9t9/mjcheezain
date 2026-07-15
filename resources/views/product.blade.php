@@ -322,6 +322,12 @@
         <div id="cartSummary" class="fixed bottom-0 left-0 w-full min-h-[5rem] bg-white shadow-2xl flex items-center justify-between px-4 sm:px-6 py-3 transform translate-y-full transition-transform duration-500 z-50" style="padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));">
             <!-- Brand gradient top strip -->
             <div class="absolute top-0 left-0 w-full h-[3px]" style="background: linear-gradient(to right, #FF7DA0, #FFC275);"></div>
+            <!-- Close (X) — dismisses the bar -->
+            <button onclick="document.getElementById('cartSummary').classList.add('translate-y-full')"
+                    aria-label="Close cart bar"
+                    class="absolute -top-3.5 right-3 w-7 h-7 bg-white rounded-full shadow-md border border-pink-100 flex items-center justify-center text-gray-400 hover:text-[#E85D85] active:scale-90 transition">
+                <i class="fas fa-times text-xs"></i>
+            </button>
             <div class="flex items-center min-w-0">
                 <div id="cartIcon" class="relative mr-3 sm:mr-4 flex-shrink-0">
                     <i class="fas fa-shopping-cart text-2xl" style="color: #E85D85;"></i>
