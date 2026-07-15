@@ -4,41 +4,26 @@
     <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Orders | Multivendor Platform</title>
+    <title>My Orders | MJ Cheezain</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <!-- Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <x-customer.theme />
     <style>
-        * {
-            font-family: 'Poppins', sans-serif;
-        }
         .order-card {
             transition: all 0.3s ease;
         }
         .order-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px -5px rgba(232, 93, 133, 0.12);
         }
-        .order-status-processing { border-left: 4px solid #3b82f6; }
+        .order-status-processing { border-left: 4px solid #FF7DA0; }
         .order-status-shipped { border-left: 4px solid #f59e0b; }
         .order-status-delivered { border-left: 4px solid #10b981; }
         .order-status-cancelled { border-left: 4px solid #ef4444; }
         .order-status-returned { border-left: 4px solid #8b5cf6; }
         .tab-active {
-            border-bottom: 3px solid #3b82f6;
-            color: #3b82f6;
+            border-bottom: 3px solid #E85D85;
+            color: #E85D85;
             font-weight: 600;
-        }
-        .sidebar-item.active {
-            background-color: #f3f4f6;
-            border-right: 3px solid #3b82f6;
-            color: #3b82f6;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -154,15 +139,15 @@
         }
 
         .timeline-step.completed .step-icon {
-            border-color: #3b82f6;
-            background: #3b82f6;
+            border-color: #E85D85;
+            background: #E85D85;
             color: white;
         }
 
         .timeline-step.current .step-icon {
-            border-color: #3b82f6;
+            border-color: #E85D85;
             background: white;
-            color: #3b82f6;
+            color: #E85D85;
             animation: pulse 2s infinite;
         }
 
@@ -175,11 +160,11 @@
         }
 
         .timeline-step.completed .step-label {
-            color: #3b82f6;
+            color: #E85D85;
         }
 
         .timeline-step.current .step-label {
-            color: #1d4ed8;
+            color: #B8436A;
             font-weight: 700;
         }
 
@@ -195,7 +180,7 @@
 
         .timeline-step.completed .timeline-connector,
         .timeline-step.current .timeline-connector {
-            background: #3b82f6;
+            background: #E85D85;
         }
 
         /* Status Badge Styles */
@@ -241,7 +226,7 @@
         }
 
         .info-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);
             color: white;
             border-radius: 0.75rem;
             padding: 1.5rem;
@@ -296,7 +281,7 @@
 
         /* Button Styles */
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);
             color: white;
             border: none;
             padding: 0.625rem 1.25rem;
@@ -368,114 +353,89 @@
 
         /* Gradient Text */
         .gradient-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
     </style>
 </head>
-<body class="bg-gray-50">
-    <div class="flex h-screen overflow-hidden">
+<body>
+    <div class="flex min-h-screen">
         <!-- Sidebar -->
         <x-customer.sidebar :basic_info="$basic_info"/>
 
         <!-- Main Content -->
-        <div class="flex flex-col flex-1 overflow-hidden">
-            <!-- Top Navigation -->
-            <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
-                <!-- Left side - Mobile menu and title -->
-                <div class="flex items-center">
-                    <button class="hidden mr-4 text-gray-500 focus:outline-none">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <h1 class="text-xl font-semibold text-gray-800">Orders</h1>
-                </div>
-
-                <!-- Center - Search bar -->
-                <div class="hidden md:flex flex-1 max-w-md mx-4">
-                    <div class="relative w-full">
-                        <input type="text" placeholder="Search..."
-                            class="w-full py-2 pl-4 pr-10 text-sm bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">
-                        <button class="absolute right-3 top-2 text-gray-500">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Right side - Icons and user menu -->
-                <div class="hidden md:flex items-center space-x-4">
-                    <!-- User dropdown -->
-                </div>
-            </header>
+        <div class="flex flex-col flex-1 min-w-0">
+            <x-customer.header title="My Orders" subtitle="Track, return or review your purchases" :basic_info="$basic_info" />
 
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-y-auto p-6 pb-24 md:pb-6">
-                <!-- Order Filter Tabs -->
-                <div class="bg-white rounded-lg shadow mb-6">
-                    <div class="border-b border-gray-200">
-                        <nav class="nav-tabs flex -mb-px overflow-x-auto">
-                            <a href="#" class="whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm tab-active border-blue-600 text-blue-600">
-                                All Orders ({{ count($orders) }})
-                            </a>
-                            <a href="#" class="whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                                Processing (2)
-                            </a>
-                            <a href="#" class="whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                                Shipped (1)
-                            </a>
-                            <a href="#" class="whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                                Delivered (4)
-                            </a>
-                            <a href="#" class="whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                                Cancelled (1)
-                            </a>
-                        </nav>
+            <main class="flex-1 p-4 md:p-6 lg:p-8 pb-28 md:pb-8 page-enter">
+                <!-- Search bar -->
+                <div class="relative mb-4 -mt-2 md:mt-0 z-10">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-gray-400 text-sm"></i>
                     </div>
+                    <input type="text"
+                           class="block w-full pl-11 pr-4 py-3 rounded-2xl bg-white border border-pink-100 shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300"
+                           placeholder="Search orders...">
                 </div>
 
-                <!-- Search and Filter -->
-                <div class="bg-white rounded-lg shadow p-4 mb-6">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                        <div class="relative mb-4 md:mb-0 md:w-64">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-search text-gray-400"></i>
-                            </div>
-                            <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Search orders...">
-                        </div>
-                        <div class="flex space-x-3">
-                            <div class="relative">
-                                <select class="appearance-none bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option>Last 30 days</option>
-                                    <option>Last 3 months</option>
-                                    <option>Last 6 months</option>
-                                    <option>Last year</option>
-                                    <option>All time</option>
-                                </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                    <i class="fas fa-chevron-down text-xs"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Order Filter Tabs (pill style) -->
+                <nav class="nav-tabs flex gap-2 overflow-x-auto no-scrollbar mb-5 -mx-4 px-4 md:mx-0 md:px-0 py-1">
+                    <a href="#" class="tab-pill tab-active-pill whitespace-nowrap px-4 py-2 rounded-full text-xs md:text-sm font-semibold transition-all">
+                        All ({{ count($orders) }})
+                    </a>
+                    <a href="#" class="tab-pill whitespace-nowrap px-4 py-2 rounded-full text-xs md:text-sm font-semibold transition-all">
+                        Processing
+                    </a>
+                    <a href="#" class="tab-pill whitespace-nowrap px-4 py-2 rounded-full text-xs md:text-sm font-semibold transition-all">
+                        Shipped
+                    </a>
+                    <a href="#" class="tab-pill whitespace-nowrap px-4 py-2 rounded-full text-xs md:text-sm font-semibold transition-all">
+                        Delivered
+                    </a>
+                    <a href="#" class="tab-pill whitespace-nowrap px-4 py-2 rounded-full text-xs md:text-sm font-semibold transition-all">
+                        Cancelled
+                    </a>
+                </nav>
+                <style>
+                    .tab-pill { background: #fff; color: #6b7280; border: 1px solid rgba(232, 93, 133, 0.15); }
+                    .tab-pill.tab-active-pill {
+                        background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);
+                        color: #fff;
+                        border-color: transparent;
+                        box-shadow: 0 4px 12px rgba(255, 125, 160, 0.35);
+                    }
+                </style>
 
                 <!-- Orders List -->
                 <div class="space-y-4">
+                    @if (!count($orders))
+                        <div class="app-card p-10 text-center">
+                            <div class="w-16 h-16 mx-auto rounded-full brand-gradient-soft flex items-center justify-center mb-3">
+                                <i class="fas fa-box-open text-2xl text-brand"></i>
+                            </div>
+                            <p class="text-gray-500 text-sm font-medium">You haven't placed any orders yet</p>
+                            <a href="/" class="inline-block mt-4 px-6 py-2.5 rounded-full text-white text-sm font-semibold brand-gradient brand-shadow">Start Shopping</a>
+                        </div>
+                    @endif
                     @foreach ($orders as $order)
-                        <div class="order-card bg-white rounded-lg shadow order-status-processing">
-                            <div class="p-5">
-                                <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                                    <div class="mb-4 md:mb-0">
-                                        <div class="flex items-center">
-                                            <h3 class="text-lg font-medium text-gray-900">Order #ORD-{{ $order->id }}</h3>
+                        <div class="order-card app-card order-status-processing overflow-hidden">
+                            <div class="p-4 md:p-5">
+                                <div class="flex items-center justify-between gap-3">
+                                    <div class="flex items-center min-w-0">
+                                        <div class="w-10 h-10 md:w-11 md:h-11 rounded-xl brand-gradient-soft flex items-center justify-center mr-3 flex-shrink-0">
+                                            <i class="fas fa-box text-brand text-sm"></i>
                                         </div>
-                                        <p class="text-sm text-gray-500 mt-1">Placed on {{ date('F d, Y', strtotime($order->order_date)) }}</p>
+                                        <div class="min-w-0">
+                                            <h3 class="text-sm md:text-lg font-bold text-gray-900 truncate">#ORD-{{ $order->id }}</h3>
+                                            <p class="text-[11px] md:text-sm text-gray-400">{{ date('M d, Y', strtotime($order->order_date)) }} · {{ $order->quantity }} item(s)</p>
+                                        </div>
                                     </div>
-                                    <div class="flex items-center">
-                                        <p class="text-sm text-gray-900">{{ $order->quantity }} items &nbsp;&nbsp;</p>
-                                        <p class="text-lg font-semibold text-gray-900">${{ $order->total_amount }}</p>
-                                        <button class="ml-4 p-2 text-gray-400 hover:text-gray-500">
+                                    <div class="flex items-center flex-shrink-0">
+                                        <p class="text-sm md:text-lg font-extrabold text-gray-900">Rs. {{ $order->total_amount }}</p>
+                                        <button class="ml-2 md:ml-4 p-2 text-gray-400 hover:text-brand">
                                             <i class="fas fa-chevron-down"></i>
                                         </button>
                                     </div>
@@ -587,7 +547,7 @@
                                                         <img src="{{ asset("storage/vendor/products/images/$cart->img") }}" alt="Product" class="w-16 h-16 rounded-lg object-cover">
                                                         <div>
                                                             <p class="font-medium text-gray-900">{{ $cart->product_name }}</p>
-                                                            <p class="text-sm text-gray-500">Quantity: {{ $cart->quantity }} • Total Price: ${{ $cart->price * $cart->quantity }}</p>
+                                                            <p class="text-sm text-gray-500">Quantity: {{ $cart->quantity }} • Total: Rs. {{ $cart->price * $cart->quantity }}</p>
                                                             @if($hasReplacement && $replacementInfo->current_step)
                                                                 <p class="text-xs text-purple-600 mt-1">
                                                                     Replacement Status: {{ ucfirst(str_replace('_', ' ', $replacementInfo->current_step)) }}
@@ -619,7 +579,7 @@
                                                                 @if($replacementInfo->status == 'completed')
                                                                     <!-- If replacement is completed, show rate button again -->
                                                                     <button 
-                                                                        class="px-4 py-2 bg-blue-500 text-white border border-blue-600 rounded-lg text-sm font-medium hover:bg-blue-600 flex items-center justify-center rate-product-btn w-full sm:w-auto"
+                                                                        class="px-4 py-2 brand-gradient brand-shadow text-white border-0 rounded-xl text-sm font-semibold hover:opacity-90 transition flex items-center justify-center rate-product-btn w-full sm:w-auto"
                                                                         data-product-id="{{ $cart->product_id }}"
                                                                         data-product-name="{{ $cart->product_name }}"
                                                                         data-order-id="{{ $order->id }}"
@@ -641,7 +601,7 @@
                                                             @else
                                                                 <!-- Original delivered product buttons -->
                                                                 <button 
-                                                                    class="px-4 py-2 bg-blue-500 text-white border border-blue-600 rounded-lg text-sm font-medium hover:bg-blue-600 flex items-center justify-center rate-product-btn w-full sm:w-auto"
+                                                                    class="px-4 py-2 brand-gradient brand-shadow text-white border-0 rounded-xl text-sm font-semibold hover:opacity-90 transition flex items-center justify-center rate-product-btn w-full sm:w-auto"
                                                                     data-product-id="{{ $cart->product_id }}"
                                                                     data-product-name="{{ $cart->product_name }}"
                                                                     data-order-id="{{ $order->id }}"
@@ -650,13 +610,13 @@
                                                                     <i class="fas fa-star mr-2"></i>{{ $isRated ? 'View Rating' : 'Rate' }}
                                                                 </button>
                                                                 
-                                                                <button class="px-4 py-2 bg-yellow-500 text-white border border-yellow-600 rounded-lg text-sm font-medium hover:bg-yellow-600 flex items-center justify-center replace-product-btn w-full sm:w-auto"
+                                                                <button class="px-4 py-2 bg-gradient-to-r from-amber-400 to-orange-400 text-white border-0 rounded-xl text-sm font-semibold shadow-lg shadow-orange-200 hover:opacity-90 transition flex items-center justify-center replace-product-btn w-full sm:w-auto"
                                                                         data-product-id="{{ $cart->product_id }}"
                                                                         data-order-id="{{ $order->id }}">
                                                                     <i class="fas fa-exchange-alt mr-2"></i>Replace
                                                                 </button>
                                                                 
-                                                                <button class="px-4 py-2 bg-red-500 text-white border border-red-600 rounded-lg text-sm font-medium hover:bg-red-600 flex items-center justify-center return-product-btn w-full sm:w-auto"
+                                                                <button class="px-4 py-2 bg-white text-red-500 border border-red-200 rounded-xl text-sm font-semibold hover:bg-red-50 transition flex items-center justify-center return-product-btn w-full sm:w-auto"
                                                                         data-product-id="{{ $cart->product_id }}"
                                                                         data-order-id="{{ $order->id }}"
                                                                         data-cart-id="{{ $cart->id }}">
@@ -670,13 +630,13 @@
                                                         @else
                                                             <!-- For non-delivered products -->
                                                             <button 
-                                                                class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center justify-center track-order-btn w-full sm:w-auto"
+                                                                class="px-4 py-2 bg-white border border-pink-200 rounded-xl text-sm font-semibold text-brand hover:bg-pink-50 transition flex items-center justify-center track-order-btn w-full sm:w-auto"
                                                                 data-order-id="ORD-{{ $order->id }}"
                                                                 data-order-status="{{ $timelineStatus }}"
                                                             >
                                                                 <i class="fas fa-truck mr-2"></i>Track
                                                             </button>
-                                                            <button class="px-4 py-2 bg-red-500 text-white border border-red-600 rounded-lg text-sm font-medium hover:bg-red-600 flex items-center justify-center cancel-order-btn w-full sm:w-auto"
+                                                            <button class="px-4 py-2 bg-white text-red-500 border border-red-200 rounded-xl text-sm font-semibold hover:bg-red-50 transition flex items-center justify-center cancel-order-btn w-full sm:w-auto"
                                                                     data-order-id="{{ $order->id }}"
                                                                     data-cart-id="{{ $cart->id }}">
                                                                 <i class="fas fa-times mr-2"></i>Cancel
@@ -762,7 +722,7 @@
                     <div class="bg-gray-50 rounded-lg p-4 mb-4">
                         <div class="flex items-start">
                             <div class="flex-shrink-0">
-                                <i class="fas fa-info-circle text-blue-500 mt-0.5"></i>
+                                <i class="fas fa-info-circle text-[#E85D85] mt-0.5"></i>
                             </div>
                             <div class="ml-3">
                                 <p class="text-sm text-gray-600" id="statusMessage"></p>
@@ -847,7 +807,7 @@
                         <p class="text-sm text-gray-600 mt-1">Track your replacement request in real-time</p>
                     </div>
                     <div class="flex items-center space-x-2">
-                        <button onclick="refreshTracking()" class="p-2 text-gray-500 hover:text-blue-600 rounded-lg hover:bg-gray-100">
+                        <button onclick="refreshTracking()" class="p-2 text-gray-500 hover:text-[#E85D85] rounded-lg hover:bg-gray-100">
                             <i class="fas fa-sync-alt"></i>
                         </button>
                         <button onclick="closeReplacementTrackingModal()" 
@@ -876,7 +836,7 @@
                         <p class="text-sm text-gray-600 mt-1">Track your return request in real-time</p>
                     </div>
                     <div class="flex items-center space-x-2">
-                        <button onclick="refreshReturnTracking()" class="p-2 text-gray-500 hover:text-blue-600 rounded-lg hover:bg-gray-100">
+                        <button onclick="refreshReturnTracking()" class="p-2 text-gray-500 hover:text-[#E85D85] rounded-lg hover:bg-gray-100">
                             <i class="fas fa-sync-alt"></i>
                         </button>
                         <button onclick="closeReturnTrackingModal()" 
@@ -974,7 +934,7 @@
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Your Review</label>
                         <textarea id="reviewComment" 
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-300 focus:border-pink-400" 
                                 rows="4" 
                                 placeholder="Share your experience with this product..."></textarea>
                     </div>
@@ -983,7 +943,7 @@
                         <button onclick="closeRateModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
                             Cancel
                         </button>
-                        <button onclick="submitRating(${productId}, ${orderId})" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
+                        <button onclick="submitRating(${productId}, ${orderId})" class="px-4 py-2 brand-gradient brand-shadow text-white rounded-lg text-sm font-medium hover:opacity-90">
                             Submit Review
                         </button>
                     </div>
@@ -1083,7 +1043,7 @@
                             ` : ''}
                             
                             <div class="flex justify-end">
-                                <button onclick="closeRateModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
+                                <button onclick="closeRateModal()" class="px-4 py-2 brand-gradient brand-shadow text-white rounded-lg text-sm font-medium hover:opacity-90">
                                     Close
                                 </button>
                             </div>
@@ -1190,7 +1150,7 @@
                         
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Reason for Replacement</label>
-                            <select id="replaceReason" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <select id="replaceReason" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-300 focus:border-pink-400">
                                 <option value="">Select a reason</option>
                                 <option value="damaged">Product Damaged</option>
                                 <option value="wrong_item">Wrong Item Received</option>
@@ -1204,7 +1164,7 @@
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Additional Details</label>
                             <textarea id="replaceDetails" 
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-300 focus:border-pink-400" 
                                     rows="4" 
                                     placeholder="Please provide more details about why you need a replacement..."></textarea>
                         </div>
@@ -1455,7 +1415,7 @@
             // Show loading
             content.innerHTML = `
                 <div class="text-center py-8">
-                    <i class="fas fa-spinner fa-spin text-3xl text-blue-500 mb-4"></i>
+                    <i class="fas fa-spinner fa-spin text-3xl text-[#E85D85] mb-4"></i>
                     <p class="text-gray-600">Loading tracking information...</p>
                 </div>
             `;
@@ -1570,14 +1530,14 @@
                     ? new Date(trackingSteps[step.id]).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
                     : '';
                 
-                const connectorColor = (index < currentStepIndex) ? 'background:#3b82f6' : 'background:#e5e7eb';
+                const connectorColor = (index < currentStepIndex) ? 'background:#E85D85' : 'background:#e5e7eb';
                 timelineHTML += `
                     <div class="timeline-step ${stepClass}" style="position:relative;display:inline-block;width:120px;text-align:center;z-index:1;">
-                        <div class="step-icon" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:1rem;border:3px solid ${index <= currentStepIndex ? '#3b82f6' : '#e5e7eb'};background:${index <= currentStepIndex ? '#3b82f6' : 'white'};color:${index <= currentStepIndex ? 'white' : '#9ca3af'};">
+                        <div class="step-icon" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:1rem;border:3px solid ${index <= currentStepIndex ? '#E85D85' : '#e5e7eb'};background:${index <= currentStepIndex ? '#E85D85' : 'white'};color:${index <= currentStepIndex ? 'white' : '#9ca3af'};">
                             <i class="fas ${step.icon}"></i>
                         </div>
                         ${index < steps.length - 1 ? '<div style="position:absolute;top:22px;left:calc(50% + 22px);width:calc(100% - 44px);height:3px;' + connectorColor + ';z-index:0;"></div>' : ''}
-                        <div class="step-label" style="font-size:0.7rem;font-weight:600;color:${index <= currentStepIndex ? '#3b82f6' : '#9ca3af'};margin-top:4px;">${step.label}</div>
+                        <div class="step-label" style="font-size:0.7rem;font-weight:600;color:${index <= currentStepIndex ? '#E85D85' : '#9ca3af'};margin-top:4px;">${step.label}</div>
                         ${stepTime ? '<div style="font-size:0.65rem;color:#6b7280;margin-top:2px;">' + stepTime + '</div>' : ''}
                     </div>
                 `;
@@ -1990,7 +1950,7 @@
                         ${returnRequest.refund_amount ? `
                             <div class="detail-item">
                                 <span class="detail-label">Refund Amount</span>
-                                <span class="detail-value">$${returnRequest.refund_amount}</span>
+                                <span class="detail-value">Rs. ${returnRequest.refund_amount}</span>
                             </div>
                         ` : ''}
                         ${returnRequest.reason ? `
@@ -2049,7 +2009,7 @@
                                 ${returnRequest.refund_amount ? `
                                     <div class="flex justify-between items-center">
                                         <span class="text-sm text-gray-600">Refund Amount</span>
-                                        <span class="text-sm font-semibold text-green-600">$${returnRequest.refund_amount}</span>
+                                        <span class="text-sm font-semibold text-green-600">Rs. ${returnRequest.refund_amount}</span>
                                     </div>
                                 ` : ''}
                                 ${returnRequest.refund_method ? `
@@ -2367,31 +2327,21 @@
 
         // Tab switching
         document.addEventListener('DOMContentLoaded', function() {
-            // Mobile sidebar toggle
-            document.querySelector('header button').addEventListener('click', function() {
-                alert('Mobile sidebar would open here');
-            });
-
-            // Tab switching
+            // Tab switching (pill tabs) — filter by status badge text inside each card
             document.querySelectorAll('.nav-tabs a').forEach(tab => {
                 tab.addEventListener('click', function(e) {
                     e.preventDefault();
-                    document.querySelectorAll('.nav-tabs a').forEach(t => {
-                        t.classList.remove('tab-active', 'border-blue-600', 'text-blue-600');
-                        t.classList.add('border-transparent', 'text-gray-500');
-                    });
-                    this.classList.add('tab-active', 'border-blue-600', 'text-blue-600');
-                    this.classList.remove('border-transparent', 'text-gray-500');
-                    
-                    // Filter orders based on tab
-                    const filter = this.textContent.toLowerCase().split(' ')[0];
+                    document.querySelectorAll('.nav-tabs a').forEach(t => t.classList.remove('tab-active-pill'));
+                    this.classList.add('tab-active-pill');
+
+                    const filter = this.textContent.trim().toLowerCase().split(' ')[0].split('(')[0];
                     document.querySelectorAll('.order-card').forEach(card => {
                         if (filter === 'all') {
                             card.style.display = 'block';
-                        } else {
-                            const hasClass = card.classList.contains(`order-status-${filter}`);
-                            card.style.display = hasClass ? 'block' : 'none';
+                            return;
                         }
+                        const badges = Array.from(card.querySelectorAll('.badge')).map(b => b.textContent.trim().toLowerCase());
+                        card.style.display = badges.some(t => t.includes(filter)) ? 'block' : 'none';
                     });
                 });
             });
@@ -2445,7 +2395,7 @@
     const statusSteps = ['Order Placed', 'Processing', 'Shipped', 'Delivered'];
     const icons = ['fa-shopping-cart', 'fa-cog', 'fa-truck', 'fa-check'];
     const colorMap = {
-        'Order Placed': 'bg-blue-500',
+        'Order Placed': 'bg-[#FF7DA0]',
         'Processing':   'bg-yellow-500',
         'Shipped':      'bg-purple-500',
         'Delivered':    'bg-green-500',
@@ -2455,7 +2405,7 @@ const matchedStatus = statusSteps.find(s => s.toLowerCase() === orderStatus.toLo
 let activeIndex = statusSteps.indexOf(matchedStatus);
 if (activeIndex === -1) activeIndex = 0;
 
-const color = colorMap[matchedStatus] || 'bg-blue-500';
+const color = colorMap[matchedStatus] || 'bg-[#FF7DA0]';
 
     // Grab the 4 step containers inside the flex row
     const stepDivs = document.querySelectorAll('#trackingModal .flex.items-center.justify-between > .text-center');
@@ -2468,7 +2418,7 @@ const color = colorMap[matchedStatus] || 'bg-blue-500';
         if (i <= activeIndex) {
             dot.className = `w-10 h-10 ${color} rounded-full flex items-center justify-center mx-auto mb-2`;
             dot.innerHTML = `<i class="fas ${icons[i]} text-white"></i>`;
-            label.className = 'text-sm font-medium text-blue-600';
+            label.className = 'text-sm font-medium text-[#E85D85]';
         } else {
             dot.className = 'w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mx-auto mb-2';
             dot.innerHTML = `<i class="fas ${icons[i]} text-gray-500"></i>`;
@@ -2506,11 +2456,11 @@ const color = colorMap[matchedStatus] || 'bg-blue-500';
         // Helper function to get color based on status
         function getStatusColorClass(status) {
             switch(status.toLowerCase()) {
-                case 'order placed': return 'bg-blue-500';
+                case 'order placed': return 'bg-[#FF7DA0]';
                 case 'processing': return 'bg-yellow-500';
                 case 'shipped': return 'bg-purple-500';
                 case 'delivered': return 'bg-green-500';
-                default: return 'bg-blue-500';
+                default: return 'bg-[#FF7DA0]';
             }
         }
 

@@ -4,24 +4,22 @@
     <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Return Item | Customer Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Return Item | MJ Cheezain</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <x-customer.theme />
     <style>
-        * { font-family: 'Poppins', sans-serif; }
-        .dropzone { border: 2px dashed #cbd5e0; border-radius: 10px; }
-        .dropzone.active { border-color: #3b82f6; background-color: #eff6ff; }
+        .dropzone { border: 2px dashed #FFC1D3; border-radius: 14px; background: #fff; }
+        .dropzone.active { border-color: #E85D85; background-color: #FFF1F5; }
     </style>
 </head>
 <body class="bg-gray-50">
     <div class="container mx-auto p-4 sm:p-6 max-w-4xl">
-        <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-8">
+        <div class="app-card p-4 sm:p-8">
             <!-- Header -->
             <div class="mb-8">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
                     <h1 class="text-2xl font-bold text-gray-800">Return Item Request</h1>
-                    <a href="{{ route('customer.orders') }}" class="text-blue-600 hover:text-blue-800">
+                    <a href="{{ route('customer.orders') }}" class="text-brand hover:opacity-70 font-semibold">
                         <i class="fas fa-arrow-left mr-2"></i> Back to Orders
                     </a>
                 </div>
@@ -29,7 +27,7 @@
             </div>
 
             <!-- Order Details -->
-            <div class="mb-8 bg-blue-50 rounded-xl p-6">
+            <div class="mb-8 brand-gradient-soft rounded-xl p-6 border border-pink-100">
                 <h2 class="text-lg font-bold text-gray-800 mb-4">Order Details</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -44,7 +42,7 @@
             </div>
 
             <!-- Product Details -->
-            <div class="mb-8 bg-white border border-gray-200 rounded-xl p-4 sm:p-6">
+            <div class="mb-8 bg-white border border-pink-100 rounded-xl p-4 sm:p-6">
                 <h2 class="text-lg font-bold text-gray-800 mb-4">Product Details</h2>
                 <div class="flex flex-col sm:flex-row items-start gap-4">
                     @if($cart->product_image)
@@ -60,11 +58,11 @@
                             </div>
                             <div>
                                 <p class="text-sm text-gray-500">Price per item</p>
-                                <p class="font-medium">${{ number_format($cart->price, 2) }}</p>
+                                <p class="font-medium">Rs. {{ number_format($cart->price, 2) }}</p>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-500">Total Refund</p>
-                                <p class="font-bold text-green-600">${{ number_format($cart->price * $cart->quantity, 2) }}</p>
+                                <p class="font-bold text-green-600">Rs. {{ number_format($cart->price * $cart->quantity, 2) }}</p>
                             </div>
                         </div>
                     </div>
@@ -83,49 +81,49 @@
                 <div class="mb-8">
                     <h2 class="text-lg font-bold text-gray-800 mb-4">Select Return Reason</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                        <label class="flex items-center p-4 border border-pink-100 rounded-xl cursor-pointer hover:bg-pink-50/50 bg-white">
                             <input type="radio" name="reason" value="damaged" class="mr-3" required>
                             <div>
                                 <span class="font-medium">Damaged Item</span>
                                 <p class="text-sm text-gray-500 mt-1">Item arrived damaged or broken</p>
                             </div>
                         </label>
-                        <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                        <label class="flex items-center p-4 border border-pink-100 rounded-xl cursor-pointer hover:bg-pink-50/50 bg-white">
                             <input type="radio" name="reason" value="wrong_item" class="mr-3">
                             <div>
                                 <span class="font-medium">Wrong Item</span>
                                 <p class="text-sm text-gray-500 mt-1">Received different item than ordered</p>
                             </div>
                         </label>
-                        <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                        <label class="flex items-center p-4 border border-pink-100 rounded-xl cursor-pointer hover:bg-pink-50/50 bg-white">
                             <input type="radio" name="reason" value="defective" class="mr-3">
                             <div>
                                 <span class="font-medium">Defective Product</span>
                                 <p class="text-sm text-gray-500 mt-1">Item doesn't work properly</p>
                             </div>
                         </label>
-                        <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                        <label class="flex items-center p-4 border border-pink-100 rounded-xl cursor-pointer hover:bg-pink-50/50 bg-white">
                             <input type="radio" name="reason" value="size_issue" class="mr-3">
                             <div>
                                 <span class="font-medium">Size Issue</span>
                                 <p class="text-sm text-gray-500 mt-1">Wrong size received</p>
                             </div>
                         </label>
-                        <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                        <label class="flex items-center p-4 border border-pink-100 rounded-xl cursor-pointer hover:bg-pink-50/50 bg-white">
                             <input type="radio" name="reason" value="color_issue" class="mr-3">
                             <div>
                                 <span class="font-medium">Color Issue</span>
                                 <p class="text-sm text-gray-500 mt-1">Wrong color received</p>
                             </div>
                         </label>
-                        <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                        <label class="flex items-center p-4 border border-pink-100 rounded-xl cursor-pointer hover:bg-pink-50/50 bg-white">
                             <input type="radio" name="reason" value="not_as_described" class="mr-3">
                             <div>
                                 <span class="font-medium">Not as Described</span>
                                 <p class="text-sm text-gray-500 mt-1">Item differs from description</p>
                             </div>
                         </label>
-                        <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                        <label class="flex items-center p-4 border border-pink-100 rounded-xl cursor-pointer hover:bg-pink-50/50 bg-white">
                             <input type="radio" name="reason" value="other" class="mr-3">
                             <div>
                                 <span class="font-medium">Other Reason</span>
@@ -139,7 +137,7 @@
                 <div class="mb-8">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Additional Details</label>
                     <textarea name="details" rows="4" 
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        class="w-full px-4 py-3 border border-pink-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300"
                         placeholder="Please provide more details about why you're returning this item..."></textarea>
                 </div>
 
@@ -182,7 +180,7 @@
                             Cancel
                         </button>
                         <button type="submit" id="submitBtn"
-                                class="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 flex items-center justify-center">
+                                class="w-full sm:w-auto px-6 py-3 brand-gradient brand-shadow text-white rounded-full font-semibold hover:opacity-90 flex items-center justify-center">
                             <i class="fas fa-paper-plane mr-2"></i> Submit Return Request
                         </button>
                     </div>

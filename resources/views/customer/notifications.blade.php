@@ -4,30 +4,23 @@
     <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notifications | Multivendor Platform</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Notifications | MJ Cheezain</title>
+    <x-customer.theme />
     <style>
-        .sidebar-item.active {
-            background-color: #f3f4f6;
-            border-right: 3px solid #3b82f6;
-            color: #3b82f6;
-        }
-        
         /* Notification animations */
         @keyframes slideIn {
             from { transform: translateY(-10px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-        
+
         .notification-item {
             animation: slideIn 0.3s ease-out;
         }
-        
+
         /* Custom checkbox style */
         input[type="checkbox"]:checked + .checkmark {
-            background-color: #3b82f6;
-            border-color: #3b82f6;
+            background-color: #E85D85;
+            border-color: #E85D85;
         }
         
         .checkmark:after {
@@ -48,71 +41,29 @@
         }
     </style>
 </head>
-<body class="bg-gray-50">
-    <div class="flex h-screen overflow-hidden">
+<body>
+    <div class="flex min-h-screen">
         <!-- Sidebar Component -->
         <x-customer.sidebar :basic_info="$basic_info"/>
-        
+
         <!-- Main Content -->
-        <div class="flex flex-col flex-1 overflow-hidden">
-            <!-- Top Navigation -->
-            <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
-                <div class="flex items-center">
-                    <button class="hidden mr-4 text-gray-500 focus:outline-none">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <h1 class="text-xl font-semibold text-gray-800">Notifications</h1>
-                </div>
-                
-                <div class="flex items-center space-x-4">
-                    <a href="{{ route('customer.notifications') }}" class="p-2 text-gray-500 rounded-full hover:bg-gray-100 relative">
-                        <i class="fas fa-bell"></i>
-                        @php
-                            $unreadCount = DB::table('notifications')
-                                ->where('user_id', Auth::id())
-                                ->where('is_read', 0)
-                                ->count();
-                        @endphp
-                        @if($unreadCount > 0)
-                            <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-                        @endif
-                    </a>
-                    {{-- <button class="p-2 text-gray-500 rounded-full hover:bg-gray-100">
-                        <i class="fas fa-search"></i>
-                    </button> --}}
-                    <div class="relative">
-                        <button id="user-menu-button" class="flex items-center focus:outline-none">
-                            <span class="mr-2 text-sm font-medium text-gray-700">{{ $basic_info->name ?? Auth::user()->name }}</span>
-                            <img class="w-8 h-8 rounded-full" src="{{ $basic_info->profile_picture ?? 'https://randomuser.me/api/portraits/men/32.jpg' }}" alt="User">
-                        </button>
-                    </div>
-                </div>
-            </header>
-            
+        <div class="flex flex-col flex-1 min-w-0">
+            <x-customer.header title="Notifications" subtitle="Stay up to date with your orders & offers" :basic_info="$basic_info" />
+
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-y-auto p-6 pb-24 md:pb-6">
+            <main class="flex-1 p-4 md:p-6 lg:p-8 pb-28 md:pb-8 page-enter">
                 <div class="max-w-4xl mx-auto">
-                    <!-- Notification Header -->
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800">Your Notifications</h2>
-                        <div class="flex items-center space-x-2">
-                            {{-- <button class="px-3 py-1 text-sm text-gray-600 hover:text-gray-800">
-                                <i class="fas fa-filter mr-1"></i> Filter
-                            </button> --}}
-                        </div>
-                    </div>
-                    
                     <!-- Notification List -->
-                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <div class="app-card overflow-hidden -mt-2 md:mt-0 relative z-10">
                         @forelse($notifications as $dateGroup => $groupedNotifications)
-                            <div class="@if(!$loop->last) border-b border-gray-200 @endif">
-                                <div class="px-4 py-3 bg-gray-50">
-                                    <h3 class="text-sm font-medium text-gray-500">{{ $dateGroup }}</h3>
+                            <div class="@if(!$loop->last) border-b border-pink-100 @endif">
+                                <div class="px-4 py-2.5 brand-gradient-soft">
+                                    <h3 class="text-xs font-bold text-brand uppercase tracking-wide">{{ $dateGroup }}</h3>
                                 </div>
-                                
-                                <div class="divide-y divide-gray-100">
+
+                                <div class="divide-y divide-pink-50">
                                     @foreach($groupedNotifications as $notification)
-                                        <div class="notification-item flex items-start px-4 py-3 hover:bg-gray-100 {{ $notification->is_read ? '' : 'bg-blue-100' }}" 
+                                        <div class="notification-item flex items-start px-4 py-3.5 hover:bg-pink-50/50 transition-colors {{ $notification->is_read ? '' : 'bg-pink-50' }}"
                                              data-notification-id="{{ $notification->id }}">
                                             {{-- <label class="inline-flex items-center mt-1 mr-3">
                                                 <input type="checkbox" 
@@ -140,11 +91,11 @@
                                 </div>
                             </div>
                         @empty
-                            <div class="px-4 py-8 text-center">
-                                <div class="mb-4">
-                                    <i class="fas fa-bell-slash text-4xl text-gray-300"></i>
+                            <div class="px-4 py-12 text-center">
+                                <div class="w-16 h-16 mx-auto rounded-full brand-gradient-soft flex items-center justify-center mb-4">
+                                    <i class="fas fa-bell-slash text-2xl text-brand"></i>
                                 </div>
-                                <p class="text-gray-500">No notifications yet</p>
+                                <p class="text-gray-600 font-semibold">No notifications yet</p>
                                 <p class="text-sm text-gray-400 mt-1">We'll notify you when something arrives</p>
                             </div>
                         @endforelse
@@ -178,14 +129,17 @@
                     const notificationId = this.dataset.notificationId;
                     const checkbox = this.querySelector('.notification-checkbox');
                     const dot = this.querySelector('.rounded-full:last-child');
-                    
+
                     // If already read, do nothing
-                    if (checkbox.checked) return;
-                    
+                    if (checkbox && checkbox.checked) return;
+
                     // Mark as read visually
-                    checkbox.checked = true;
-                    dot.classList.remove('bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-red-500');
-                    dot.classList.add('bg-gray-300');
+                    if (checkbox) checkbox.checked = true;
+                    if (dot) {
+                        dot.classList.remove('bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-red-500');
+                        dot.classList.add('bg-gray-300');
+                    }
+                    this.classList.remove('bg-pink-50');
                     
                     // Mark as read in database
                     fetch(`/customer/notifications/${notificationId}/read`, {
@@ -256,7 +210,8 @@
             })
             .then(data => {
                 console.log('Successfully read notifications', data);
-                document.getElementById('noti-num').style.display = 'none'
+                const notiNum = document.getElementById('noti-num');
+                if (notiNum) notiNum.style.display = 'none';
             })
             .catch(error => {
                 console.error('Error:', error);

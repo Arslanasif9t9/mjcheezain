@@ -3,61 +3,66 @@
 <!-- Backdrop Overlay (Hidden on Mobile as sidebar is removed) -->
 <div id="customerSidebarBackdrop" class="hidden"></div>
 
-<aside id="customerSidebar" 
-       class="hidden md:flex fixed md:sticky top-0 left-0 h-[100vh] w-64 bg-white border-r border-gray-200 flex-col z-50">
-    
-    <div class="flex items-center justify-between h-16 px-4 bg-blue-600 md:justify-center flex-shrink-0">
-        <span class="text-white font-bold text-xl">mjcheezain</span>
+<aside id="customerSidebar"
+       class="hidden md:flex fixed md:sticky top-0 left-0 h-[100vh] w-64 bg-white border-r border-pink-100 flex-col z-50">
+
+    <div class="flex items-center justify-between h-16 px-4 brand-gradient md:justify-center flex-shrink-0 relative overflow-hidden">
+        <div class="absolute -top-6 -right-6 w-20 h-20 bg-white/10 rounded-full pointer-events-none"></div>
+        <a href="/" class="text-white font-extrabold text-xl tracking-wide relative z-10">MJ Cheezain</a>
         <!-- Close button visible only on mobile -->
-        <button onclick="toggleCustomerMobileSidebar()" class="text-white focus:outline-none md:hidden text-lg">
+        <button onclick="toggleCustomerMobileSidebar()" class="text-white focus:outline-none md:hidden text-lg relative z-10">
             <i class="fas fa-times"></i>
         </button>
-    </div>                
+    </div>
     <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
-        <div class="flex items-center px-4 py-3 mb-4 bg-gray-100 rounded-lg">
-            <img class="w-10 h-10 rounded-full" src="{{ $basic_info && $basic_info->profile_image ? asset('storage/customer/profile/' . $basic_info->profile_image) : asset('storage/default_profile.webp') }}" alt="User">
-            <div class="ml-3">
-                <p class="text-sm font-medium text-gray-900">{{ $basic_info->first_name ?? '' }} {{ $basic_info->last_name ?? '' }}</p>
-                <p class="text-xs text-gray-500">Gold Member</p>
+        <a href="/customer/profile" class="flex items-center px-4 py-3 mb-4 brand-gradient-soft rounded-2xl border border-pink-100 hover:shadow-md transition-shadow">
+            <img class="w-10 h-10 rounded-full object-cover ring-2 ring-white shadow" src="{{ $basic_info && $basic_info->profile_image ? asset('storage/customer/profile/' . $basic_info->profile_image) : asset('storage/default_profile.webp') }}" alt="User">
+            <div class="ml-3 min-w-0">
+                <p class="text-sm font-semibold text-gray-900 truncate">{{ $basic_info->first_name ?? '' }} {{ $basic_info->last_name ?? '' }}</p>
+                <p class="text-xs text-brand font-medium"><i class="fas fa-crown text-[10px] mr-1"></i>Gold Member</p>
             </div>
-        </div>
-        
-        <nav class="flex-1 space-y-2">
-            <a href="/customer/dashboard" class="flex items-center px-4 py-2 text-sm font-medium text-gray-900 rounded-lg sidebar-item hover:bg-gray-100 active">
-                <i class="fas fa-tachometer-alt mr-3"></i>
+        </a>
+
+        <nav class="flex-1 space-y-1.5">
+            <a href="/customer/dashboard" class="flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 rounded-xl sidebar-item hover:bg-pink-50 transition-colors">
+                <i class="fas fa-home w-5 mr-3 text-center"></i>
                 Dashboard
             </a>
-            <a href="/customer/orders" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                <i class="fas fa-shopping-bag mr-3"></i>
+            <a href="/customer/orders" class="flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 rounded-xl sidebar-item hover:bg-pink-50 transition-colors">
+                <i class="fas fa-shopping-bag w-5 mr-3 text-center"></i>
                 My Orders
             </a>
-            <a href="/customer/notifications" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100 relative">
-                <i class="fas fa-shopping-bag mr-3"></i>
+            <a href="/customer/notifications" class="flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 rounded-xl sidebar-item hover:bg-pink-50 relative transition-colors">
+                <i class="fas fa-bell w-5 mr-3 text-center"></i>
                 Notifications
                 @php $unreadCount = $basic_info ? DB::table('notifications')->where('user_id', $basic_info->user_id)->where('is_read', 0)->count() : 0; @endphp
                 @if ($unreadCount != 0)
-                    <div id="noti-num" class="w-5 h-5 text-sm absolute right-4 bg-red-600 text-white flex justify-center items-center rounded-full">
+                    <div id="noti-num" class="min-w-[20px] h-5 px-1 text-xs absolute right-4 brand-gradient text-white flex justify-center items-center rounded-full font-bold shadow">
                         {{ $unreadCount }}
                     </div>
                 @endif
             </a>
-            <a href="/customer/wishlist" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                <i class="fas fa-heart mr-3"></i>
+            <a href="/customer/wishlist" class="flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 rounded-xl sidebar-item hover:bg-pink-50 transition-colors">
+                <i class="fas fa-heart w-5 mr-3 text-center"></i>
                 Wishlist
             </a>
-            <a href="/customer/addresses" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                <i class="fas fa-map-marker-alt mr-3"></i>
+            <a href="/customer/addresses" class="flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 rounded-xl sidebar-item hover:bg-pink-50 transition-colors">
+                <i class="fas fa-map-marker-alt w-5 mr-3 text-center"></i>
                 Addresses
             </a>
-            <a href="/customer/profile" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-lg sidebar-item hover:bg-gray-100">
-                <i class="fas fa-user-cog mr-3"></i>
+            <a href="/customer/profile" class="flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 rounded-xl sidebar-item hover:bg-pink-50 transition-colors">
+                <i class="fas fa-user-cog w-5 mr-3 text-center"></i>
                 Profile Settings
             </a>
         </nav>
-        
-        <div class="mt-auto mb-4">
-            <button id="logoutBtn" class="flex items-center w-full px-4 py-2 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50 transition-all duration-200">
-                <i class="fas fa-sign-out-alt mr-3"></i>
+
+        <div class="mt-auto mb-4 space-y-2">
+            <a href="/" class="flex items-center w-full px-4 py-2.5 text-sm font-semibold text-white rounded-xl brand-gradient brand-shadow hover:-translate-y-0.5 hover:shadow-lg transition-all">
+                <i class="fas fa-store w-5 mr-3 text-center"></i>
+                Continue Shopping
+            </a>
+            <button id="logoutBtn" class="flex items-center w-full px-4 py-2.5 text-sm font-medium text-red-500 rounded-xl hover:bg-red-50 transition-all duration-200">
+                <i class="fas fa-sign-out-alt w-5 mr-3 text-center"></i>
                 Logout
             </button>
         </div>
@@ -256,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Remove active class from all sidebar items first
         document.querySelectorAll('.sidebar-item').forEach(item => {
-            item.classList.remove('active', 'bg-blue-50', 'text-blue-700');
+            item.classList.remove('active');
             item.classList.add('text-gray-700');
         });
         
@@ -277,7 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (route.pattern.test(currentPath)) {
                 const activeLink = document.querySelector(route.selector);
                 if (activeLink) {
-                    activeLink.classList.add('active', 'bg-blue-50', 'text-blue-700');
+                    activeLink.classList.add('active');
                     activeLink.classList.remove('text-gray-700');
                     activeFound = true;
                     break;
@@ -289,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!activeFound) {
             const exactMatch = document.querySelector(`a[href="${currentPath}"]`);
             if (exactMatch) {
-                exactMatch.classList.add('active', 'bg-blue-50', 'text-blue-700');
+                exactMatch.classList.add('active');
                 exactMatch.classList.remove('text-gray-700');
             }
         }
@@ -315,12 +320,12 @@ document.addEventListener('DOMContentLoaded', function() {
         item.addEventListener('click', function() {
             // Remove active class from all items
             document.querySelectorAll('.sidebar-item').forEach(navItem => {
-                navItem.classList.remove('active', 'bg-blue-50', 'text-blue-700');
+                navItem.classList.remove('active');
                 navItem.classList.add('text-gray-700');
             });
             
             // Add active class to clicked item
-            this.classList.add('active', 'bg-blue-50', 'text-blue-700');
+            this.classList.add('active');
             this.classList.remove('text-gray-700');
             
             // Close mobile sidebar on click if open

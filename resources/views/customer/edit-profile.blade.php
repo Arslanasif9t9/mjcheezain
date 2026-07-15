@@ -4,41 +4,24 @@
     <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Settings | Multivendor Platform</title>
-    <!-- Tailwind CSS  -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- font-awesome  -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google font  -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
+    <title>Profile Settings | MJ Cheezain</title>
+    <x-customer.theme />
     <style>
-        /* Internal CSS */
-        .sidebar-item.active {
-            background-color: #f3f4f6;
-            border-right: 3px solid #3b82f6;
-            color: #3b82f6;
-        }
         .settings-section {
             transition: all 0.3s ease;
         }
-        
+
         .settings-card {
             transition: all 0.2s ease;
         }
         .settings-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px -5px rgba(232, 93, 133, 0.12);
         }
-        
+
         .tab-active {
-            border-bottom: 3px solid #3b82f6;
-            color: #3b82f6;
+            border-bottom: 3px solid #E85D85;
+            color: #E85D85;
             font-weight: 600;
         }
         
@@ -70,27 +53,16 @@
         }
     </style>
 </head>
-<body class="bg-gray-50">
-    <div class="flex h-screen overflow-hidden">
+<body>
+    <div class="flex min-h-screen">
         <!-- Sidebar -->
         <x-customer.sidebar :basic_info="$basic_info"/>
-        
+
         <!-- Main Content Area -->
-        <div class="flex flex-col flex-1 overflow-hidden">
-            <!-- Top Navigation -->
-            <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
-                <!-- Left side - Mobile menu and title -->
-                <div class="flex items-center">
-                    <button class="hidden mr-4 text-gray-500 focus:outline-none">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <h1 class="text-xl font-semibold text-gray-800">Profile Settings</h1>
-                </div>
-            </header>
+        <div class="flex flex-col flex-1 min-w-0">
+            <x-customer.header title="Profile Settings" subtitle="Update your personal information" :basic_info="$basic_info" back="/customer/profile" />
 
-
-
-            <main class="flex-1 overflow-y-auto p-4 md:p-6 pb-24 md:pb-6">
+            <main class="flex-1 p-4 md:p-6 lg:p-8 pb-28 md:pb-8 page-enter">
             
             <!-- Profile Settings Tabs -->
             {{-- <div class="border-b border-gray-200 mb-6">
@@ -114,8 +86,8 @@
             <div class="tab-content">
                 {{-- <?php if ($active_tab == 'account'): ?> --}}
                     <!-- Account Settings Section -->
-                    <div class="settings-section bg-white rounded-lg shadow overflow-hidden mb-6">
-                        <div class="border-b border-gray-200 px-6 py-4">
+                    <div class="settings-section app-card overflow-hidden mb-6">
+                        <div class="border-b border-pink-100 px-5 md:px-6 py-4">
                             <h2 class="text-lg font-medium text-gray-900">Profile Information</h2>
                             <p class="text-sm text-gray-500">Update your account's profile information and email address.</p>
                         </div>
@@ -130,7 +102,7 @@
                                         <div class="flex flex-col items-center">
                                             <div class="relative mb-4">
                                                 <img id="profile-preview" src="{{ asset('storage/customer/profile/' . $basic_info->profile_image) }}" alt="Profile" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow">
-                                                <div class="absolute bottom-0 right-0 bg-blue-600 rounded-full p-2">
+                                                <div class="absolute bottom-0 right-0 brand-gradient brand-shadow rounded-full p-2">
                                                     <input type="file" id="profile-upload" name="profile-upload" class="file-upload-input" accept="image/*">
                                                     <label for="profile-upload" class="file-upload-label">
                                                         <i class="fas fa-camera text-white"></i>
@@ -147,42 +119,42 @@
                                             <div>
                                                 <label for="first-name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
                                                 <input type="text" id="first-name" name="first-name" value="{{ $basic_info->first_name }}" required
-                                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                                    class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300">
                                             </div>
                                             
                                             <div>
                                                 <label for="last-name" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
                                                 <input type="text" id="last-name" name="last-name" value="{{ $basic_info->last_name }}" required
-                                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                                    class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300">
                                             </div>
                                             
                                             <div class="md:col-span-2">
                                                 <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                                                 <input type="email" id="email" name="email" value="{{ $basic_info->email }}" required
-                                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                                    class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300">
                                             </div>
                                             
                                             <div>
                                                 <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                                                 <input type="tel" id="phone" name="phone" value="{{ $basic_info->phone }}" required
-                                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                                    class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300">
                                             </div>
                                             
                                             <div>
                                                 <label for="birthday" class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
                                                 <input type="date" id="birthday" name="birthday" value="{{ $basic_info->birthday }}" required
-                                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                                    class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300">
                                             </div>
                                             
                                             <div class="md:col-span-2">
                                                 <label for="bio" class="block text-sm font-medium text-gray-700 mb-1">Bio</label>
                                                 <textarea id="bio" name="bio" rows="3" 
-                                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">{{ $basic_info->bio }}</textarea>
+                                                        class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300">{{ $basic_info->bio }}</textarea>
                                             </div>
                                         </div>
                                         
                                         <div class="mt-6 flex justify-end">
-                                            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none">
+                                            <button type="submit" class="px-6 py-2.5 brand-gradient brand-shadow text-white rounded-full text-sm font-semibold hover:opacity-90 focus:outline-none">
                                                 Save Changes
                                             </button>
                                         </div>
@@ -194,8 +166,8 @@
                 
                 {{-- <?php elseif ($active_tab == 'security'): ?>
                     <!-- Account Security Section -->
-                    <div class="settings-section bg-white rounded-lg shadow overflow-hidden mb-6">
-                        <div class="border-b border-gray-200 px-6 py-4">
+                    <div class="settings-section app-card overflow-hidden mb-6">
+                        <div class="border-b border-pink-100 px-5 md:px-6 py-4">
                             <h2 class="text-lg font-medium text-gray-900">Security</h2>
                             <p class="text-sm text-gray-500">Update your password and secure your account.</p>
                         </div>
@@ -207,7 +179,7 @@
                                         <label for="current-password" class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
                                         <div class="relative">
                                             <input type="password" id="current-password" name="current-password" 
-                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 pr-10">
+                                                class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300 pr-10">
                                             <button type="button" class="absolute right-3 top-2 text-gray-400 hover:text-gray-500 focus:outline-none">
                                                 <i class="fas fa-eye"></i>
                                             </button>
@@ -218,7 +190,7 @@
                                         <label for="new-password" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
                                         <div class="relative">
                                             <input type="password" id="new-password" name="new-password" 
-                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 pr-10">
+                                                class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300 pr-10">
                                             <button type="button" class="absolute right-3 top-2 text-gray-400 hover:text-gray-500 focus:outline-none">
                                                 <i class="fas fa-eye"></i>
                                             </button>
@@ -230,7 +202,7 @@
                                         <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
                                         <div class="relative">
                                             <input type="password" id="confirm-password" name="confirm-password" 
-                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 pr-10">
+                                                class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300 pr-10">
                                             <button type="button" class="absolute right-3 top-2 text-gray-400 hover:text-gray-500 focus:outline-none">
                                                 <i class="fas fa-eye"></i>
                                             </button>
@@ -256,7 +228,7 @@
                                     </div>
                                     
                                     <div class="flex justify-end">
-                                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none">
+                                        <button type="submit" class="px-6 py-2.5 brand-gradient brand-shadow text-white rounded-full text-sm font-semibold hover:opacity-90 focus:outline-none">
                                             Update Password
                                         </button>
                                     </div>
@@ -267,8 +239,8 @@
                 
                 <?php elseif ($active_tab == 'notifications'): ?>
                     <!-- Notification Preferences Section -->
-                    <div class="settings-section bg-white rounded-lg shadow overflow-hidden mb-6">
-                        <div class="border-b border-gray-200 px-6 py-4">
+                    <div class="settings-section app-card overflow-hidden mb-6">
+                        <div class="border-b border-pink-100 px-5 md:px-6 py-4">
                             <h2 class="text-lg font-medium text-gray-900">Notification Preferences</h2>
                             <p class="text-sm text-gray-500">Manage how you receive notifications.</p>
                         </div>
@@ -342,7 +314,7 @@
                                     </div>
                                     
                                     <div class="flex justify-end">
-                                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none">
+                                        <button type="submit" class="px-6 py-2.5 brand-gradient brand-shadow text-white rounded-full text-sm font-semibold hover:opacity-90 focus:outline-none">
                                             Save Preferences
                                         </button>
                                     </div>
@@ -353,8 +325,8 @@
                 
                 <?php elseif ($active_tab == 'actions'): ?>
                     <!-- Account Actions Section -->
-                    <div class="settings-section bg-white rounded-lg shadow overflow-hidden">
-                        <div class="border-b border-gray-200 px-6 py-4">
+                    <div class="settings-section app-card overflow-hidden">
+                        <div class="border-b border-pink-100 px-5 md:px-6 py-4">
                             <h2 class="text-lg font-medium text-gray-900">Account Actions</h2>
                             <p class="text-sm text-gray-500">Manage your account settings.</p>
                         </div>
@@ -442,7 +414,7 @@
                             <div class="mt-4">
                                 <label for="delete-confirm" class="block text-sm font-medium text-gray-700 mb-1">Type "DELETE" to confirm</label>
                                 <input type="text" id="delete-confirm" name="delete-confirm" 
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                       class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300">
                             </div>
                         </div>
                     </div>
@@ -549,13 +521,13 @@
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             notification.className = `notification fixed top-4 right-4 p-4 rounded-lg shadow-lg bg-white border-l-4 ${
-                type === 'info' ? 'border-blue-500' : 'border-green-500'
+                type === 'info' ? 'border-[#FF7DA0]' : 'border-green-500'
             } z-50`;
             notification.innerHTML = `
                 <div class="flex items-start">
                     <div class="flex-shrink-0">
                         <i class="fas ${
-                            type === 'info' ? 'fa-info-circle text-blue-500' : 'fa-check-circle text-green-500'
+                            type === 'info' ? 'fa-info-circle text-[#FF7DA0]' : 'fa-check-circle text-green-500'
                         }"></i>
                     </div>
                     <div class="ml-3">

@@ -4,35 +4,18 @@
     <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Addresses | Multivendor Platform</title>
+    <title>My Addresses | MJ Cheezain</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <!-- Tailwind CSS  -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- font-awesome  -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google font  -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
+    <x-customer.theme />
     <style>
-        /* Internal CSS */
-        .sidebar-item.active {
-            background-color: #f3f4f6;
-            border-right: 3px solid #3b82f6;
-            color: #3b82f6;
-        }
         .address-card {
             transition: all 0.3s ease;
         }
         .address-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px -5px rgba(232, 93, 133, 0.12);
         }
-        
+
         .default-address {
             border-left: 4px solid #10b981;
         }
@@ -60,109 +43,26 @@
         }
     </style>
 </head>
-<body class="bg-gray-50">
-    <div class="flex h-screen overflow-hidden">
+<body>
+    <div class="flex min-h-screen">
         <!-- Sidebar -->
         <x-customer.sidebar :basic_info="$basic_info"/>
-        
+
         <!-- Main Content -->
-        <div class="flex flex-col flex-1 overflow-hidden">
-            <!-- Top Navigation -->
-            <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
-                <!-- Left side - Mobile menu and title -->
-                <div class="flex items-center">
-                    <button class="hidden mr-4 text-gray-500 focus:outline-none">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <h1 class="text-xl font-semibold text-gray-800">Addresses</h1>
-                </div>
+        <div class="flex flex-col flex-1 min-w-0">
+            <x-customer.header title="My Addresses" subtitle="Manage shipping addresses for faster checkout" :basic_info="$basic_info" />
 
-                <!-- Center - Search bar -->
-                <div class="hidden md:flex flex-1 max-w-md mx-4">
-                    <div class="relative w-full">
-                        <input type="text" placeholder="Search..."
-                            class="w-full py-2 pl-4 pr-10 text-sm bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">
-                        <button class="absolute right-3 top-2 text-gray-500">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Right side - Icons and user menu -->
-                <div class="hidden md:flex items-center space-x-4">
-                    <!-- Notification dropdown -->
-                    <div class="relative">
-                        <button id="notification-button"
-                            class="p-2 text-gray-500 rounded-full hover:bg-gray-100 relative focus:outline-none">
-                            <i class="fas fa-bell"></i>
-                            <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-                        </button>
-
-                        <!-- Notification dropdown menu -->
-                        <div id="notification-dropdown"
-                            class="hidden absolute right-0 mt-2 w-72 bg-white rounded-md shadow-lg overflow-hidden z-10 border border-gray-200">
-                            <div class="px-4 py-3 border-b border-gray-200 bg-gray-50">
-                                <h3 class="text-sm font-medium text-gray-700">Notifications</h3>
-                            </div>
-                            <div class="divide-y divide-gray-100">
-                                <a href="#" class="block px-4 py-3 hover:bg-gray-50">
-                                    <div class="text-sm font-medium text-gray-800">New message</div>
-                                    <div class="text-xs text-gray-500 mt-1 truncate">You received a new message from
-                                        Sarah</div>
-                                </a>
-                                <a href="#" class="block px-4 py-3 hover:bg-gray-50">
-                                    <div class="text-sm font-medium text-gray-800">System update</div>
-                                    <div class="text-xs text-gray-500 mt-1 truncate">Your system will be updated tonight
-                                    </div>
-                                </a>
-                                <a href="#" class="block px-4 py-3 hover:bg-gray-50">
-                                    <div class="text-sm font-medium text-gray-800">Payment received</div>
-                                    <div class="text-xs text-gray-500 mt-1 truncate">Your payment of $29.99 has been
-                                        processed</div>
-                                </a>
-                            </div>
-                            <div class="px-4 py-2 border-t border-gray-200 bg-gray-50 text-center">
-                                <a href="./notifications.php"
-                                    class="text-xs font-medium text-blue-600 hover:text-blue-800">See all
-                                    notifications</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- User dropdown -->
-                    {{-- <div class="relative">
-                        <button id="user-menu-button" class="flex items-center focus:outline-none">
-                            <div class="mr-3 text-right hidden sm:block">
-                                <span class="block text-sm font-medium text-gray-700"><?= $basic_info['first_name'] . " " . $basic_info['last_name']?></span>
-                                <span class="block text-xs text-gray-500">Admin</span>
-                            </div>
-                            <div class="relative">
-                                <img class="w-8 h-8 rounded-full" src="<?= $basic_info['profile_image']?>"
-                                    alt="User">
-                            </div>
-                        </button>
-                    </div> --}}
-                </div>
-                <script src="../script/notification_dropdown.js"></script>
-            </header>
-
-
-            
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-y-auto p-6 pb-24 md:pb-6">
-                <!-- Address Management Header -->
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-800">Saved Addresses</h2>
-                        <p class="text-gray-600">Manage your shipping addresses for faster checkout</p>
-                    </div>
-                    <button id="add-address-btn" class="mt-4 md:mt-0 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none flex items-center">
+            <main class="flex-1 p-4 md:p-6 lg:p-8 pb-28 md:pb-8 page-enter">
+                <!-- Add button row -->
+                <div class="flex justify-end mb-4 -mt-2 md:mt-0 relative z-10">
+                    <button id="add-address-btn" class="w-full md:w-auto px-5 py-3 brand-gradient brand-shadow text-white rounded-2xl md:rounded-full text-sm font-semibold hover:-translate-y-0.5 transition-transform flex items-center justify-center">
                         <i class="fas fa-plus mr-2"></i>Add New Address
                     </button>
                 </div>
                 
                 <!-- Add/Edit Address Form -->
-                <div id="address-form" class="address-form bg-white rounded-lg shadow p-6 mb-6">
+                <div id="address-form" class="address-form app-card p-5 md:p-6 mb-6">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-medium text-gray-900" id="form-title">Add New Address</h3>
                         <button id="close-form-btn" class="text-gray-400 hover:text-gray-500 focus:outline-none">
@@ -175,47 +75,47 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="address_type" class="block text-sm font-medium text-gray-700 mb-1">Address Type</label>
-                                <input type="text" id="address_type" name="address_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Home, Work, etc." >
+                                <input type="text" id="address_type" name="address_type" class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300" placeholder="Home, Work, etc." >
                             </div>
                             
                             <div>
                                 <label for="full-name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                                <input type="text" id="full-name" name="full-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" >
+                                <input type="text" id="full-name" name="full-name" class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300" >
                             </div>
                             
                             <div>
                                 <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                                <input type="tel" id="phone" name="phone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" >
+                                <input type="tel" id="phone" name="phone" class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300" >
                             </div>
                             
                             <div>
                                 <label for="address-line1" class="block text-sm font-medium text-gray-700 mb-1">Address Line 1</label>
-                                <input type="text" id="address-line1" name="address-line1" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" >
+                                <input type="text" id="address-line1" name="address-line1" class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300" >
                             </div>
                             
                             <div>
                                 <label for="address-line2" class="block text-sm font-medium text-gray-700 mb-1">Address Line 2 (Optional)</label>
-                                <input type="text" id="address-line2" name="address-line2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <input type="text" id="address-line2" name="address-line2" class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300">
                             </div>
                             
                             <div>
                                 <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City</label>
-                                <input type="text" id="city" name="city" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" >
+                                <input type="text" id="city" name="city" class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300" >
                             </div>
                             
                             <div>
                                 <label for="state" class="block text-sm font-medium text-gray-700 mb-1">State/Province</label>
-                                <input type="text" id="state" name="state" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" >
+                                <input type="text" id="state" name="state" class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300" >
                             </div>
                             
                             <div>
                                 <label for="zip-code" class="block text-sm font-medium text-gray-700 mb-1">ZIP/Postal Code</label>
-                                <input type="text" id="zip-code" name="zip-code" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" >
+                                <input type="text" id="zip-code" name="zip-code" class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300" >
                             </div>
                             
                             <div>
                                 <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
-                                <select id="country" name="country" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" >
+                                <select id="country" name="country" class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300" >
                                     <option value="">Select Country</option>
                                     <option value="US">United States</option>
                                     <option value="CA">Canada</option>
@@ -228,7 +128,7 @@
                         </div>
                         
                         <div class="mt-6 flex items-center">
-                            <input type="checkbox" id="default-address" name="default-address" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            <input type="checkbox" id="default-address" name="default-address" class="h-4 w-4 text-pink-500 focus:ring-pink-300 border-pink-200 rounded">
                             <label for="default-address" class="ml-2 block text-sm text-gray-700">Set as default shipping address</label>
                         </div>
                         
@@ -236,7 +136,7 @@
                             <button type="button" id="cancel-form-btn" class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">
                                 Cancel
                             </button>
-                            <button type="submit" name="add_address" id="submit-btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 focus:outline-none">
+                            <button type="submit" name="add_address" id="submit-btn" class="px-5 py-2.5 brand-gradient brand-shadow text-white rounded-full text-sm font-semibold hover:opacity-90 focus:outline-none">
                                 Save Address
                             </button>
                         </div>
@@ -251,13 +151,13 @@
                             <h3 class="text-lg font-medium text-gray-900 mb-1">No saved addresses</h3>
                             <p class="text-gray-500 mb-6">Add your addresses for faster checkout</p>
                             
-                            <button id="show-empty-add-btn" class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:outline-none">
+                            <button id="show-empty-add-btn" class="px-6 py-3 brand-gradient brand-shadow text-white rounded-full font-semibold hover:opacity-90 focus:outline-none">
                                 <i class="fas fa-plus mr-2"></i>Add Address
                             </button>
                         </div>
                     @else
                         @foreach ($addresses as $address)
-                            <div class="address-card bg-white rounded-lg shadow {{ $address->is_default ? 'default-address' : '' }}" data-address-id="{{ $address->id }}">
+                            <div class="address-card app-card {{ $address->is_default ? 'default-address' : '' }}" data-address-id="{{ $address->id }}">
                                 <div class="p-6">
                                     <div class="flex justify-between items-start">
                                         <div>
@@ -284,7 +184,7 @@
                                                     Set Default
                                                 </button>
                                             @endif
-                                            <button onclick="openEditForm({{ $address->id }})" class="p-2 text-blue-600 hover:text-blue-800 focus:outline-none">
+                                            <button onclick="openEditForm({{ $address->id }})" class="p-2 text-brand hover:opacity-70 focus:outline-none">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                             <button onclick="deleteAddress({{ $address->id }})" class="p-2 text-red-500 hover:text-red-700 focus:outline-none">
@@ -511,7 +411,7 @@
         function createAddressCard(addressId, addressData) {
             const isDefault = addressData.default_address == 1;
             const card = document.createElement('div');
-            card.className = `address-card bg-white rounded-lg shadow ${isDefault ? 'default-address' : ''}`;
+            card.className = `address-card app-card ${isDefault ? 'default-address' : ''}`;
             card.setAttribute('data-address-id', addressId);
             
             card.innerHTML = `
@@ -539,7 +439,7 @@
                                     Set Default
                                 </button>
                             ` : ''}
-                            <button onclick="openEditForm(${addressId})" class="p-2 text-blue-600 hover:text-blue-800 focus:outline-none">
+                            <button onclick="openEditForm(${addressId})" class="p-2 text-brand hover:opacity-70 focus:outline-none">
                                 <i class="fas fa-edit"></i>
                             </button>
                             <button onclick="deleteAddress(${addressId})" class="p-2 text-red-500 hover:text-red-700 focus:outline-none">
@@ -619,7 +519,7 @@
                         }
                         
                         // If no addresses left, show empty state
-                        const addressesContainer = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.gap-6');
+                        const addressesContainer = document.querySelector('#address-con');
                         if (addressesContainer && addressesContainer.children.length === 0) {
                             showEmptyState();
                         }
@@ -635,14 +535,14 @@
 
         // Show empty state
         function showEmptyState() {
-            const addressesContainer = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.gap-6');
+            const addressesContainer = document.querySelector('#address-con');
             if (addressesContainer) {
                 addressesContainer.innerHTML = `
                     <div class="col-span-full text-center py-12">
                         <i class="fas fa-map-marker-alt text-gray-300 text-5xl mb-4"></i>
                         <h3 class="text-lg font-medium text-gray-900 mb-1">No saved addresses</h3>
                         <p class="text-gray-500 mb-6">Add your addresses for faster checkout</p>
-                        <button id="show-empty-add-btn" class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:outline-none">
+                        <button id="show-empty-add-btn" class="px-6 py-3 brand-gradient brand-shadow text-white rounded-full font-semibold hover:opacity-90 focus:outline-none">
                             <i class="fas fa-plus mr-2"></i>Add Address
                         </button>
                     </div>
@@ -798,14 +698,14 @@
             const notification = document.createElement('div');
             notification.className = `notification fixed top-4 right-4 p-4 rounded-lg shadow-lg bg-white border-l-4 ${
                 type === 'success' ? 'border-green-500' : 
-                type === 'error' ? 'border-red-500' : 'border-blue-500'
+                type === 'error' ? 'border-red-500' : 'border-[#FF7DA0]'
             } z-50`;
             notification.innerHTML = `
                 <div class="flex items-start">
                     <div class="flex-shrink-0">
                         <i class="fas ${
                             type === 'success' ? 'fa-check-circle text-green-500' : 
-                            type === 'error' ? 'fa-exclamation-circle text-red-500' : 'fa-info-circle text-blue-500'
+                            type === 'error' ? 'fa-exclamation-circle text-red-500' : 'fa-info-circle text-[#FF7DA0]'
                         }"></i>
                     </div>
                     <div class="ml-3">

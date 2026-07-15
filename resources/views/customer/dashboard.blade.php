@@ -1,6 +1,3 @@
-@php
-    // dd($basic_info);
-@endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,443 +5,221 @@
     <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Dashboard | Multivendor Platform</title>
-    <!-- Tailwind CSS  -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- font-awesome  -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google font  -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
-    <style>
-        /* Internal CSS */
-        .order-status-processing {
-            border-left: 4px solid #3b82f6;
-        }
-
-        .order-status-shipped {
-            border-left: 4px solid #f59e0b;
-        }
-
-        .order-status-delivered {
-            border-left: 4px solid #10b981;
-        }
-
-        .order-status-cancelled {
-            border-left: 4px solid #ef4444;
-        }
-
-        .timeline-step.active {
-            color: #10b981;
-            border-color: #10b981;
-        }
-
-        .timeline-step.active .timeline-dot {
-            background-color: #10b981;
-        }
-
-        .sidebar-item.active {
-            background-color: #f3f4f6;
-            border-right: 3px solid #3b82f6;
-            color: #3b82f6;
-        }
-
-        /* Animation for notifications */
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-            }
-
-            to {
-                transform: translateX(0);
-            }
-        }
-
-        .notification {
-            animation: slideIn 0.3s ease-out;
-        }
-    </style>
+    <title>Dashboard | MJ Cheezain</title>
+    <x-customer.theme />
 </head>
 
-<body class="bg-gray-50">
-    <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar -->
-        <x-customer.sidebar :basic_info="$basic_info"/>
+<body>
+    <div class="flex min-h-screen">
+        <!-- Sidebar (desktop) -->
+        <x-customer.sidebar :basic_info="$basic_info" />
 
         <!-- Main Content -->
-        <div class="flex flex-col flex-1 overflow-hidden">
-            <!-- Top Navigation -->
-            <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
-                <!-- Left side - Mobile menu and title -->
-                <div class="flex items-center">
-                    <button class="hidden mr-4 text-gray-500 focus:outline-none">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <h1 class="text-xl font-semibold text-gray-800">Dashboard</h1>
-                </div>
-
-                <!-- Center - Search bar -->
-                <div class="hidden md:flex flex-1 max-w-md mx-4"> <!-- md:flex -->
-                    <div class="relative w-full">
-                        <input type="text" placeholder="Search..."
-                            class="w-full py-2 pl-4 pr-10 text-sm bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">
-                        <button class="absolute right-3 top-2 text-gray-500">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Right side - Icons and user menu -->
-                <div class="hidden md:flex items-center space-x-4">
-                    <!-- Notification dropdown -->
-                    <div class="relative">
-                        <button id="notification-button"
-                            class="p-2 text-gray-500 rounded-full hover:bg-gray-100 relative focus:outline-none">
-                            <i class="fas fa-bell"></i>
-                            <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-                        </button>
-
-                        <!-- Notification dropdown menu -->
-                        <div id="notification-dropdown"
-                            class="hidden absolute right-0 mt-2 w-72 bg-white rounded-md shadow-lg overflow-hidden z-10 border border-gray-200">
-                            <div class="px-4 py-3 border-b border-gray-200 bg-gray-50">
-                                <h3 class="text-sm font-medium text-gray-700">Notifications</h3>
-                            </div>
-                            <div class="divide-y divide-gray-100">
-                                <a href="#" class="block px-4 py-3 hover:bg-gray-50">
-                                    <div class="text-sm font-medium text-gray-800">New message</div>
-                                    <div class="text-xs text-gray-500 mt-1 truncate">You received a new message from
-                                        Sarah</div>
-                                </a>
-                                <a href="#" class="block px-4 py-3 hover:bg-gray-50">
-                                    <div class="text-sm font-medium text-gray-800">System update</div>
-                                    <div class="text-xs text-gray-500 mt-1 truncate">Your system will be updated tonight
-                                    </div>
-                                </a>
-                                <a href="#" class="block px-4 py-3 hover:bg-gray-50">
-                                    <div class="text-sm font-medium text-gray-800">Payment received</div>
-                                    <div class="text-xs text-gray-500 mt-1 truncate">Your payment of $29.99 has been
-                                        processed</div>
-                                </a>
-                            </div>
-                            <div class="px-4 py-2 border-t border-gray-200 bg-gray-50 text-center">
-                                <a href="./notifications.php"
-                                    class="text-xs font-medium text-blue-600 hover:text-blue-800">See all
-                                    notifications</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- User dropdown -->
-                    {{-- <div class="relative">
-                        <button id="user-menu-button" class="flex items-center focus:outline-none">
-                            <div class="mr-3 text-right hidden sm:block">
-                                <span class="block text-sm font-medium text-gray-700"><?= $basic_info['first_name'] . " " . $basic_info['last_name']?></span>
-                                <span class="block text-xs text-gray-500">Admin</span>
-                            </div>
-                            <div class="relative">
-                                <img class="w-8 h-8 rounded-full" src="<?= $basic_info['profile_image']?>"
-                                    alt="User">
-                            </div>
-                        </button>
-                    </div> --}}
-                </div>
-            </header>
-
-
+        <div class="flex flex-col flex-1 min-w-0">
+            <x-customer.header title="Dashboard" subtitle="Here's what's happening with your orders" :basic_info="$basic_info" />
 
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-y-auto p-6 pb-24 md:pb-6">
-                <!-- Welcome Panel -->
-                <div class="bg-white rounded-lg shadow p-6 mb-6">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                        <div>
-                            <h2 class="text-2xl font-bold text-gray-800">Welcome back!</h2>
-                            <p class="text-gray-600">Here's what's happening with your orders today.</p>
-                        </div>
-                        <div class="mt-4 md:mt-0">
-                            <!-- <button
-                                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none">
-                                <i class="fas fa-plus mr-2"></i>New Order
-                            </button> -->
+            <main class="flex-1 p-4 md:p-6 lg:p-8 pb-28 md:pb-8 page-enter">
+
+                @php
+                    $totalOrders = DB::table('orders')->where('user_id', $basic_info->user_id)->count();
+                    $activeOrders = DB::table('orders')->where('user_id', $basic_info->user_id)->where('status', '!=', 'completed')->count();
+                    $completedOrders = DB::table('orders')->where('user_id', $basic_info->user_id)->where('status', 'completed')->count();
+                    $wishlistCount = DB::table('favorites')->where('user_id', $basic_info->user_id)->count();
+                @endphp
+
+                <!-- Stat Cards -->
+                <div class="grid grid-cols-3 gap-3 md:gap-5 mb-5 md:mb-8 -mt-2 md:mt-0 relative z-10">
+                    <div class="app-card p-3.5 md:p-5 text-center md:text-left">
+                        <div class="md:flex md:items-center">
+                            <div class="w-10 h-10 md:w-12 md:h-12 mx-auto md:mx-0 rounded-2xl brand-gradient flex items-center justify-center brand-shadow md:mr-4">
+                                <i class="fas fa-shopping-bag text-white text-sm md:text-base"></i>
+                            </div>
+                            <div class="mt-2 md:mt-0">
+                                <p class="text-xl md:text-2xl font-extrabold text-gray-800 leading-none">{{ $totalOrders }}</p>
+                                <p class="text-[10px] md:text-xs text-gray-500 font-medium mt-1">Total Orders</p>
+                            </div>
                         </div>
                     </div>
+                    <div class="app-card p-3.5 md:p-5 text-center md:text-left">
+                        <div class="md:flex md:items-center">
+                            <div class="w-10 h-10 md:w-12 md:h-12 mx-auto md:mx-0 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-400 flex items-center justify-center shadow-lg shadow-orange-200 md:mr-4">
+                                <i class="fas fa-truck text-white text-sm md:text-base"></i>
+                            </div>
+                            <div class="mt-2 md:mt-0">
+                                <p class="text-xl md:text-2xl font-extrabold text-gray-800 leading-none">{{ $activeOrders }}</p>
+                                <p class="text-[10px] md:text-xs text-gray-500 font-medium mt-1">Active</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="app-card p-3.5 md:p-5 text-center md:text-left">
+                        <div class="md:flex md:items-center">
+                            <div class="w-10 h-10 md:w-12 md:h-12 mx-auto md:mx-0 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-200 md:mr-4">
+                                <i class="fas fa-check-circle text-white text-sm md:text-base"></i>
+                            </div>
+                            <div class="mt-2 md:mt-0">
+                                <p class="text-xl md:text-2xl font-extrabold text-gray-800 leading-none">{{ $completedOrders }}</p>
+                                <p class="text-[10px] md:text-xs text-gray-500 font-medium mt-1">Completed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                        <div class="bg-blue-50 p-4 rounded-lg">
-                            <div class="flex items-center">
-                                <div class="p-3 bg-blue-100 rounded-full mr-4">
-                                    <i class="fas fa-shopping-bag text-blue-600"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-600">Total Orders</p>
-                                    <p class="text-xl font-bold text-gray-800">
-                                        {{ DB::table('orders')->where('user_id', $basic_info->user_id)->count() }}
-                                    </p>
-                                </div>
+                <!-- Quick Actions -->
+                <div class="mb-5 md:mb-8">
+                    <h2 class="text-sm md:text-base font-bold text-gray-800 mb-3 px-1">Quick Actions</h2>
+                    <div class="grid grid-cols-4 gap-3 md:gap-5">
+                        <a href="/customer/orders" class="app-card p-3 md:p-5 flex flex-col items-center hover:-translate-y-1 transition-transform">
+                            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full brand-gradient-soft flex items-center justify-center">
+                                <i class="fas fa-box-open text-brand text-sm md:text-lg"></i>
                             </div>
-                        </div>
-                        <div class="bg-orange-50 p-4 rounded-lg">
-                            <div class="flex items-center">
-                                <div class="p-3 bg-orange-100 rounded-full mr-4">
-                                    <i class="fas fa-truck text-orange-600"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-600">Active Orders</p>
-                                    <p class="text-xl font-bold text-gray-800">
-                                        {{ DB::table('orders')->where('user_id', $basic_info->user_id)->where('status', '!=', 'completed')->count() }}
-                                    </p>
-                                </div>
+                            <span class="text-[10px] md:text-sm font-semibold text-gray-700 mt-2 text-center">Orders</span>
+                        </a>
+                        <a href="/customer/wishlist" class="app-card p-3 md:p-5 flex flex-col items-center hover:-translate-y-1 transition-transform">
+                            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full brand-gradient-soft flex items-center justify-center relative">
+                                <i class="fas fa-heart text-brand text-sm md:text-lg"></i>
+                                @if ($wishlistCount > 0)
+                                    <span class="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 brand-gradient text-white text-[9px] font-bold rounded-full flex items-center justify-center">{{ $wishlistCount }}</span>
+                                @endif
                             </div>
-                        </div>
-                        <div class="bg-green-50 p-4 rounded-lg">
-                            <div class="flex items-center">
-                                <div class="p-3 bg-green-100 rounded-full mr-4">
-                                    <i class="fas fa-check-circle text-green-600"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-600">Completed</p>
-                                    <p class="text-xl font-bold text-gray-800">
-                                        {{ DB::table('orders')->where('user_id', $basic_info->user_id)->where('status', 'completed')->count() }}
-                                    </p>
-                                </div>
+                            <span class="text-[10px] md:text-sm font-semibold text-gray-700 mt-2 text-center">Wishlist</span>
+                        </a>
+                        <a href="/customer/addresses" class="app-card p-3 md:p-5 flex flex-col items-center hover:-translate-y-1 transition-transform">
+                            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full brand-gradient-soft flex items-center justify-center">
+                                <i class="fas fa-map-marker-alt text-brand text-sm md:text-lg"></i>
                             </div>
-                        </div>
+                            <span class="text-[10px] md:text-sm font-semibold text-gray-700 mt-2 text-center">Addresses</span>
+                        </a>
+                        <a href="/customer/profile" class="app-card p-3 md:p-5 flex flex-col items-center hover:-translate-y-1 transition-transform">
+                            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full brand-gradient-soft flex items-center justify-center">
+                                <i class="fas fa-user-cog text-brand text-sm md:text-lg"></i>
+                            </div>
+                            <span class="text-[10px] md:text-sm font-semibold text-gray-700 mt-2 text-center">Profile</span>
+                        </a>
                     </div>
                 </div>
 
                 <!-- My Orders Section -->
-                <div class="bg-white rounded-lg shadow p-6 mb-6">
+                <div class="app-card p-4 md:p-6">
                     <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-xl font-bold text-gray-800">My Orders</h2>
-                        {{-- <div class="relative">
-                            <select id="orderFilter" class="appearance-none bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="all">All Orders</option>
-                                <option value="processing">Processing</option>
-                                <option value="shipped">Shipped</option>
-                                <option value="delivered">Delivered</option>
-                                <option value="cancelled">Cancelled</option>
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                <i class="fas fa-chevron-down text-xs"></i>
-                            </div>
-                        </div> --}}
+                        <h2 class="text-base md:text-xl font-bold text-gray-800">My Orders</h2>
+                        <a href="/customer/orders" class="text-xs md:text-sm font-semibold text-brand hover:underline">View all <i class="fas fa-chevron-right text-[9px] ml-0.5"></i></a>
                     </div>
 
-                    <div class="overflow-x-auto w-full">
-                        <table class="min-w-[800px] md:min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+                    <!-- Desktop table -->
+                    <div class="hidden md:block overflow-x-auto w-full">
+                        <table class="min-w-full divide-y divide-pink-100">
+                            <thead>
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer sortable" data-column="id">
-                                        Order ID <i class="fas fa-sort ml-1"></i>
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer sortable" data-column="date">
-                                        Date <i class="fas fa-sort ml-1"></i>
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer sortable" data-column="items">
-                                        Items <i class="fas fa-sort ml-1"></i>
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer sortable" data-column="total">
-                                        Total <i class="fas fa-sort ml-1"></i>
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer sortable" data-column="status">
-                                        Status <i class="fas fa-sort ml-1"></i>
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Action
-                                    </th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Order ID</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Date</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Items</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Total</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200" id="ordersTableBody">
+                            <tbody class="divide-y divide-pink-50" id="ordersTableBody">
                                 <!-- Orders will be dynamically loaded here -->
                             </tbody>
                         </table>
                     </div>
 
-                    {{-- <div class="mt-4 flex justify-between items-center">
-                        <p class="text-sm text-gray-600">Showing <span class="font-medium" id="showingStart">1</span> to <span class="font-medium" id="showingEnd">4</span> of <span class="font-medium" id="totalOrders">24</span> orders</p>
-                        <div class="flex space-x-2" id="pagination">
-                            <!-- Pagination will be dynamically loaded here -->
-                        </div>
-                    </div> --}}
+                    <!-- Mobile order cards -->
+                    <div class="md:hidden space-y-3" id="ordersCardList">
+                        <!-- Orders will be dynamically loaded here -->
+                    </div>
                 </div>
-
-                <!-- Quick Links Section -->
-                <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                    <a href="#" class="bg-white rounded-lg shadow p-6 flex items-center hover:bg-gray-50">
-                        <div class="p-3 bg-purple-100 rounded-full mr-4">
-                            <i class="fas fa-heart text-purple-600"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-medium text-gray-800">Wishlist</h3>
-                            <p class="text-sm text-gray-600">5 items saved</p>
-                        </div>
-                    </a>
-                    <a href="#" class="bg-white rounded-lg shadow p-6 flex items-center hover:bg-gray-50">
-                        <div class="p-3 bg-green-100 rounded-full mr-4">
-                            <i class="fas fa-map-marker-alt text-green-600"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-medium text-gray-800">Addresses</h3>
-                            <p class="text-sm text-gray-600">2 saved addresses</p>
-                        </div>
-                    </a>
-                    <a href="#" class="bg-white rounded-lg shadow p-6 flex items-center hover:bg-gray-50">
-                        <div class="p-3 bg-blue-100 rounded-full mr-4">
-                            <i class="fas fa-credit-card text-blue-600"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-medium text-gray-800">Payment Methods</h3>
-                            <p class="text-sm text-gray-600">1 card saved</p>
-                        </div>
-                    </a>
-                    <a href="#" class="bg-white rounded-lg shadow p-6 flex items-center hover:bg-gray-50">
-                        <div class="p-3 bg-orange-100 rounded-full mr-4">
-                            <i class="fas fa-headset text-orange-600"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-medium text-gray-800">Support Center</h3>
-                            <p class="text-sm text-gray-600">Need help?</p>
-                        </div>
-                    </a>
-                </div> -->
-
 
             </main>
             <x-customer.mobile-nav />
         </div>
     </div>
 
-
-
-    <script src="../script/notification_dropdown.js"></script>
+    <!-- order data -->
     <script>
-
-        // Tracking modal functions
-        function openTrackingModal(orderId) {
-            document.getElementById('tracking-modal').classList.remove('hidden');
-            document.getElementById('tracking-id').textContent = '#' + orderId;
-
-            // Update timeline based on order status
-            // This would be dynamic in a real application
-            if (orderId === 'ORD-2023-002') {
-                // Mark shipped as active for this order
-                document.querySelectorAll('.timeline-step')[2].classList.add('active');
-            } else if (orderId === 'ORD-2023-003') {
-                // Mark all steps as active for delivered order
-                document.querySelectorAll('.timeline-step').forEach(step => {
-                    step.classList.add('active');
-                });
-            }
-        }
-
-        function closeTrackingModal() {
-            document.getElementById('tracking-modal').classList.add('hidden');
-            // Reset timeline when closing
-            document.querySelectorAll('.timeline-step').forEach((step, index) => {
-                if (index > 1) step.classList.remove('active');
-            });
-        }
-
-        // Notification system (example)
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `notification fixed top-4 right-4 p-4 rounded-lg shadow-lg bg-white border-l-4 ${type === 'info' ? 'border-blue-500' : 'border-green-500'}`;
-            notification.innerHTML = `
-                <div class="flex items-start">
-                    <div class="flex-shrink-0">
-                        <i class="fas ${type === 'info' ? 'fa-info-circle text-blue-500' : 'fa-check-circle text-green-500'}"></i>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium text-gray-900">${message}</p>
-                    </div>
-                    <div class="ml-4 pl-3 flex-shrink-0 flex">
-                        <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-gray-400 hover:text-gray-500 focus:outline-none">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(notification);
-
-            // Auto remove after 5 seconds
-            setTimeout(() => {
-                notification.remove();
-            }, 5000);
-        }
-
-        // Example: Show welcome notification
-        setTimeout(() => {
-            showNotification('Welcome back to your dashboard! Check your recent orders.', 'info');
-        }, 1000);
-    </script>
-
-    <!-- Notification  -->
-    <script src="../script/customer_notification.js"></script>
-
-    <!-- order data  -->
-     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const ordersTableBody = document.getElementById("ordersTableBody");
-            const filter = document.getElementById("orderFilter");
+            const ordersCardList = document.getElementById("ordersCardList");
+
+            function getStatusColor(status) {
+                switch (status) {
+                    case 'processing': return 'bg-amber-100 text-amber-700';
+                    case 'shipped': return 'bg-blue-100 text-blue-700';
+                    case 'delivered': return 'bg-emerald-100 text-emerald-700';
+                    case 'cancelled': return 'bg-red-100 text-red-700';
+                    default: return 'bg-pink-100 text-[#E85D85]';
+                }
+            }
 
             function loadOrders(status = 'all') {
                 fetch(`/customer/get_orders?status=${status}`)
                     .then(res => res.json())
                     .then(data => {
                         ordersTableBody.innerHTML = "";
+                        ordersCardList.innerHTML = "";
+
                         if (!data.length) {
-                            ordersTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">No orders found.</td></tr>`;
+                            const emptyHtml = `
+                                <div class="text-center py-10">
+                                    <div class="w-16 h-16 mx-auto rounded-full brand-gradient-soft flex items-center justify-center mb-3">
+                                        <i class="fas fa-box-open text-2xl" style="color:#E85D85"></i>
+                                    </div>
+                                    <p class="text-gray-500 text-sm font-medium">No orders yet</p>
+                                    <a href="/" class="inline-block mt-3 px-5 py-2 rounded-full text-white text-sm font-semibold brand-gradient brand-shadow">Start Shopping</a>
+                                </div>`;
+                            ordersTableBody.innerHTML = `<tr><td colspan="6">${emptyHtml}</td></tr>`;
+                            ordersCardList.innerHTML = emptyHtml;
                             return;
                         }
 
-                        data.forEach(order => {
+                        data.slice(0, 6).forEach(order => {
+                            const statusLabel = order.fulfillment ? order.fulfillment : 'Order Placed';
+                            const statusCls = getStatusColor(order.fulfillment);
+
+                            // Desktop row
                             const row = document.createElement("tr");
+                            row.className = "hover:bg-pink-50/40 transition-colors";
                             row.innerHTML = `
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">ORD-${order.order_id}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${order.order_date}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${order.quantity}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Rs. ${order.total_amount}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <span class="inline-flex px-2 py-1 rounded text-xs font-semibold ${
-                                        getStatusColor(order.fulfillment)
-                                    }">${order.fulfillment ? order.fulfillment : 'Order Placed'}</span>
+                                <td class="px-4 py-4 whitespace-nowrap text-sm font-semibold text-gray-800">ORD-${order.order_id}</td>
+                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">${order.order_date}</td>
+                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">${order.quantity}</td>
+                                <td class="px-4 py-4 whitespace-nowrap text-sm font-semibold text-gray-800">Rs. ${order.total_amount}</td>
+                                <td class="px-4 py-4 whitespace-nowrap text-sm">
+                                    <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-semibold ${statusCls}">${statusLabel}</span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 hover:underline cursor-pointer"><a href="/customer/orders">View<a/></td>
+                                <td class="px-4 py-4 whitespace-nowrap text-sm"><a href="/customer/orders" class="font-semibold hover:underline" style="color:#E85D85">View</a></td>
                             `;
                             ordersTableBody.appendChild(row);
-                        });
 
-                        if (document.getElementById("showingStart")) document.getElementById("showingStart").textContent = 1;
-                        if (document.getElementById("showingEnd")) document.getElementById("showingEnd").textContent = data.length;
-                        if (document.getElementById("totalOrders")) document.getElementById("totalOrders").textContent = data.length;
+                            // Mobile card
+                            const card = document.createElement("a");
+                            card.href = "/customer/orders";
+                            card.className = "block rounded-2xl border border-pink-100 bg-white p-4 active:scale-[0.98] transition-transform";
+                            card.innerHTML = `
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center min-w-0">
+                                        <div class="w-10 h-10 rounded-xl brand-gradient-soft flex items-center justify-center mr-3 flex-shrink-0">
+                                            <i class="fas fa-box text-sm" style="color:#E85D85"></i>
+                                        </div>
+                                        <div class="min-w-0">
+                                            <p class="text-sm font-bold text-gray-800 truncate">ORD-${order.order_id}</p>
+                                            <p class="text-[11px] text-gray-400">${order.order_date} · ${order.quantity} item(s)</p>
+                                        </div>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-gray-300 text-xs ml-2"></i>
+                                </div>
+                                <div class="flex items-center justify-between mt-3 pt-3 border-t border-pink-50">
+                                    <span class="inline-flex px-2.5 py-1 rounded-full text-[11px] font-semibold ${statusCls}">${statusLabel}</span>
+                                    <span class="text-sm font-extrabold text-gray-800">Rs. ${order.total_amount}</span>
+                                </div>
+                            `;
+                            ordersCardList.appendChild(card);
+                        });
                     });
             }
 
-            function getStatusColor(status) {
-                switch (status) {
-                    case 'processing': return 'bg-yellow-100 text-yellow-800';
-                    case 'shipped': return 'bg-blue-100 text-blue-800';
-                    case 'delivered': return 'bg-green-100 text-green-800';
-                    case 'cancelled': return 'bg-red-100 text-red-800';
-                    default: return 'bg-gray-100 text-gray-800';
-                }
-            }
-
-            // Initial load
             loadOrders();
-
-            // Filter handler
-            if (filter) {
-                filter.addEventListener("change", () => {
-                    loadOrders(filter.value);
-                });
-            }
         });
     </script>
 </body>

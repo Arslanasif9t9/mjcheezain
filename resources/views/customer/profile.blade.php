@@ -4,32 +4,15 @@
     <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile | Multivendor Platform</title>
-    <!-- Tailwind CSS  -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- font-awesome  -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google font  -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
+    <title>My Profile | MJ Cheezain</title>
+    <x-customer.theme />
     <style>
-        /* Internal CSS */
-        .sidebar-item.active {
-            background-color: #f3f4f6;
-            border-right: 3px solid #3b82f6;
-            color: #3b82f6;
-        }
         .profile-card {
             transition: all 0.3s ease;
         }
         .profile-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px -5px rgba(232, 93, 133, 0.12);
         }
         
         .stats-card {
@@ -59,110 +42,24 @@
         }
     </style>
 </head>
-<body class="bg-gray-50">
-    <div class="flex h-screen overflow-hidden">
+<body>
+    <div class="flex min-h-screen">
         <!-- Sidebar -->
         <x-customer.sidebar :basic_info="$basic_info"/>
-        
+
         <!-- Main Content -->
-        <div class="flex flex-col flex-1 overflow-hidden">
-            <!-- Top Navigation --
-            <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
-                <!-- Left side - Mobile menu and title -->
-                <div class="flex items-center">
-                    <button class="hidden mr-4 text-gray-500 focus:outline-none">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <h1 class="text-xl font-semibold text-gray-800">Profile</h1>
-                </div>
+        <div class="flex flex-col flex-1 min-w-0">
+            <x-customer.header title="My Profile" subtitle="Your account details and preferences" :basic_info="$basic_info" />
 
-                <!-- Center - Search bar -->
-                <div class="hidden md:flex flex-1 max-w-md mx-4">
-                    <div class="relative w-full">
-                        <input type="text" placeholder="Search..."
-                            class="w-full py-2 pl-4 pr-10 text-sm bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">
-                        <button class="absolute right-3 top-2 text-gray-500">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Right side - Icons and user menu -->
-                <div class="hidden md:flex items-center space-x-4">
-                    <!-- Notification dropdown -->
-                    <div class="relative">
-                        <button id="notification-button"
-                            class="p-2 text-gray-500 rounded-full hover:bg-gray-100 relative focus:outline-none">
-                            <i class="fas fa-bell"></i>
-                            <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-                        </button>
-
-                        <!-- Notification dropdown menu -->
-                        <div id="notification-dropdown"
-                            class="hidden absolute right-0 mt-2 w-72 bg-white rounded-md shadow-lg overflow-hidden z-10 border border-gray-200">
-                            <div class="px-4 py-3 border-b border-gray-200 bg-gray-50">
-                                <h3 class="text-sm font-medium text-gray-700">Notifications</h3>
-                            </div>
-                            <div class="divide-y divide-gray-100">
-                                <a href="#" class="block px-4 py-3 hover:bg-gray-50">
-                                    <div class="text-sm font-medium text-gray-800">New message</div>
-                                    <div class="text-xs text-gray-500 mt-1 truncate">You received a new message from
-                                        Sarah</div>
-                                </a>
-                                <a href="#" class="block px-4 py-3 hover:bg-gray-50">
-                                    <div class="text-sm font-medium text-gray-800">System update</div>
-                                    <div class="text-xs text-gray-500 mt-1 truncate">Your system will be updated tonight
-                                    </div>
-                                </a>
-                                <a href="#" class="block px-4 py-3 hover:bg-gray-50">
-                                    <div class="text-sm font-medium text-gray-800">Payment received</div>
-                                    <div class="text-xs text-gray-500 mt-1 truncate">Your payment of $29.99 has been
-                                        processed</div>
-                                </a>
-                            </div>
-                            <div class="px-4 py-2 border-t border-gray-200 bg-gray-50 text-center">
-                                <a href="./notifications.php"
-                                    class="text-xs font-medium text-blue-600 hover:text-blue-800">See all
-                                    notifications</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- User dropdown -->
-                    {{-- <div class="relative">
-                        <button id="user-menu-button" class="flex items-center focus:outline-none">
-                            <div class="mr-3 text-right hidden sm:block">
-                                <span class="block text-sm font-medium text-gray-700"><?= $basic_info['first_name'] . " " . $basic_info['last_name']?></span>
-                                <span class="block text-xs text-gray-500">Admin</span>
-                            </div>
-                            <div class="relative">
-                                <img class="w-8 h-8 rounded-full" src="<?= $basic_info['profile_image']?>"
-                                    alt="User">
-                            </div>
-                        </button>
-                    </div> --}}
-                </div>
-            </header>
-
-
-            
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-y-auto p-6 pb-24 md:pb-6">
+            <main class="flex-1 p-4 md:p-6 lg:p-8 pb-28 md:pb-8 page-enter">
                 <!-- Profile Header -->
-                <div class="profile-card bg-white rounded-lg shadow overflow-hidden mb-6">
-                    <div class="bg-gradient-to-r from-blue-500 to-blue-700 h-48 relative" id="cover-container">
+                <div class="profile-card app-card overflow-hidden mb-5 md:mb-6 -mt-2 md:mt-0 relative z-10">
+                    <div class="brand-gradient h-36 md:h-48 relative" id="cover-container">
                         {{-- @if ($bannerImage) --}}
-                        <img 
-                            src="{{ asset('storage/customer/banner/' . $bannerImage) }}" 
-                            class="
-                                w-full 
-                                h-48
-                                object-cover 
-                                object-center
-                                rounded-t-xl
-                                shadow-md
-                                border-b border-gray-200
-                            "
+                        <img
+                            src="{{ asset('storage/customer/banner/' . $bannerImage) }}"
+                            class="w-full h-36 md:h-48 object-cover object-center rounded-t-xl shadow-md border-b border-pink-100"
                             id="cover-image"
                         >
                         {{-- @endif --}}
@@ -203,7 +100,7 @@
                                         id="profile-image">
                                     
                                     <!-- Camera Icon for Profile Picture -->
-                                    <button class="absolute bottom-2 right-2 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full"
+                                    <button class="absolute bottom-2 right-2 brand-gradient brand-shadow text-white p-2 rounded-full"
                                             id="profile-camera-btn">
                                         <i class="fas fa-camera text-sm"></i>
                                     </button>
@@ -233,12 +130,12 @@
                                 
                                 <div class="ml-0 sm:ml-6 mt-4 sm:mt-0 mb-4">
                                     <h2 class="text-2xl font-bold text-gray-900">{{ $basic_info->first_name }} {{ $basic_info->last_name }}</h2>
-                                    <p class="text-gray-600">Gold Member</p>
+                                    <p class="text-brand font-semibold text-sm"><i class="fas fa-crown text-xs mr-1"></i>Gold Member</p>
                                 </div>
                             </div>
                             
                             <div class="mt-4 md:mt-0 w-full md:w-auto text-center md:text-right">
-                                <a href="/customer/profile/edit" class="inline-block w-full md:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 focus:outline-none">
+                                <a href="/customer/profile/edit" class="inline-block w-full md:w-auto px-5 py-2.5 brand-gradient brand-shadow text-white rounded-full text-sm font-semibold hover:opacity-90 focus:outline-none">
                                     <i class="fas fa-user-edit mr-2"></i>Edit Profile
                                 </a>
                             </div>
@@ -551,30 +448,30 @@
                 </script>
                 
                 <!-- Stats Overview -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                    <div class="stats-card bg-white rounded-lg shadow p-4 text-center">
-                        <div class="text-2xl font-bold text-blue-600 mb-1">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-5 md:mb-6">
+                    <div class="stats-card app-card p-3.5 md:p-4 text-center">
+                        <div class="text-xl md:text-2xl font-extrabold text-brand mb-0.5">
                             {{ DB::table('orders')->where('user_id', $basic_info->user_id)->count() }}
                         </div>
-                        <p class="text-sm text-gray-600">Total Orders</p>
+                        <p class="text-[11px] md:text-sm text-gray-500 font-medium">Total Orders</p>
                     </div>
-                    <div class="stats-card bg-white rounded-lg shadow p-4 text-center">
-                        <div class="text-2xl font-bold text-green-600 mb-1">
+                    <div class="stats-card app-card p-3.5 md:p-4 text-center">
+                        <div class="text-xl md:text-2xl font-extrabold text-emerald-500 mb-0.5">
                             {{ DB::table('orders')->where('user_id', $basic_info->user_id)->where('status', 'completed')->count() }}
                         </div>
-                        <p class="text-sm text-gray-600">Completed</p>
+                        <p class="text-[11px] md:text-sm text-gray-500 font-medium">Completed</p>
                     </div>
-                    <div class="stats-card bg-white rounded-lg shadow p-4 text-center">
-                        <div class="text-2xl font-bold text-purple-600 mb-1">
+                    <div class="stats-card app-card p-3.5 md:p-4 text-center">
+                        <div class="text-xl md:text-2xl font-extrabold text-purple-500 mb-0.5">
                             {{ DB::table('favorites')->where('user_id', $basic_info->user_id)->count() }}
                         </div>
-                        <p class="text-sm text-gray-600">Wishlist Items</p>
+                        <p class="text-[11px] md:text-sm text-gray-500 font-medium">Wishlist Items</p>
                     </div>
-                    <div class="stats-card bg-white rounded-lg shadow p-4 text-center">
-                        <div class="text-2xl font-bold text-yellow-600 mb-1">
+                    <div class="stats-card app-card p-3.5 md:p-4 text-center">
+                        <div class="text-xl md:text-2xl font-extrabold text-amber-500 mb-0.5">
                             {{ DB::table('orders')->where('user_id', $basic_info->user_id)->where('status', '!=', 'completed')->count() }}
                         </div>
-                        <p class="text-sm text-gray-600">Active Orders</p>
+                        <p class="text-[11px] md:text-sm text-gray-500 font-medium">Active Orders</p>
                     </div>
                 </div>
                 
@@ -583,10 +480,10 @@
                     <!-- Left Column -->
                     <div class="lg:col-span-2">
                         <!-- About Section -->
-                        <div class="profile-card bg-white rounded-lg shadow p-6 mb-6">
+                        <div class="profile-card app-card p-6 mb-6">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-lg font-medium text-gray-900">About</h3>
-                                <button class="text-blue-600 hover:text-blue-800 focus:outline-none">
+                                <button class="text-brand hover:opacity-70 focus:outline-none">
                                     <a href="/customer/profile/edit"><i class="fas fa-edit"></i></a>
                                 </button>
                             </div>
@@ -617,7 +514,7 @@
                         </div>
 
                         <!-- Saved Addresses Section (Theme matching home screen) -->
-                        <div class="profile-card bg-white rounded-lg shadow p-6 mb-6">
+                        <div class="profile-card app-card p-6 mb-6">
                             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                                 <div class="flex items-center space-x-3">
                                     <div class="bg-pink-100 p-2.5 rounded-lg text-[#FF7DA0]">
@@ -635,10 +532,10 @@
                         </div>
                         
                         <!-- Recent Activity -->
-                        {{-- <div class="profile-card bg-white rounded-lg shadow p-6">
+                        {{-- <div class="profile-card app-card p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-lg font-medium text-gray-900">Recent Activity</h3>
-                                <button class="text-blue-600 hover:text-blue-800 focus:outline-none">
+                                <button class="text-brand hover:opacity-70 focus:outline-none">
                                     <i class="fas fa-ellipsis-h"></i>
                                 </button>
                             </div>
@@ -717,7 +614,7 @@
                     <!-- Right Column -->
                     <div>
                         <!-- Membership Status -->
-                        {{-- <div class="profile-card bg-white rounded-lg shadow p-6 mb-6">
+                        {{-- <div class="profile-card app-card p-6 mb-6">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-lg font-medium text-gray-900">Membership Status</h3>
                                 <span class="px-2 py-1 text-xs font-semibold bg-yellow-100 text-yellow-800 rounded-full badge">
@@ -758,10 +655,10 @@
                         </div> --}}
                         
                         <!-- Recent Reviews -->
-                        <div class="profile-card bg-white rounded-lg shadow p-6">
+                        <div class="profile-card app-card p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-lg font-medium text-gray-900">Recent Reviews</h3>
-                                {{-- <button class="text-blue-600 hover:text-blue-800 focus:outline-none">
+                                {{-- <button class="text-brand hover:opacity-70 focus:outline-none">
                                     <i class="fas fa-ellipsis-h"></i>
                                 </button> --}}
                             </div>
@@ -816,13 +713,13 @@
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             notification.className = `notification fixed top-4 right-4 p-4 rounded-lg shadow-lg bg-white border-l-4 ${
-                type === 'info' ? 'border-blue-500' : 'border-green-500'
+                type === 'info' ? 'border-[#FF7DA0]' : 'border-green-500'
             } z-50`;
             notification.innerHTML = `
                 <div class="flex items-start">
                     <div class="flex-shrink-0">
                         <i class="fas ${
-                            type === 'info' ? 'fa-info-circle text-blue-500' : 'fa-check-circle text-green-500'
+                            type === 'info' ? 'fa-info-circle text-[#FF7DA0]' : 'fa-check-circle text-green-500'
                         }"></i>
                     </div>
                     <div class="ml-3">
