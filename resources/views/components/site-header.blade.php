@@ -224,14 +224,14 @@
     </header>
 
     <!-- Backdrop Overlay for Mobile Drawer (close X sits on the overlay) -->
-    <div id="mobile-overlay" class="hidden fixed inset-0 bg-black/50 z-[98]" onclick="toggleMobileMenu()">
+    <div id="mobile-overlay" class="hidden fixed inset-0 bg-black/50 z-[10000]" onclick="toggleMobileMenu()">
         <button class="absolute top-4 left-[17rem] text-white p-2 focus:outline-none" aria-label="Close Menu">
             <i class="fa-solid fa-xmark text-3xl"></i>
         </button>
     </div>
 
     <!-- Mobile Drawer Menu -->
-    <div id="mobile-drawer" class="fixed inset-y-0 left-0 w-64 bg-white z-[99] shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden border-r border-gray-100 flex flex-col justify-between">
+    <div id="mobile-drawer" class="fixed inset-y-0 left-0 w-64 bg-white z-[10001] shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden border-r border-gray-100 flex flex-col justify-between">
         <div class="overflow-y-auto flex-1">
             <!-- Drawer Header (gradient: Sign in top-right + Browse Brand) -->
             <div class="p-4 pb-5" style="background: linear-gradient(to right, #FF7DA0, #FFC275);">
