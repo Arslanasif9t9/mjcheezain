@@ -8,6 +8,15 @@
 
 ## ✅ Completed
 
+### 2026-07-15 (batch 6) — site-wide blue purge (3 parallel agents) — commit `d2f25db`
+- **Vendor nav everywhere**: `<x-vendor.mobile-nav />` added to all 10 standalone vendor pages; global-nav now shows vendor tab bar on EVERY page (incl. home) for vendors, customer bar everywhere for customers.
+- **Customer notifications blue icons**: DB-stored `icon_color`/`dot_color` classes are brandized in the view via a `$brandizeClasses` str_replace closure (DB values found: `bg-blue-100 text-blue-600`, `bg-blue-500`); JS dot toggle uses `bg-[#FF7DA0]` now. Shipped badges → purple across customer pages.
+- **Public sweep** (agent): product-auto (19 fixes, primary-blue token), coming-soon, checkout KNET tile, guest-menu, logout-modal, alert component, privacy-policy socials, autoparts info boxes, fav.js, style.css.
+- **Vendor sweep** (agent): orders status styles, withdraw/balance primary token scales → pink, notifications sidebar accents, new_product GST-calc + rgba(59,130,246) tints, returns/replacements status classes → purple/pink, recent-sold shipped badge purple.
+- **Auth popup loader fix**: page-loader click/submit handlers now defer via setTimeout(0) and check `e.defaultPrevented` AFTER all handlers — no more 12s stuck loader when the auth popup intercepts /login-user links. Failsafe 12s → 8s.
+- **Drawer wordmark**: logo image removed; serif italic "MJ Cheezain" + BROWSE kicker + underline accent.
+- Verified: compile OK, node checks OK, customer + vendor renders 200, vendor nav present on home & panel pages. NO blue/indigo remains anywhere except sanctioned aliases (umart-blue/primary-blue both = #E85D85).
+
 ### 2026-07-15 (batch 5) — Vendor panel brand redesign — commit `4f846ab`
 - **Sidebar** (`components/vendor/sidebar.blade.php`): dark gray-900/red → light brand (gradient "MJ Vendor Center" header, gradient-soft profile chip, `.v-nav-active` brand active state, View Site gradient button). z-[10001] so mobile drawer sits above bottom nav. Same props/IDs preserved (btn-side, aside, navbarToggle, setActive, noti-num).
 - **New vendor mobile bottom nav** (`components/vendor/mobile-nav.blade.php`): 5 tabs (Dashboard/Products/Orders incl. returns+replacements/Withdraw/Profile), served via `customer/global-nav` (vendor branch, only on vendor/* paths).
