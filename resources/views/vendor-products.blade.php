@@ -72,119 +72,58 @@
         <!-- Products Section - List View -->
         <section id="vendor-products-section" class="py-8">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-3xl font-bold text-gray-900">All Products ({{ $products->count() }})</h2>
-                <div class="flex space-x-2">
-                    {{-- <button id="grid-view-btn" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition duration-300">
-                        <i class="fas fa-th-large mr-2"></i> Grid
-                    </button> --}}
-                    <button id="list-view-btn" class="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-700 transition duration-300">
-                        <i class="fas fa-list mr-2"></i> List
-                    </button>
-                </div>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">All Products ({{ $products->count() }})</h2>
             </div>
-            
+
             @if($products->count() > 0)
-                <!-- Products List -->
-                <div id="vendor-product-list" class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <!-- Products Grid (ss10-style cards, same size as every other section) -->
+                <div id="vendor-product-list" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
                     @foreach($products as $product)
-                        <div class="product-card-list p-6 hover:bg-gray-50 transition duration-300">
-                            <div class="flex flex-col md:flex-row md:items-center">
-                                <!-- Product Image -->
-                                <div class="product-image-container mb-4 md:mb-0 md:mr-6">
-                                    <div class="aspect-w-4">
-                                        <div class="aspect-h-3">
-                                            @if($product->primary_image)
-                                                <img src="{{ asset('storage/vendor/products/images/' . $product->primary_image) }}" 
-                                                     alt="{{ $product->name }}" 
-                                                     class="w-full h-full object-cover rounded-lg">
-                                            @else
-                                                <img src="https://via.placeholder.com/300x300/F3F4F6/6B7280?text=No+Image" 
-                                                     alt="{{ $product->name }}" 
-                                                     class="w-full h-full object-cover rounded-lg">
-                                            @endif
-                                        </div>
+                        @php
+                            $cardPrice = $product->selling_price * 1.17;
+                            $cardMrp = (float) ($product->mrp ?? $product->original_price ?? 0);
+                            $cardHasDiscount = $cardMrp && $cardMrp > $cardPrice;
+                            $cardDiscountPct = $cardHasDiscount ? round((($cardMrp - $cardPrice) / $cardMrp) * 100) : 0;
+                        @endphp
+                        <div class="product-card-ss10 bg-white rounded-2xl overflow-hidden group flex flex-col relative w-full" style="box-shadow: 0 6px 20px rgba(17, 24, 39, 0.08);">
+                            @if($cardHasDiscount)
+                                <div class="absolute top-2.5 left-2.5 z-10 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-bold text-white" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 3px 10px rgba(255,125,160,.4);">-{{ $cardDiscountPct }}%</div>
+                            @endif
+                            <a href="/product/{{ $product->id }}" class="no-underline flex flex-col flex-grow">
+                                <div class="aspect-[16/10] bg-gray-50 overflow-hidden">
+                                    <img src="{{ $product->primary_image ? asset('storage/vendor/products/images/' . $product->primary_image) : asset('img/default_img.png') }}"
+                                         alt="{{ $product->name }}" loading="lazy"
+                                         class="w-full h-full object-cover transition duration-500 ease-in-out group-hover:scale-105">
+                                </div>
+                                <div class="px-3.5 pt-3 sm:px-4 sm:pt-3.5">
+                                    <h3 class="text-[15px] sm:text-lg font-bold text-gray-900 truncate leading-snug m-0 group-hover:text-[#E85D85] transition-colors">{{ $product->name }}</h3>
+                                    <p class="flex items-center gap-1 text-xs sm:text-sm text-gray-400 mt-1 mb-0 truncate">
+                                        <i class="fas fa-map-marker-alt text-[#FF7DA0] text-[11px]"></i>
+                                        <span class="truncate">{{ $product->category ?? 'MJ Cheezain' }}</span>
+                                        <span class="flex-shrink-0">&nbsp;•&nbsp;<span class="text-yellow-400">★</span> 4.9</span>
+                                    </p>
+                                    <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
+                                        <span class="text-base sm:text-lg font-extrabold text-gray-900 whitespace-nowrap">Rs. {{ number_format($cardPrice, 0) }}</span>
+                                        @if($cardHasDiscount)
+                                            <span class="text-[11px] sm:text-xs text-gray-400 line-through whitespace-nowrap">Rs. {{ number_format($cardMrp, 0) }}</span>
+                                        @endif
                                     </div>
                                 </div>
-
-                                <!-- Product Details -->
-                                <div class="flex-1">
-                                    <div class="flex flex-col md:flex-row md:items-start justify-between mb-4">
-                                        <div class="md:mr-4">
-                                            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $product->name }}</h3>
-                                            <p class="text-gray-600 mb-3">{{ Str::limit($product->description, 150) }}</p>
-                                            
-                                            <!-- Product Tags/Categories -->
-                                            @if($product->categories && $product->categories->count() > 0)
-                                                <div class="flex flex-wrap gap-2 mb-3">
-                                                    @foreach($product->categories->take(3) as $category)
-                                                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-                                                            {{ $category->name }}
-                                                        </span>
-                                                    @endforeach
-                                                    @if($product->categories->count() > 3)
-                                                        <span class="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">
-                                                            +{{ $product->categories->count() - 3 }} more
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        </div>
-                                        
-                                        <!-- Price and Rating -->
-                                        <div class="flex flex-col items-start md:items-end">
-                                            <div class="mb-2">
-                                                <span class="text-2xl font-extrabold text-gray-900">${{ number_format($product->selling_price, 2) }}</span>
-                                                @if($product->original_price && $product->original_price > $product->selling_price)
-                                                    <span class="text-sm text-gray-500 line-through ml-2">${{ number_format($product->original_price, 2) }}</span>
-                                                    <span class="text-sm font-medium text-green-600 ml-2">
-                                                        {{ round((($product->original_price - $product->selling_price) / $product->original_price) * 100) }}% OFF
-                                                    </span>
-                                                @endif
-                                            </div>
-                                            <div class="flex items-center mb-4 md:mb-0">
-                                                <div class="flex text-yellow-400 mr-2">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star-half-alt"></i>
-                                                </div>
-                                                <span class="text-gray-600">4.5 (128 reviews)</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Product Actions -->
-                                    <div class="flex flex-col md:flex-row md:items-center justify-between pt-4 border-t border-gray-100">
-                                        <div class="flex items-center mb-4 md:mb-0">
-                                            <div class="flex items-center mr-6">
-                                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
-                                                <span class="text-sm text-gray-600">In Stock</span>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <i class="fas fa-shipping-fast text-blue-500 mr-2"></i>
-                                                <span class="text-sm text-gray-600">Free Shipping</span>
-                                            </div>
-                                        </div>
-                                        <div class="flex space-x-3">
-                                            {{-- <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition duration-300 flex items-center">
-                                                <i class="far fa-heart mr-2"></i> Wishlist
-                                            </button> --}}
-                                            <a href="/product/{{ $product->id }}">
-                                                <button class="px-6 py-2 text-sm font-semibold text-white bg-gray-900 rounded-lg hover:bg-gray-700 transition duration-300 shadow-md flex items-center">
-                                                    <i class="fas fa-eye mr-2"></i> View Details
-                                                </button>
-                                            </a>
-                                            {{-- <button class="px-6 py-2 text-sm font-semibold text-white bg-orange-500 rounded-lg hover:bg-orange-600 transition duration-300 shadow-md flex items-center">
-                                                <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
-                                            </button> --}}
-                                        </div>
-                                    </div>
-                                </div>
+                            </a>
+                            <div class="px-3.5 pb-3.5 pt-2.5 sm:px-4 sm:pb-4 mt-auto">
+                                <button onclick="window.location.href='/product/{{ $product->id }}'"
+                                        class="w-full py-2 sm:py-2.5 text-[11px] sm:text-sm font-semibold text-white rounded-full transition duration-200 hover:opacity-90 active:scale-[0.98]"
+                                        style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 4px 12px rgba(255, 125, 160, 0.35);">
+                                    Quick View
+                                </button>
                             </div>
                         </div>
                     @endforeach
                 </div>
+                <style>
+                    .product-card-ss10{transition:transform .25s ease, box-shadow .25s ease;}
+                    .product-card-ss10:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(232,93,133,.16)!important;}
+                </style>
 
                 <!-- Pagination (if applicable) -->
                 

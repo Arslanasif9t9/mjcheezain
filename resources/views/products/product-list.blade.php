@@ -1,3 +1,4 @@
+<script src="{{ asset('js/product-card.js') }}?v={{ time() }}"></script>
 <style>
     .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
     .scrollbar-none::-webkit-scrollbar { display: none; }
@@ -39,13 +40,13 @@
             <!-- category chips injected by JS -->
         </div>
 
-        <!-- Products Masonry (ss4-style: staggered columns, cards of varying heights) -->
-        <div id="product-list" class="columns-2 sm:columns-3 lg:columns-4 xl:columns-5 gap-2 sm:gap-4">
-            <!-- Skeletons shown while loading (staggered heights to match the masonry feel) -->
-            <div class="skeleton-shimmer rounded-lg h-56 mb-2 break-inside-avoid"></div>
-            <div class="skeleton-shimmer rounded-lg h-40 mb-2 break-inside-avoid"></div>
-            <div class="skeleton-shimmer rounded-lg h-48 mb-2 break-inside-avoid hidden sm:block"></div>
-            <div class="skeleton-shimmer rounded-lg h-64 mb-2 break-inside-avoid hidden lg:block"></div>
+        <!-- Products Grid (ss10-style: uniform cards, same size as every other section) -->
+        <div id="product-list" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
+            <!-- Skeletons shown while loading -->
+            <div class="skeleton-shimmer rounded-2xl h-64"></div>
+            <div class="skeleton-shimmer rounded-2xl h-64"></div>
+            <div class="skeleton-shimmer rounded-2xl h-64 hidden sm:block"></div>
+            <div class="skeleton-shimmer rounded-2xl h-64 hidden lg:block"></div>
         </div>
 
         <!-- Empty state -->
@@ -113,51 +114,15 @@
 
         const fragment = document.createDocumentFragment();
 
-        // Varying image ratios so columns stagger up/down like ss4 (not perfect rows)
-        const RATIOS = ['aspect-[3/4]', 'aspect-square', 'aspect-[4/5]', 'aspect-[3/3.9]', 'aspect-[5/4]', 'aspect-[3/4.4]'];
-
-        products.forEach((product, index) => {
+        products.forEach((product) => {
             const productImages = allListingImages[product.id];
             const hasImage = productImages && productImages.length > 0 && productImages[0].image_path;
             const imgUrl = hasImage
                 ? `/storage/vendor/products/images/${productImages[0].image_path}`
                 : '/img/default_img.png';
 
-            // Same price maths as the single-product page (selling price + 17% GST)
-            const price = product.selling_price * 1.17;
-            const hasDiscount = product.mrp && parseFloat(product.mrp) > price;
-            const discountPct = hasDiscount ? Math.round(((product.mrp - price) / product.mrp) * 100) : 0;
-
-            const ratio = RATIOS[index % RATIOS.length];
-
-            const card = document.createElement('a');
-            card.href = `/product/${product.id}`;
-            card.className = 'listing-card bg-white border border-gray-100 rounded-lg overflow-hidden no-underline block mb-2 sm:mb-4 break-inside-avoid';
-
-            card.innerHTML = `
-                <!-- Edge-to-edge image with a varying ratio for the masonry stagger -->
-                <div class="${ratio} bg-gray-50 overflow-hidden">
-                    <img src="${imgUrl}" alt="${product.name}" loading="lazy"
-                         class="w-full h-full object-cover transition duration-500 ease-in-out hover:scale-105">
-                </div>
-                <div class="px-2 pt-2 pb-2.5 sm:px-3 sm:pt-2.5 sm:pb-3">
-                    <!-- Name: two lines, left aligned -->
-                    <h3 class="text-[13px] sm:text-sm text-gray-800 leading-snug line-clamp-2 min-h-[2.4em] m-0">${product.name}</h3>
-
-                    <!-- Bold price row -->
-                    <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
-                        <span class="text-base sm:text-lg font-extrabold text-gray-900 whitespace-nowrap">Rs. ${price.toFixed(0)}</span>
-                        ${hasDiscount ? `<span class="text-[11px] sm:text-xs text-gray-400 line-through whitespace-nowrap">Rs. ${parseFloat(product.mrp).toFixed(0)}</span>` : ''}
-                    </div>
-
-                    <!-- Promo line (ss4-style red/pink accent) -->
-                    ${hasDiscount
-                        ? `<p class="text-[11px] sm:text-xs font-semibold mt-1 m-0" style="color: #E85D85;">🔥 ${discountPct}% OFF</p>`
-                        : `<p class="text-[11px] sm:text-xs text-gray-400 mt-1 m-0"><span class="text-yellow-400">★</span> 4.9 rated</p>`
-                    }
-                </div>
-            `;
-            fragment.appendChild(card);
+            // ss10-style shared card (public/js/product-card.js)
+            fragment.appendChild(window.buildProductCard(product, imgUrl, 'grid'));
         });
 
         grid.innerHTML = '';

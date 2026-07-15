@@ -142,57 +142,8 @@
                         ? `/storage/vendor/products/images/${productImages[0].image_path}` 
                         : (product.mock_image_url || `/img/default_img.png`);
 
-                    const card = document.createElement('div');
-                    
-                    // Card styling
-                    card.className = 'card-hover-glow bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-300 w-[47vw] sm:w-56 md:w-64 flex-shrink-0 snap-start flex flex-col justify-between relative';
-                    
-                    // Product Card HTML Structure
-                    card.innerHTML = `
-                        <!-- Wishlist Button -->
-                        <div class="absolute top-2.5 right-2.5 z-10">
-                            <button id="heart-btn" data-product-id="${product.id}" class="p-1.5 sm:p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-gray-100 transition active:scale-95" onclick="event.preventDefault(); event.stopPropagation();">
-                                <svg id="heart-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="w-[18px] h-[18px] sm:w-5 sm:h-5 text-gray-700">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.682l-7.682-7.682a4.5 4.5 0 010-6.364z"></path>
-                                </svg>
-                            </button>
-                        </div>
-
-                        <!-- Product Link -->
-                        <a href="/product/${product.id}" class="no-underline flex flex-col flex-grow">
-                            <!-- Product Image -->
-                            <div class="relative overflow-hidden aspect-[4/3] bg-gray-50">
-                                <img src="${imgUrl}" alt="${product.name}" loading="lazy" onload="this.classList.add('is-loaded')"
-                                    class="fade-in-img w-full h-full object-cover transition duration-500 ease-in-out group-hover:scale-105">
-                            </div>
-
-                            <!-- Product Details -->
-                            <div class="p-2.5 sm:p-3.5 flex-grow flex flex-col justify-between">
-                                <div>
-                                    <h3 class="text-xs sm:text-base font-bold text-gray-900 mb-0.5 truncate group-hover:text-pink-600 transition-colors duration-200">${product.name}</h3>
-                                    <p class="hidden sm:block text-[11px] sm:text-xs text-gray-500 h-5 sm:h-6 overflow-hidden line-clamp-1 leading-tight mb-2">${product.description}</p>
-                                </div>
-                                
-                                <div>
-                                    <!-- Price and Rating -->
-                                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 my-1.5">
-                                        <span class="text-sm sm:text-base font-extrabold text-gray-900">Rs. ${(product.selling_price*1.17).toFixed(2)}</span>
-                                        <div class="flex items-center text-gray-500">
-                                            <span class="text-[10px] sm:text-xs font-semibold">4.9</span>
-                                            <span class="text-yellow-400 text-xs sm:text-sm ml-0.5">★</span>
-                                        </div>                          
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <!-- Action Button container (avoid nesting buttons in anchors) -->
-                        <div class="px-2.5 pb-2.5 sm:px-3.5 sm:pb-3.5">
-                            <button onclick="window.location.href='/product/${product.id}'" class="btn-brand-gradient px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs md:text-sm font-semibold rounded-lg w-full transition duration-200 shadow-sm">
-                                Quick View
-                            </button>
-                        </div>
-                    `;
+                    // ss10-style shared card (public/js/product-card.js)
+                    const card = window.buildProductCard(product, imgUrl, 'slider');
                     fragment.appendChild(card);
                 });
 

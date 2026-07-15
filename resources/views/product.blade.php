@@ -97,7 +97,7 @@
                 <div class="relative">
                     <img id="main-image"
                         src="{{ asset('storage/vendor/products/images/'.$imageMain->image_path) }}"
-                        class="border-0 sm:border-2 sm:border-blue-900 w-full h-[55vh] sm:h-[60vh] lg:h-[72vh] aspect-square object-contain rounded-none sm:rounded-lg overflow-hidden">
+                        class="border-0 sm:border-2 sm:border-pink-200 w-full h-[55vh] sm:h-[60vh] lg:h-[72vh] aspect-square object-contain rounded-none sm:rounded-lg overflow-hidden">
                     {{-- <img id="main-image"
                         src="https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg" 
                         class="border-2 border-blue-900 w-full h-[72vh] aspect-square object-cover rounded-lg overflow-hidden"> --}}
@@ -126,7 +126,7 @@
                 <!-- Thumbnails Slider -->
                 <div class="relative w-full mt-4 px-2 sm:px-0">
                     <button id="scroll-left"
-                        class="absolute left-0 top-1/2 -translate-y-1/2 bg-blue-900 text-white p-2 rounded-full z-10 hover:bg-blue-800 transition-colors">
+                        class="absolute left-0 top-1/2 -translate-y-1/2 bg-[#E85D85] text-white p-2 rounded-full z-10 hover:bg-[#C94A72] transition-colors">
                         &#10094;
                     </button>
 
@@ -137,7 +137,7 @@
 
                     <div class="bg-white absolute right-0 top-1/2 " style="height: 60px; width: 25px; margin-top: -30px; display: flex; justify-content: center; align-items: center;">
                         <button id="scroll-right" style="margin-top: 30px"
-                            class="-translate-y-1/2 bg-blue-900 text-white p-2 rounded-full z-10 hover:bg-blue-800 transition-colors">
+                            class="-translate-y-1/2 bg-[#E85D85] text-white p-2 rounded-full z-10 hover:bg-[#C94A72] transition-colors">
                             &#10095;
                         </button>
                     </div>
@@ -146,21 +146,21 @@
 
             <!-- Right Column: Product Info & CTA -->
             <div class="mt-4 md:mt-32 col-span-2 relative px-4 sm:px-0">
-                <h1 class="text-2xl sm:text-3xl font-bold mb-2">{{ $product->name }}</h1>
-
-                <!-- Discount Badge -->
                 @php
                     $gst = $product->selling_price * 1.17;
                     $discount = round((($product->mrp - $gst) / $product->mrp) * 100);
                 @endphp
-                @if ($product->mrp > $product->selling_price)
 
-                    <div class="inline-block mb-2 sm:mb-0 sm:absolute sm:top-12 sm:right-20 bg-red-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full sm:rounded-xl shadow-lg
-                                text-sm sm:text-lg font-bold sm:transform sm:translate-x-4 sm:-translate-y-4 z-10">
-                        🔥 {{ $discount }}% OFF
-                    </div>
-                @endif
-      
+                <!-- Title with inline discount badge -->
+                <h1 class="text-2xl sm:text-3xl font-bold mb-2 leading-snug">
+                    {{ $product->name }}
+                    @if ($product->mrp > $product->selling_price)
+                        <span class="inline-block align-middle ml-1.5 bg-red-600 text-white px-2.5 py-1 rounded-full shadow-md text-xs sm:text-sm font-bold whitespace-nowrap relative -top-0.5">
+                            🔥 {{ $discount }}% OFF
+                        </span>
+                    @endif
+                </h1>
+
                 <!-- Ratings & Verification -->
                 <div class="flex items-center space-x-4 text-sm mb-4">
                     <div class="flex items-center space-x-1">
@@ -196,7 +196,7 @@
                 
                 <!-- Vendor Info -->
                 <div class="mb-4">
-                    <p class="text-sm text-gray-500">Sold by <span class="font-semibold text-blue-700 hover:text-blue-800 cursor-pointer">{{ $vendor->full_name }}</span></p>
+                    <p class="text-sm text-gray-500">Sold by <span class="font-semibold text-[#E85D85] hover:opacity-80 cursor-pointer">{{ $vendor->full_name }}</span></p>
                 </div>
                 
                 <!-- Stock Status -->
@@ -288,20 +288,20 @@
                 <!-- Delivery & Payment Info -->
                 <div class="space-y-3 text-sm">
                     <div class="flex items-center text-gray-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M13 8V4.835a1 1 0 01.325-.758l2.25-2.25a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-2.25 2.25a1 1 0 01-.758.325H16M3 9h11a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6a1 1 0 011-1zm0 0l-1.5 7" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-[#E85D85]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M13 8V4.835a1 1 0 01.325-.758l2.25-2.25a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-2.25 2.25a1 1 0 01-.758.325H16M3 9h11a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6a1 1 0 011-1zm0 0l-1.5 7" /></svg>
                         Delivery charges PKR {{ $product->delivery_charges }} (already included)
                     </div>
                     <div class="flex items-center text-gray-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-[#E85D85]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
                         Estimated <span class="font-semibold text-gray-800 ml-1">{{ $product->shipping_time }} </span>
                     </div>
                     <div class="flex items-center justify-between text-gray-700">
                         <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-[#E85D85]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             7-Day Return Policy
                         </div>
                         <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.172a1 1 0 000-1.414L2.83 2.83a1 1 0 00-1.414 1.414L18.182 20.618a1 1 0 001.414-1.414L9.828 8.414a1 1 0 00-1.414 0L6.414 6.414a1 1 0 00-1.414 0z" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-[#E85D85]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.172a1 1 0 000-1.414L2.83 2.83a1 1 0 00-1.414 1.414L18.182 20.618a1 1 0 001.414-1.414L9.828 8.414a1 1 0 00-1.414 0L6.414 6.414a1 1 0 00-1.414 0z" /></svg>
                             100% Original Product Guarantee
                         </div>
                     </div>
@@ -536,11 +536,11 @@
                     images.forEach((image, index) => {
                         const thumb = document.createElement('img');
                         thumb.src = image;
-                        thumb.className = 'thumb aspect-square object-cover border-2 border-blue-900 rounded-md w-32 h-16 lg:h-32 cursor-pointer hover:opacity-75 transition flex-shrink-0';
+                        thumb.className = 'thumb aspect-square object-cover border-2 border-pink-200 rounded-md w-32 h-16 lg:h-32 cursor-pointer hover:opacity-75 transition flex-shrink-0';
                         
                         // Set first thumbnail as active
                         if (index === 0) {
-                            thumb.classList.add('border-blue-700', 'border-opacity-80');
+                            thumb.classList.add('border-[#E85D85]');
                         }
                         
                         thumb.addEventListener('click', function() {
@@ -549,9 +549,9 @@
                             
                             // Update active thumbnail
                             document.querySelectorAll('.thumb').forEach(t => {
-                                t.classList.remove('border-blue-700', 'border-opacity-80');
+                                t.classList.remove('border-[#E85D85]');
                             });
-                            this.classList.add('border-blue-700', 'border-opacity-80');
+                            this.classList.add('border-[#E85D85]');
                         });
                         
                         slider.appendChild(thumb);
@@ -724,7 +724,7 @@
                         <p id="productText">{{ $product->description }}</p>
                         <button
                             id="toggleBtn"
-                            class="mt-2 text-blue-600 font-medium hover:underline hidden">
+                            class="mt-2 text-[#E85D85] font-medium hover:underline hidden">
                             Read more
                         </button>
                     </div>
@@ -839,7 +839,7 @@
                                         <span class="text-sm text-primary-blue">{{ $vendorUser->verified ? "Verified" : "Unverified" }}</span>
                                     </span>
                                 </p>
-                                <a href="/vendor-products/{{ $vendor->user_id }}" class="text-sm text-primary-blue hover:text-blue-700 transition duration-150 break-words inline-block">
+                                <a href="/vendor-products/{{ $vendor->user_id }}" class="text-sm text-[#E85D85] hover:opacity-80 transition duration-150 break-words inline-block">
                                     View all products from this vendor &rarr;
                                 </a>
                             </div>
@@ -892,8 +892,8 @@
                 @forelse($reviews as $review)
                     <div class="border-t pt-4 mt-4 space-y-2">
                         <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                                <span class="text-xs font-bold text-blue-600">{{ strtoupper(substr($review->customer_name, 0, 1)) }}</span>
+                            <div class="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center">
+                                <span class="text-xs font-bold text-[#E85D85]">{{ strtoupper(substr($review->customer_name, 0, 1)) }}</span>
                             </div>
                             <div>
                                 <p class="text-sm font-semibold text-gray-800">{{ $review->customer_name }}</p>
@@ -929,7 +929,7 @@
                     <button id="load-more-reviews"
                         data-product-id="{{ $product->id }}"
                         data-offset="5"
-                        class="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition duration-150 text-sm font-medium">
+                        class="px-6 py-2 border border-[#E85D85] text-[#E85D85] rounded-lg hover:bg-pink-50 transition duration-150 text-sm font-medium">
                         Load More Reviews
                     </button>
                 </div>
@@ -949,13 +949,14 @@
 
 
     <script src="{{ asset('js/search.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/product-card.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('js/category_fetch.js') }}?v={{ time() }}"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'primary-blue': '#3b82f6',
+                        'primary-blue': '#E85D85',
                         'dark-bg': '#1f2937',
                         'star-yellow': '#FFC700',
                         'verified-green': '#10b981',
@@ -1037,8 +1038,8 @@
 
                             let html = '<div class="border-t pt-4 mt-4 space-y-2">'
                                 + '<div class="flex items-center space-x-3">'
-                                + '<div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">'
-                                + '<span class="text-xs font-bold text-blue-600">' + review.customer_name.charAt(0).toUpperCase() + '</span>'
+                                + '<div class="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center">'
+                                + '<span class="text-xs font-bold text-[#E85D85]">' + review.customer_name.charAt(0).toUpperCase() + '</span>'
                                 + '</div>'
                                 + '<div>'
                                 + '<p class="text-sm font-semibold text-gray-800">' + review.customer_name + '</p>'

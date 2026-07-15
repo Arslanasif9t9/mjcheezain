@@ -194,15 +194,24 @@
                                     </div>
                                 </div>
                             @else
-                                <!-- Logged in state -->
+                                <!-- Logged in state: profile picture (app-like), dropdown on tap -->
                                 <div class="relative">
-                                    <button onclick="toggleDropdown('mobile-user-dropdown')" class="flex items-center text-gray-900 hover:text-pink-600 transition-colors focus:outline-none py-1">
-                                        Account
-                                        <svg class="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    <button onclick="toggleDropdown('mobile-user-dropdown')" class="flex items-center focus:outline-none py-0.5" aria-label="Account menu">
+                                        <img src="{{ $imgPath ? asset('storage/'.$imgPath) : asset('storage/default_profile.webp') }}" alt="Account"
+                                             class="w-8 h-8 rounded-full object-cover ring-2 ring-white/80 shadow-md">
+                                        <svg class="w-3 h-3 ml-1 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                     </button>
-                                    <div id="mobile-user-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
-                                        <a href="{{ url(Auth::user()->type . '/dashboard') }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Dashboard</a>
-                                        <a href="{{ url('logout') }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Logout</a>
+                                    <div id="mobile-user-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
+                                        <div class="px-4 py-2 border-b border-gray-100 flex items-center gap-2.5">
+                                            <img src="{{ $imgPath ? asset('storage/'.$imgPath) : asset('storage/default_profile.webp') }}" alt=""
+                                                 class="w-8 h-8 rounded-full object-cover flex-shrink-0">
+                                            <div class="min-w-0">
+                                                <p class="text-xs font-bold text-gray-900 truncate m-0">{{ $user->full_name ?? ($user->username ?? 'My Account') }}</p>
+                                                <p class="text-[10px] text-gray-400 capitalize m-0">{{ $user->type ?? '' }}</p>
+                                            </div>
+                                        </div>
+                                        <a href="{{ url(Auth::user()->type . '/dashboard') }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline"><i class="fa-solid fa-gauge-high mr-2 text-gray-400"></i>Dashboard</a>
+                                        <a href="{{ url('logout') }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline"><i class="fa-solid fa-sign-out-alt mr-2 text-gray-400"></i>Logout</a>
                                     </div>
                                 </div>
                             @endguest

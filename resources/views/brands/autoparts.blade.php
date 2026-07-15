@@ -1098,6 +1098,7 @@
         });
     </script>
 
+    <script src="{{ asset('js/product-card.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('js/category_fetch.js') }}?v={{ time() }}"></script>
     @endif
 

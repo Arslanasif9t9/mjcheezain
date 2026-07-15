@@ -8,6 +8,14 @@
 
 ## ✅ Completed
 
+### 2026-07-15 — ss10 product cards + header avatar + product page fixes
+- **Shared ss10-style product card** (`public/js/product-card.js`, `window.buildProductCard(product, imgUrl, 'slider'|'grid')`): big 16/10 image, bold title, meta row (pin icon + category • rating), Rs. price + strikethrough MRP, gradient discount ribbon, gradient **Quick View** button at card end. Hover lift injected once.
+- Wired everywhere: `category_fetch.js` + `category_fetch_v2.js` (home/cosmetics/related sliders), `products/product-list.blade.php` (masonry → uniform ss10 grid), `search.js` (results grid; also killed hardcoded arslan.mjcheezain.com domain + $ currency), `vendor-products.blade.php` (list rows → ss10 grid, Blade version of same card), `products/biggest-savings.blade.php` (unused but consistent).
+- `product-card.js` script tag added before category_fetch includes in: layouts/app, brands/cosmetics (×2 branches), brands/autoparts, product, product-auto.
+- **Mobile header**: logged-in "Account" text → profile picture (w-8 ring) with richer dropdown (avatar+name header, Dashboard, Logout) in `components/site-header.blade.php` — covers all headers (cosmetics/transparent/main reuse it).
+- **Single product page** (`product.blade.php`): red discount badge now inline right after the product title (was absolutely positioned separately); all blue accents → brand (`primary-blue` token redefined #3b82f6 → #E85D85, image borders pink-200, slider arrows #E85D85, sold-by/tab/review-avatar/info icons rethemed).
+- Verified: blades compile, node --check on all 4 JS files, product/home/vendor-products pages render HTTP 200.
+
 ### 2026-07-15 — Project documentation (`docx/`)
 - Created `docx/` folder with PRD.md, Architecture.md, rules.md, phases.md, design.md, memory.md
 
