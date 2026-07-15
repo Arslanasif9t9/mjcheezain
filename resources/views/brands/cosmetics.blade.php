@@ -30,7 +30,7 @@
 @endsection
 
 @section('body')
-    <x-cosmetics.header :user="$user ?? null" :vendor="$vendor ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
+    <x-cosmetics.transparent-header :user="$user ?? null" :vendor="$vendor ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
     <main id="main">
         <x-cosmetics.hero-video />
         <x-cosmetics.subcetogries />

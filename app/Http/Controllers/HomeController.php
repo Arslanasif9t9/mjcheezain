@@ -208,6 +208,50 @@ class HomeController extends Controller
         ]));
     }
 
+    public function footerPage($page)
+    {
+        $views = [
+            'about'           => 'footer/about',
+            'future-vision'   => 'footer/future-vision',
+            'contact-us'      => 'footer/contact-us',
+            'FAQs'            => 'footer/FAQs',
+            'vendor-zone'     => 'footer/vendor-zone',
+            'legal-policies'  => 'footer/legal-policies',
+            'privacy-policy'  => 'footer/privacy-policy',
+            'cookie-policy'   => 'footer/privacy-policy',
+            'disclaimer'      => 'footer/privacy-policy',
+        ];
+
+        abort_unless(isset($views[$page]), 404);
+
+        $user = null;
+        $profile = null;
+        $dashboardPage = null;
+        $imgPath = 'img/default_profile.webp';
+
+        if (Auth::check()) {
+            $user = Auth::user();
+
+            if ($user->type == 'vendor') {
+                $profile = $user->vendorProfile;
+                $imgPath = $profile && $profile->profile_picture
+                ? "vendor/profile/{$profile->profile_picture}"
+                : "img/default_profile.webp";
+                $dashboardPage = route('vendor.dashboard');
+            } else {
+                $profile = $user->customerProfile;
+                $imgPath = $profile && $profile->profile_image
+                ? "customer/profile/{$profile->profile_image}"
+                : "img/default_profile.webp";
+                $dashboardPage = route('customer.dashboard');
+            }
+        }
+
+        return view($views[$page], compact([
+            'user', 'profile', 'dashboardPage', 'imgPath'
+        ]));
+    }
+
     public function subscribe(Request $request)
     {
         // Manual validation

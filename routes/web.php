@@ -88,15 +88,10 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 Route::get('/product/{id}', [HomeController::class, 'product']);
 Route::get('/vendor-products/{id}', [HomeController::class, 'vendorProducts']);
 
-Route::view('/about', 'footer/about');
-Route::view('/future-vision', 'footer/future-vision');
-Route::view('/contact-us', 'footer/contact-us');
-Route::view('/FAQs', 'footer/FAQs');
-Route::view('/vendor-zone','footer/vendor-zone');
-Route::view('/legal-policies', 'footer/legal-policies');
-Route::view('/privacy-policy', 'footer/privacy-policy');
-Route::view('/cookie-policy', 'footer/privacy-policy');
-Route::view('/disclaimer', 'footer/privacy-policy');
+// Footer pages go through the controller so the shared site header
+// gets the logged-in user's data (profile image, dashboard link).
+Route::get('/{page}', [HomeController::class, 'footerPage'])
+    ->where('page', 'about|future-vision|contact-us|FAQs|vendor-zone|legal-policies|privacy-policy|cookie-policy|disclaimer');
 
 
 
