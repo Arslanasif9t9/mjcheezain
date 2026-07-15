@@ -26,7 +26,7 @@
   - `notifications` — brand date-group headers, unread `bg-pink-50`, null-guards on checkbox/`#noti-num` (were throwing)
   - `returns/create` + `returns/track` — standalone pages rethemed, `$` → `Rs.`
 - Verified: `view:cache` compiles; all 9 pages server-rendered OK with real data (user_id 67) via tinker
-- **Not pushed** — commit is local; user must approve push (push = production deploy)
+- **Pushed & deployed 2026-07-15** (with docs commit `07b40bb`) — GitHub Actions deploy run succeeded
 
 ### 2026-07-14 — Cosmetics + footer polish — commit `837ae79`
 - Cosmetics transparent header + full-screen hero; footer pages rethemed & mobile responsive
