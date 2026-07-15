@@ -18,7 +18,7 @@
                 <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Sales</p>
                 <p class="text-3xl font-extrabold text-gray-800">{{ $totalSales }}</p>
             </div>
-            <div class="w-14 h-14 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+            <div class="w-14 h-14 rounded-full bg-pink-50 text-[#E85D85] flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <i class="fa-solid fa-boxes-packing text-2xl"></i>
             </div>
         </div>
@@ -29,7 +29,7 @@
                 <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">New Orders</p>
                 <p class="text-3xl font-extrabold text-gray-800">{{ $newOrders }}</p>
             </div>
-            <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+            <div class="w-14 h-14 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <i class="fa-solid fa-cart-plus text-2xl"></i>
             </div>
         </div>

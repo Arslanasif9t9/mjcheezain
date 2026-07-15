@@ -6,13 +6,13 @@
     <div class="mb-5">
         <label class="block text-gray-700 font-bold mb-2" for="pickup-address">Warehouse / Pickup Address</label>
         <textarea id="pickup-address" name="pickup_address" rows="3" 
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">{{ $address['pickup_address'] ?? '' }}</textarea>
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-300 focus:border-pink-300">{{ $address['pickup_address'] ?? '' }}</textarea>
     </div>
 
     <div class="mb-5">
         <label class="block text-gray-700 font-bold mb-2" for="area">Province</label>
         <select id="area" name="area" 
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-300 focus:border-pink-300"
             onchange="updateCities()">
             <option value="">Select province</option>
             <option value="Punjab" {{ ($address['area'] ?? '') == 'Punjab' ? 'selected' : '' }}>Punjab</option>
@@ -25,7 +25,7 @@
     <div class="mb-5">
         <label class="block text-gray-700 font-bold mb-2" for="city">City</label>
         <select id="city" name="city" 
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-300 focus:border-pink-300">
             <option value="">Select City</option>
             <!-- Cities will be populated dynamically based on province selection -->
         </select>
@@ -40,7 +40,7 @@
     <div class="mb-5">
         <label class="block text-gray-700 font-bold mb-2" for="postal-code">Postal Code</label>
         <input type="text" id="postal-code" name="postal_code" value="{{ $address['postal_code'] ?? '' }}"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-300 focus:border-pink-300">
     </div>
 
     <div class="flex justify-between mt-8">
@@ -48,7 +48,7 @@
             class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 btn-back"
             data-prev-tab="store-details">Back</button>
         <button type="button"
-            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center min-w-[120px]" 
+            class="px-4 py-2 text-white rounded-full hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:ring-offset-2 flex items-center justify-center min-w-[120px]" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 4px 12px rgba(255, 125, 160, 0.35);" 
             id="save-address-btn">
             <span id="btn-text">Submit</span>
             <div id="btn-loader" class="hidden ml-2">
@@ -300,7 +300,7 @@ function setButtonLoading(isLoading) {
         // Disable button
         saveBtn.disabled = true;
         saveBtn.classList.add('opacity-75', 'cursor-not-allowed');
-        saveBtn.classList.remove('hover:bg-blue-700');
+        saveBtn.classList.remove('hover:opacity-90');
         
         // Change text and show loader
         btnText.textContent = 'Processing...';
@@ -309,7 +309,7 @@ function setButtonLoading(isLoading) {
         // Enable button
         saveBtn.disabled = false;
         saveBtn.classList.remove('opacity-75', 'cursor-not-allowed');
-        saveBtn.classList.add('hover:bg-blue-700');
+        saveBtn.classList.add('hover:opacity-90');
         
         // Restore original text and hide loader
         btnText.textContent = 'Submit';

@@ -48,7 +48,7 @@
             
             <!-- Edit Profile Button -->
             <a href="{{ route('vendor.profile.edit') }}" 
-               class="inline-block mt-4 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white px-5 py-2 rounded-xl transition-all font-semibold shadow-sm hover:shadow text-sm">
+               class="inline-block mt-4 text-white px-5 py-2 rounded-full transition-all font-semibold hover:opacity-90 hover:shadow text-sm" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 4px 12px rgba(255, 125, 160, 0.35);">
                 Edit Profile
             </a>
         </div>

@@ -6,7 +6,7 @@
     <div class="mb-5">
         <label class="block text-gray-700 font-bold mb-2" for="business-type">Business Type</label>
         <select id="business-type" name="business_type" 
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-300 focus:border-pink-300">
             <option value="">Select Business Type</option>
             <option value="individual" {{ ($storeDetails['business_type'] ?? '') == 'individual' ? 'selected' : '' }}>Individual</option>
             <option value="company" {{ ($storeDetails['business_type'] ?? '') == 'company' ? 'selected' : '' }}>Company</option>
@@ -16,7 +16,7 @@
     <div class="mb-5">
         <label class="block text-gray-700 font-bold mb-2" for="store-category">Store Category</label>
         <select id="store-category" name="store_category" 
-                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-300 focus:border-pink-300">
             <option value="">Select Category</option>
             <option value="electronics" {{ ($storeDetails['store_category'] ?? '') == 'electronics' ? 'selected' : '' }}>Electronics</option>
             <option value="fashion" {{ ($storeDetails['store_category'] ?? '') == 'fashion' ? 'selected' : '' }}>Fashion & Clothing</option>
@@ -36,7 +36,7 @@
     <div class="mb-5">
         <label class="block text-gray-700 font-bold mb-2" for="ntn">NTN Number</label>
         <input type="text" id="ntn" name="ntn" placeholder="i.e:- 12345678" value="{{ $storeDetails['ntn'] ?? '' }}"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-300 focus:border-pink-300">
     </div>
 
     <div class="mb-5">
@@ -46,7 +46,7 @@
         </label>
         <div class="relative">
             <textarea id="store-description" name="store_description" rows="5" 
-                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 pr-10"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-300 focus:border-pink-300 pr-10"
                 placeholder="Describe your store in 100 words or less..."
                 oninput="updateWordCount()">{{ $storeDetails['store_description'] ?? '' }}</textarea>
             
@@ -116,7 +116,7 @@
             class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 btn-back"
             data-prev-tab="basic-info">Back</button>
         <button type="button"
-            class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 btn-next"
+            class="px-4 py-2 text-white rounded-full hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:ring-offset-2 btn-next" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 4px 12px rgba(255, 125, 160, 0.35);"
             data-next-tab="address" id="save-store-details">Save & Continue</button>
     </div>
 </div>

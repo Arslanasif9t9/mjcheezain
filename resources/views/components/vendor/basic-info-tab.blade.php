@@ -22,27 +22,27 @@
     <div class="mb-5">
         <label class="block text-gray-700 font-bold mb-2" for="full-name">Full Name</label>
         <input type="text" id="full-name" name="full_name" value="{{ $basicInfo['full_name'] ?? '' }}"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-300 focus:border-pink-300">
     </div>
 
     <div class="mb-5">
         <label class="block text-gray-700 font-bold mb-2" for="store-name">Store Name</label>
         <input type="text" id="store-name" name="store_name" value="{{ $basicInfo['store_name'] ?? '' }}"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-300 focus:border-pink-300">
     </div>
 
     <div class="mb-5">
         <label class="block text-gray-700 font-bold mb-2" for="email">Email Address</label>
         <div class="relative">
             <input type="email" id="email" value="{{ $basicInfo['email'] ?? '' }}"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 bg-gray-100" readonly>
+                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-300 focus:border-pink-300 bg-gray-100" readonly>
         </div>
     </div>
 
     <div class="mb-5">
         <label class="block text-gray-700 font-bold mb-2" for="phone">Phone Number</label>
         <input type="tel" id="phone" name="phone" value="{{ $basicInfo['phone'] ?? '' }}"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-300 focus:border-pink-300">
     </div>
 
     <div class="mb-5 flex items-center">
@@ -55,7 +55,7 @@
 
     <div class="flex justify-end mt-8">
         <button type="button"
-            class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 btn-next"
+            class="px-4 py-2 text-white rounded-full hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:ring-offset-2 btn-next" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 4px 12px rgba(255, 125, 160, 0.35);"
             data-next-tab="store-details">Save & Continue</button>
     </div>
 </div>

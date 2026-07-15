@@ -17,8 +17,8 @@
                 datasets: [{
                     label: 'Orders',
                     data: @json($data),
-                    backgroundColor: 'rgba(70, 130, 180, 0.7)',
-                    borderColor: 'rgba(70, 130, 180, 1)',
+                    backgroundColor: 'rgba(255, 125, 160, 0.75)',
+                    borderColor: '#E85D85',
                     borderWidth: 1,
                     barPercentage: 0.5
                 }]

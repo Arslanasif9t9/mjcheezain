@@ -15,7 +15,7 @@
                         $maxOrders = max(array_column($topCategories, 'order_count')) ?: 1;
                         $percent = min(100, ($category['order_count'] / $maxOrders) * 100);
                     @endphp
-                    <div class="h-full bg-red-500 rounded-full" style="width: {{ $percent }}%"></div>
+                    <div class="h-full rounded-full" style="background: linear-gradient(90deg, #FF7DA0, #FFC275); width: {{ $percent }}%"></div>
                 </div>
             </li>
         @endforeach

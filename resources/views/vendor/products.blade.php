@@ -9,6 +9,10 @@
         .scrollbar-hide::-webkit-scrollbar {
             display: none;
         }
+        .tab-active-v {
+            border-bottom: 2px solid #E85D85 !important;
+            color: #E85D85 !important;
+        }
         
         #logoutModal {
         animation: fadeIn 0.3s ease-out;
@@ -78,10 +82,10 @@
             function updateActiveTab(tab) {
                 tabButtons.forEach(button => {
                     if (button.getAttribute('data-tab') === tab) {
-                        button.classList.add('border-b-2', 'border-blue-500', 'text-blue-500');
+                        button.classList.add('tab-active-v');
                         button.classList.remove('text-gray-600');
                     } else {
-                        button.classList.remove('border-b-2', 'border-blue-500', 'text-blue-500');
+                        button.classList.remove('tab-active-v');
                         button.classList.add('text-gray-600');
                     }
                 });
@@ -114,7 +118,7 @@
             
             function filterProductsBySearch(searchTerm) {
                 const productRows = document.querySelectorAll('.product-row');
-                const activeTab = document.querySelector('.tab-button.border-blue-500').getAttribute('data-tab');
+                const activeTab = document.querySelector('.tab-button.tab-active-v').getAttribute('data-tab');
                 
                 productRows.forEach(row => {
                     const productName = row.querySelector('.font-semibold').textContent.toLowerCase();

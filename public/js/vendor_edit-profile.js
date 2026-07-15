@@ -16,14 +16,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Deactivate all buttons
             tabBtns.forEach(btn => {
-                btn.classList.remove('active', 'text-green-600', 'border-b-2', 'border-green-500');
+                btn.classList.remove('active', 'text-[#E85D85]', 'border-b-2', 'border-[#E85D85]');
                 btn.classList.add('text-gray-500');
             });
 
             // Show selected tab
             document.getElementById(tabId).classList.remove('hidden');
             document.getElementById(tabId).classList.add('active');
-            this.classList.add('active', 'text-green-600', 'border-b-2', 'border-green-500');
+            this.classList.add('active', 'text-[#E85D85]', 'border-b-2', 'border-[#E85D85]');
 
             // Update progress bar
             updateProgressBar(tabId);

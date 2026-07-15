@@ -40,7 +40,7 @@
         />
 
         <!-- Main Content -->
-        <main class="bg-gray-100 flex-1 p-6 overflow-y-auto scrollbar-hide">
+        <main class="flex-1 p-4 md:p-6 overflow-y-auto scrollbar-hide min-w-0" style="background-color: #FFF6F0;">
             <!-- Header Component -->
             <x-vendor.header :profilePicture="$vendorBasicInfo->profile_picture ?? 'default_profile.webp'" />
 

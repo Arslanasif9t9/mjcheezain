@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="{{ asset('js/page-loader.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,7 +53,7 @@
         }
     </script>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="min-h-screen" style="background-color: #FFF6F0;">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
         <x-vendor.sidebar 
@@ -112,19 +113,19 @@
                 <div class="bg-white rounded-2xl shadow-card p-6 border border-gray-100 hover:shadow-lg transition-shadow duration-300">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center">
-                            <div class="p-3 bg-blue-50 rounded-xl mr-4">
-                                <i class="fas fa-check-circle text-blue-500 text-xl"></i>
+                            <div class="p-3 bg-pink-50 rounded-xl mr-4">
+                                <i class="fas fa-check-circle text-[#E85D85] text-xl"></i>
                             </div>
                             <div>
                                 <h3 class="text-lg font-semibold text-gray-700">Available Balance</h3>
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 mt-1">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-pink-50 text-[#C94A72] mt-1">
                                     Withdrawable
                                 </span>
                             </div>
                         </div>
                     </div>
                     <div class="mb-2">
-                        <div class="text-3xl lg:text-4xl font-bold text-blue-600">
+                        <div class="text-3xl lg:text-4xl font-bold text-[#E85D85]">
                             Rs. {{ number_format($balance->available_balance, 2) }}
                         </div>
                         <p class="text-gray-500 text-sm mt-2">This amount is ready for immediate withdrawal</p>
@@ -259,7 +260,7 @@
                         </div>
                         
                         <!-- Guidelines Box -->
-                        <div class="mt-8 p-6 bg-blue-50 border-l-4 border-primary-500 rounded-xl">
+                        <div class="mt-8 p-6 bg-pink-50 border-l-4 border-primary-500 rounded-xl">
                             <div class="flex items-center mb-4">
                                 <i class="fas fa-info-circle text-primary-500 text-xl mr-3"></i>
                                 <h4 class="text-lg font-bold text-gray-800">Important Guidelines</h4>
@@ -313,8 +314,8 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-white p-5 rounded-xl shadow-card border border-gray-100">
                     <div class="flex items-center">
-                        <div class="p-3 bg-blue-100 rounded-lg mr-4">
-                            <i class="fas fa-shield-alt text-blue-500 text-xl"></i>
+                        <div class="p-3 bg-pink-100 rounded-lg mr-4">
+                            <i class="fas fa-shield-alt text-[#E85D85] text-xl"></i>
                         </div>
                         <div>
                             <h5 class="font-bold text-gray-800">Secure Transactions</h5>
@@ -423,7 +424,7 @@
                 } else if (type === 'warning') {
                     toast.className += ' bg-amber-50 border-l-4 border-amber-500 text-amber-800';
                 } else {
-                    toast.className += ' bg-blue-50 border-l-4 border-blue-500 text-blue-800';
+                    toast.className += ' bg-pink-50 border-l-4 border-[#E85D85] text-[#C94A72]';
                 }
                 
                 toast.innerHTML = `

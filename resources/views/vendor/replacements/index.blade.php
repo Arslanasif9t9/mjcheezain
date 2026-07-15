@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="{{ asset('js/page-loader.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,7 +11,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <!-- Font Awesome -->
@@ -328,7 +329,7 @@
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen">
+<body class="min-h-screen" style="background-color: #FFF6F0;">
     <div class="flex min-h-screen">
         <!-- Sidebar Component -->
         <x-vendor.sidebar 
@@ -351,8 +352,8 @@
                 <div class="relative w-full lg:w-1/3">
                     <i class="fa-solid fa-magnifying-glass absolute left-4 top-3 text-gray-400"></i>
                     <input id="searchInput" type="text" placeholder="Search replacements..." 
-                           class="border border-gray-300 pl-11 pr-12 py-2.5 rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-blue-500/25 focus:border-blue-500 bg-white shadow-sm text-sm">
-                    <button class="absolute right-2 top-1.5 bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 transition text-sm">
+                           class="border border-gray-300 pl-11 pr-12 py-2.5 rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-pink-300/25 focus:border-[#E85D85] bg-white shadow-sm text-sm">
+                    <button class="absolute right-2 top-1.5 bg-[#E85D85] text-white px-3 py-1.5 rounded-lg hover:bg-[#C94A72] transition text-sm">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
@@ -360,14 +361,14 @@
 
             <!-- Stats Cards -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-                <div class="stat-card bg-white p-4 rounded-xl border-l-4 border-blue-500 shadow-sm hover:shadow transition-shadow card">
+                <div class="stat-card bg-white p-4 rounded-xl border-l-4 border-[#E85D85] shadow-sm hover:shadow transition-shadow card">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-gray-500 text-xs mb-1">Total Requests</p>
                             <p class="text-xl font-bold text-gray-800">{{ $stats['total'] }}</p>
                         </div>
-                        <div class="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
-                            <i class="fas fa-exchange-alt text-blue-650 text-sm"></i>
+                        <div class="w-10 h-10 bg-pink-50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-exchange-alt text-[#E85D85] text-sm"></i>
                         </div>
                     </div>
                 </div>
@@ -581,7 +582,7 @@
                                     <td class="table-cell">
                                         <div class="flex gap-2">
                                             <button onclick="viewReplacement({{ $replacement->id }})"
-                                                    class="action-btn bg-blue-100 text-blue-700 hover:bg-blue-200">
+                                                    class="action-btn bg-pink-100 text-[#C94A72] hover:bg-pink-200">
                                                 <i class="fas fa-eye"></i> View
                                             </button>
                                             
@@ -634,8 +635,8 @@
         
         <div class="status-dropdown-body">
             <!-- Current Step Info -->
-            <div id="currentStepInfo" class="mb-6 p-4 bg-blue-50 rounded-lg">
-                <h4 class="font-semibold text-blue-800 mb-2">Current Status</h4>
+            <div id="currentStepInfo" class="mb-6 p-4 bg-pink-50 rounded-lg">
+                <h4 class="font-semibold text-[#C94A72] mb-2">Current Status</h4>
                 <div class="flex items-center justify-between">
                     <span id="currentStepText" class="font-medium"></span>
                     <span id="currentStepBadge" class="badge"></span>
@@ -721,7 +722,7 @@
                 <!-- Step Selection -->
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Current Step</label>
-                    <select id="stepSelect" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <select id="stepSelect" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-300 focus:border-[#E85D85]">
                         <option value="">Select Step</option>
                         <option value="request_submitted">Request Submitted</option>
                         <option value="approved">Approved</option>
@@ -738,7 +739,7 @@
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Tracking Number</label>
                     <input type="text" id="trackingNumber" 
-                           class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                           class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-300 focus:border-[#E85D85]" 
                            placeholder="Enter tracking number">
                 </div>
                 
@@ -746,7 +747,7 @@
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
                     <textarea id="statusNotes" 
-                              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-300 focus:border-[#E85D85]" 
                               rows="3" 
                               placeholder="Add any notes about this status update..."></textarea>
                 </div>
@@ -755,7 +756,7 @@
             <!-- Action Buttons -->
             <div class="pt-4 border-t border-gray-200">
                 <button id="updateStatusBtn" onclick="updateReplacementStatus()" 
-                        class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="w-full py-3.5 bg-gradient-to-r from-[#FF7DA0] to-purple-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled>
                     Update Status
                 </button>
@@ -829,7 +830,7 @@
                 <tr>
                     <td colspan="8" class="px-6 py-12 text-center">
                         <div class="flex flex-col items-center">
-                            <div class="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full spinner mb-4"></div>
+                            <div class="w-16 h-16 border-4 border-pink-200 border-t-[#E85D85] rounded-full spinner mb-4"></div>
                             <p class="text-gray-600">Loading replacements...</p>
                         </div>
                     </td>

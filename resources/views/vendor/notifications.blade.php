@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="{{ asset('js/page-loader.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,7 +49,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body style="background-color: #FFF6F0;">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar Component -->
         <x-vendor.sidebar 
@@ -93,7 +94,7 @@
             </header>
             
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-y-auto p-6">
+            <main class="flex-1 overflow-y-auto p-4 md:p-6 min-w-0" style="background-color: #FFF6F0;">
                 <div class="max-w-4xl mx-auto">
                     <!-- Notification Header -->
                     <div class="flex items-center justify-between mb-6">
@@ -115,11 +116,11 @@
                                 
                                 <div class="divide-y divide-gray-100">
                                     @foreach($groupedNotifications as $notification)
-                                        <div class="notification-item flex items-start px-4 py-3 hover:bg-gray-100 {{ $notification->is_read ? '' : 'bg-blue-100' }}" 
+                                        <div class="notification-item flex items-start px-4 py-3 hover:bg-gray-100 {{ $notification->is_read ? '' : 'bg-pink-100' }}" 
                                              data-notification-id="{{ $notification->id }}">
                                             {{-- <label class="inline-flex items-center mt-1 mr-3">
                                                 <input type="checkbox" 
-                                                       class="notification-checkbox form-checkbox h-4 w-4 text-blue-600 sr-only" 
+                                                       class="notification-checkbox form-checkbox h-4 w-4 text-[#E85D85] sr-only" 
                                                        {{ $notification->is_read ? 'checked' : '' }}>
                                                 <span class="checkmark h-4 w-4 border border-gray-300 rounded-sm flex-shrink-0"></span>
                                             </label> --}}
@@ -195,7 +196,7 @@
                     
                     // Mark as read visually
                     checkbox.checked = true;
-                    dot.classList.remove('bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-red-500');
+                    dot.classList.remove('bg-pink-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-red-500');
                     dot.classList.add('bg-gray-300');
                     
                     // Mark as read in database
@@ -221,7 +222,7 @@
                     
                     if (checkbox.checked) {
                         // Mark as read
-                        dot.classList.remove('bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-red-500');
+                        dot.classList.remove('bg-pink-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-red-500');
                         dot.classList.add('bg-gray-300');
                         
                         fetch(`/vendor/notifications/${notificationId}/read`, {
@@ -238,7 +239,7 @@
                         
                         // Determine dot color based on icon type
                         if (iconClass.includes('fa-shipping-fast') || iconClass.includes('fa-comment-alt')) {
-                            dot.classList.add('bg-blue-500');
+                            dot.classList.add('bg-pink-500');
                         } else if (iconClass.includes('fa-check-circle') || iconClass.includes('fa-thumbs-up')) {
                             dot.classList.add('bg-green-500');
                         } else if (iconClass.includes('fa-exclamation-circle')) {

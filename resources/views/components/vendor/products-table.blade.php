@@ -33,7 +33,7 @@
                     <tr class="product-row border-b hover:bg-gray-50 transition" data-position="{{ $product->position ?? 'all' }}">
                         <td class="p-0 whitespace-nowrap">
                             <a href="/product/{{ $product->id }}" target="_blank" id="prd-id"
-                               class="text-black hover:text-blue-700">
+                               class="text-black hover:text-[#E85D85]">
                                 PRD-{{ str_pad($product->id, 6, '0', STR_PAD_LEFT) }}-{{ \Carbon\Carbon::parse($product->updated_at)->format('y') }}
                             </a>
                         </td>
@@ -47,7 +47,7 @@
                         </td>
                         <td class="p-2 font-semibold">
                             <a href="/product/{{ $product->id }}" target="_blank"
-                               class="hover:text-blue-600 transition">
+                               class="hover:text-[#E85D85] transition">
                                 <p class="h-8 overflow-hidden leading-4 line-clamp-2">
                                     {{ $product->name }}
                                 </p>
@@ -55,7 +55,7 @@
                         </td>
                         <td class="p-2 whitespace-nowrap">{{ $product->category }}</td>
                         <td class="p-2 whitespace-nowrap">{{ $product->quantity }}</td>
-                        <td class="p-2 whitespace-nowrap">${{ number_format($product->selling_price*1.17, 2) }}</td>
+                        <td class="p-2 whitespace-nowrap">Rs. {{ number_format($product->selling_price*1.17, 2) }}</td>
                         <td class="p-2 whitespace-nowrap">
                             @php
                                 $status_class = '';
@@ -101,7 +101,7 @@
                         <td class="p-2 whitespace-nowrap">
                             <div class="flex items-center gap-2">
                                 <a href="{{ route('vendor.products.edit', $product->id) }}" 
-                                    class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition flex items-center justify-center border border-blue-100 shadow-sm" title="Edit">
+                                    class="w-8 h-8 rounded-lg bg-pink-50 text-[#E85D85] hover:bg-pink-100 transition flex items-center justify-center border border-pink-100 shadow-sm" title="Edit">
                                          <i class="fas fa-edit text-xs"></i>
                                 </a>
                                 <form method="POST" action="{{ route('vendor.products.delete') }}" 

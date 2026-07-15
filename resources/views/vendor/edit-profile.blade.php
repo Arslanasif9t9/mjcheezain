@@ -62,7 +62,7 @@
         }
 
         input:checked+.slider {
-            background-color: #4CAF50;
+            background-color: #E85D85;
         }
 
         input:checked+.slider:before {
@@ -122,7 +122,7 @@
         />
 
         <!-- Main Content -->
-        <main class="bg-gray-100 flex-1 p-6 overflow-y-auto scrollbar-hide">
+        <main class="flex-1 p-4 md:p-6 overflow-y-auto scrollbar-hide min-w-0" style="background-color: #FFF6F0;">
             <div class="container mx-auto p-4 max-w-4xl pt-16 md:pt-4">
                 
                 <x-vendor.progress-bar />

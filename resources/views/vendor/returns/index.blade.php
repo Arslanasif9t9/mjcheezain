@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="{{ asset('js/page-loader.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,7 +11,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <!-- Font Awesome -->
@@ -413,7 +414,7 @@
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-gray-50 to-orange-50 min-h-screen">
+<body class="min-h-screen" style="background-color: #FFF6F0;">
     <div class="flex min-h-screen">
         <!-- Sidebar Component -->
         <x-vendor.sidebar 
@@ -481,14 +482,14 @@
                     </div>
                 </div>
                 
-                <div class="stat-card bg-white p-4 rounded-xl border-l-4 border-blue-500 shadow-sm hover:shadow transition-shadow card">
+                <div class="stat-card bg-white p-4 rounded-xl border-l-4 border-[#E85D85] shadow-sm hover:shadow transition-shadow card">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-gray-500 text-xs mb-1">Processing</p>
                             <p class="text-xl font-bold text-gray-800">{{ $stats['processing'] }}</p>
                         </div>
-                        <div class="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
-                            <i class="fas fa-cog text-blue-650 text-sm"></i>
+                        <div class="w-10 h-10 bg-pink-50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-cog text-[#E85D85] text-sm"></i>
                         </div>
                     </div>
                 </div>
@@ -534,7 +535,7 @@
                 </button>
                 <button onclick="filterReturns('processing')" 
                         class="filter-btn px-5 py-2.5 bg-white border border-gray-300 rounded-xl font-medium hover:bg-gray-50 flex items-center gap-2">
-                    <i class="fas fa-cog text-blue-500"></i> Processing
+                    <i class="fas fa-cog text-[#E85D85]"></i> Processing
                 </button>
                 <button onclick="filterReturns('refunded')" 
                         class="filter-btn px-5 py-2.5 bg-white border border-gray-300 rounded-xl font-medium hover:bg-gray-50 flex items-center gap-2">
@@ -572,7 +573,7 @@
                                     $statusColors = [
                                         'pending' => 'bg-yellow-500',
                                         'approved' => 'bg-green-500',
-                                        'processing' => 'bg-blue-500',
+                                        'processing' => 'bg-pink-500',
                                         'refunded' => 'bg-teal-500',
                                         'completed' => 'bg-green-600',
                                         'rejected' => 'bg-red-500'
@@ -742,7 +743,7 @@
                     
                     <div class="status-option" data-status="processing" onclick="selectStatus('processing')">
                         <div class="flex items-center">
-                            <span class="badge bg-blue-500 text-white mr-3">Processing</span>
+                            <span class="badge bg-pink-500 text-white mr-3">Processing</span>
                             <div>
                                 <span class="font-medium">Processing</span>
                                 <div class="text-xs text-gray-500">Processing return item</div>
@@ -993,7 +994,7 @@
             const colors = {
                 'pending': 'bg-yellow-500',
                 'approved': 'bg-green-500',
-                'processing': 'bg-blue-500',
+                'processing': 'bg-pink-500',
                 'refunded': 'bg-teal-500',
                 'completed': 'bg-green-600',
                 'rejected': 'bg-red-500'

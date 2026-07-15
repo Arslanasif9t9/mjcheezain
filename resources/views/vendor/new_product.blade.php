@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="{{ asset('js/page-loader.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,8 +16,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #3b82f6;
-            --primary-dark: #2563eb;
+            --primary: #E85D85;
+            --primary-dark: #C94A72;
             --secondary: #6b7280;
             --success: #10b981;
             --danger: #ef4444;
@@ -27,7 +28,7 @@
         
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f5f7fa;
+            background-color: #FFF6F0;
         }
         
         .scrollbar-hide::-webkit-scrollbar {
@@ -931,8 +932,8 @@
                             
                             <!-- Existing Video (if any) -->
                             @if(isset($product) && $product->video)
-                            <div class="mt-4 p-3 bg-blue-50 rounded-lg">
-                                <p class="text-sm text-blue-700 mb-2">
+                            <div class="mt-4 p-3 bg-pink-50 rounded-lg">
+                                <p class="text-sm text-[#C94A72] mb-2">
                                     <i class="fas fa-info-circle mr-2"></i>
                                     Existing video will be replaced if you upload a new one
                                 </p>
@@ -1085,25 +1086,25 @@
                             </div>
                             
                             <!-- GST Calculation & MRP Validation -->
-                            <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
+                            <div class="mt-6 p-4 bg-pink-50 border border-pink-200 rounded-md">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <!-- GST Calculation -->
                                     <div>
-                                        <h4 class="text-blue-700 font-semibold mb-2 flex items-center">
+                                        <h4 class="text-[#C94A72] font-semibold mb-2 flex items-center">
                                             <i class="fas fa-percentage mr-2"></i> GST Calculation (17%)
                                         </h4>
                                         <div class="space-y-2">
                                             <div class="flex justify-between items-center">
-                                                <span class="text-sm text-blue-600">Selling Price:</span>
-                                                <span class="text-blue-700 font-medium" id="gstSellingPrice">PKR 0.00</span>
+                                                <span class="text-sm text-[#E85D85]">Selling Price:</span>
+                                                <span class="text-[#C94A72] font-medium" id="gstSellingPrice">PKR 0.00</span>
                                             </div>
                                             <div class="flex justify-between items-center">
-                                                <span class="text-sm text-blue-600">GST (17%):</span>
-                                                <span class="text-blue-700 font-medium" id="gstAmount">PKR 0.00</span>
+                                                <span class="text-sm text-[#E85D85]">GST (17%):</span>
+                                                <span class="text-[#C94A72] font-medium" id="gstAmount">PKR 0.00</span>
                                             </div>
-                                            <div class="flex justify-between items-center pt-2 border-t border-blue-200">
-                                                <span class="text-sm font-semibold text-blue-800">Total with GST:</span>
-                                                <span class="text-blue-800 font-bold" id="gstTotal">PKR 0.00</span>
+                                            <div class="flex justify-between items-center pt-2 border-t border-pink-200">
+                                                <span class="text-sm font-semibold text-[#C94A72]">Total with GST:</span>
+                                                <span class="text-[#C94A72] font-bold" id="gstTotal">PKR 0.00</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1245,7 +1246,7 @@
                 <div class="lg:col-span-1">
                     <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-4 sm:p-6 lg:sticky lg:top-6 max-h-[calc(100vh-4rem)] overflow-y-auto preview-box w-full">
                         <h2 class="text-xl font-bold text-gray-800 mb-4 pb-3 border-b border-gray-100 text-center flex items-center justify-center">
-                            <i class="fas fa-eye text-blue-500 mr-2"></i> Live Preview
+                            <i class="fas fa-eye text-[#E85D85] mr-2"></i> Live Preview
                         </h2>
                         
                         <div class="space-y-4">
@@ -1257,7 +1258,7 @@
                             <!-- Basic Details -->
                             <div class="bg-gray-50 rounded-lg p-4">
                                 <h3 class="font-semibold text-gray-700 mb-3 flex items-center">
-                                    <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+                                    <i class="fas fa-info-circle text-[#E85D85] mr-2"></i>
                                     Product Details
                                 </h3>
                                 <div class="space-y-2">
@@ -1297,9 +1298,9 @@
                             </div>
                             
                             <!-- Price Breakdown in Preview Box -->
-                            <div class="bg-blue-50 border border-blue-100 rounded-lg p-4">
+                            <div class="bg-pink-50 border border-pink-100 rounded-lg p-4">
                                 <h3 class="font-semibold text-gray-700 mb-3 flex items-center">
-                                    <i class="fas fa-receipt text-blue-500 mr-2"></i>
+                                    <i class="fas fa-receipt text-[#E85D85] mr-2"></i>
                                     Price Breakdown
                                 </h3>
                                 <div class="space-y-2">
@@ -1326,14 +1327,14 @@
                                     </div>
                                     
                                     <!-- GST -->
-                                    <div class="flex justify-between items-center bg-blue-100 px-2 py-1 rounded">
+                                    <div class="flex justify-between items-center bg-pink-100 px-2 py-1 rounded">
                                         <div class="flex items-center">
                                             <span class="text-gray-600 text-sm flex items-center">
-                                                <i class="fas fa-percentage text-xs mr-1 text-blue-600"></i>
+                                                <i class="fas fa-percentage text-xs mr-1 text-[#E85D85]"></i>
                                                 GST (17%):
                                             </span>
                                         </div>
-                                        <span class="text-blue-700 font-medium" id="previewGST">PKR 0.00</span>
+                                        <span class="text-[#C94A72] font-medium" id="previewGST">PKR 0.00</span>
                                     </div>
                                     
                                     <!-- Delivery Charges -->
@@ -1343,14 +1344,14 @@
                                     </div>
                                     
                                     <!-- Total Price -->
-                                    <div class="flex justify-between items-center pt-2 border-t border-blue-200 mt-2">
+                                    <div class="flex justify-between items-center pt-2 border-t border-pink-200 mt-2">
                                         <span class="text-gray-800 font-bold">Total Price:</span>
-                                        <span class="text-blue-600 font-bold text-lg" id="previewTotalPrice">PKR 0.00</span>
+                                        <span class="text-[#E85D85] font-bold text-lg" id="previewTotalPrice">PKR 0.00</span>
                                     </div>
                                     
                                     <!-- Price Summary Note -->
-                                    <div class="mt-3 pt-2 border-t border-blue-200">
-                                        <p class="text-xs text-blue-600">
+                                    <div class="mt-3 pt-2 border-t border-pink-200">
+                                        <p class="text-xs text-[#E85D85]">
                                             <i class="fas fa-info-circle mr-1"></i>
                                             Total = Selling Price + 17% GST + Delivery
                                         </p>
@@ -1395,7 +1396,7 @@
                         <div class="mt-6 pt-4 border-t border-gray-200">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center text-gray-600">
-                                    <i class="fas fa-sync-alt text-blue-500 mr-2 animate-spin"></i>
+                                    <i class="fas fa-sync-alt text-[#E85D85] mr-2 animate-spin"></i>
                                     <span class="text-sm">Live Updates</span>
                                 </div>
                                 <div class="text-xs text-gray-500" id="previewStatus">
@@ -1440,7 +1441,7 @@
                 <!-- Image Section -->
                 <div class="w-full md:w-1/3">
                     <label class="form-label flex items-center gap-2 mb-2">
-                        <i class="fas fa-camera text-blue-500"></i>
+                        <i class="fas fa-camera text-[#E85D85]"></i>
                         Fault Image
                     </label>
                     <div class="image-upload-container" style="height: 120px;">

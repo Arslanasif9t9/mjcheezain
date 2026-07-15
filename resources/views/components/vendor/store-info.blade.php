@@ -27,7 +27,7 @@
             <div class="flex space-x-4">
                 @if($returnPolicy || $returnPolicyFile)
                     <a href="{{ $returnPolicyFile ? asset('uploads/' . $returnPolicyFile) : '#' }}" 
-                       class="text-blue-600 hover:text-blue-800 underline text-sm transition-colors"
+                       class="text-[#E85D85] hover:opacity-80 underline text-sm transition-colors"
                        {{ $returnPolicyFile ? 'download' : '' }}>
                         Return Policy
                     </a>
@@ -37,7 +37,7 @@
                 
                 @if($shippingPolicy || $shippingPolicyFile)
                     <a href="{{ $shippingPolicyFile ? asset('uploads/' . $shippingPolicyFile) : '#' }}" 
-                       class="text-blue-600 hover:text-blue-800 underline text-sm transition-colors"
+                       class="text-[#E85D85] hover:opacity-80 underline text-sm transition-colors"
                        {{ $shippingPolicyFile ? 'download' : '' }}>
                         Shipping Policy
                     </a>

@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="{{ asset('js/page-loader.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Replacement Details | Vendor Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-gray-50">
+<body style="background-color: #FFF6F0;">
     <div class="container mx-auto p-6">
         <div class="bg-white rounded-2xl shadow-lg p-6">
             <!-- Header -->
@@ -30,7 +31,7 @@
                     <!-- Customer Information -->
                     <div class="bg-white border border-gray-200 rounded-xl p-6">
                         <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-user text-blue-600"></i> Customer Information
+                            <i class="fas fa-user text-[#E85D85]"></i> Customer Information
                         </h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
@@ -50,7 +51,7 @@
                             @if($order)
                             <div>
                                 <p class="text-sm text-gray-500">Original Order</p>
-                                <p class="font-medium text-blue-600">ORD-{{ $order->id }}</p>
+                                <p class="font-medium text-[#E85D85]">ORD-{{ $order->id }}</p>
                             </div>
                             @endif
                         </div>
@@ -59,7 +60,7 @@
                     <!-- Product Information -->
                     <div class="bg-white border border-gray-200 rounded-xl p-6">
                         <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-box text-blue-600"></i> Product Information
+                            <i class="fas fa-box text-[#E85D85]"></i> Product Information
                         </h2>
                         <div class="flex items-start gap-4">
                             @php
@@ -99,7 +100,7 @@
                     <!-- Tracking Timeline -->
                     <div class="bg-white border border-gray-200 rounded-xl p-6">
                         <h2 class="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
-                            <i class="fas fa-history text-blue-600"></i> Tracking History
+                            <i class="fas fa-history text-[#E85D85]"></i> Tracking History
                         </h2>
                         
                         <div class="space-y-4">
@@ -125,7 +126,7 @@
                 <!-- Right Column: Status & Actions -->
                 <div class="space-y-6">
                     <!-- Status Summary -->
-                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-6">
+                    <div class="bg-gradient-to-br from-pink-50 to-indigo-50 border border-pink-100 rounded-xl p-6">
                         <h2 class="text-lg font-bold text-gray-800 mb-4">Status Summary</h2>
                         
                         <div class="space-y-4">
@@ -151,7 +152,7 @@
                             @if($replacement->tracking_number)
                             <div>
                                 <p class="text-sm text-gray-500 mb-1">Tracking Number</p>
-                                <p class="font-medium text-blue-600">{{ $replacement->tracking_number }}</p>
+                                <p class="font-medium text-[#E85D85]">{{ $replacement->tracking_number }}</p>
                             </div>
                             @endif
                             
@@ -175,7 +176,7 @@
                         
                         <div class="space-y-3">
                             <a href="mailto:{{ $replacement->customer_email }}"
-                               class="w-full px-4 py-3 bg-blue-100 text-blue-700 rounded-lg font-medium hover:bg-blue-200 flex items-center justify-center gap-2">
+                               class="w-full px-4 py-3 bg-pink-100 text-[#C94A72] rounded-lg font-medium hover:bg-pink-200 flex items-center justify-center gap-2">
                                 <i class="fas fa-envelope"></i> Email Customer
                             </a>
                             

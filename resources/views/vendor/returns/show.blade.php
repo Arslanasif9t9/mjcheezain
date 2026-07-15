@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="{{ asset('js/page-loader.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Return Details | Vendor Dashboard</title>
     
     <!-- Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <!-- Font Awesome -->
@@ -142,7 +143,7 @@
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-gray-50 to-orange-50 min-h-screen">
+<body class="min-h-screen" style="background-color: #FFF6F0;">
     <div class="container mx-auto px-4 py-8">
         <!-- Header -->
         <div class="flex justify-between items-center mb-8">
@@ -156,7 +157,7 @@
                     <i class="fas fa-arrow-left"></i> Back to Returns
                 </a>
                 <button onclick="window.print()" 
-                        class="px-6 py-3 bg-blue-100 text-blue-700 rounded-xl font-semibold hover:bg-blue-200 transition flex items-center gap-2">
+                        class="px-6 py-3 bg-pink-100 text-[#C94A72] rounded-xl font-semibold hover:bg-pink-200 transition flex items-center gap-2">
                     <i class="fas fa-print"></i> Print
                 </button>
             </div>
@@ -297,7 +298,7 @@
                             $statusColors = [
                                 'pending' => 'bg-yellow-500',
                                 'approved' => 'bg-green-500',
-                                'processing' => 'bg-blue-500',
+                                'processing' => 'bg-pink-500',
                                 'refunded' => 'bg-teal-500',
                                 'completed' => 'bg-green-600',
                                 'rejected' => 'bg-red-500'
@@ -321,7 +322,7 @@
                             <i class="fas fa-edit"></i> Update Status
                         </button>
                         <button onclick="contactCustomer()" 
-                                class="w-full py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition flex items-center justify-center gap-2">
+                                class="w-full py-3 bg-[#E85D85] text-white rounded-xl font-semibold hover:bg-[#C94A72] transition flex items-center justify-center gap-2">
                             <i class="fas fa-comment"></i> Contact Customer
                         </button>
                         <button onclick="generateLabel()" 

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <script src="{{ asset('js/img-fallback.js') }}"></script>
+    <script src="{{ asset('js/page-loader.js') }}?v={{ time() }}"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>All Orders | Vendor Dashboard</title>
@@ -10,7 +11,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <!-- Font Awesome -->
@@ -345,7 +346,7 @@
     </style>
 </head>
 
-<body class="bg-gray-100">
+<body style="background-color: #FFF6F0;">
     <div class="flex min-h-screen">
         <!-- Sidebar Component -->
         <x-vendor.sidebar 
@@ -357,13 +358,13 @@
         />
 
         <!-- Main Content -->
-        <main class="flex-1 p-6">
+        <main class="flex-1 p-4 md:p-6 min-w-0">
             <!-- Header -->
             <div class="flex justify-between items-center mb-6">
                 <div class="w-1/3">
                     <div class="relative">
                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-gray-400"></i>
-                        <input id="orderSearch" type="text" placeholder="Search orders..." class="border border-gray-300 px-10 py-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                        <input id="orderSearch" type="text" placeholder="Search orders..." class="border border-gray-300 px-10 py-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300" />
                     </div>
                 </div>
                 <div class="text-center">
@@ -464,8 +465,8 @@
                                         @endif
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4">{{ $order->quantity }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4 font-medium">${{ number_format($order->price, 2) }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4 font-bold text-green-600">${{ number_format($totalAmount, 2) }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4 font-medium">Rs. {{ number_format($order->price, 2) }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4 font-bold text-green-600">Rs. {{ number_format($totalAmount, 2) }}</td>
                                     
                                     <td class="whitespace-nowrap px-6 py-4">
                                         <div class="relative inline-block">
@@ -481,7 +482,7 @@
                                     <td class="whitespace-nowrap px-6 py-4 text-gray-500">{{ \Carbon\Carbon::parse($order->created_at)->format('M d, Y') }}</td>
                                     <td class="whitespace-nowrap px-6 py-4">
                                         <button onclick="openPrintLabelModal('{{ $order->id }}')" 
-                                                class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-sm no-print">
+                                                class="px-4 py-2 text-white rounded-full hover:opacity-90 transition text-sm no-print" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 4px 12px rgba(255, 125, 160, 0.35);">
                                             <i class="fas fa-print mr-1"></i> Print Label
                                         </button>
                                     </td>
@@ -558,7 +559,7 @@
             
             <div class="mt-6 pt-4 border-t border-gray-200">
                 <button id="updateStatusBtn" onclick="updateOrderStatus()" 
-                        class="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="w-full py-3 text-white rounded-full font-semibold hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 4px 12px rgba(255, 125, 160, 0.35);"
                         disabled>
                     Update Status
                 </button>

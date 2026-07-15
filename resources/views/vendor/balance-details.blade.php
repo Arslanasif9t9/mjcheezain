@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="{{ asset('js/page-loader.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,7 +58,7 @@
         }
     </script>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="min-h-screen" style="background-color: #FFF6F0;">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
         <x-vendor.sidebar 
@@ -86,7 +87,7 @@
             </div>
             
             <!-- Balance Overview -->
-            <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl shadow-lg p-6 lg:p-8 mb-8">
+            <div class="bg-gradient-to-r from-[#FF7DA0] to-purple-600 text-white rounded-2xl shadow-lg p-6 lg:p-8 mb-8">
                 <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center">
                     <div class="mb-6 lg:mb-0 lg:mr-8">
                         <div class="flex items-center mb-4">
@@ -136,10 +137,10 @@
                         <div>
                             <div class="flex justify-between items-center mb-4">
                                 <span class="text-white/90">Available Balance</span>
-                                <span class="text-xl font-bold text-blue-200">₹{{ number_format($balance->available_balance, 2) }}</span>
+                                <span class="text-xl font-bold text-pink-100">₹{{ number_format($balance->available_balance, 2) }}</span>
                             </div>
                             <div class="w-full bg-white/30 rounded-full h-2.5">
-                                <div class="bg-blue-200 h-2.5 rounded-full" 
+                                <div class="bg-pink-200 h-2.5 rounded-full" 
                                      style="width: {{ $balance->total_balance > 0 ? ($balance->available_balance / $balance->total_balance) * 100 : 0 }}%"></div>
                             </div>
                         </div>
@@ -230,7 +231,7 @@
                                                 $typeClasses = [
                                                     'credit' => 'bg-green-100 text-green-800',
                                                     'debit' => 'bg-red-100 text-red-800',
-                                                    'withdrawal' => 'bg-blue-100 text-blue-800',
+                                                    'withdrawal' => 'bg-pink-100 text-[#C94A72]',
                                                     'hold' => 'bg-amber-100 text-amber-800',
                                                     'release' => 'bg-purple-100 text-purple-800',
                                                 ];
@@ -362,7 +363,7 @@
                                                     'pending' => 'bg-amber-100 text-amber-800',
                                                     'approved' => 'bg-green-100 text-green-800',
                                                     'rejected' => 'bg-red-100 text-red-800',
-                                                    'processing' => 'bg-blue-100 text-blue-800',
+                                                    'processing' => 'bg-pink-100 text-[#C94A72]',
                                                 ];
                                                 $statusClass = $statusClasses[$withdrawal->status] ?? 'bg-gray-100 text-gray-800';
                                             @endphp
@@ -454,10 +455,10 @@
             
             <!-- Summary Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-                <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-6">
+                <div class="bg-gradient-to-r from-[#FF7DA0] to-[#FFC275] text-white rounded-xl p-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-blue-100 text-sm">Total Earnings</p>
+                            <p class="text-pink-100 text-sm">Total Earnings</p>
                             <p class="text-2xl font-bold">₹{{ number_format($balance->total_balance + ($withdrawals->sum('amount') ?? 0), 2) }}</p>
                         </div>
                         <i class="fas fa-money-bill-wave text-2xl opacity-80"></i>
