@@ -483,9 +483,17 @@
             }
         }
 
-        // Direction-aware: scrolling DOWN the page collapses the header,
-        // any upward scroll instantly restores the FULL header (no half state).
+        // Direction-aware WITHOUT jitter:
+        // Collapsing/expanding the sticky header changes its height, which
+        // nudges scrollY and used to re-trigger the opposite state — the
+        // searchbar visibly bounced up/down on tiny scrolls. Two guards fix it:
+        //   1. ACCUMULATED direction: the user must scroll >= 14px in ONE
+        //      direction before the state may flip (single-pixel blips reset).
+        //   2. TRANSITION LOCK: after any state change, direction flips are
+        //      ignored for 400ms so the animation itself can't re-trigger us.
         let lastScrollY = window.scrollY || 0;
+        let scrollAcc = 0;
+        let stateLockUntil = 0;
 
         window.addEventListener('scroll', function() {
             if (scrollTickPending) return;
@@ -497,14 +505,31 @@
                 if (!isMobile) return;
 
                 const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
-                const goingDown = scrollY > lastScrollY + 2;
-                const goingUp = scrollY < lastScrollY - 2;
+                const dy = scrollY - lastScrollY;
                 lastScrollY = scrollY;
 
-                if (goingDown && scrollY > HEADER_COLLAPSE_AT) {
-                    applyHeaderState(true);
-                } else if (goingUp || scrollY < HEADER_EXPAND_AT) {
+                // Hard positions always win (top of page = full header)
+                if (scrollY < HEADER_EXPAND_AT) {
                     applyHeaderState(false);
+                    scrollAcc = 0;
+                    return;
+                }
+
+                // During the collapse/expand animation, ignore direction noise
+                if (performance.now() < stateLockUntil) return;
+
+                // Accumulate movement; a direction change resets the counter
+                if ((dy > 0 && scrollAcc < 0) || (dy < 0 && scrollAcc > 0)) scrollAcc = 0;
+                scrollAcc += dy;
+
+                if (scrollAcc > 14 && scrollY > HEADER_COLLAPSE_AT && headerCompact !== true) {
+                    applyHeaderState(true);
+                    scrollAcc = 0;
+                    stateLockUntil = performance.now() + 400;
+                } else if (scrollAcc < -14 && headerCompact !== false) {
+                    applyHeaderState(false);
+                    scrollAcc = 0;
+                    stateLockUntil = performance.now() + 400;
                 }
             });
         }, { passive: true });

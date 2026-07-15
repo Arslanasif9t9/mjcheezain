@@ -8,6 +8,10 @@
 
 ## ✅ Completed
 
+### 2026-07-15 (batch 4) — MJ page loader + cart bar close — commit `c966c60`
+- `public/js/page-loader.js`: branded page-transition overlay — spinning brand-gradient ring around "MJ" monogram, top indeterminate gradient bar, "LOADING…" animated dots. Fires instantly on link clicks / form submits that navigate (skips new-tab/hash/external/data-no-loader); hides on pageshow (bfcache-safe); 12s failsafe. Included in: layouts/structure (head), layouts/app, checkout, brands/autoparts, and customer theme component (all customer pages).
+- Product page `#cartSummary`: small floating X (top-right of bar) to dismiss it.
+
 ### 2026-07-15 (batch 3) — UX fixes: header scroll, checkout, global nav
 - **Mobile header scroll** (`site-header.blade.php`): now direction-aware — any upward scroll instantly restores the FULL header; collapses only while scrolling down past 70px (no more half-hidden state).
 - **Product page view-cart bar** (`#cartSummary`): removed the slideUp keyframe that fought the CSS transition over `transform` (cause of half-hidden bar); `min-h` + safe-area bottom padding.
