@@ -61,9 +61,10 @@ jobs:
             **/.git*
             **/.git*/**
             **/node_modules/**
-            **/vendor/**
-            **/tests/**
-            **/storage/**
+            vendor/**
+            tests/**
+            storage/**
+            public/storage/**
             .env
             .env.*
             .github/**
