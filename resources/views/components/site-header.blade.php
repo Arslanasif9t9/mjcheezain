@@ -84,12 +84,6 @@
                     <a href="/customer/wishlist" class="hover:text-gray-900 transition duration-150">Wishlist</a>
                     <a href="/cart" class="hover:text-gray-900 transition duration-150">View Cart</a>
 
-                    @if($vendor ?? null)
-                        <a href="/vendor-products/{{ $vendor->user_id }}" class="px-5 py-2 text-white font-bold rounded-full shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm no-underline" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);">
-                            <i class="fa-solid fa-store mr-1.5"></i>View Store
-                        </a>
-                    @endif
-
                     <div class="relative">
                         <button onclick="toggleDropdown('bell-dropdown-desktop')" class="p-1 hover:text-gray-900 transition duration-150 focus:outline-none">
                             <i class="fa-solid fa-bell text-lg"></i>
@@ -154,12 +148,6 @@
 
                     <!-- Right side: Store button + Search trigger (on scroll) + Sign Up / Login / Profile dropdowns -->
                     <div class="flex items-center text-xs sm:text-sm font-semibold text-gray-800 space-x-1.5">
-                        @if($vendor ?? null)
-                            <a href="/vendor-products/{{ $vendor->user_id }}" class="px-3.5 py-1.5 text-white text-xs font-bold rounded-full shadow-md hover:opacity-90 transition whitespace-nowrap no-underline" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);">
-                                <i class="fa-solid fa-store mr-1"></i>Store
-                            </a>
-                        @endif
-
                         <!-- Collapsed Search Icon (Visible on Scroll) -->
                         <button id="mobile-search-trigger" onclick="expandMobileSearch()" class="text-[#000000] focus:outline-none p-1.5 transition-all duration-300" style="max-width: 0px; opacity: 0; pointer-events: none; overflow: hidden;" aria-label="Search">
                             <i class="fa-solid fa-magnifying-glass text-base"></i>
@@ -495,6 +483,10 @@
             }
         }
 
+        // Direction-aware: scrolling DOWN the page collapses the header,
+        // any upward scroll instantly restores the FULL header (no half state).
+        let lastScrollY = window.scrollY || 0;
+
         window.addEventListener('scroll', function() {
             if (scrollTickPending) return;
             scrollTickPending = true;
@@ -505,12 +497,15 @@
                 if (!isMobile) return;
 
                 const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
-                if (scrollY > HEADER_COLLAPSE_AT) {
+                const goingDown = scrollY > lastScrollY + 2;
+                const goingUp = scrollY < lastScrollY - 2;
+                lastScrollY = scrollY;
+
+                if (goingDown && scrollY > HEADER_COLLAPSE_AT) {
                     applyHeaderState(true);
-                } else if (scrollY < HEADER_EXPAND_AT) {
+                } else if (goingUp || scrollY < HEADER_EXPAND_AT) {
                     applyHeaderState(false);
                 }
-                // Between the two thresholds the header keeps its current state
             });
         }, { passive: true });
 

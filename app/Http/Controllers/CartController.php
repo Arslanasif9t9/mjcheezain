@@ -197,7 +197,8 @@ class CartController extends Controller
         $total = $subtotal + $shipping + $tax - $discount;
 
         if(!$user) {
-            return 'please <a href="https://arslan.mjcheezain.com/login-user?type=customer-login&page=product/' . $product_id . '/buy/' . $quantity . '"> Register or login </a> your account';
+            // Guest "Buy Now" — send to login, then return to this buy URL
+            return redirect('/login-user?type=customer-login&page=' . urlencode("product/{$product_id}/buy/{$quantity}"));
         }
         return view('checkout', compact(
             'user', 'profile', 'dashboardPage', 'imgPath',

@@ -83,7 +83,9 @@ class CheckoutController extends Controller
         // dd($cartItems);
 
         if(!$user) {
-            return "please <a href='https://arslan.mjcheezain.com/login-user?type=customer-login&page=product/40/buy/1'> Register or login </a> your account";
+            // Guest checkout isn't supported — send them to login and bring
+            // them back to checkout afterwards (relative URL, works on any domain)
+            return redirect('/login-user?type=customer-login&page=checkout');
         }
         return view('checkout', compact(
             'user', 'profile', 'dashboardPage', 'imgPath',

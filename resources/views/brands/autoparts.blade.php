@@ -1103,5 +1103,6 @@
     @endif
 
     <script src="{{ asset('js/search.js') }}?v={{ time() }}"></script>
+    <x-customer.global-nav />
 </body>
 </html>

@@ -63,6 +63,8 @@
 <body class="bg-gray-50 font-sans">
     @yield('body')
 
+    <x-customer.global-nav />
+
     @yield('script')
 </body>
 </html>

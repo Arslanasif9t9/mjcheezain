@@ -176,7 +176,9 @@
     </script>
     <script src="{{ asset('js/product-card.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('js/category_fetch_v2.js') }}?v={{ time() }}"></script>
-    
+
+    <x-customer.global-nav />
+
     @stack('scripts')
 </body>
 </html>

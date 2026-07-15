@@ -1,69 +1,38 @@
 @extends('layouts.structure')
 @section('title', 'Vendor Products')
 
-@section('style')
-    <style>
-        .product-card-list {
-            transition: all 0.3s ease;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        .product-card-list:hover {
-            background-color: #f9fafb;
-            transform: translateX(5px);
-        }
-        .aspect-w-4 {
-            position: relative;
-        }
-        .aspect-w-4::before {
-            content: '';
-            display: block;
-            padding-top: 100%;
-        }
-        .aspect-h-3 {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-        }
-        .product-image-container {
-            width: 100%;
-        }
-        @media (min-width: 768px) {
-            .product-image-container {
-                min-width: 200px;
-                max-width: 200px;
-            }
-        }
-    </style>
-@endsection
-
 @section('body')
     <x-cosmetics.header :user="$user ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
-    
-    <main class="container mx-auto px-4 py-8">
-        <!-- Vendor Info Section -->
-        <section class="bg-white rounded-xl shadow-sm p-6 mb-8">
-            <div class="flex flex-col md:flex-row items-center">
-                <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-orange-100 mb-4 md:mb-0 md:mr-6">
+
+    <main class="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
+        <!-- Vendor Store Hero (brand gradient banner) -->
+        <section class="rounded-2xl sm:rounded-3xl overflow-hidden mb-6 sm:mb-8 relative"
+                 style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 10px 30px rgba(255, 125, 160, 0.25);">
+            <!-- Decorative circles -->
+            <div class="absolute -top-12 -right-12 w-44 h-44 bg-white/10 rounded-full pointer-events-none"></div>
+            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full pointer-events-none"></div>
+
+            <div class="relative z-10 px-4 py-6 sm:px-8 sm:py-10 flex flex-col md:flex-row items-center gap-4 sm:gap-6">
+                <div class="w-20 h-20 sm:w-28 sm:h-28 rounded-full overflow-hidden ring-4 ring-white/70 shadow-xl flex-shrink-0">
                     <img src="{{ asset($imgPath) }}" alt="Vendor Profile" class="w-full h-full object-cover">
                 </div>
-                <div class="text-center md:text-left">
-                    <h1 class="text-2xl font-bold text-gray-900">
+                <div class="text-center md:text-left min-w-0">
+                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 bg-white/25 backdrop-blur-sm text-white text-[10px] sm:text-xs font-bold rounded-full mb-1.5">
+                        <i class="fa-solid fa-store text-[9px]"></i> OFFICIAL STORE
+                    </span>
+                    <h1 class="text-xl sm:text-3xl font-extrabold text-white truncate">
                         {{ $vendor->business_name ?? 'Vendor Business' }}
                     </h1>
-                    <p class="text-gray-600 mt-2">
+                    <p class="text-white/85 text-xs sm:text-base mt-1 line-clamp-2">
                         {{ $vendor->business_description ?? 'Premium products for all your needs' }}
                     </p>
-                    <div class="flex items-center justify-center md:justify-start mt-3">
-                        <div class="flex text-yellow-400 mr-2">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </div>
-                        <span class="text-gray-600">4.5 ({{ $products->count() }} products)</span>
+                    <div class="flex items-center justify-center md:justify-start gap-2 mt-3 flex-wrap">
+                        <span class="inline-flex items-center gap-1 bg-white text-gray-800 text-[11px] sm:text-sm font-bold px-3 py-1 rounded-full shadow">
+                            <span class="text-yellow-400">★</span> 4.5
+                        </span>
+                        <span class="inline-flex items-center gap-1 bg-white/25 backdrop-blur-sm text-white text-[11px] sm:text-sm font-semibold px-3 py-1 rounded-full">
+                            <i class="fa-solid fa-box-open text-[10px]"></i> {{ $products->count() }} products
+                        </span>
                     </div>
                 </div>
             </div>
@@ -129,52 +98,17 @@
                 
             @else
                 <!-- Empty State -->
-                <div class="text-center py-12">
-                    <div class="w-24 h-24 mx-auto mb-4 text-gray-400">
-                        <i class="fas fa-box-open text-6xl"></i>
+                <div class="text-center py-12 bg-white rounded-2xl" style="box-shadow: 0 6px 20px rgba(17, 24, 39, 0.06);">
+                    <div class="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style="background: linear-gradient(115deg, rgba(255,125,160,.12), rgba(255,194,117,.12));">
+                        <i class="fas fa-box-open text-3xl" style="color: #E85D85;"></i>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-600 mb-2">No Products Available</h3>
-                    <p class="text-gray-500">This vendor hasn't added any products yet.</p>
+                    <h3 class="text-xl font-bold text-gray-700 mb-2">No Products Available</h3>
+                    <p class="text-gray-500 text-sm">This vendor hasn't added any products yet.</p>
+                    <a href="/" class="inline-block mt-4 px-6 py-2.5 text-white text-sm font-semibold rounded-full no-underline" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 4px 14px rgba(255, 125, 160, 0.35);">Continue Shopping</a>
                 </div>
             @endif
         </section>
     </main>
 
     <x-footer />
-
-    <script>
-        // Toggle between grid and list view
-        const gridBtn = document.getElementById('grid-view-btn');
-        if (gridBtn) {
-            gridBtn.addEventListener('click', function() {
-                window.location.href = '';
-            });
-        }
-
-        const listBtn = document.getElementById('list-view-btn');
-        if (listBtn) {
-            listBtn.addEventListener('click', function() {
-                window.location.href = '';
-            });
-        }
-
-        // Add to cart functionality
-        document.querySelectorAll('[class*="Add to Cart"]').forEach(button => {
-            button.addEventListener('click', function() {
-                const productId = this.dataset.productId;
-                // Add your add to cart logic here
-                console.log('Add product to cart:', productId);
-                
-                // Show success message
-                const toast = document.createElement('div');
-                toast.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg';
-                toast.textContent = 'Product added to cart!';
-                document.body.appendChild(toast);
-                
-                setTimeout(() => {
-                    toast.remove();
-                }, 3000);
-            });
-        });
-    </script>
 @endsection

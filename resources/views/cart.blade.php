@@ -141,7 +141,7 @@
                         <div class="flex-shrink-0 flex flex-col items-center gap-2.5">
                             <div class="w-28 h-28 sm:w-36 sm:h-36 bg-gray-50 border border-pink-100 rounded-xl flex items-center justify-center overflow-hidden shadow-sm">
                                 ${item.image_path ?
-                                    `<img src="https://arslan.mjcheezain.com/storage/vendor/products/images/${item.image_path}" alt="${item.product_name}" class="w-full h-full object-cover hover:scale-105 transition duration-300">` :
+                                    `<img src="/storage/vendor/products/images/${item.image_path}" alt="${item.product_name}" class="w-full h-full object-cover hover:scale-105 transition duration-300">` :
                                     '<span class="text-gray-400 text-xs">No Image</span>'
                                 }
                             </div>

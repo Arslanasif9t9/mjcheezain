@@ -102,6 +102,15 @@
                         src="https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg" 
                         class="border-2 border-blue-900 w-full h-[72vh] aspect-square object-cover rounded-lg overflow-hidden"> --}}
                     
+                    <!-- Visit Store (moved out of the header, lives on the main image now) -->
+                    @if($vendor ?? null)
+                        <a href="/vendor-products/{{ $vendor->user_id }}"
+                           class="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 px-3.5 py-2 text-white text-xs sm:text-sm font-bold rounded-full shadow-lg hover:opacity-90 hover:-translate-y-0.5 transition-all no-underline"
+                           style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 4px 14px rgba(255, 125, 160, 0.4);">
+                            <i class="fa-solid fa-store"></i> Visit Store
+                        </a>
+                    @endif
+
                     <!-- Icons -->
                     <div class="absolute top-3 right-3 flex space-x-3">
                         <!-- Fullscreen Icon -->
@@ -310,7 +319,7 @@
         </div>
 
         <!-- Bottom Cart Summary (brand-themed) -->
-        <div id="cartSummary" class="fixed bottom-0 left-0 w-full h-20 bg-white shadow-2xl flex items-center justify-between px-4 sm:px-6 transform translate-y-full transition-transform duration-500 z-50">
+        <div id="cartSummary" class="fixed bottom-0 left-0 w-full min-h-[5rem] bg-white shadow-2xl flex items-center justify-between px-4 sm:px-6 py-3 transform translate-y-full transition-transform duration-500 z-50" style="padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));">
             <!-- Brand gradient top strip -->
             <div class="absolute top-0 left-0 w-full h-[3px]" style="background: linear-gradient(to right, #FF7DA0, #FFC275);"></div>
             <div class="flex items-center min-w-0">
@@ -407,9 +416,10 @@
                         totalItems.textContent = data.cart_count;
                         totalPriceElement.textContent = data.cart_total.toFixed(2);
                         
-                        // Show cart summary with animation
+                        // Show cart summary — the CSS transition handles the slide;
+                        // don't ALSO run the slideUp keyframe animation (the two
+                        // fight over `transform` and can leave the bar half-hidden)
                         cartSummary.classList.remove('translate-y-full');
-                        cartSummary.classList.add('animate-slide-up');
                         
                         // Cart icon bounce animation
                         cartIcon.classList.add('animate-bounce-custom');
@@ -718,42 +728,73 @@
                 <!-- Tab Content Panels -->
                 <div class="pt-8">
                     
-                    <!-- Tab 1: Description Content (Default Active) -->
+                    <!-- Tab 1: Description Content (Default Active)
+                         Design: text clamped to 5 lines with a soft white fade at the
+                         bottom; a pink "Read more ▾" toggle expands it smoothly and
+                         becomes "Read less ▴". Button auto-hides for short text. -->
+                    <style>
+                        #descWrap { position: relative; overflow: hidden; transition: max-height 0.35s ease; }
+                        #descWrap.desc-clamped::after {
+                            content: '';
+                            position: absolute;
+                            left: 0; right: 0; bottom: 0;
+                            height: 2.5em;
+                            background: linear-gradient(to bottom, rgba(255,255,255,0), #ffffff 85%);
+                            pointer-events: none;
+                        }
+                        #productText { line-height: 1.65; color: #4b5563; white-space: pre-line; }
+                    </style>
                     <div id="content-description" class="tab-content">
                         <h3 class="text-xl font-semibold mb-4">Product Details</h3>
-                        <p id="productText">{{ $product->description }}</p>
-                        <button
-                            id="toggleBtn"
-                            class="mt-2 text-[#E85D85] font-medium hover:underline hidden">
-                            Read more
+                        <div id="descWrap" class="desc-clamped">
+                            <p id="productText" class="m-0">{{ $product->description }}</p>
+                        </div>
+                        <button id="toggleBtn"
+                                class="mt-2 inline-flex items-center gap-1 text-[#E85D85] text-sm font-semibold hover:underline hidden">
+                            Read more <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300"></i>
                         </button>
                     </div>
                     <script>
-                        const textElement = document.getElementById("productText");
-                        const toggleBtn = document.getElementById("toggleBtn");
+                        (function () {
+                            const wrap = document.getElementById('descWrap');
+                            const textEl = document.getElementById('productText');
+                            const toggleBtn = document.getElementById('toggleBtn');
+                            const LINES = 5;
 
-                        const fullText = textElement.innerText;
-                        const words = fullText.split(" ");
-                        const limit = 500;
+                            const lineHeight = parseFloat(getComputedStyle(textEl).lineHeight) || 24;
+                            const clampedHeight = Math.round(lineHeight * LINES);
+                            let expanded = false;
 
-                        if (words.length > limit) {
-                            const shortText = words.slice(0, limit).join(" ") + "...";
-                            let isExpanded = false;
+                            function applyClamp() {
+                                wrap.style.maxHeight = clampedHeight + 'px';
+                                wrap.classList.add('desc-clamped');
+                            }
 
-                            textElement.innerText = shortText;
-                            toggleBtn.classList.remove("hidden");
+                            applyClamp();
 
-                            toggleBtn.addEventListener("click", () => {
-                                if (!isExpanded) {
-                                    textElement.innerText = fullText;
-                                    toggleBtn.innerText = "Read less";
+                            // Only show the toggle when the text actually overflows 5 lines
+                            if (textEl.scrollHeight > clampedHeight + 8) {
+                                toggleBtn.classList.remove('hidden');
+                            } else {
+                                wrap.style.maxHeight = 'none';
+                                wrap.classList.remove('desc-clamped');
+                            }
+
+                            toggleBtn.addEventListener('click', function () {
+                                expanded = !expanded;
+                                const icon = toggleBtn.querySelector('i');
+                                if (expanded) {
+                                    wrap.style.maxHeight = textEl.scrollHeight + 24 + 'px';
+                                    wrap.classList.remove('desc-clamped');
+                                    toggleBtn.firstChild.textContent = 'Read less ';
+                                    if (icon) icon.style.transform = 'rotate(180deg)';
                                 } else {
-                                    textElement.innerText = shortText;
-                                    toggleBtn.innerText = "Read more";
+                                    applyClamp();
+                                    toggleBtn.firstChild.textContent = 'Read more ';
+                                    if (icon) icon.style.transform = 'rotate(0deg)';
                                 }
-                                isExpanded = !isExpanded;
                             });
-                        }
+                        })();
                     </script>
 
 

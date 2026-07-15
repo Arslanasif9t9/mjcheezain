@@ -8,6 +8,17 @@
 
 ## ✅ Completed
 
+### 2026-07-15 (batch 3) — UX fixes: header scroll, checkout, global nav
+- **Mobile header scroll** (`site-header.blade.php`): now direction-aware — any upward scroll instantly restores the FULL header; collapses only while scrolling down past 70px (no more half-hidden state).
+- **Product page view-cart bar** (`#cartSummary`): removed the slideUp keyframe that fought the CSS transition over `transform` (cause of half-hidden bar); `min-h` + safe-area bottom padding.
+- **Store button**: removed from site-header (mobile + desktop); now a gradient "Visit Store" pill on the product page main image (bottom-left).
+- **Description read-more** (`product.blade.php`): 5-line clamp + white gradient fade + pink "Read more ▾ / Read less ▴" toggle with smooth max-height expand; auto-hides for short text.
+- **Guest Buy Now / checkout**: raw "please login" text with hardcoded arslan.mjcheezain.com replaced by proper `redirect('/login-user?type=customer-login&page=…')` in CartController::buy and CheckoutController::checkout (verified 302). Also killed last hardcoded domain in cart.blade.php.
+- **Vendor store page** (`vendor-products.blade.php`): brand gradient store hero (avatar ring, OFFICIAL STORE chip, rating + product count pills), rethemed empty state, removed dead list-view CSS/JS.
+- **Global customer bottom nav** (`components/customer/global-nav.blade.php`): customer tab bar now on EVERY page — included in layouts/structure (cart, checkout, product, cosmetics, listings, vendor store), layouts/app (home), and autoparts. Pushes `#cartSummary` above itself on mobile; adds spacer so it never covers content.
+- **Checkout redesign**: compact numbered sections (1 Address / 2 Payment / 3 Contact), slim address+payment option rows with checked highlight, merged billing checkbox + order notes into contact card, compact summary rows (thumb + qty badge + one meta line), trust badges strip merged into summary card. All form IDs/JS preserved.
+- Verified: blades compile; checkout/home/cart/product/vendor-store all HTTP 200; guest buy/checkout 302 redirect.
+
 ### 2026-07-15 — ss10 product cards + header avatar + product page fixes
 - **Shared ss10-style product card** (`public/js/product-card.js`, `window.buildProductCard(product, imgUrl, 'slider'|'grid')`): big 16/10 image, bold title, meta row (pin icon + category • rating), Rs. price + strikethrough MRP, gradient discount ribbon, gradient **Quick View** button at card end. Hover lift injected once.
 - Wired everywhere: `category_fetch.js` + `category_fetch_v2.js` (home/cosmetics/related sliders), `products/product-list.blade.php` (masonry → uniform ss10 grid), `search.js` (results grid; also killed hardcoded arslan.mjcheezain.com domain + $ currency), `vendor-products.blade.php` (list rows → ss10 grid, Blade version of same card), `products/biggest-savings.blade.php` (unused but consistent).
