@@ -4,7 +4,8 @@
 
 ## 🔄 Currently Working On
 
-- **MJGuider chatbot — DONE, owner approved & pushing himself (2026-07-15).** UI revamp bhi approved ("sab thek ha"). Pending abhi bhi: `GROK_API_KEY` (fallback key-less), real phone number for `knowledge.md`. ⚠ Deploy ke baad server `.env` mein `GEMINI_API_KEY` + `GEMINI_MODEL=gemini-3.1-flash-lite` (+ Grok key jab mile) manually dalna + `php artisan config:clear` + `php artisan view:clear` zaroori hai — deploy `.env` upload nahi karta.
+- *(nothing in progress — MJGuider **DEPLOYED & LIVE, owner-verified working** 2026-07-15)*
+- Future MJGuider todos jab owner chahe: `GROK_API_KEY` dalna (fallback abhi key-less — Gemini fail par polite fallback msg hi aata hai), real phone number aane par `app/Services/MjGuide/knowledge.md` update + server par `php artisan cache:clear`.
 - **⚠ GOTCHA (2026-07-15):** naye Gemini keys par 2.0/2.5 models ka free-tier quota **0** hai (429/404 dete hain) — is liye model `gemini-3.1-flash-lite` use ho raha hai (free tier OK, tested). GeminiProvider ab "thought" parts skip kar ke sirf visible text jorta hai.
 
 ## ✅ Completed
