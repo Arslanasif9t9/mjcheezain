@@ -58,9 +58,9 @@ POST /mj-guide/message   (payload: new message + last 10 messages as context)
 
 ### Config (`config/services.php` + `.env`)
 ```
-GEMINI_API_KEY=            # required
-GEMINI_MODEL=gemini-2.0-flash
-GROK_API_KEY=              # required
+GEMINI_API_KEY=            # required (added by owner 2026-07-15)
+GEMINI_MODEL=gemini-3.1-flash-lite   # NOTE: 2.0/2.5 models have ZERO free-tier quota on new keys
+GROK_API_KEY=              # still pending from owner
 GROK_MODEL=grok-3-mini
 MJ_GUIDE_ENABLED=true      # kill-switch without deploy
 ```

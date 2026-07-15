@@ -4,7 +4,8 @@
 
 ## 🔄 Currently Working On
 
-- **MJ Guide chatbot — CODE COMPLETE, not yet pushed/deployed.** Waiting on owner to: fill `GEMINI_API_KEY` + `GROK_API_KEY` in `.env` (placeholders already added at file end), then live-test with real AI replies. Real phone number still pending → update `app/Services/MjGuide/knowledge.md` when owner provides it.
+- **MJ Guide chatbot — WORKING with real Gemini, NOT pushed/deployed (owner: "abhi push nahi").** Gemini key in local `.env`, live-tested OK. Pending: `GROK_API_KEY` (fallback abhi key-less → dono fail par polite fallback msg), real phone number for `knowledge.md`, owner ka widget UI browser test, phir push approval. ⚠ Server `.env` par bhi keys manually dalni hongi (deploy .env upload nahi karta) + `php artisan config:clear`.
+- **⚠ GOTCHA (2026-07-15):** naye Gemini keys par 2.0/2.5 models ka free-tier quota **0** hai (429/404 dete hain) — is liye model `gemini-3.1-flash-lite` use ho raha hai (free tier OK, tested). GeminiProvider ab "thought" parts skip kar ke sirf visible text jorta hai.
 
 ## ✅ Completed
 

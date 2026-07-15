@@ -43,9 +43,16 @@ class GeminiProvider
             throw new RuntimeException('Gemini HTTP '.$response->status());
         }
 
-        $text = $response->json('candidates.0.content.parts.0.text');
+        // Newer Gemini models may emit "thought" parts first — take the visible text parts only
+        $parts = $response->json('candidates.0.content.parts', []);
+        $text = '';
+        foreach ($parts as $part) {
+            if (empty($part['thought']) && isset($part['text']) && is_string($part['text'])) {
+                $text .= $part['text'];
+            }
+        }
 
-        if (! is_string($text) || trim($text) === '') {
+        if (trim($text) === '') {
             throw new RuntimeException('Gemini returned an empty or blocked response');
         }
 
