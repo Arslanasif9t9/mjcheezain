@@ -35,4 +35,18 @@ return [
         ],
     ],
 
+    'mj_guide' => [
+        'enabled' => env('MJ_GUIDE_ENABLED', true),
+    ],
+
+    'gemini' => [
+        'key' => env('GEMINI_API_KEY'),
+        'model' => env('GEMINI_MODEL', 'gemini-2.0-flash'),
+    ],
+
+    'grok' => [
+        'key' => env('GROK_API_KEY'),
+        'model' => env('GROK_MODEL', 'grok-3-mini'),
+    ],
+
 ];

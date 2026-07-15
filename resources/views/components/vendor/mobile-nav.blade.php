@@ -43,3 +43,6 @@
 </div>
 <!-- Spacer so the fixed bar never covers content on mobile -->
 <div class="h-16 md:hidden" aria-hidden="true"></div>
+
+{{-- MJ Guide chatbot (site-wide; @once inside prevents duplicates) --}}
+<x-mj-guide />

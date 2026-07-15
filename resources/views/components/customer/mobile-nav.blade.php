@@ -90,3 +90,6 @@
         padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
     }
 </style>
+
+{{-- MJ Guide chatbot (site-wide; @once inside prevents duplicates) --}}
+<x-mj-guide />

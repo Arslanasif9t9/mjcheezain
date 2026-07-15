@@ -4,9 +4,25 @@
 
 ## 🔄 Currently Working On
 
-- *(nothing in progress — last task fully completed)*
+- **MJ Guide chatbot — CODE COMPLETE, not yet pushed/deployed.** Waiting on owner to: fill `GEMINI_API_KEY` + `GROK_API_KEY` in `.env` (placeholders already added at file end), then live-test with real AI replies. Real phone number still pending → update `app/Services/MjGuide/knowledge.md` when owner provides it.
 
 ## ✅ Completed
+
+### 2026-07-15 — MJ Guide chatbot: FULL BUILD (Phases A–E)
+- **Backend** (`app/Services/MjGuide/`): `GeminiProvider` (v1beta generateContent, 15s timeout), `GrokProvider` (x.ai chat/completions, 20s), `ChatService` (failover on 429/quota/5xx/timeout/empty, `Cache` 5-min circuit breaker `mj_guide_gemini_down`, provider logged to laravel.log, Urdu fallback reply when both fail). System prompt: MJ-Cheezain-only scope, mirrors user language, Rs. only, phone "coming soon" + support email.
+- **Knowledge base**: `app/Services/MjGuide/knowledge.md` (contacts, login/signup at /login-user, order flow COD-only, customer+vendor panel guides with real URLs verified from routes/web.php, returns/replacements, info pages, "does NOT exist yet" list). Cached 1h — `php artisan cache:clear` after editing it.
+- **API**: `POST /mj-guide/message` (`MjGuideController`, throttle:10,1, validates message ≤1000 + context ≤10 items role-whitelisted). Stateless — no DB, no migrations.
+- **Config**: `config/services.php` → `mj_guide.enabled`, `gemini.key/model`, `grok.key/model`; `.env` + `.env.production.example` got placeholder block (keys EMPTY — owner fills).
+- **Widget**: `components/mj-guide.blade.php` (@once; brand gradient FAB bottom-right, chat window 380px/bottom-sheet mobile, 15.5px msg text, 16px input (iOS no-zoom), two-tap clear button, typing dots, unread dot; z 9990/9991 — under auth-popup 9998, vendor drawer 10001, page-loader) + `public/js/mj-guide.js` (localStorage `mj_guide_history` 70-cap, last-10 context, textContent-only XSS-safe, welcome bubble when empty, 429/network notes not saved).
+- **Injection**: `customer/global-nav.blade.php` (OUTSIDE @auth → guests too), `customer/mobile-nav.blade.php`, `vendor/mobile-nav.blade.php`, `home/login.blade.php` — @once collapses overlaps.
+- **Verified**: php -l ×4, node --check, view:cache OK; live server: home/cosmetics/cart/contact/product/login-user = 1 widget each; tinker full-kernel renders (customer 67: dashboard/orders/wishlist/home; vendor 66: dashboard/products/orders/withdraw) all 200 with exactly 1 widget; endpoint 200 fallback reply (no keys), 422 invalid payload, failover logged.
+- ⚠ Widget UI browser-click test NOT done (Chrome extension unavailable) — owner should open site, click MJ Guide, send a message.
+
+### 2026-07-15 — MJ Guide chatbot: complete planning + docs (NO code)
+- New `docx/mj-guide.md` (full technical plan) + `docx/plan.html` (visual brand-themed plan page)
+- Plan: floating bottom-right widget (all users incl. guests, injected via `customer/global-nav` which is on every page), Gemini→Grok silent failover with 5-min circuit breaker, system-prompt training + `knowledge.md` (MJ Cheezain-only scope), rate limits + `MJ_GUIDE_ENABLED` kill-switch
+- **Owner revision (same day): history = browser localStorage ONLY, max 70 messages, NO database changes** (original DB-table plan dropped); AI ko old chat yaad rakhne ke liye last 10 messages har request ke sath context mein jate hain; server fully stateless
+- `phases.md`: inserted as Phase 9 (Payments shifted to Phase 10); `PRD.md`: added §3.6
 
 ### 2026-07-15 — deploy exclude bug fixed — commit `77921c6` ⚠️ IMPORTANT GOTCHA
 - Live error "Unable to locate component [vendor.mobile-nav]": deploy.yml excluded `**/vendor/**` which silently skipped `resources/views/vendor/**` AND `resources/views/components/vendor/**` from every FTP upload (vendor views on server were stale since pre-autodeploy days). Fixed: excludes anchored to repo root (`vendor/**`, `tests/**`, `storage/**`, `public/storage/**`). Deploy succeeded, live verified 200 + error gone.

@@ -42,7 +42,15 @@ Status legend: ✅ done · 🔄 in progress · ⏳ planned
 ## Phase 8 — Auto Parts Launch ⏳
 - Remove Coming Soon gate, category data, autoparts-specific theming
 
-## Phase 9 — Payments & Growth ⏳
+## Phase 9 — MJ Guide (AI Support Chatbot) ✅ *(built 2026-07-15 — see `mj-guide.md` + `plan.html`)*
+- Floating brand-themed chatbot (bottom-right, every page, all users incl. guests) — DONE
+- Gemini primary → Grok silent fallback (5-min circuit breaker), stateless `POST /mj-guide/message` (throttle 10/min) — DONE
+- History: browser localStorage only, 70-msg cap, last 10 sent as AI context; clear-chat = two-tap trash button — DONE
+- System-prompt training + `app/Services/MjGuide/knowledge.md` (MJ Cheezain-only scope, mirrors user language, Rs., phone "coming soon") — DONE
+- Verified: all public/customer/vendor pages render exactly 1 widget; fallback path + validation + logs tested live
+- ⚠ Remaining: owner fills `GEMINI_API_KEY` + `GROK_API_KEY` in `.env` (placeholders added); real phone number later in `knowledge.md`; NOT yet pushed/deployed
+
+## Phase 10 — Payments & Growth ⏳
 - Online payment gateway (JazzCash/Easypaisa/cards) — currently COD only
 - Email notifications (order confirmations, return updates) via `resources/views/emails`
 - Performance pass: replace CDN Tailwind with compiled CSS if/when a build step becomes acceptable

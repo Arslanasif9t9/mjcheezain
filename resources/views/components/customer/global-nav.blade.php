@@ -20,3 +20,7 @@
         <x-vendor.mobile-nav />
     @endif
 @endauth
+
+{{-- MJ Guide chatbot — for EVERYONE (guests included), hence outside @auth --}}
+<x-mj-guide />
+

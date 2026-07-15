@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MJ Guide — Chatbot Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brand:#E85D85; --brand-dark:#C94A72;
+    --g1:#FF7DA0; --g2:#FFC275;
+    --ink:#1f2937; --muted:#6b7280; --card:#ffffff; --bg:#FFF6F0;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px 80px}
+
+  /* hero */
+  .hero{background:linear-gradient(120deg,var(--g1),var(--g2));color:#fff;padding:56px 20px 72px;text-align:center;border-radius:0 0 36px 36px}
+  .hero .kicker{letter-spacing:4px;font-size:12px;font-weight:600;text-transform:uppercase;opacity:.9}
+  .hero h1{font-size:clamp(30px,5vw,46px);font-weight:800;margin:8px 0 4px}
+  .hero h1 .mono{font-style:italic;font-family:Georgia,serif}
+  .hero p{max-width:640px;margin:10px auto 0;font-size:15px;opacity:.95}
+  .hero .status{display:inline-block;margin-top:18px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.5);padding:6px 18px;border-radius:999px;font-size:13px;font-weight:600}
+
+  section{margin-top:52px}
+  h2{font-size:22px;font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:18px}
+  h2 .num{width:34px;height:34px;border-radius:10px;background:linear-gradient(120deg,var(--g1),var(--g2));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex:none}
+  .card{background:var(--card);border-radius:18px;padding:22px 24px;box-shadow:0 4px 18px rgba(232,93,133,.08);border:1px solid #ffe4ec}
+  .grid{display:grid;gap:16px}
+  @media(min-width:760px){.grid.c2{grid-template-columns:1fr 1fr}.grid.c3{grid-template-columns:1fr 1fr 1fr}}
+  .card h3{font-size:15px;font-weight:700;color:var(--brand);margin-bottom:6px}
+  .card p, .card li{font-size:13.5px;color:#374151}
+  .card ul{padding-left:18px}
+  .pill{display:inline-block;background:#fdf2f6;color:var(--brand);border:1px solid #fbd3e0;border-radius:999px;padding:2px 12px;font-size:12px;font-weight:600;margin:2px 3px 2px 0}
+  code{background:#fdf2f6;color:var(--brand-dark);padding:1px 6px;border-radius:6px;font-size:12.5px}
+
+  /* quote */
+  .quote{border-left:4px solid var(--brand);background:#fff;padding:16px 20px;border-radius:0 14px 14px 0;font-size:14px;font-style:italic;color:#4b5563}
+
+  /* widget mockup */
+  .mock-stage{position:relative;background:linear-gradient(180deg,#fafafa,#f3f4f6);border:1px solid #e5e7eb;border-radius:18px;min-height:520px;overflow:hidden;display:flex;align-items:flex-end;justify-content:flex-end;padding:24px}
+  .mock-stage .pagehint{position:absolute;top:16px;left:20px;color:#c7cdd6;font-size:12px;letter-spacing:2px;font-weight:600}
+  .chat{width:330px;background:#fff;border-radius:20px;box-shadow:0 18px 50px rgba(0,0,0,.18);overflow:hidden;margin-bottom:74px}
+  .chat-head{background:linear-gradient(120deg,var(--g1),var(--g2));color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px}
+  .chat-head .avatar{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.25);border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-family:Georgia,serif;font-style:italic}
+  .chat-head .t{font-weight:700;font-size:15px;line-height:1.2}
+  .chat-head .s{font-size:11px;opacity:.95;display:flex;align-items:center;gap:5px}
+  .dot{width:7px;height:7px;border-radius:50%;background:#4ade80;display:inline-block}
+  .chat-head .x{margin-left:auto;opacity:.9;font-size:18px;cursor:default}
+  .chat-body{padding:14px;background:#fdf7f4;display:flex;flex-direction:column;gap:10px;min-height:240px}
+  .bub{max-width:85%;padding:10px 14px;border-radius:16px;font-size:15px;line-height:1.5}
+  .bub.bot{background:#fff;border:1px solid #ffe4ec;border-bottom-left-radius:4px;align-self:flex-start;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+  .bub.user{background:linear-gradient(120deg,var(--g1),var(--g2));color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+  .typing{display:flex;gap:4px;align-self:flex-start;background:#fff;border:1px solid #ffe4ec;border-radius:16px;border-bottom-left-radius:4px;padding:12px 16px}
+  .typing i{width:6px;height:6px;border-radius:50%;background:var(--g1);animation:b 1s infinite}
+  .typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+  @keyframes b{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+  .chat-input{display:flex;gap:8px;padding:12px;background:#fff;border-top:1px solid #f3e2e9}
+  .chat-input .field{flex:1;border:1px solid #f0d4de;border-radius:999px;padding:9px 16px;font-size:14px;color:#9ca3af}
+  .chat-input .send{width:40px;height:40px;border-radius:50%;background:linear-gradient(120deg,var(--g1),var(--g2));color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .fab{position:absolute;right:24px;bottom:24px;background:linear-gradient(120deg,var(--g1),var(--g2));color:#fff;border-radius:999px;padding:13px 22px;font-weight:700;font-size:14px;box-shadow:0 10px 26px rgba(232,93,133,.45);display:flex;align-items:center;gap:8px;animation:pulse 2.4s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 10px 26px rgba(232,93,133,.45)}50%{box-shadow:0 10px 26px rgba(232,93,133,.45),0 0 0 12px rgba(232,93,133,.08)}}
+
+  /* flow diagram */
+  .flow{display:flex;flex-direction:column;gap:0;align-items:center}
+  .fnode{background:#fff;border:2px solid #fbd3e0;border-radius:14px;padding:12px 22px;font-size:13.5px;font-weight:600;text-align:center;min-width:260px;box-shadow:0 3px 10px rgba(232,93,133,.07)}
+  .fnode small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+  .fnode.hot{background:linear-gradient(120deg,var(--g1),var(--g2));color:#fff;border:none}
+  .fnode.hot small{color:rgba(255,255,255,.9)}
+  .farrow{color:var(--brand);font-size:20px;line-height:1;padding:6px 0}
+  .fsplit{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;align-items:stretch}
+  .fsplit .col{display:flex;flex-direction:column;align-items:center}
+  .badge-fail{background:#fef2f2;color:#dc2626;border:1px solid #fecaca;border-radius:999px;font-size:11px;font-weight:700;padding:2px 12px;margin:6px 0}
+
+  /* tables */
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{background:#fdf2f6;color:var(--brand-dark);text-align:left;padding:9px 12px;font-weight:700}
+  td{padding:9px 12px;border-top:1px solid #f8e3eb;color:#374151;vertical-align:top}
+  .tbl-wrap{overflow-x:auto}
+
+  /* timeline */
+  .tl{list-style:none;position:relative;padding-left:30px}
+  .tl:before{content:'';position:absolute;left:9px;top:6px;bottom:6px;width:3px;background:linear-gradient(var(--g1),var(--g2));border-radius:3px}
+  .tl li{position:relative;padding:0 0 20px 8px}
+  .tl li:before{content:'';position:absolute;left:-27px;top:5px;width:15px;height:15px;border-radius:50%;background:#fff;border:4px solid var(--brand)}
+  .tl b{color:var(--brand-dark)}
+  .tl small{color:var(--muted)}
+
+  .warn{background:#fffbeb;border:1px solid #fde68a;border-radius:14px;padding:14px 18px;font-size:13.5px}
+  footer{text-align:center;margin-top:60px;color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="kicker">MJ Cheezain · Feature Plan</div>
+  <h1><span class="mono">MJ Guide</span> — Website Assistant Chatbot</h1>
+  <p>Har page par maujood floating assistant jo sirf MJ Cheezain ke baare mein guide kare — Gemini first, Grok silent fallback, sab users ke liye, permanent chat history.</p>
+  <div class="status">📋 PLANNING PHASE — coding not started</div>
+</div>
+
+<div class="wrap">
+
+  <!-- 1. Overview -->
+  <section>
+    <h2><span class="num">1</span> Overview & Requirements</h2>
+    <div class="grid c3">
+      <div class="card"><h3>🤖 Kya hai</h3><p>Bottom-right floating <b>MJ Guide</b> button → chhoti brand-themed chat window. General AI nahi — sirf website ka support assistant.</p></div>
+      <div class="card"><h3>👥 Kis ke liye</h3><p>Har user: <span class="pill">Guest</span> <span class="pill">Customer</span> <span class="pill">Vendor</span> — login ki zaroorat nahi. (Admin panel excluded.)</p></div>
+      <div class="card"><h3>💾 History</h3><p>Chat close / page refresh par history delete <b>nahi</b> hogi — browser <b>localStorage</b> mein max <b>70 messages</b>. Database mein <b>koi change nahi</b>.</p></div>
+    </div>
+    <div style="margin-top:16px" class="quote">
+      Welcome message: “Hi! I am MJ Guide, the assistant of your website. Agar aap ko is website ke mutalliq kisi bhi qisam ka masla, sawal ya madad chahiye ho to aap mujhse pooch sakte hain.”
+    </div>
+  </section>
+
+  <!-- 2. UI -->
+  <section>
+    <h2><span class="num">2</span> UI Design (mockup)</h2>
+    <div class="grid c2">
+      <div class="mock-stage">
+        <div class="pagehint">ANY PAGE · MJCHEEZAIN.COM</div>
+        <div class="chat">
+          <div class="chat-head">
+            <div class="avatar">MJ</div>
+            <div><div class="t">MJ Guide</div><div class="s"><span class="dot"></span> Online</div></div>
+            <div class="x">—</div>
+          </div>
+          <div class="chat-body">
+            <div class="bub bot">Hi! I am MJ Guide 👋 Agar aap ko is website ke mutalliq koi masla, sawal ya madad chahiye ho to poochein.</div>
+            <div class="bub user">Order track kaise karun?</div>
+            <div class="bub bot">Login karein → <b>My Orders</b> kholen → order par <b>Track</b> dabayen. Wahan poori timeline milegi 📦</div>
+            <div class="typing"><i></i><i></i><i></i></div>
+          </div>
+          <div class="chat-input"><div class="field">Apna sawal likhein…</div><div class="send">➤</div></div>
+        </div>
+        <div class="fab">💬 MJ Guide</div>
+      </div>
+      <div class="card">
+        <h3>Design specs</h3>
+        <ul>
+          <li><b>Button:</b> brand gradient pill, gentle pulse, unread dot. Desktop <code>bottom:24px right:24px</code>; mobile <code>bottom:~92px</code> (bottom tab bar ke oopar).</li>
+          <li><b>Window:</b> desktop ~380px card; mobile full-width bottom sheet (~80vh) slide-up.</li>
+          <li><b>Text 15–16px</b> — normal chat widgets se bara, easily readable (owner requirement).</li>
+          <li><b>Bubbles:</b> bot = white app-card (left), user = pink gradient (right). Poppins font.</li>
+          <li><b>Typing indicator</b> jab API reply aa rahi ho; input disabled during send.</li>
+          <li><b>z-index ~9990</b> — content/#cartSummary ke oopar, vendor drawer (z-10001) ke neeche.</li>
+          <li><b>Injection point:</b> <code>customer/global-nav.blade.php</code> — pehle se HAR page par included hai, is liye ek hi jagah <code>&lt;x-mj-guide /&gt;</code> add karne se poori site cover.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Failover flow -->
+  <section>
+    <h2><span class="num">3</span> API Flow — Gemini first, Grok silent fallback</h2>
+    <div class="card">
+      <div class="flow">
+        <div class="fnode">💬 User message <small>widget → POST /mj-guide/message (CSRF + rate limit)<br>sath localStorage se last 10 messages bhi context ke liye</small></div>
+        <div class="farrow">▼</div>
+        <div class="fnode">🧠 ChatService <small>system prompt + knowledge.md + bheja gaya context (server stateless)</small></div>
+        <div class="farrow">▼</div>
+        <div class="fsplit">
+          <div class="col">
+            <div class="fnode hot">1️⃣ Gemini API <small>gemini-2.0-flash · 15s timeout</small></div>
+            <div class="badge-fail">429 / quota / 5xx / timeout / blocked</div>
+            <div class="farrow">▼</div>
+            <div class="fnode hot">2️⃣ Grok API <small>grok-3-mini · same prompt, same reply shape</small></div>
+          </div>
+          <div class="col" style="justify-content:center">
+            <div class="fnode">🛡 Circuit breaker <small>Gemini fail → 5 min ke liye seedha Grok<br>(Cache flag, koi wasted wait nahi)</small></div>
+          </div>
+        </div>
+        <div class="farrow">▼</div>
+        <div class="fnode">💾 JSON reply → bubble render → dono messages localStorage mein append (70-cap) <small>Provider sirf server log mein — DB mein kuch save nahi. User ko kabhi pata nahi chalta kaunsi API thi. Dono fail → polite fallback message + support email.</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. History & data -->
+  <section>
+    <h2><span class="num">4</span> Persistent History — localStorage (No Database!)</h2>
+    <div class="grid c2">
+      <div class="card">
+        <h3>💾 Browser localStorage — max 70 messages</h3>
+        <p style="margin-bottom:8px"><b>Owner decision:</b> database mein <b>koi change nahi</b> — na migrations, na tables. Poori history browser ke localStorage mein.</p>
+        <table>
+          <tr><th>Key</th><th>Value</th></tr>
+          <tr><td><code>mj_guide_history</code></td><td>JSON array: <code>{ role, text, t }</code></td></tr>
+        </table>
+        <ul style="margin-top:10px">
+          <li>Har send/reply ke baad dono messages append hote hain.</li>
+          <li>Array &gt; <b>70</b> → sab se purane messages trim (newest 70 hamesha safe).</li>
+          <li>Corrupt JSON → silently fresh chat (widget kabhi crash nahi).</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Old chat ki yaad & loading</h3>
+        <ul>
+          <li>Widget open → localStorage se poori history render — refresh/close par kuch delete <b>nahi</b> hota.</li>
+          <li><b>AI ko purani baat yaad rehti hai:</b> har request ke sath last <b>10 messages</b> context ke taur par jate hain.</li>
+          <li>Guest / customer / vendor sab ke liye same — na login, na cookie, na user_id.</li>
+          <li>Server bilkul <b>stateless</b> — chat ka kuch bhi server par save nahi hota.</li>
+          <li><i>Trade-off (accepted):</i> history per-browser/per-device hai; browser data clear karne par chat bhi clear.</li>
+        </ul>
+        <h3 style="margin-top:14px">New backend files</h3>
+        <p><code>MjGuideController</code> · <code>Services/MjGuide/ChatService</code> · <code>GeminiProvider</code> · <code>GrokProvider</code> · <code>knowledge.md</code> · config in <code>services.php</code> + <code>.env</code> keys — <b>0 migrations</b></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Training -->
+  <section>
+    <h2><span class="num">5</span> Training — System Prompt + Knowledge Base</h2>
+    <div class="grid c2">
+      <div class="card">
+        <h3>Scope lock (system prompt)</h3>
+        <ul>
+          <li>Sirf MJ Cheezain ke sawalat — off-topic par politely mana kar ke website ki taraf wapas laana.</li>
+          <li>User ki language mirror karna (English / Urdu / Roman Urdu).</li>
+          <li>Short, step-by-step jawab; currency hamesha <code>Rs.</code></li>
+          <li>Kabhi facts invent nahi karna (order status, price, stock) — sahi page ka rasta batana.</li>
+          <li>Gemini/Grok ya internal details kabhi mention nahi karna.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>knowledge.md contents</h3>
+        <ul>
+          <li>📞 Contacts: <code>support@mjcheezain.com</code>, <code>sellers@mjcheezain.com</code>, phone (⚠ owner se real number chahiye)</li>
+          <li>🔐 Register / login / forgot-password guide (customer + vendor)</li>
+          <li>🛒 Shopping flow: browse → cart → checkout (COD only)</li>
+          <li>👤 Customer panel: orders/track, wishlist, addresses, profile, notifications, returns (10-step), replacements, ratings</li>
+          <li>🏪 Vendor guide: products, orders, withdraw, store settings, returns handling</li>
+          <li>🗺 Page directory + policies + Auto Parts = Coming Soon</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Security -->
+  <section>
+    <h2><span class="num">6</span> Security & Abuse Protection</h2>
+    <div class="card tbl-wrap">
+      <table>
+        <tr><th>Risk</th><th>Mitigation</th></tr>
+        <tr><td>Guests API quota jala dein</td><td>Rate limit <b>10 msgs/min</b> per IP + daily cap (~200/IP)</td></tr>
+        <tr><td>Client se tampered context</td><td>Server validation: max 10 context items, role whitelist, size cap</td></tr>
+        <tr><td>API keys leak</td><td>Keys sirf server <code>.env</code> mein — browser ko kabhi nahi bheji jatin</td></tr>
+        <tr><td>XSS</td><td>Har message escaped render (<code>textContent</code>), koi raw HTML nahi</td></tr>
+        <tr><td>Prompt injection</td><td>Hardened system prompt + scope lock + refusal rules</td></tr>
+        <tr><td>Junk input</td><td>Validation: max 1000 chars, empty reject</td></tr>
+        <tr><td>Runaway cost</td><td><code>MJ_GUIDE_ENABLED</code> kill-switch (bina deploy band ho sakta hai) + provider/usage logging</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- 7. Phases -->
+  <section>
+    <h2><span class="num">7</span> Build Roadmap (after owner approval)</h2>
+    <div class="card">
+      <ul class="tl">
+        <li><b>Phase A — Backend core</b><br><small>Config/env keys, GeminiProvider + GrokProvider + ChatService failover + circuit breaker (DB untouched — no migrations)</small></li>
+        <li><b>Phase B — API endpoint</b><br><small>MjGuideController (single stateless message route), context validation, rate limits</small></li>
+        <li><b>Phase C — Widget UI</b><br><small>Blade component + mj-guide.js (localStorage history, 70-msg cap) + CSS, global-nav injection, mobile bottom-sheet, typing indicator</small></li>
+        <li><b>Phase D — Knowledge base</b><br><small>knowledge.md + system prompt likhna, real Q&A tuning (contact/login/orders/vendor)</small></li>
+        <li><b>Phase E — Testing & deploy</b><br><small>Failover simulation (fake 429), guest/customer/vendor flows, refresh persistence, mobile nav clash, deploy</small></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 8. Open questions -->
+  <section>
+    <h2><span class="num">8</span> Owner Se Sawalat (coding se pehle)</h2>
+    <div class="warn">
+      <b>⚠ In 5 cheezon ka jawab chahiye:</b>
+      <ol style="padding-left:20px;margin-top:8px">
+        <li><b>Official phone number?</b> — site par abhi placeholder <code>03XX-XXXXXXX</code> hai.</li>
+        <li><b>Gemini + Grok API keys</b> mil jayengi? (server .env ke liye)</li>
+        <li><b>Models:</b> <code>gemini-2.0-flash</code> + <code>grok-3-mini</code> theek hain? (fast + cheap defaults)</li>
+        <li><b>"Clear chat" button</b> user ko dena hai ya nahi?</li>
+        <li><b>Language:</b> user ki language mirror karna (Urdu/Roman/English) — OK?</li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>MJ Cheezain · MJ Guide Feature Plan · 2026-07-15 · Full technical detail: <b>docx/mj-guide.md</b></footer>
+</div>
+</body>
+</html>

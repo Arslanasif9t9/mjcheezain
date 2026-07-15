@@ -21,6 +21,7 @@ use App\Http\Controllers\VendorReturnController;
 use App\Http\Controllers\ProfileImageController;
 use App\Http\Controllers\Vendor\AutoPartsProductController;
 use App\Http\Controllers\Vendor\AutoPartsProductShowController;
+use App\Http\Controllers\MjGuideController;
 
 // Auto Parts Public Routes
 Route::prefix('auto-parts')->name('auto-parts.')->group(function () {
@@ -108,6 +109,11 @@ Route::get('/signup', function () {
     return redirect('/');
 });
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// MJ Guide chatbot (public — guests, customers, vendors; stateless, history lives in the browser)
+Route::post('/mj-guide/message', [MjGuideController::class, 'message'])
+    ->middleware('throttle:10,1')
+    ->name('mj-guide.message');
 
 // Search route
 // Route::get('/search', [ProductController::class, 'search'])->name('products.search');

@@ -904,5 +904,7 @@
             }
         });
     </script>
+    {{-- MJ Guide chatbot — login-problem help right where users need it --}}
+    <x-mj-guide />
 </body>
 </html>

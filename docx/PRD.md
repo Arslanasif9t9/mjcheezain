@@ -50,6 +50,12 @@ Primary device is a **low-to-mid-range Android phone** on average mobile data �
 ### 3.5 Commerce Flow
 - Cart → Checkout → Order placement → fulfilment statuses (`Order Placed → Processing → Shipped → Delivered`, or `Cancelled`) → post-delivery actions (rate / replace / return)
 
+### 3.6 MJ Guide — AI Support Chatbot *(planned — see `mj-guide.md` / `plan.html`)*
+- Floating "MJ Guide" button (bottom-right, every page) opening a small brand-themed chat window with larger readable text (15–16px)
+- Answers ONLY MJ Cheezain questions: contact info, login/registration help, orders, returns, vendor/customer feature guidance, page how-tos — refuses off-topic
+- Available to everyone (guest, customer, vendor — no login needed); chat history persists across refresh/close in browser localStorage (max 70 messages, NO database changes)
+- Backend: Gemini API first, automatic **silent** fallback to Grok API on quota/failure (user never notices)
+
 ## 4. Non-Goals (for now)
 - Online payment gateway (orders are COD-style; no card/wallet integration yet)
 - Native mobile apps (the web IS the app — PWA-like feel)

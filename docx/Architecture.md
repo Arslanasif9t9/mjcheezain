@@ -65,6 +65,7 @@ mjcheezain/
 │   │   ├── header.blade.php       # main site header (mobile scroll animation)
 │   │   ├── cosmetics/header...    # transparent cosmetics header
 │   │   ├── auth-popup.blade.php   # login/signup modal (@once)
+│   │   ├── mj-guide.blade.php     # 🤖 chatbot widget (@once; injected via global-nav + both mobile-navs + login page)
 │   │   ├── footer.blade.php
 │   │   └── customer/              # customer-panel shared components
 │   │       ├── theme.blade.php    #  ⭐ brand tailwind config + base CSS (include in <head>)
@@ -74,8 +75,13 @@ mjcheezain/
 │   ├── vendor/                    # vendor panel views
 │   ├── Admin/                     # admin panel views
 │   └── footer/                    # footer info pages
+├── app/Services/MjGuide/          # 🤖 MJ Guide chatbot backend
+│   ├── ChatService.php            # Gemini→Grok failover + circuit breaker + system prompt
+│   ├── GeminiProvider.php / GrokProvider.php
+│   └── knowledge.md               # site knowledge base (cached 1h — cache:clear after edits)
 ├── public/
 │   ├── js/img-fallback.js         # global image error fallback (included in ~39 views)
+│   ├── js/mj-guide.js             # chatbot widget logic (localStorage history, 70-msg cap)
 │   └── storage/ → storage/app/public (symlink: customer/vendor images)
 ├── claude-code-data/              # reference screenshots (ss1..ss9) — design refs
 ├── docx/                          # 📄 project documentation (this folder)
