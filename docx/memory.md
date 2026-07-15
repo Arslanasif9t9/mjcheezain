@@ -8,6 +8,10 @@
 
 ## ✅ Completed
 
+### 2026-07-15 — deploy exclude bug fixed — commit `77921c6` ⚠️ IMPORTANT GOTCHA
+- Live error "Unable to locate component [vendor.mobile-nav]": deploy.yml excluded `**/vendor/**` which silently skipped `resources/views/vendor/**` AND `resources/views/components/vendor/**` from every FTP upload (vendor views on server were stale since pre-autodeploy days). Fixed: excludes anchored to repo root (`vendor/**`, `tests/**`, `storage/**`, `public/storage/**`). Deploy succeeded, live verified 200 + error gone.
+- Lesson: never use `**/name/**` excludes for dirs whose name also appears inside resources/.
+
 ### 2026-07-15 (batch 6) — site-wide blue purge (3 parallel agents) — commit `d2f25db`
 - **Vendor nav everywhere**: `<x-vendor.mobile-nav />` added to all 10 standalone vendor pages; global-nav now shows vendor tab bar on EVERY page (incl. home) for vendors, customer bar everywhere for customers.
 - **Customer notifications blue icons**: DB-stored `icon_color`/`dot_color` classes are brandized in the view via a `$brandizeClasses` str_replace closure (DB values found: `bg-blue-100 text-blue-600`, `bg-blue-500`); JS dot toggle uses `bg-[#FF7DA0]` now. Shipped badges → purple across customer pages.
