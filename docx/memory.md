@@ -8,6 +8,19 @@
 
 ## ✅ Completed
 
+### 2026-07-15 (batch 5) — Vendor panel brand redesign — commit `4f846ab`
+- **Sidebar** (`components/vendor/sidebar.blade.php`): dark gray-900/red → light brand (gradient "MJ Vendor Center" header, gradient-soft profile chip, `.v-nav-active` brand active state, View Site gradient button). z-[10001] so mobile drawer sits above bottom nav. Same props/IDs preserved (btn-side, aside, navbarToggle, setActive, noti-num).
+- **New vendor mobile bottom nav** (`components/vendor/mobile-nav.blade.php`): 5 tabs (Dashboard/Products/Orders incl. returns+replacements/Withdraw/Profile), served via `customer/global-nav` (vendor branch, only on vendor/* paths).
+- **Dashboard**: chart bars → brand pink, balance card gradient strip + gradient Withdraw button, stats icon chips rethemed, top-categories gradient bars, progress-bar gradient, warm `#FFF6F0` main bg.
+- **Products**: tab active = `.tab-active-v` brand (JS updated), search/Add Product/table accents brand, `$` → `Rs.`.
+- **new_product + create-auto** (4,600 lines): `--primary` CSS token #3b82f6 → #E85D85, full blue→pink sweep, warm bg.
+- **Orders + returns/index+show + replacements/index+show**: upgraded from Tailwind 2.2.19 CSS → Play CDN (needed for arbitrary values), full blue→brand sweep, `Rs.`, gradient buttons, responsive mains.
+- **Profile/edit-profile**: tab green → brand (also in `public/js/vendor_edit-profile.js`), inputs pink focus, gradient step/save buttons, toggle switch #E85D85.
+- **Withdraw/balance-details/notifications**: blue→brand sweep, warm backgrounds.
+- `page-loader.js` added to all 10 standalone vendor pages.
+- Verified: all 11 vendor routes HTTP 200 with real vendor login; blades compile.
+- Note: `/vendor/balance/details` has pre-existing `$user` undefined warning in sidebar include (view doesn't pass $user) — not introduced, works with warning.
+
 ### 2026-07-15 (batch 4) — MJ page loader + cart bar close — commit `c966c60`
 - `public/js/page-loader.js`: branded page-transition overlay — spinning brand-gradient ring around "MJ" monogram, top indeterminate gradient bar, "LOADING…" animated dots. Fires instantly on link clicks / form submits that navigate (skips new-tab/hash/external/data-no-loader); hides on pageshow (bfcache-safe); 12s failsafe. Included in: layouts/structure (head), layouts/app, checkout, brands/autoparts, and customer theme component (all customer pages).
 - Product page `#cartSummary`: small floating X (top-right of bar) to dismiss it.
