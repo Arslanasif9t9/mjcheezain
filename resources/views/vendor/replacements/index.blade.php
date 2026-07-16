@@ -327,6 +327,22 @@
             font-size: 75.5%;
         }
     </style>
+    <style>
+        /* ===== App-style retheme (mobile-first, matches customer panel) ===== */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .status-dropdown { border-radius: 1.25rem !important; }
+        .status-dropdown-header {
+            background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%) !important;
+        }
+        @media (max-width: 767px) {
+            .status-dropdown {
+                width: calc(100vw - 2rem);
+                max-width: calc(100vw - 2rem);
+            }
+        }
+    </style>
 </head>
 
 <body class="min-h-screen" style="background-color: #FFF6F0;">
@@ -341,10 +357,12 @@
         />
 
         <!-- Main Content -->
-        <main class="flex-1 p-4 sm:p-6 pt-16 sm:pt-6 overflow-y-auto">
+        <div class="flex flex-col flex-1 min-w-0">
+        <x-vendor.app-header title="Replace Orders" subtitle="{{ $stats['total'] }} requests · {{ $stats['pending'] }} pending" />
+        <main class="flex-1 p-4 sm:p-6 pb-28 md:pb-8 overflow-y-auto page-enter">
             <!-- Header -->
-            <div class="flex flex-col lg:flex-row justify-between items-stretch lg:items-center mb-8 gap-4">
-                <div>
+            <div class="flex flex-col lg:flex-row justify-between items-stretch lg:items-center mb-5 md:mb-8 gap-4">
+                <div class="hidden md:block">
                     <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-800 tracking-tight">Replacement Requests</h1>
                     <p class="text-sm text-gray-550 mt-1">Manage and track all replacement requests for your products</p>
                 </div>
@@ -434,36 +452,44 @@
                 </div>
             </div>
 
-            <!-- Filter Buttons -->
-            <div class="flex flex-wrap gap-3 mb-6">
+            <!-- Filter Buttons (horizontally scrollable pills on mobile) -->
+            <div class="flex md:flex-wrap gap-2 md:gap-3 mb-6 text-sm overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 py-1">
                 <button onclick="filterReplacements('all')" 
-                        class="filter-btn active px-5 py-2.5 bg-white border border-gray-300 rounded-xl font-medium hover:bg-gray-50 flex items-center gap-2">
+                        class="filter-btn active whitespace-nowrap flex-shrink-0 px-4 md:px-5 py-2 md:py-2.5 bg-white border border-gray-300 rounded-full font-medium hover:bg-gray-50 flex items-center gap-2">
                     <i class="fas fa-list"></i> All Requests
                 </button>
                 <button onclick="filterReplacements('pending')" 
-                        class="filter-btn px-5 py-2.5 bg-white border border-gray-300 rounded-xl font-medium hover:bg-gray-50 flex items-center gap-2">
+                        class="filter-btn whitespace-nowrap flex-shrink-0 px-4 md:px-5 py-2 md:py-2.5 bg-white border border-gray-300 rounded-full font-medium hover:bg-gray-50 flex items-center gap-2">
                     <i class="fas fa-clock text-yellow-500"></i> Pending
                 </button>
                 <button onclick="filterReplacements('approved')" 
-                        class="filter-btn px-5 py-2.5 bg-white border border-gray-300 rounded-xl font-medium hover:bg-gray-50 flex items-center gap-2">
+                        class="filter-btn whitespace-nowrap flex-shrink-0 px-4 md:px-5 py-2 md:py-2.5 bg-white border border-gray-300 rounded-full font-medium hover:bg-gray-50 flex items-center gap-2">
                     <i class="fas fa-check-circle text-green-500"></i> Approved
                 </button>
                 <button onclick="filterReplacements('processing')" 
-                        class="filter-btn px-5 py-2.5 bg-white border border-gray-300 rounded-xl font-medium hover:bg-gray-50 flex items-center gap-2">
+                        class="filter-btn whitespace-nowrap flex-shrink-0 px-4 md:px-5 py-2 md:py-2.5 bg-white border border-gray-300 rounded-full font-medium hover:bg-gray-50 flex items-center gap-2">
                     <i class="fas fa-cog text-purple-500"></i> Processing
                 </button>
                 <button onclick="filterReplacements('completed')" 
-                        class="filter-btn px-5 py-2.5 bg-white border border-gray-300 rounded-xl font-medium hover:bg-gray-50 flex items-center gap-2">
+                        class="filter-btn whitespace-nowrap flex-shrink-0 px-4 md:px-5 py-2 md:py-2.5 bg-white border border-gray-300 rounded-full font-medium hover:bg-gray-50 flex items-center gap-2">
                     <i class="fas fa-check-double text-teal-500"></i> Completed
                 </button>
                 <button onclick="filterReplacements('cancelled')" 
-                        class="filter-btn px-5 py-2.5 bg-white border border-gray-300 rounded-xl font-medium hover:bg-gray-50 flex items-center gap-2">
+                        class="filter-btn whitespace-nowrap flex-shrink-0 px-4 md:px-5 py-2 md:py-2.5 bg-white border border-gray-300 rounded-full font-medium hover:bg-gray-50 flex items-center gap-2">
                     <i class="fas fa-times-circle text-red-500"></i> Cancelled
                 </button>
             </div>
 
-            <!-- Replacements Table -->
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+            <!-- Mobile replacement cards (rendered by JS from the table rows below) -->
+            <div id="replacementsMobileList" class="md:hidden space-y-3"></div>
+            @if($replacements->hasPages())
+            <div class="md:hidden mt-4">
+                {{ $replacements->links() }}
+            </div>
+            @endif
+
+            <!-- Replacements Table (desktop) -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hidden md:block">
                 <div class="overflow-x-auto w-full">
                     <table class="min-w-[1100px] w-full text-left">
                         <thead class="table-header">
@@ -507,7 +533,9 @@
                                     $stepColor = $stepColors[$replacement->current_step] ?? 'gray';
                                 @endphp
                                 
-                                <tr class="table-row replacement-row" data-replacement-id="{{ $replacement->id }}">
+                                <tr class="table-row replacement-row" data-replacement-id="{{ $replacement->id }}"
+                                    data-status="{{ $replacement->status }}"
+                                    data-step="{{ $replacement->current_step }}">
                                     <td class="table-cell font-bold text-black">
                                         {{-- REP-{{ str_pad($replacement->id, 6, '0', STR_PAD_LEFT) }} --}}
                                         REP-{{ str_pad($replacement->id, 6, '0', STR_PAD_LEFT) }}-{{ \Carbon\Carbon::parse($replacement->updated_at)->format('y') }}
@@ -618,6 +646,7 @@
                 @endif
             </div>
         </main>
+        </div>
     </div>
 
     <!-- Status Modal -->
@@ -755,13 +784,13 @@
             
             <!-- Action Buttons -->
             <div class="pt-4 border-t border-gray-200">
-                <button id="updateStatusBtn" onclick="updateReplacementStatus()" 
-                        class="w-full py-3.5 bg-gradient-to-r from-[#FF7DA0] to-purple-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                <button id="updateStatusBtn" onclick="updateReplacementStatus()"
+                        class="w-full py-3.5 brand-gradient brand-shadow text-white rounded-full font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed border-0"
                         disabled>
                     Update Status
                 </button>
-                <button onclick="closeStatusModal()" 
-                        class="w-full py-3.5 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition mt-3">
+                <button onclick="closeStatusModal()"
+                        class="w-full py-3.5 bg-gray-100 text-gray-700 rounded-full font-semibold hover:bg-gray-200 transition mt-3 border-0">
                     Cancel
                 </button>
             </div>
@@ -845,6 +874,9 @@
                 console.error('Error filtering:', error);
                 tableBody.innerHTML = originalContent;
                 showNotification('Error loading replacements', 'error');
+            } finally {
+                // Keep the mobile card list in sync with the (possibly new) table rows
+                if (typeof renderMobileReplacementCards === 'function') renderMobileReplacementCards();
             }
         }
         
@@ -961,7 +993,8 @@
                 return;
             }
             
-            const badge = document.querySelector(`.status-badge[data-replacement-id="${currentReplacementId}"]`);
+            // Desktop table badge AND mobile card badge share data-replacement-id — update all
+            const badges = document.querySelectorAll(`.status-badge[data-replacement-id="${currentReplacementId}"]`);
             const stepBadge = document.querySelector(`[data-replacement-id="${currentReplacementId}"] .step-badge`);
             const updateBtn = document.getElementById('updateStatusBtn');
             
@@ -995,11 +1028,12 @@
                 
                 if (result.success) {
                     // Update UI immediately
-                    if (badge) {
+                    badges.forEach(badge => {
                         badge.className = `badge ${getStatusColor(selectedStatus)} text-white cursor-pointer status-badge`;
                         badge.innerHTML = `${selectedStatus.charAt(0).toUpperCase() + selectedStatus.slice(1)} <i class="fas fa-chevron-down ml-1 text-xs"></i>`;
                         badge.setAttribute('data-current-status', selectedStatus);
-                    }
+                        badge.setAttribute('onclick', `openStatusModal('${currentReplacementId}', '${selectedStatus}')`);
+                    });
                     
                     if (stepBadge && data.current_step) {
                         const stepText = data.current_step.replace(/_/g, ' ');
@@ -1064,6 +1098,110 @@
                 }, 300);
             }, 4000);
         }
+    </script>
+
+    <!-- Mobile app-card list: built from the (hidden) desktop table rows so filters/updates stay in sync -->
+    <script>
+        (function () {
+            function esc(s) {
+                const d = document.createElement('div');
+                d.textContent = s == null ? '' : String(s);
+                return d.innerHTML;
+            }
+
+            window.renderMobileReplacementCards = function () {
+                const list = document.getElementById('replacementsMobileList');
+                if (!list) return;
+
+                const rows = document.querySelectorAll('#replacementsTableBody tr[data-replacement-id]');
+                if (!rows.length) {
+                    list.innerHTML = `
+                        <div class="app-card p-10 text-center">
+                            <div class="w-16 h-16 mx-auto rounded-full brand-gradient-soft flex items-center justify-center mb-3">
+                                <i class="fas fa-exchange-alt text-2xl text-[#E85D85]"></i>
+                            </div>
+                            <p class="text-gray-600 text-sm font-semibold">No replacement requests found</p>
+                            <p class="text-gray-400 text-xs mt-1">When customers request replacements, they'll appear here.</p>
+                        </div>`;
+                    return;
+                }
+
+                let html = '';
+                rows.forEach(row => {
+                    const id = row.getAttribute('data-replacement-id');
+                    const code = row.cells[0].textContent.trim();
+                    const customer = (row.cells[1].querySelector('.font-medium')?.textContent || row.cells[1].textContent).trim().replace(/\s+/g, ' ');
+                    const img = row.cells[2].querySelector('img');
+                    const name = (row.cells[2].querySelector('.font-medium')?.textContent || '').trim();
+                    const reason = (row.cells[3].querySelector('.text-sm')?.textContent || row.cells[3].textContent).trim();
+                    const step = (row.cells[4].textContent || '').trim().replace(/\s+/g, ' ');
+                    const badgeEl = row.cells[5].querySelector('.status-badge');
+                    const status = (badgeEl && badgeEl.getAttribute('data-current-status'))
+                        || row.getAttribute('data-status')
+                        || 'pending';
+                    const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
+                    const reqDate = row.cells[6].textContent.trim().replace(/\s+/g, ' ');
+                    const thumb = img
+                        ? `<img src="${img.src}" class="w-12 h-12 rounded-xl object-cover flex-shrink-0" alt="">`
+                        : `<div class="w-12 h-12 rounded-xl brand-gradient-soft flex items-center justify-center flex-shrink-0"><i class="fas fa-box text-[#E85D85]"></i></div>`;
+
+                    html += `
+                    <div class="m-replacement-card app-card p-4">
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <span class="text-[11px] font-bold text-[#E85D85] tracking-wide truncate">${esc(code)}</span>
+                            <span class="badge ${getStatusColor(status)} text-white cursor-pointer status-badge flex-shrink-0"
+                                  data-replacement-id="${esc(id)}" data-current-status="${esc(status)}"
+                                  onclick="openStatusModal('${esc(id)}', '${esc(status)}')">
+                                ${esc(statusLabel)} <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            ${thumb}
+                            <div class="min-w-0 flex-1">
+                                <p class="text-sm font-bold text-gray-900 truncate">${esc(name)}</p>
+                                <p class="text-[11px] text-gray-400 mt-0.5 truncate">${esc(customer)}${customer && reqDate ? ' &middot; ' : ''}${esc(reqDate)}</p>
+                            </div>
+                        </div>
+                        <div class="mt-3 grid grid-cols-2 gap-2">
+                            <div class="brand-gradient-soft rounded-xl px-3 py-2">
+                                <p class="text-[10px] text-gray-500 font-medium">Reason</p>
+                                <p class="text-[11px] font-semibold text-gray-800 capitalize truncate">${esc(reason)}</p>
+                            </div>
+                            <div class="brand-gradient-soft rounded-xl px-3 py-2">
+                                <p class="text-[10px] text-gray-500 font-medium">Current Step</p>
+                                <p class="text-[11px] font-semibold text-gray-800 truncate">${esc(step)}</p>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-[#E85D85]/10 flex gap-2">
+                            <button onclick="viewReplacement(${parseInt(id, 10)})"
+                                    class="flex-1 py-2.5 rounded-full text-white text-xs font-semibold brand-gradient brand-shadow border-0 active:scale-[0.98] transition">
+                                <i class="fas fa-eye mr-1"></i> View
+                            </button>
+                            <button onclick="openStatusModal('${esc(id)}', '${esc(status)}')"
+                                    class="flex-1 py-2.5 rounded-full text-xs font-semibold brand-gradient-soft text-[#E85D85] border border-[#E85D85]/20 active:scale-[0.98] transition">
+                                <i class="fas fa-edit mr-1"></i> Update
+                            </button>
+                        </div>
+                    </div>`;
+                });
+                list.innerHTML = html;
+            };
+
+            document.addEventListener('DOMContentLoaded', function () {
+                renderMobileReplacementCards();
+
+                // Extend the search box to filter the mobile cards as well
+                const search = document.getElementById('searchInput');
+                if (search) {
+                    search.addEventListener('keyup', function () {
+                        const term = this.value.toLowerCase();
+                        document.querySelectorAll('#replacementsMobileList .m-replacement-card').forEach(card => {
+                            card.style.display = card.textContent.toLowerCase().includes(term) ? '' : 'none';
+                        });
+                    });
+                }
+            });
+        })();
     </script>
     <x-vendor.mobile-nav />
 </body>

@@ -65,9 +65,12 @@
         />
         
         <!-- Main Content -->
-        <div class="flex-1 p-4 lg:p-8 transition-all duration-300 min-w-0">
-            <!-- Page Header -->
-            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 pb-6 border-b border-gray-200 pl-12 md:pl-0">
+        <div class="flex flex-col flex-1 min-w-0 transition-all duration-300">
+            <x-vendor.app-header title="Withdraw" subtitle="Move your earnings to your bank" />
+
+            <main class="flex-1 p-4 md:p-6 lg:p-8 pb-28 md:pb-8 page-enter">
+            <!-- Page Header (desktop only) -->
+            <div class="hidden md:flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 pb-6 border-b border-gray-200">
                 <div class="mb-4 lg:mb-0">
                     <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 flex items-center">
                         <i class="fas fa-wallet text-primary-500 mr-3"></i>
@@ -107,8 +110,37 @@
                 </div>
             @endif
             
-            <!-- Balance Summary -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Balance Summary — mobile wallet hero card -->
+            <div class="md:hidden -mt-2 mb-5 relative z-10">
+                <div class="brand-gradient brand-shadow rounded-3xl p-5 text-white relative overflow-hidden">
+                    <div class="absolute -top-8 -right-8 w-28 h-28 bg-white/10 rounded-full pointer-events-none"></div>
+                    <div class="absolute bottom-0 -left-6 w-20 h-20 bg-white/10 rounded-full pointer-events-none"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between">
+                            <p class="text-[11px] font-semibold uppercase tracking-widest text-white/80">Available Balance</p>
+                            <span class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                                <i class="fas fa-wallet text-xs"></i>
+                            </span>
+                        </div>
+                        <p class="text-[34px] leading-tight font-extrabold tracking-tight mt-1">Rs. {{ number_format($balance->available_balance, 2) }}</p>
+                        <p class="text-[11px] text-white/75 mt-0.5">Ready for immediate withdrawal</p>
+                        <div class="flex items-center justify-between mt-4 pt-4 border-t border-white/20">
+                            <div>
+                                <p class="text-[10px] text-white/70 font-semibold uppercase tracking-wider">Pending</p>
+                                <p class="text-base font-bold leading-tight">Rs. {{ number_format($balance->pending_balance, 2) }}</p>
+                            </div>
+                            <a href="{{ route('vendor.balance.details') }}"
+                               class="inline-flex items-center px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-white text-xs font-semibold active:scale-95 transition-transform">
+                                <i class="fas fa-chart-line mr-1.5 text-[10px]"></i>
+                                Balance Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Balance Summary (desktop) -->
+            <div class="hidden md:grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 <!-- Available Balance Card -->
                 <div class="bg-white rounded-2xl shadow-card p-6 border border-gray-100 hover:shadow-lg transition-shadow duration-300">
                     <div class="flex items-center justify-between mb-4">
@@ -157,17 +189,19 @@
             </div>
             
             <!-- Withdrawal Form Card -->
-            <div class="bg-white rounded-2xl shadow-card overflow-hidden border border-gray-100 mb-8">
+            <div class="app-card md:bg-white rounded-3xl md:rounded-2xl md:shadow-card overflow-hidden md:border md:border-gray-100 mb-6 md:mb-8">
                 <!-- Card Header -->
-                <div class="bg-gradient-to-r from-primary-500 to-primary-600 text-white px-6 py-5">
+                <div class="brand-gradient text-white px-4 md:px-6 py-4 md:py-5">
                     <div class="flex items-center">
-                        <i class="fas fa-university text-2xl mr-3"></i>
-                        <h2 class="text-xl font-bold">Bank Withdrawal Request</h2>
+                        <span class="w-9 h-9 md:w-auto md:h-auto rounded-full md:rounded-none bg-white/20 md:bg-transparent flex items-center justify-center mr-3">
+                            <i class="fas fa-university text-sm md:text-2xl"></i>
+                        </span>
+                        <h2 class="text-base md:text-xl font-bold">Bank Withdrawal Request</h2>
                     </div>
                 </div>
-                
+
                 <!-- Card Body -->
-                <div class="p-6 lg:p-8">
+                <div class="p-4 md:p-6 lg:p-8">
                     <form action="{{ route('vendor.withdraw.process') }}" method="POST" id="withdrawalForm">
                         @csrf
                         
@@ -182,16 +216,16 @@
                                     <input type="number" 
                                            id="amount"
                                            name="amount"
-                                           class="w-full pl-14 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                                           class="w-full pl-14 pr-4 py-3 bg-white border border-pink-100 md:border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#E85D85]/40 focus:border-[#E85D85] transition-colors duration-200"
                                            placeholder="Enter amount"
                                            min="100"
                                            step="0.01"
                                            max="{{ $balance->available_balance }}"
                                            required>
                                 </div>
-                                <div class="text-sm text-gray-505 mt-2">
+                                <div class="text-sm text-gray-500 mt-2">
                                     Minimum: Rs. 100 | Maximum: Rs. {{ number_format($balance->available_balance, 2) }}
-                                </div>    </div>
+                                </div>
                             </div>
                             
                             <!-- Bank Name -->
@@ -202,7 +236,7 @@
                                 <input type="text" 
                                        id="bank_name"
                                        name="bank_name"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                                       class="w-full px-4 py-3 bg-white border border-pink-100 md:border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#E85D85]/40 focus:border-[#E85D85] transition-colors duration-200"
                                        placeholder="e.g., State Bank of India"
                                        required>
                             </div>
@@ -215,7 +249,7 @@
                                 <input type="text" 
                                        id="account_holder_name"
                                        name="account_holder_name"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                                       class="w-full px-4 py-3 bg-white border border-pink-100 md:border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#E85D85]/40 focus:border-[#E85D85] transition-colors duration-200"
                                        placeholder="As per bank records"
                                        required>
                             </div>
@@ -228,7 +262,7 @@
                                 <input type="text" 
                                        id="account_number"
                                        name="account_number"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                                       class="w-full px-4 py-3 bg-white border border-pink-100 md:border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#E85D85]/40 focus:border-[#E85D85] transition-colors duration-200"
                                        placeholder="Enter your account number"
                                        required>
                             </div>
@@ -241,7 +275,7 @@
                                 <input type="text" 
                                        id="ifsc_code"
                                        name="ifsc_code"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                                       class="w-full px-4 py-3 bg-white border border-pink-100 md:border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#E85D85]/40 focus:border-[#E85D85] transition-colors duration-200"
                                        placeholder="e.g., SBIN0001234"
                                        required>
                             </div>
@@ -254,13 +288,13 @@
                                 <textarea id="notes"
                                           name="notes"
                                           rows="3"
-                                          class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                                          class="w-full px-4 py-3 bg-white border border-pink-100 md:border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#E85D85]/40 focus:border-[#E85D85] transition-colors duration-200"
                                           placeholder="Any special instructions or reference"></textarea>
                             </div>
                         </div>
                         
                         <!-- Guidelines Box -->
-                        <div class="mt-8 p-6 bg-pink-50 border-l-4 border-primary-500 rounded-xl">
+                        <div class="mt-6 md:mt-8 p-4 md:p-6 bg-pink-50 border-l-4 border-primary-500 rounded-2xl">
                             <div class="flex items-center mb-4">
                                 <i class="fas fa-info-circle text-primary-500 text-xl mr-3"></i>
                                 <h4 class="text-lg font-bold text-gray-800">Important Guidelines</h4>
@@ -294,14 +328,14 @@
                         </div>
                         
                         <!-- Form Buttons -->
-                        <div class="flex flex-col sm:flex-row gap-4 mt-8">
-                            <button type="submit" 
-                                    class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+                        <div class="flex flex-col sm:flex-row gap-3 md:gap-4 mt-6 md:mt-8">
+                            <button type="submit"
+                                    class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 md:py-4 brand-gradient brand-shadow text-white font-semibold rounded-full md:rounded-xl hover:shadow-lg transition-all duration-300 active:scale-[0.98] hover:-translate-y-0.5">
                                 <i class="fas fa-paper-plane mr-3"></i>
                                 Submit Withdrawal Request
                             </button>
-                            <button type="reset" 
-                                    class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-colors duration-200">
+                            <button type="reset"
+                                    class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 md:py-4 bg-gray-100 text-gray-700 font-semibold rounded-full md:rounded-xl hover:bg-gray-200 active:scale-[0.98] transition-all duration-200">
                                 <i class="fas fa-redo mr-3"></i>
                                 Clear Form
                             </button>
@@ -311,43 +345,44 @@
             </div>
             
             <!-- Quick Info Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-5 rounded-xl shadow-card border border-gray-100">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
+                <div class="app-card p-4 md:p-5">
                     <div class="flex items-center">
-                        <div class="p-3 bg-pink-100 rounded-lg mr-4">
-                            <i class="fas fa-shield-alt text-[#E85D85] text-xl"></i>
+                        <div class="w-11 h-11 rounded-xl brand-gradient-soft flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fas fa-shield-alt text-[#E85D85] text-lg"></i>
                         </div>
-                        <div>
-                            <h5 class="font-bold text-gray-800">Secure Transactions</h5>
-                            <p class="text-gray-600 text-sm mt-1">Bank-level security for all transactions</p>
+                        <div class="min-w-0">
+                            <h5 class="font-bold text-gray-800 text-sm md:text-base">Secure Transactions</h5>
+                            <p class="text-gray-500 text-xs md:text-sm mt-0.5">Bank-level security for all transactions</p>
                         </div>
                     </div>
                 </div>
-                
-                <div class="bg-white p-5 rounded-xl shadow-card border border-gray-100">
+
+                <div class="app-card p-4 md:p-5">
                     <div class="flex items-center">
-                        <div class="p-3 bg-green-100 rounded-lg mr-4">
-                            <i class="fas fa-history text-green-500 text-xl"></i>
+                        <div class="w-11 h-11 rounded-xl bg-green-50 flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fas fa-history text-green-500 text-lg"></i>
                         </div>
-                        <div>
-                            <h5 class="font-bold text-gray-800">Transaction History</h5>
-                            <p class="text-gray-600 text-sm mt-1">Track all withdrawals in real-time</p>
+                        <div class="min-w-0">
+                            <h5 class="font-bold text-gray-800 text-sm md:text-base">Transaction History</h5>
+                            <p class="text-gray-500 text-xs md:text-sm mt-0.5">Track all withdrawals in real-time</p>
                         </div>
                     </div>
                 </div>
-                
-                <div class="bg-white p-5 rounded-xl shadow-card border border-gray-100">
+
+                <div class="app-card p-4 md:p-5">
                     <div class="flex items-center">
-                        <div class="p-3 bg-purple-100 rounded-lg mr-4">
-                            <i class="fas fa-headset text-purple-500 text-xl"></i>
+                        <div class="w-11 h-11 rounded-xl bg-purple-50 flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fas fa-headset text-purple-500 text-lg"></i>
                         </div>
-                        <div>
-                            <h5 class="font-bold text-gray-800">24/7 Support</h5>
-                            <p class="text-gray-600 text-sm mt-1">Contact support for any withdrawal issues</p>
+                        <div class="min-w-0">
+                            <h5 class="font-bold text-gray-800 text-sm md:text-base">24/7 Support</h5>
+                            <p class="text-gray-500 text-xs md:text-sm mt-0.5">Contact support for any withdrawal issues</p>
                         </div>
                     </div>
                 </div>
             </div>
+            </main>
         </div>
     </div>
 

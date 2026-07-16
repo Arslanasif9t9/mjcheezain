@@ -36,9 +36,10 @@
         }
         
         .info-card {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);
             color: white;
-            border-radius: 12px;
+            border-radius: 1.25rem;
+            box-shadow: 0 6px 18px rgba(255, 125, 160, 0.30);
         }
         
         .timeline-container {
@@ -144,9 +145,14 @@
 </head>
 
 <body class="min-h-screen" style="background-color: #FFF6F0;">
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-8">
+    <x-vendor.app-header
+        title="Return #{{ str_pad($return->id, 6, '0', STR_PAD_LEFT) }}"
+        subtitle="Return request details"
+        back="{{ route('vendor.returns.index') }}" />
+
+    <div class="container mx-auto px-4 py-4 md:py-8 pb-28 md:pb-8 page-enter">
+        <!-- Header (desktop only — mobile uses the app header above) -->
+        <div class="hidden md:flex justify-between items-center mb-8">
             <div>
                 <h1 class="text-3xl font-bold text-gray-800">Return Details</h1>
                 <p class="text-gray-600 mt-2">Return ID: RET-{{ str_pad($return->id, 6, '0', STR_PAD_LEFT) }}</p>
@@ -164,11 +170,11 @@
         </div>
 
         <!-- Main Content Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 md:gap-8">
             <!-- Left Column - Details -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- Customer Information -->
-                <div class="card bg-white p-6">
+                <div class="card app-card bg-white p-5 md:p-6">
                     <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                         <i class="fas fa-user-circle text-orange-600"></i>
                         Customer Information
@@ -194,7 +200,7 @@
                 </div>
 
                 <!-- Product Information -->
-                <div class="card bg-white p-6">
+                <div class="card app-card bg-white p-5 md:p-6">
                     <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                         <i class="fas fa-box text-orange-600"></i>
                         Product Information
@@ -241,7 +247,7 @@
 
                 <!-- Return Images -->
                 @if($images && count($images) > 0)
-                <div class="card bg-white p-6">
+                <div class="card app-card bg-white p-5 md:p-6">
                     <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                         <i class="fas fa-images text-orange-600"></i>
                         Return Images
@@ -258,7 +264,7 @@
                 @endif
 
                 <!-- Tracking Timeline -->
-                <div class="card bg-white p-6">
+                <div class="card app-card bg-white p-5 md:p-6">
                     <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                         <i class="fas fa-history text-orange-600"></i>
                         Return Timeline
@@ -314,26 +320,30 @@
                 </div>
 
                 <!-- Quick Actions -->
-                <div class="card bg-white p-6">
+                <div class="card app-card bg-white p-5 md:p-6">
                     <h2 class="text-xl font-bold text-gray-800 mb-4">Quick Actions</h2>
                     <div class="space-y-3">
-                        <button onclick="window.location.href='{{ route('vendor.returns.index') }}?update={{ $return->id }}'" 
-                                class="w-full py-3 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-700 transition flex items-center justify-center gap-2">
+                        <button onclick="window.location.href='{{ route('vendor.returns.index') }}?update={{ $return->id }}'"
+                                class="w-full py-3 brand-gradient brand-shadow text-white rounded-full font-semibold hover:opacity-90 transition flex items-center justify-center gap-2 border-0">
                             <i class="fas fa-edit"></i> Update Status
                         </button>
-                        <button onclick="contactCustomer()" 
-                                class="w-full py-3 bg-[#E85D85] text-white rounded-xl font-semibold hover:bg-[#C94A72] transition flex items-center justify-center gap-2">
+                        <button onclick="contactCustomer()"
+                                class="w-full py-3 bg-[#E85D85] text-white rounded-full font-semibold hover:bg-[#C94A72] transition flex items-center justify-center gap-2 border-0">
                             <i class="fas fa-comment"></i> Contact Customer
                         </button>
-                        <button onclick="generateLabel()" 
-                                class="w-full py-3 bg-green-600 text-white rounded-xl font-semibold hover:bg-green-700 transition flex items-center justify-center gap-2">
+                        <button onclick="generateLabel()"
+                                class="w-full py-3 bg-green-600 text-white rounded-full font-semibold hover:bg-green-700 transition flex items-center justify-center gap-2 border-0">
                             <i class="fas fa-tag"></i> Generate Label
+                        </button>
+                        <button onclick="window.print()"
+                                class="md:hidden w-full py-3 brand-gradient-soft text-[#E85D85] rounded-full font-semibold transition flex items-center justify-center gap-2 border border-[#E85D85]/20">
+                            <i class="fas fa-print"></i> Print
                         </button>
                     </div>
                 </div>
 
                 <!-- Return Details -->
-                <div class="card bg-white p-6">
+                <div class="card app-card bg-white p-5 md:p-6">
                     <h2 class="text-xl font-bold text-gray-800 mb-4">Return Details</h2>
                     <div class="space-y-3">
                         <div>

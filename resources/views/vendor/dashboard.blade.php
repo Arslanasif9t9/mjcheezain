@@ -40,33 +40,38 @@
         />
 
         <!-- Main Content -->
-        <main class="flex-1 p-4 md:p-6 overflow-y-auto scrollbar-hide min-w-0" style="background-color: #FFF6F0;">
-            <!-- Header Component -->
-            <x-vendor.header :profilePicture="$vendorBasicInfo->profile_picture ?? 'default_profile.webp'" />
+        <main class="flex-1 min-w-0 bg-[#FFF6F0]">
+            <!-- Mobile App Header (md:hidden) -->
+            <x-vendor.app-header title="Dashboard" subtitle="Here's how your store is doing" />
 
-            <!-- Overview Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <!-- Chart Component -->
-                <x-vendor.chart :labels="$chartLabels" :data="$chartData" />
-                
-                <!-- Balance Component -->
-                <x-vendor.balance :balance="$balance" />
-            </div>
+            <div class="p-4 md:p-6 pb-28 md:pb-8 page-enter">
+                <!-- Header Component (desktop only) -->
+                <x-vendor.header :profilePicture="$vendorBasicInfo->profile_picture ?? 'default_profile.webp'" />
 
-            <!-- Stats Cards Component -->
-            <x-vendor.stats-cards 
-                :totalProducts="$totalProducts"
-                :totalSales="$totalSales" 
-                :newOrders="$newOrders"
-            />
+                <!-- Overview Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6">
+                    <!-- Chart Component -->
+                    <x-vendor.chart :labels="$chartLabels" :data="$chartData" />
 
-            <!-- Recent Sold & Top Categories -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Recent Sold Component -->
-                <x-vendor.recent-sold :recentOrders="$recentOrders" />
-                
-                <!-- Top Categories Component -->
-                <x-vendor.top-categories :topCategories="$topCategories" />
+                    <!-- Balance Component -->
+                    <x-vendor.balance :balance="$balance" />
+                </div>
+
+                <!-- Stats Cards Component -->
+                <x-vendor.stats-cards
+                    :totalProducts="$totalProducts"
+                    :totalSales="$totalSales"
+                    :newOrders="$newOrders"
+                />
+
+                <!-- Recent Sold & Top Categories -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+                    <!-- Recent Sold Component -->
+                    <x-vendor.recent-sold :recentOrders="$recentOrders" />
+
+                    <!-- Top Categories Component -->
+                    <x-vendor.top-categories :topCategories="$topCategories" />
+                </div>
             </div>
         </main>
     </div>

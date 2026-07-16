@@ -8,12 +8,32 @@
     <title>Replacement Details | Vendor Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Progress bar (used by the Replacement Progress card) */
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: #e5e7eb;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);
+            transition: width 0.5s ease;
+        }
+    </style>
 </head>
 <body style="background-color: #FFF6F0;">
-    <div class="container mx-auto p-6">
-        <div class="bg-white rounded-2xl shadow-lg p-6">
-            <!-- Header -->
-            <div class="flex justify-between items-center mb-8">
+    <x-vendor.app-header
+        title="Replace #{{ str_pad($replacement->id, 6, '0', STR_PAD_LEFT) }}"
+        subtitle="Replacement request details"
+        back="{{ route('vendor.replacements.index') }}" />
+
+    <div class="container mx-auto p-4 md:p-6 pb-28 md:pb-8 page-enter">
+        <div class="bg-transparent shadow-none p-0 md:bg-white md:rounded-2xl md:shadow-lg md:p-6">
+            <!-- Header (desktop only — mobile uses the app header above) -->
+            <div class="hidden md:flex justify-between items-center mb-8">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-800">Replacement Request Details</h1>
                     <p class="text-gray-600">ID: REP-{{ str_pad($replacement->id, 6, '0', STR_PAD_LEFT) }}</p>
@@ -29,7 +49,7 @@
                 <!-- Left Column: Customer & Product Info -->
                 <div class="lg:col-span-2 space-y-6">
                     <!-- Customer Information -->
-                    <div class="bg-white border border-gray-200 rounded-xl p-6">
+                    <div class="app-card bg-white p-5 md:p-6">
                         <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-user text-[#E85D85]"></i> Customer Information
                         </h2>
@@ -58,7 +78,7 @@
                     </div>
 
                     <!-- Product Information -->
-                    <div class="bg-white border border-gray-200 rounded-xl p-6">
+                    <div class="app-card bg-white p-5 md:p-6">
                         <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-box text-[#E85D85]"></i> Product Information
                         </h2>
@@ -98,7 +118,7 @@
                     </div>
 
                     <!-- Tracking Timeline -->
-                    <div class="bg-white border border-gray-200 rounded-xl p-6">
+                    <div class="app-card bg-white p-5 md:p-6">
                         <h2 class="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
                             <i class="fas fa-history text-[#E85D85]"></i> Tracking History
                         </h2>
@@ -171,37 +191,37 @@
                     </div>
 
                     <!-- Quick Actions -->
-                    <div class="bg-white border border-gray-200 rounded-xl p-6">
+                    <div class="app-card bg-white p-5 md:p-6">
                         <h2 class="text-lg font-bold text-gray-800 mb-4">Quick Actions</h2>
                         
                         <div class="space-y-3">
-                            <a href="mailto:{{ $replacement->customer_email }}"
-                               class="w-full px-4 py-3 bg-pink-100 text-[#C94A72] rounded-lg font-medium hover:bg-pink-200 flex items-center justify-center gap-2">
-                                <i class="fas fa-envelope"></i> Email Customer
-                            </a>
-                            
                             <button onclick="updateStatus()"
-                                    class="w-full px-4 py-3 bg-green-100 text-green-700 rounded-lg font-medium hover:bg-green-200 flex items-center justify-center gap-2">
+                                    class="w-full px-4 py-3 brand-gradient brand-shadow text-white rounded-full font-semibold hover:opacity-90 flex items-center justify-center gap-2 border-0">
                                 <i class="fas fa-edit"></i> Update Status
                             </button>
-                            
+
+                            <a href="mailto:{{ $replacement->customer_email }}"
+                               class="w-full px-4 py-3 bg-pink-100 text-[#C94A72] rounded-full font-medium hover:bg-pink-200 flex items-center justify-center gap-2">
+                                <i class="fas fa-envelope"></i> Email Customer
+                            </a>
+
                             @if($replacement->tracking_number)
-                            <a href="https://www.trackingmore.com/track.php?num={{ $replacement->tracking_number }}" 
+                            <a href="https://www.trackingmore.com/track.php?num={{ $replacement->tracking_number }}"
                                target="_blank"
-                               class="w-full px-4 py-3 bg-purple-100 text-purple-700 rounded-lg font-medium hover:bg-purple-200 flex items-center justify-center gap-2">
+                               class="w-full px-4 py-3 bg-purple-100 text-purple-700 rounded-full font-medium hover:bg-purple-200 flex items-center justify-center gap-2">
                                 <i class="fas fa-truck"></i> Track Shipment
                             </a>
                             @endif
-                            
+
                             <button onclick="printPage()"
-                                    class="w-full px-4 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 flex items-center justify-center gap-2">
+                                    class="w-full px-4 py-3 bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 flex items-center justify-center gap-2 border-0">
                                 <i class="fas fa-print"></i> Print Details
                             </button>
                         </div>
                     </div>
 
                     <!-- Progress -->
-                    <div class="bg-white border border-gray-200 rounded-xl p-6">
+                    <div class="app-card bg-white p-5 md:p-6">
                         <h2 class="text-lg font-bold text-gray-800 mb-4">Replacement Progress</h2>
                         
                         <div class="space-y-2">

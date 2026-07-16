@@ -461,6 +461,87 @@
         .category-highlight {
             border-left: 4px solid var(--primary);
         }
+
+        /* ================================================================
+           Mobile app-style overrides (< 768px only) — desktop untouched.
+           CSS-only usability pass: cards, touch targets, sticky submit.
+           ================================================================ */
+        @media (max-width: 767px) {
+            /* Header sits flush; content column gets p-4 + clearance for
+               the fixed bottom nav (z-9999) */
+            main.flex-1 { padding: 0 !important; }
+            main.flex-1 > .max-w-7xl {
+                padding: 1rem !important;
+                padding-bottom: 7rem !important;
+            }
+
+            /* Card-ify each form section */
+            .form-section {
+                border-radius: 1.25rem;
+                padding: 1.25rem 1rem;
+                border: 1px solid rgba(232, 93, 133, 0.08);
+                box-shadow: 0 2px 12px rgba(232, 93, 133, 0.07);
+            }
+            .form-section h2 { font-size: 1.05rem; }
+
+            /* Touch-friendly fields: 44px targets, 16px font (no iOS zoom),
+               soft rounding, pink focus */
+            #productForm input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]),
+            #productForm select,
+            #productForm textarea {
+                width: 100%;
+                min-height: 44px;
+                font-size: 16px;
+                border-radius: 0.75rem;
+            }
+            #productForm input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):focus,
+            #productForm select:focus,
+            #productForm textarea:focus {
+                border-color: #E85D85;
+                box-shadow: 0 0 0 3px rgba(232, 93, 133, 0.15);
+                outline: none;
+            }
+            #productForm .btn-primary { min-height: 44px; }
+
+            /* Upload dropzones: neat dashed brand cards */
+            .image-upload-container { border-radius: 1rem; }
+            .image-upload-label {
+                border-radius: 1rem;
+                border-color: rgba(232, 93, 133, 0.35);
+                background: #fff;
+            }
+            .video-upload-label {
+                border-radius: 1rem;
+                border-color: rgba(232, 93, 133, 0.35);
+            }
+
+            /* Sticky full-width gradient submit, floating above the
+               bottom nav (nav z-9999, MJGuider z-9990 -> use 9980) */
+            #productForm > div.text-right {
+                position: sticky;
+                bottom: calc(4.5rem + env(safe-area-inset-bottom));
+                z-index: 9980;
+            }
+            #submitBtn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                min-height: 52px;
+                font-size: 16px;
+                border-radius: 9999px;
+                background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);
+                box-shadow: 0 6px 18px rgba(255, 125, 160, 0.30);
+            }
+            #submitBtn:hover { transform: none; }
+
+            /* Live preview stacks below the form: drop the nested
+               scrollbox / sticky so it reads as a normal card */
+            .preview-box {
+                position: static !important;
+                max-height: none !important;
+            }
+        }
     </style>
 </head>
 <body class="font-sans" style="background-color: #FFF6F0;">
@@ -475,6 +556,12 @@
         />
 
         <main class="flex-1 p-6 overflow-y-auto scrollbar-hide">
+            {{-- Mobile app header (renders < md only) --}}
+            <x-vendor.app-header
+                title="Add Auto Part"
+                subtitle="List a new auto parts product"
+                back="{{ route('vendor.products') }}" />
+
             <!-- Notifications -->
             <div id="successNotification" class="fixed top-4 right-4 z-50 max-w-md hidden">
                 <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg shadow-lg">
@@ -520,11 +607,11 @@
 
             <div class="max-w-7xl mx-auto p-6 text-gray-800 grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="lg:col-span-2">
-                    <div class="flex items-center gap-3 mb-6">
+                    <div class="hidden md:flex items-center gap-3 mb-6">
                         <h1 class="text-3xl font-bold text-gray-900">Add Auto Parts Product</h1>
                         <span class="part-type-badge">Auto Parts</span>
                     </div>
-                    <p class="text-gray-600 mb-6">Fill in the details below to list your auto parts product</p>
+                    <p class="hidden md:block text-gray-600 mb-6">Fill in the details below to list your auto parts product</p>
 
                     <form class="space-y-6" id="productForm" action="{{ route('vendor.products.store') }}" method="post" enctype="multipart/form-data">
                         @csrf

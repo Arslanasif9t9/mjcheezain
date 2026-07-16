@@ -338,11 +338,31 @@
         table {
             max-width: 800px !important;
         }
-        table th, 
+        table th,
         table td {
             white-space: nowrap;
         }
-    
+
+        /* ===== App-style retheme (mobile-first, matches customer panel) ===== */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .status-dropdown, .label-modal { border-radius: 1.25rem !important; }
+        .status-dropdown-header {
+            background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%) !important;
+            border-bottom: 0 !important;
+        }
+        .status-dropdown-header h3 { color: #fff !important; }
+        .status-dropdown-header p { color: rgba(255, 255, 255, 0.9) !important; }
+        .status-dropdown-header p span { color: #fff !important; }
+        .close-btn { color: rgba(255, 255, 255, 0.95) !important; z-index: 5; }
+        .close-btn:hover { color: #fff !important; }
+        @media (max-width: 767px) {
+            .status-dropdown, .label-modal {
+                width: calc(100vw - 2rem);
+                max-width: calc(100vw - 2rem);
+            }
+        }
     </style>
 </head>
 
@@ -358,43 +378,48 @@
         />
 
         <!-- Main Content -->
-        <main class="flex-1 p-4 md:p-6 min-w-0">
+        <div class="flex flex-col flex-1 min-w-0">
+        <x-vendor.app-header title="Orders" subtitle="{{ $totalOrders }} total · {{ $activeOrders }} active · {{ $deliveredOrders }} delivered" />
+        <main class="flex-1 p-4 md:p-6 pb-28 md:pb-8 min-w-0 page-enter">
             <!-- Header -->
-            <div class="flex justify-between items-center mb-6">
-                <div class="w-1/3">
+            <div class="flex flex-col md:flex-row justify-between md:items-center mb-5 md:mb-6 gap-3">
+                <div class="w-full md:w-1/3">
                     <div class="relative">
                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-gray-400"></i>
-                        <input id="orderSearch" type="text" placeholder="Search orders..." class="border border-gray-300 px-10 py-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300" />
+                        <input id="orderSearch" type="text" placeholder="Search orders..." class="border border-pink-100 md:border-gray-300 bg-white shadow-sm md:shadow-none px-10 py-2.5 md:py-2 rounded-2xl md:rounded-lg w-full text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300" />
                     </div>
                 </div>
-                <div class="text-center">
+                <div class="text-center hidden md:block">
                     <h1 class="text-2xl font-bold text-gray-800">All Cart Orders</h1>
                     <p class="text-sm text-gray-600 mt-1">Orders from your products</p>
                 </div>
             </div>
 
             <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <div class="bg-white p-6 rounded-lg card">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
+                <div class="app-card card p-4 md:p-6">
                     <p class="text-gray-600 text-sm mb-2">Total Orders</p>
                     <p class="text-2xl font-bold text-gray-800">{{ $totalOrders }}</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg card">
+                <div class="app-card card p-4 md:p-6">
                     <p class="text-gray-600 text-sm mb-2">Active Orders</p>
                     <p class="text-2xl font-bold text-gray-800">{{ $activeOrders }}</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg card">
+                <div class="app-card card p-4 md:p-6">
                     <p class="text-gray-600 text-sm mb-2">Delivered Orders</p>
                     <p class="text-2xl font-bold text-gray-800">{{ $deliveredOrders }}</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg card">
+                <div class="app-card card p-4 md:p-6">
                     <p class="text-gray-600 text-sm mb-2">Paid Orders</p>
                     <p class="text-2xl font-bold text-gray-800">{{ $paidOrders }}</p>
                 </div>
             </div>
 
-            <!-- Orders Table -->
-            <div class="bg-white rounded-lg shadow">
+            <!-- Mobile order cards (rendered by JS from the table rows below) -->
+            <div id="ordersMobileList" class="md:hidden space-y-3"></div>
+
+            <!-- Orders Table (desktop) -->
+            <div class="bg-white rounded-lg shadow hidden md:block">
                 <div class="overflow-x-auto min-w-[600px] max-w-full">
                     <table class="min-w-full">
                         <thead class="bg-gray-50">
@@ -501,6 +526,7 @@
                 </div>
             </div>
         </main>
+        </div>
     </div>
 
     <!-- Status Modal -->
@@ -723,16 +749,18 @@
                 return;
             }
             
-            const badge = document.querySelector(`.status-badge[data-order-id="${currentOrderId}"]`);
+            // Both the desktop table badge AND the mobile card badge share the same
+            // data-order-id, so update every matching badge to keep them in sync.
+            const badges = document.querySelectorAll(`.status-badge[data-order-id="${currentOrderId}"]`);
             const updateBtn = document.getElementById('updateStatusBtn');
-            
+
             // Show loading state
             const originalText = updateBtn.innerHTML;
             updateBtn.innerHTML = '<i class="fas fa-spinner spinner mr-2"></i> Updating...';
             updateBtn.disabled = true;
-            
+
             // Update badge immediately for better UX
-            if (badge) {
+            badges.forEach(badge => {
                 const statusColors = {
                     'order placed': 'bg-gray-500',
                     'processing': 'bg-pink-500',
@@ -741,11 +769,12 @@
                     'cancelled': 'bg-red-500',
                     'paid': 'bg-green-500'
                 };
-                
+
                 badge.className = `badge ${statusColors[selectedStatus]} text-white status-badge cursor-pointer`;
                 badge.innerHTML = `${selectedStatus.charAt(0).toUpperCase() + selectedStatus.slice(1)} <i class="fas fa-chevron-down ml-1 text-xs"></i>`;
                 badge.setAttribute('data-current-status', selectedStatus);
-            }
+                badge.setAttribute('onclick', `openStatusModal('${currentOrderId}', '${selectedStatus}')`);
+            });
             
             // Send AJAX request
             fetch("{{ route('vendor.orders.update-status') }}", {
@@ -781,8 +810,8 @@
             .catch(error => {
                 console.error('Error:', error);
                 
-                // Revert badge if failed
-                if (badge) {
+                // Revert badges if failed
+                badges.forEach(badge => {
                     const statusColors = {
                         'order placed': 'bg-gray-500',
                         'processing': 'bg-pink-500',
@@ -791,11 +820,12 @@
                         'cancelled': 'bg-red-500',
                         'paid': 'bg-green-500'
                     };
-                    
+
                     badge.className = `badge ${statusColors[currentOrderStatus]} text-white status-badge cursor-pointer`;
                     badge.innerHTML = `${currentOrderStatus.charAt(0).toUpperCase() + currentOrderStatus.slice(1)} <i class="fas fa-chevron-down ml-1 text-xs"></i>`;
                     badge.setAttribute('data-current-status', currentOrderStatus);
-                }
+                    badge.setAttribute('onclick', `openStatusModal('${currentOrderId}', '${currentOrderStatus}')`);
+                });
                 
                 showNotification('Failed to update status. Please try again.', 'error');
                 updateBtn.innerHTML = originalText;
@@ -988,6 +1018,104 @@
                 }, 300);
             }, 3000);
         }
+    </script>
+
+    <!-- Mobile app-card list: built from the (hidden) desktop table rows so both views share one data source -->
+    <script>
+        (function () {
+            const M_STATUS_COLORS = {
+                'order placed': 'bg-gray-500',
+                'processing': 'bg-pink-500',
+                'shipping': 'bg-purple-500',
+                'delivered': 'bg-green-500',
+                'cancelled': 'bg-red-500',
+                'paid': 'bg-green-500'
+            };
+
+            function esc(s) {
+                const d = document.createElement('div');
+                d.textContent = s == null ? '' : String(s);
+                return d.innerHTML;
+            }
+
+            window.renderMobileOrderCards = function () {
+                const list = document.getElementById('ordersMobileList');
+                if (!list) return;
+
+                const rows = document.querySelectorAll('#ordersTableBody tr[data-order-id]');
+                if (!rows.length) {
+                    list.innerHTML = `
+                        <div class="app-card p-10 text-center">
+                            <div class="w-16 h-16 mx-auto rounded-full brand-gradient-soft flex items-center justify-center mb-3">
+                                <i class="fas fa-shopping-cart text-2xl text-[#E85D85]"></i>
+                            </div>
+                            <p class="text-gray-600 text-sm font-semibold">No orders found</p>
+                            <p class="text-gray-400 text-xs mt-1">When customers add your products to cart, they'll appear here.</p>
+                        </div>`;
+                    return;
+                }
+
+                let html = '';
+                rows.forEach(row => {
+                    const id = row.getAttribute('data-order-id');
+                    const code = row.cells[0].textContent.trim();
+                    const img = row.cells[1].querySelector('img');
+                    const name = (row.cells[1].querySelector('.font-medium')?.textContent || row.cells[1].textContent).trim();
+                    const qty = row.cells[2].textContent.trim();
+                    const total = row.cells[4].textContent.trim(); // already "Rs. x,xxx.xx"
+                    const badgeEl = row.cells[5].querySelector('.status-badge');
+                    const status = badgeEl ? (badgeEl.getAttribute('data-current-status') || 'order placed') : 'order placed';
+                    const statusColor = M_STATUS_COLORS[status] || 'bg-gray-500';
+                    const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
+                    const date = row.cells[6].textContent.trim();
+                    const thumb = img
+                        ? `<img src="${img.src}" class="w-12 h-12 rounded-xl object-cover flex-shrink-0" alt="">`
+                        : `<div class="w-12 h-12 rounded-xl brand-gradient-soft flex items-center justify-center flex-shrink-0"><i class="fas fa-box text-[#E85D85]"></i></div>`;
+
+                    html += `
+                    <div class="m-order-card app-card p-4">
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <span class="text-[11px] font-bold text-gray-400 tracking-wide truncate">${esc(code)}</span>
+                            <span class="badge ${statusColor} text-white status-badge cursor-pointer flex-shrink-0"
+                                  data-order-id="${esc(id)}" data-current-status="${esc(status)}"
+                                  onclick="openStatusModal('${esc(id)}', '${esc(status)}')">
+                                ${esc(statusLabel)} <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            ${thumb}
+                            <div class="min-w-0 flex-1">
+                                <p class="text-sm font-bold text-gray-900 truncate">${esc(name)}</p>
+                                <p class="text-[11px] text-gray-400 mt-0.5">Qty ${esc(qty)} &middot; ${esc(date)}</p>
+                            </div>
+                            <p class="text-sm font-extrabold text-gray-900 flex-shrink-0">${esc(total)}</p>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-[#E85D85]/10">
+                            <button onclick="openPrintLabelModal('${esc(id)}')"
+                                    class="w-full py-2.5 rounded-full text-white text-xs font-semibold brand-gradient brand-shadow border-0 no-print active:scale-[0.98] transition">
+                                <i class="fas fa-print mr-1"></i> Print Label
+                            </button>
+                        </div>
+                    </div>`;
+                });
+                list.innerHTML = html;
+            };
+
+            document.addEventListener('DOMContentLoaded', function () {
+                renderMobileOrderCards();
+
+                // Extend the search box to filter the mobile cards as well
+                const search = document.getElementById('orderSearch');
+                if (search) {
+                    search.addEventListener('keyup', function () {
+                        const term = this.value.toLowerCase();
+                        document.querySelectorAll('#ordersMobileList .m-order-card').forEach(card => {
+                            card.style.display = card.textContent.toLowerCase().includes(term) ? '' : 'none';
+                        });
+                    });
+                }
+            });
+        })();
     </script>
     <x-vendor.mobile-nav />
 </body>

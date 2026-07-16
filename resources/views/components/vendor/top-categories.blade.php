@@ -1,7 +1,7 @@
 @props(['topCategories'])
 
-<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-    <h2 class="text-lg font-bold mb-4 text-gray-800 border-b border-gray-50 pb-3">Top 5 Sales Categories</h2>
+<div class="app-card p-4 md:p-6">
+    <h2 class="text-base md:text-lg font-bold mb-4 text-gray-800 border-b border-gray-50 pb-3">Top 5 Sales Categories</h2>
     <ul class="space-y-4">
         @foreach($topCategories as $category)
             <li class="flex flex-col gap-1.5">

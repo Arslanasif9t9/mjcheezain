@@ -49,8 +49,8 @@
         }
     </style>
 </head>
-<body style="background-color: #FFF6F0;">
-    <div class="flex h-screen overflow-hidden">
+<body class="min-h-screen" style="background-color: #FFF6F0;">
+    <div class="flex min-h-screen">
         <!-- Sidebar Component -->
         <x-vendor.sidebar 
             :profilePicture="$vendorBasicInfo->profile_picture ?? 'default_profile.webp'"
@@ -61,9 +61,11 @@
         />
         
         <!-- Main Content -->
-        <div class="flex flex-col flex-1 overflow-hidden">
-            <!-- Top Navigation -->
-            <header class="flex items-center justify-between pl-16 pr-6 py-4 bg-white border-b border-gray-200 md:pl-6">
+        <div class="flex flex-col flex-1 min-w-0">
+            <x-vendor.app-header title="Notifications" subtitle="Stay up to date with your store" />
+
+            <!-- Top Navigation (desktop only) -->
+            <header class="hidden md:flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
                 <div class="flex items-center">
                     <h1 class="text-xl font-semibold text-gray-800">Notifications</h1>
                 </div>
@@ -94,10 +96,10 @@
             </header>
             
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-y-auto p-4 md:p-6 min-w-0" style="background-color: #FFF6F0;">
+            <main class="flex-1 p-4 md:p-6 pb-28 md:pb-8 page-enter min-w-0" style="background-color: #FFF6F0;">
                 <div class="max-w-4xl mx-auto">
-                    <!-- Notification Header -->
-                    <div class="flex items-center justify-between mb-6">
+                    <!-- Notification Header (desktop only) -->
+                    <div class="hidden md:flex items-center justify-between mb-6">
                         <h2 class="text-2xl font-bold text-gray-800">Your Notifications</h2>
                         <div class="flex items-center space-x-2">
                             {{-- <button class="px-3 py-1 text-sm text-gray-600 hover:text-gray-800">
@@ -105,18 +107,30 @@
                             </button> --}}
                         </div>
                     </div>
-                    
+
+                    @php
+                        // Brand theme mapping: DB-stored color classes may contain blue variants.
+                        // Rewrite them to brand pink equivalents before echoing (view-only fix, no DB changes).
+                        $brandizeClasses = function ($classes) {
+                            return str_replace(
+                                ['bg-blue-100', 'bg-blue-500', 'bg-blue-50', 'text-blue-800', 'text-blue-600', 'text-blue-500'],
+                                ['bg-pink-100', 'bg-[#FF7DA0]', 'bg-pink-50', 'text-[#C94A72]', 'text-[#E85D85]', 'text-[#E85D85]'],
+                                (string) $classes
+                            );
+                        };
+                    @endphp
+
                     <!-- Notification List -->
-                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <div class="app-card overflow-hidden -mt-2 md:mt-0 relative z-10">
                         @forelse($notifications as $dateGroup => $groupedNotifications)
-                            <div class="@if(!$loop->last) border-b border-gray-200 @endif">
-                                <div class="px-4 py-3 bg-gray-50">
-                                    <h3 class="text-sm font-medium text-gray-500">{{ $dateGroup }}</h3>
+                            <div class="@if(!$loop->last) border-b border-pink-100 @endif">
+                                <div class="px-4 py-2.5 brand-gradient-soft">
+                                    <h3 class="text-xs font-bold text-[#E85D85] uppercase tracking-wide">{{ $dateGroup }}</h3>
                                 </div>
-                                
-                                <div class="divide-y divide-gray-100">
+
+                                <div class="divide-y divide-pink-50">
                                     @foreach($groupedNotifications as $notification)
-                                        <div class="notification-item flex items-start px-4 py-3 hover:bg-gray-100 {{ $notification->is_read ? '' : 'bg-pink-100' }}" 
+                                        <div class="notification-item flex items-start px-4 py-3.5 hover:bg-pink-50/50 transition-colors {{ $notification->is_read ? '' : 'bg-pink-50' }}"
                                              data-notification-id="{{ $notification->id }}">
                                             {{-- <label class="inline-flex items-center mt-1 mr-3">
                                                 <input type="checkbox" 
@@ -125,7 +139,7 @@
                                                 <span class="checkmark h-4 w-4 border border-gray-300 rounded-sm flex-shrink-0"></span>
                                             </label> --}}
                                             <div class="flex-shrink-0 mr-3">
-                                                <div class="p-2 rounded-full {!! $notification->icon_color !!}">
+                                                <div class="p-2 rounded-full {!! $brandizeClasses($notification->icon_color) !!}">
                                                     <i class="{{ $notification->icon_class }}"></i>
                                                 </div>
                                             </div>
@@ -137,27 +151,27 @@
                                                 </p>
                                             </div>
                                             <div class="ml-4 flex-shrink-0">
-                                                <span class="w-2 h-2 rounded-full {{ $notification->is_read ? 'bg-gray-300' : $notification->dot_color }}"></span>
+                                                <span class="w-2 h-2 rounded-full {{ $notification->is_read ? 'bg-gray-300' : $brandizeClasses($notification->dot_color) }}"></span>
                                             </div>
                                         </div>
                                     @endforeach
                                 </div>
                             </div>
                         @empty
-                            <div class="px-4 py-8 text-center">
-                                <div class="mb-4">
-                                    <i class="fas fa-bell-slash text-4xl text-gray-300"></i>
+                            <div class="px-4 py-12 text-center">
+                                <div class="w-16 h-16 mx-auto rounded-full brand-gradient-soft flex items-center justify-center mb-4">
+                                    <i class="fas fa-bell-slash text-2xl text-[#E85D85]"></i>
                                 </div>
-                                <p class="text-gray-500">No notifications yet</p>
+                                <p class="text-gray-600 font-semibold">No notifications yet</p>
                                 <p class="text-sm text-gray-400 mt-1">We'll notify you when something arrives</p>
                             </div>
                         @endforelse
                     </div>
-                    
+
                     <!-- Load More Button -->
                     @if($notifications->count() > 0)
                     <div class="mt-6 text-center">
-                        <button class="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                        <button class="px-5 py-2.5 bg-white border border-pink-200 rounded-full md:rounded-md text-sm font-semibold text-[#E85D85] md:text-gray-700 md:border-gray-300 hover:bg-pink-50 md:hover:bg-gray-50 active:scale-95 transition-transform">
                             Load More Notifications
                         </button>
                     </div>
@@ -190,15 +204,18 @@
                     const notificationId = this.dataset.notificationId;
                     const checkbox = this.querySelector('.notification-checkbox');
                     const dot = this.querySelector('.rounded-full:last-child');
-                    
+
                     // If already read, do nothing
-                    if (checkbox.checked) return;
-                    
+                    if (checkbox && checkbox.checked) return;
+
                     // Mark as read visually
-                    checkbox.checked = true;
-                    dot.classList.remove('bg-pink-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-red-500');
-                    dot.classList.add('bg-gray-300');
-                    
+                    if (checkbox) checkbox.checked = true;
+                    if (dot) {
+                        dot.classList.remove('bg-pink-500', 'bg-[#FF7DA0]', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-red-500');
+                        dot.classList.add('bg-gray-300');
+                    }
+                    this.classList.remove('bg-pink-50');
+
                     // Mark as read in database
                     fetch(`/vendor/notifications/${notificationId}/read`, {
                         method: 'POST',
@@ -222,7 +239,7 @@
                     
                     if (checkbox.checked) {
                         // Mark as read
-                        dot.classList.remove('bg-pink-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-red-500');
+                        dot.classList.remove('bg-pink-500', 'bg-[#FF7DA0]', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-red-500');
                         dot.classList.add('bg-gray-300');
                         
                         fetch(`/vendor/notifications/${notificationId}/read`, {
@@ -269,7 +286,8 @@
             })
             .then(data => {
                 console.log('Successfully read notifications', data);
-                document.getElementById('noti-num').style.display = 'none'
+                const notiNum = document.getElementById('noti-num');
+                if (notiNum) notiNum.style.display = 'none';
             })
             .catch(error => {
                 console.error('Error:', error);

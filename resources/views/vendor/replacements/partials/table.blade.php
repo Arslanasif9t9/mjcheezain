@@ -26,7 +26,10 @@
         $stepColor = $stepColors[$replacement->current_step] ?? 'gray';
     @endphp
     
-    <tr class="table-row replacement-row" data-replacement-id="{{ $replacement->id }}">
+    {{-- data-status / data-step are read by the mobile app-card renderer on vendor/replacements/index --}}
+    <tr class="table-row replacement-row" data-replacement-id="{{ $replacement->id }}"
+        data-status="{{ $replacement->status }}"
+        data-step="{{ $replacement->current_step }}">
         <td class="table-cell font-bold text-[#E85D85]">
             REP-{{ str_pad($replacement->id, 6, '0', STR_PAD_LEFT) }}
         </td>

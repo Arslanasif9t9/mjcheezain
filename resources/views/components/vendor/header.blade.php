@@ -1,6 +1,6 @@
 @props(['profilePicture', 'title' => 'Overview'])
 
-<div class="header flex justify-between items-center mb-6 pl-14 md:pl-0 gap-4">
+<div class="header hidden md:flex justify-between items-center mb-6 gap-4">
     <h1 class="text-xl md:text-3xl font-extrabold text-gray-800 tracking-tight whitespace-nowrap">{{ $title }}</h1>
 
     <!-- Desktop Search -->
