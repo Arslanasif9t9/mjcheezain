@@ -4,11 +4,18 @@
 
 ## 🔄 Currently Working On
 
-- *(nothing in progress — MJGuider **DEPLOYED & LIVE, owner-verified working** 2026-07-15)*
+- 2026-07-16: MJGuider bottom-nav tab + mobile full-screen done locally — **awaiting owner mobile test + push approval**
 - Future MJGuider todos jab owner chahe: `GROK_API_KEY` dalna (fallback abhi key-less — Gemini fail par polite fallback msg hi aata hai), real phone number aane par `app/Services/MjGuide/knowledge.md` update + server par `php artisan cache:clear`.
 - **⚠ GOTCHA (2026-07-15):** naye Gemini keys par 2.0/2.5 models ka free-tier quota **0** hai (429/404 dete hain) — is liye model `gemini-3.1-flash-lite` use ho raha hai (free tier OK, tested). GeminiProvider ab "thought" parts skip kar ke sirf visible text jorta hai.
 
 ## ✅ Completed
+
+### 2026-07-16 — MJGuider: bottom-nav tab + mobile full-screen (owner feedback round 2)
+- **Nav tab**: gradient circular MJGuider chip (fa-comment-dots, unread `.mjg-nav-dot`) added to BOTH bottom navs — customer (`customer/mobile-nav`, between Orders/Wishlist) and vendor (`vendor/mobile-nav`, between Products/Orders). Class `.mjg-nav-open` = JS hook. Raised-center button rejected: 6 flex-1 items mein exact center possible nahi (41.7% par girta).
+- **FAB mobile-hide is CONDITIONAL**: JS `.mjg-nav-open` milne par `#mjGuide` ko `.mjg-nav` class deta hai → CSS mobile par FAB `display:none`. **Guests ke paas bottom nav nahi hoti, unka FAB mobile par visible rehta hai** (warna chatbot unreachable). Desktop FAB sab ke liye same.
+- **Mobile chat = FULL SCREEN app view**: 91dvh sheet → `top:0; 100dvh; border-radius:0`, grab-handle removed (markup+CSS), header safe-area-top padding, avatar 42px. Slide-up animation + body scroll-lock retained.
+- **Unread dot sync**: `setDot()` helper FAB dot + saare nav dots ek sath toggle karta hai.
+- Verified: node --check, view:cache; tinker renders — customer 67 (dashboard+home) / vendor 66 (dashboard) = widgets 1, navtab 1, fullscreen CSS present; guest home = widget 1, navtab 0 (FAB path). NOT pushed.
 
 ### 2026-07-15 — MJGuider widget UI revamp (owner feedback round 1)
 - **Rename**: "MJ Guide" → **MJGuider** everywhere (FAB label, header, welcome msg, aria labels, system prompt self-name — AI tested: "Mera naam MJGuider hai"; docs sed-renamed too).

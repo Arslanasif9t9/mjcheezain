@@ -31,9 +31,9 @@ Status legend: ✅ done · 🔄 in progress · ⏳ planned
 - Redesigned + responsive: dashboard, orders (pill tabs, Rs. currency, rethemed modals), wishlist, addresses, profile, edit-profile, notifications, returns create/track
 - All legacy blue theme removed from customer panel
 
-## Phase 6 — Vendor Panel Polish ⏳
-- Apply the same brand theme + mobile-app treatment to vendor views (dashboard, products CRUD, orders, withdraw, profile-edit)
-- Vendor return/replacement handling screens retheme
+## Phase 6 — Vendor Panel Polish ✅ *(completed 2026-07-15, commits `4f846ab` + `d2f25db`)*
+- Brand theme + mobile-app treatment applied to all vendor views (dashboard, products CRUD, orders, withdraw, profile-edit, notifications, balance)
+- Vendor return/replacement handling screens rethemed; vendor mobile bottom nav on every page; site-wide blue purge
 
 ## Phase 7 — Admin Panel ⏳
 - Retheme + harden admin dashboard (`resources/views/Admin`)

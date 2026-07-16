@@ -131,10 +131,18 @@
         return window.matchMedia('(max-width: 767px)').matches;
     }
 
+    /* unread dot lives on the FAB and on every bottom-nav MJGuider tab */
+    function setDot(show) {
+        dot.hidden = !show;
+        Array.prototype.forEach.call(document.querySelectorAll('.mjg-nav-dot'), function (d) {
+            d.hidden = !show;
+        });
+    }
+
     function openChat() {
         root.classList.add('mjg-open');
         win.setAttribute('aria-hidden', 'false');
-        dot.hidden = true;
+        setDot(false);
         hideConfirm();
         renderAll();
         if (isMobile()) {
@@ -154,6 +162,17 @@
 
     fab.addEventListener('click', openChat);
     closeBtn.addEventListener('click', closeChat);
+
+    /* Bottom-nav MJGuider tabs: open the chat; their presence hides the
+       mobile FAB (guests have no bottom nav, so they keep the FAB). */
+    var navTabs = document.querySelectorAll('.mjg-nav-open');
+    if (navTabs.length) {
+        root.classList.add('mjg-nav');
+        Array.prototype.forEach.call(navTabs, function (t) {
+            t.addEventListener('click', openChat);
+        });
+    }
+
     back.addEventListener('click', closeChat);
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && isOpen()) closeChat();
@@ -222,7 +241,7 @@
                 pushMessage('assistant', reply);
                 bubble('assistant', reply);
                 scrollDown();
-                if (!isOpen()) dot.hidden = false;
+                if (!isOpen()) setDot(true);
             })
             .catch(function (err) {
                 hideTyping();

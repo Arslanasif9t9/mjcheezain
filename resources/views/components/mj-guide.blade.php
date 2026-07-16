@@ -16,7 +16,6 @@
 
     {{-- Chat window --}}
     <div id="mjGuideWin" role="dialog" aria-label="MJGuider chat" aria-hidden="true">
-        <div class="mjg-grab" aria-hidden="true"><i></i></div>
         <div class="mjg-head">
             <div class="mjg-ava">MJ<em></em></div>
             <div class="mjg-title">
@@ -97,8 +96,6 @@
             transition: opacity .24s ease, transform .24s cubic-bezier(.32,.72,.24,1), visibility .24s;
         }
         #mjGuide.mjg-open #mjGuideWin { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
-
-        .mjg-grab { display: none; }
 
         /* ---- Header ---- */
         .mjg-head {
@@ -219,31 +216,30 @@
         #mjGuideSend svg { width: 16px; height: 16px; margin-left: 2px; }
 
         /* =========================================================
-           Mobile — premium app-style full sheet
+           Mobile — FULL-SCREEN app view
            ========================================================= */
         @media (max-width: 767px) {
             #mjGuideFab { right: 14px; bottom: 5.9rem; padding: 12px 17px; font-size: 13px; }
             #mjGuide.mjg-lift #mjGuideFab { bottom: 9.6rem; }
+            /* page has an MJGuider tab in the bottom nav -> FAB not needed on mobile
+               (guests have no bottom nav, so THEY keep the FAB) */
+            #mjGuide.mjg-nav #mjGuideFab { display: none; }
 
             #mjGuideBack { display: block; }
             #mjGuide.mjg-open #mjGuideBack { opacity: 1; visibility: visible; }
 
+            /* full-screen app page (covers bottom nav too) */
             #mjGuideWin {
-                left: 0; right: 0; bottom: 0; width: 100%; max-width: 100%;
-                height: 91vh; height: 91dvh;
-                border-radius: 24px 24px 0 0;
+                top: 0; left: 0; right: 0; bottom: 0; width: 100%; max-width: 100%;
+                height: 100vh; height: 100dvh;
+                border-radius: 0;
                 opacity: 1; transform: translateY(104%); /* slide fully off-screen */
                 transition: transform .34s cubic-bezier(.32,.72,.24,1), visibility .34s;
             }
             #mjGuide.mjg-open #mjGuideWin { transform: translateY(0); }
 
-            .mjg-grab {
-                display: flex; justify-content: center; flex: none;
-                background: linear-gradient(120deg, #FF7DA0, #FFC275);
-                padding: 8px 0 0;
-            }
-            .mjg-grab i { width: 42px; height: 4px; border-radius: 99px; background: rgba(255,255,255,.55); }
-            .mjg-head { padding-top: 8px; }
+            .mjg-head { padding: calc(12px + env(safe-area-inset-top)) 14px 12px; }
+            .mjg-ava { width: 42px; height: 42px; }
 
             .mjg-input { padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
         }

@@ -23,6 +23,16 @@
         @if($vnIsProducts)<div class="w-1 h-1 rounded-full bg-[#FF7DA0] mt-0.5 animate-pulse"></div>@endif
     </a>
 
+    <!-- MJGuider tab (gradient chip; opens the full-screen chat) -->
+    <button type="button" class="mjg-nav-open flex flex-col items-center justify-center flex-1 py-1 bg-transparent border-0 cursor-pointer" aria-label="Open MJGuider chat">
+        <span class="relative w-9 h-9 -mt-2 rounded-full flex items-center justify-center text-white"
+              style="background:linear-gradient(120deg,#FF7DA0,#FFC275); box-shadow:0 6px 14px rgba(232,93,133,.4);">
+            <i class="fas fa-comment-dots text-base"></i>
+            <i class="mjg-nav-dot" hidden style="position:absolute;top:-1px;right:-1px;width:12px;height:12px;background:#ef4444;border:2px solid #fff;border-radius:50%;"></i>
+        </span>
+        <span class="text-[10px] font-bold mt-1" style="color:#E85D85;">MJGuider</span>
+    </button>
+
     <a href="{{ route('vendor.orders') }}" class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200 no-underline {{ $vnIsOrders ? 'text-[#FF7DA0]' : 'text-gray-400' }}">
         <i class="fas fa-shopping-cart text-lg"></i>
         <span class="text-[10px] font-semibold mt-1">Orders</span>
