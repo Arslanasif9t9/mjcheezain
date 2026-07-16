@@ -301,5 +301,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/change-product-position', [ProductController::class, 'changeProductPosition']);
     Route::post('/delete-product', [ProductController::class, 'deleteProduct']);
 
+    Route::get('/category-suggestions', [AdminAuthController::class, 'categorySuggestions']);
+
     Route::get('/orders', [AdminAuthController::class, 'orders']);
 });

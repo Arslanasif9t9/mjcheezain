@@ -140,8 +140,10 @@
                         @php
                             $m_position_map = [
                                 'online' => 'Online',
+                                'approved' => 'Online',
                                 'pending' => 'Pending',
                                 'offline' => 'Offline',
+                                'rejected' => 'Offline',
                                 'draft' => 'Draft'
                             ];
                             if ($product->quantity > 10) {
@@ -224,6 +226,12 @@
 <x-logout-modal />
 
     <script>
+        // DB position values -> tab keys (legacy tabs use online/offline naming)
+        window.mjPositionMatchesTab = function (position, tab) {
+            const alias = { approved: 'online', rejected: 'offline' };
+            return tab === 'all' || position === tab || alias[position] === tab;
+        };
+
         // Tab functionality
         document.addEventListener('DOMContentLoaded', function() {
             const tabButtons = document.querySelectorAll('.tab-button');
@@ -261,7 +269,7 @@
                 productRows.forEach(row => {
                     const position = row.getAttribute('data-position');
 
-                    if (tab === 'all' || position === tab) {
+                    if (window.mjPositionMatchesTab(position, tab)) {
                         row.style.display = '';
                     } else {
                         row.style.display = 'none';
@@ -296,7 +304,7 @@
                         productId.includes(searchTerm);
 
                     const position = row.getAttribute('data-position');
-                    const matchesTab = activeTab === 'all' || position === activeTab;
+                    const matchesTab = window.mjPositionMatchesTab(position, activeTab);
 
                     if (matchesSearch && matchesTab) {
                         row.style.display = '';
@@ -344,7 +352,7 @@
                     if (!card.isConnected) return;
                     const position = card.getAttribute('data-position');
                     const hay = (card.getAttribute('data-search') || '');
-                    const matchesTab = mTab === 'all' || position === mTab;
+                    const matchesTab = window.mjPositionMatchesTab(position, mTab);
                     const matchesSearch = mSearch === '' || hay.includes(mSearch);
                     const show = matchesTab && matchesSearch;
                     card.style.display = show ? '' : 'none';

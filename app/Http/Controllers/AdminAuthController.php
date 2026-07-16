@@ -168,6 +168,24 @@ class AdminAuthController extends Controller
         ]));
     }
 
+    function categorySuggestions() {
+        // Check if admin is logged in
+        if (!Session::get('admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        $suggestions = DB::table('category_suggestions as cs')
+            ->leftJoin('users as u', 'cs.user_id', '=', 'u.user_id')
+            ->leftJoin('vendor_products as p', 'cs.product_id', '=', 'p.id')
+            ->select('cs.*', 'u.full_name as vendor_name', 'u.email as vendor_email', 'p.name as product_name')
+            ->orderByDesc('cs.created_at')
+            ->get();
+
+        $pendingCount = $suggestions->where('status', 'pending')->count();
+
+        return view('Admin/category_suggestions', compact('suggestions', 'pendingCount'));
+    }
+
 
     function orders() {
         // Check if admin is logged in

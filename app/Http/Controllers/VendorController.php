@@ -603,39 +603,52 @@ class VendorController extends Controller
         // return response()->json([
         //         'success' => $request->all()
         //     ]);
-        $validated['product_name'] = ucwords(trim($validated['product_name']));
-        $validated['brand'] = ucwords(trim($validated['brand']));
-        $validated['model'] = ucwords(trim($validated['model']));
-        $validated['made_in'] = ucwords(trim($validated['made_in']));
+
+        // Draft: saved with status/position 'draft' — storefront (position='approved')
+        // and admin moderation (position='pending') never see it.
+        $isDraft = $request->boolean('save_as_draft');
+
+        // "Other" category: use the vendor-typed value and queue it for admin review
+        $customCategory = $this->resolveCustomCategory($request, $validated);
+
+        $validated['product_name'] = ucwords(trim($validated['product_name'] ?? ''));
+        $validated['brand'] = ucwords(trim($validated['brand'] ?? ''));
+        $validated['model'] = ucwords(trim($validated['model'] ?? ''));
+        $validated['made_in'] = ucwords(trim($validated['made_in'] ?? ''));
         // Handle model field based on category
         // $modelValue = $validated['model'] ?? '';
         // if (!empty($validated['model_value']) && !empty($validated['model_unit'])) {
         //     $modelValue = $validated['model_value'] . ' ' . $validated['model_unit'];
         // }
 
-        // Create the product
+        // Create the product (drafts may have empty fields — NOT NULL columns get safe defaults)
         $product = VendorProduct::create([
             'user_id' => Auth::id(),
-            'name' => $validated['product_name'],
-            'category' => $validated['category'],
-            'subcategory' => $validated['subcategory'],
-            'quantity' => $validated['quantity'],
+            'name' => $validated['product_name'] !== '' ? $validated['product_name'] : 'Untitled Draft',
+            'category' => $validated['category'] ?? '',
+            'subcategory' => $validated['subcategory'] ?? '',
+            'quantity' => (int) ($validated['quantity'] ?? 0),
             'brand' => $validated['brand'],
             'model' => $validated['model'],
-            'pcondition' => $validated['condition'],
+            'pcondition' => $validated['condition'] ?? '',
             'original_price' => 0,
-            'delivery_charges' => $validated['delivery_charges'],
-            'selling_price' => $validated['selling_price'],
-            'mrp' => $validated['mrp'] ?? null,
-            'shipping_method' => $validated['shipping_method'],
-            'shipping_time' => $validated['shipping_time'],
-            'description' => $validated['description'],
-            'location' => $validated['location'],
+            'delivery_charges' => (float) ($validated['delivery_charges'] ?? 0),
+            'selling_price' => (float) ($validated['selling_price'] ?? 0),
+            'mrp' => ($validated['mrp'] ?? '') !== '' ? $validated['mrp'] : null,
+            'shipping_method' => $validated['shipping_method'] ?? '',
+            'shipping_time' => $validated['shipping_time'] ?? '',
+            'description' => $validated['description'] ?? '',
+            'location' => $validated['location'] ?? '',
             'made_in' => $validated['made_in'],
             'return_policy' => $validated['return_policy'] ?? null,
-            'status' => 'pending',
+            'status' => $isDraft ? 'draft' : 'pending',
+            'position' => $isDraft ? 'draft' : 'pending',
             'part_type' => $validated['part_type'] ?? null
         ]);
+
+        if ($customCategory) {
+            $this->queueCategorySuggestion($validated, $product->id);
+        }
 
         // return $request->input('productImages');
         // Handle product images
@@ -685,22 +698,71 @@ class VendorController extends Controller
             }
         }
         
-        if ($validated['part_type'] ?? null) {
+        if (!$isDraft && ($validated['part_type'] ?? null)) {
             $AutoPartsProductController = new AutoPartsProductController();
             $result = $AutoPartsProductController->store($validated, $product->id);
             // return response()->json(['test'=>$result]);
         }
 
+        $message = $isDraft
+            ? 'Product saved as draft. You can finish and publish it anytime from My Products.'
+            : 'Product created successfully and is pending approval.';
+
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Product created successfully and is pending approval.',
+                'message' => $message,
                 'redirect' => route('vendor.products')
             ]);
         }
 
         return redirect()->route('vendor.products')
-            ->with('success', 'Product created successfully and is pending approval.');
+            ->with('success', $message);
+    }
+
+    /**
+     * "Other" category support: when the vendor picks Other, swap in the typed
+     * category/subcategory. Returns the typed category (or null if not used).
+     */
+    private function resolveCustomCategory(Request $request, array &$validated)
+    {
+        if (($validated['category'] ?? '') !== '__other__') {
+            return null;
+        }
+
+        $custom = ucwords(trim((string) $request->input('custom_category', '')));
+        $validated['category'] = $custom !== '' ? $custom : 'Other';
+
+        $customSub = ucwords(trim((string) $request->input('custom_subcategory', '')));
+        $validated['subcategory'] = $customSub !== '' ? $customSub : 'General';
+
+        return $validated['category'];
+    }
+
+    /** Queue a vendor-suggested category for admin review (deduped per vendor+name). */
+    private function queueCategorySuggestion(array $validated, $productId)
+    {
+        try {
+            $exists = DB::table('category_suggestions')
+                ->where('user_id', Auth::id())
+                ->where('category_name', $validated['category'])
+                ->exists();
+
+            if (!$exists) {
+                DB::table('category_suggestions')->insert([
+                    'user_id' => Auth::id(),
+                    'category_name' => $validated['category'],
+                    'subcategory_name' => $validated['subcategory'] ?? null,
+                    'product_id' => $productId,
+                    'status' => 'pending',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        } catch (\Throwable $e) {
+            // Suggestion logging must never block product creation
+            \Log::warning('category_suggestions insert failed: ' . $e->getMessage());
+        }
     }
 
     public function deleteProduct(Request $request)
@@ -760,27 +822,46 @@ class VendorController extends Controller
 
         $validated = $request->all();
 
-        // Update the product
+        $isDraft = $request->boolean('save_as_draft');
+        $wasDraft = $product->status === 'draft' || $product->position === 'draft';
+
+        // "Other" category: use the vendor-typed value and queue it for admin review
+        $customCategory = $this->resolveCustomCategory($request, $validated);
+
+        // Update the product (drafts may have empty fields — keep old values as fallback)
         $product->update([
-            'name' => $validated['product_name'],
-            'category' => $validated['category'],
-            'subcategory' => $validated['subcategory'],
-            'quantity' => $validated['quantity'],
-            'brand' => $validated['brand'],
-            'model' => $validated['model'],
-            'pcondition' => $validated['condition'],
+            'name' => ucwords(trim($validated['product_name'] ?? '')) ?: $product->name,
+            'category' => $validated['category'] ?? $product->category,
+            'subcategory' => $validated['subcategory'] ?? $product->subcategory,
+            'quantity' => (int) (($validated['quantity'] ?? '') !== '' ? $validated['quantity'] : $product->quantity),
+            'brand' => $validated['brand'] ?? $product->brand,
+            'model' => $validated['model'] ?? $product->model,
+            'pcondition' => $validated['condition'] ?? $product->pcondition,
             'original_price' => 0,
-            'delivery_charges' => $validated['delivery_charges'],
-            'selling_price' => $validated['selling_price'],
-            'mrp' => $validated['mrp'] ?? null,
-            'shipping_method' => $validated['shipping_method'],
-            'shipping_time' => $validated['shipping_time'],
-            'description' => $validated['description'],
-            'location' => $validated['location'],
-            'made_in' => $validated['made_in'],
+            'delivery_charges' => (float) (($validated['delivery_charges'] ?? '') !== '' ? $validated['delivery_charges'] : $product->delivery_charges),
+            'selling_price' => (float) (($validated['selling_price'] ?? '') !== '' ? $validated['selling_price'] : $product->selling_price),
+            'mrp' => ($validated['mrp'] ?? '') !== '' ? $validated['mrp'] : null,
+            'shipping_method' => $validated['shipping_method'] ?? $product->shipping_method,
+            'shipping_time' => $validated['shipping_time'] ?? $product->shipping_time,
+            'description' => $validated['description'] ?? $product->description,
+            'location' => $validated['location'] ?? $product->location,
+            'made_in' => $validated['made_in'] ?? $product->made_in,
             'return_policy' => $validated['return_policy'] ?? null,
-            'status' => 'pending',
+            'status' => $isDraft ? 'draft' : 'pending',
         ]);
+
+        if ($isDraft) {
+            // Stays hidden from storefront + admin moderation queue
+            $product->update(['position' => 'draft']);
+        } elseif ($wasDraft) {
+            // Publishing a draft -> enters the normal moderation queue
+            $product->update(['position' => 'pending']);
+        }
+        // (non-draft edits never touch position — approved products stay live, as before)
+
+        if ($customCategory) {
+            $this->queueCategorySuggestion($validated, $product->id);
+        }
 
         // Handle product images - ADD NEW IMAGES ONLY
         if ($request->hasFile('productImages')) {
@@ -857,16 +938,22 @@ class VendorController extends Controller
             }
         }
 
+        $message = $isDraft
+            ? 'Draft saved. You can finish and publish it anytime from My Products.'
+            : ($wasDraft
+                ? 'Product published successfully and is pending approval.'
+                : 'Product updated successfully and is pending approval.');
+
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Product updated successfully and is pending approval.',
+                'message' => $message,
                 'redirect' => route('vendor.products')
             ]);
         }
 
         return redirect()->route('vendor.products')
-            ->with('success', 'Product updated successfully and is pending approval.');
+            ->with('success', $message);
     }
 
     public function updateStatus(Request $request) {

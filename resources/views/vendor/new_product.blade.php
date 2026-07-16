@@ -778,6 +778,176 @@
         }
 
         /* ================================================================
+           Wizard (multi-step form)
+           ================================================================ */
+        .wizard-step { display: none; }
+        .wizard-step.active { display: block; animation: fadeIn 0.35s ease; }
+
+        .wizard-header {
+            background: white;
+            border: 1px solid rgba(232, 93, 133, 0.12);
+            border-radius: 1rem;
+            padding: 1rem 1.25rem;
+            box-shadow: 0 2px 12px rgba(232, 93, 133, 0.07);
+            scroll-margin-top: 84px;
+        }
+
+        .draft-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fcd34d;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .wizard-progress {
+            height: 6px;
+            background: #fdeef3;
+            border-radius: 9999px;
+            overflow: hidden;
+            margin-bottom: 0.875rem;
+        }
+
+        .wizard-progress-bar {
+            height: 100%;
+            background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);
+            border-radius: 9999px;
+            transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .wizard-chips {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+        }
+
+        .wizard-chip {
+            flex: 1 0 auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.7rem;
+            border-radius: 9999px;
+            border: 1px solid #e5e7eb;
+            background: white;
+            color: #6b7280;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .wizard-chip .chip-num {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #f3f4f6;
+            color: #6b7280;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+        }
+
+        .wizard-chip.current {
+            border-color: #E85D85;
+            background: #fdf2f8;
+            color: #C94A72;
+            font-weight: 600;
+        }
+
+        .wizard-chip.current .chip-num {
+            background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);
+            color: white;
+        }
+
+        .wizard-chip.done {
+            border-color: #a7f3d0;
+            color: #059669;
+        }
+
+        .wizard-chip.done .chip-num {
+            background: #10b981;
+            color: white;
+        }
+
+        .wizard-nav {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            padding-top: 0.5rem;
+        }
+
+        .wizard-btn-back {
+            margin-right: auto;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            padding: 0.7rem 1.4rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .wizard-btn-back:hover {
+            border-color: #9ca3af;
+            background: #f9fafb;
+        }
+
+        .wizard-btn-continue {
+            background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.75rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 125, 160, 0.30);
+            transition: all 0.25s ease;
+        }
+
+        .wizard-btn-continue:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 125, 160, 0.40);
+        }
+
+        .save-draft-btn {
+            border: 1px solid rgba(232, 93, 133, 0.4);
+            background: white;
+            color: #C94A72;
+            padding: 0.7rem 1.25rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .save-draft-btn:hover {
+            background: #fdf2f8;
+            border-color: #E85D85;
+        }
+
+        .save-draft-btn:disabled,
+        .wizard-btn-continue:disabled,
+        .wizard-btn-back:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ================================================================
            Mobile app-style overrides (< 768px only) — desktop untouched.
            CSS-only usability pass: cards, touch targets, sticky submit.
            ================================================================ */
@@ -830,25 +1000,54 @@
                 border-color: rgba(232, 93, 133, 0.35);
             }
 
-            /* Sticky full-width gradient submit, floating above the
+            /* Sticky full-width wizard nav row, floating above the
                bottom nav (nav z-9999, MJGuider z-9990 -> use 9980) */
-            #productForm > div.text-right {
+            .wizard-nav {
                 position: sticky;
                 bottom: calc(4.5rem + env(safe-area-inset-bottom));
                 z-index: 9980;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                border: 1px solid rgba(232, 93, 133, 0.12);
+                border-radius: 1.25rem;
+                box-shadow: 0 -4px 20px rgba(232, 93, 133, 0.15);
+                padding: 0.625rem;
+                gap: 0.5rem;
             }
+            .wizard-btn-back {
+                min-height: 48px;
+                padding: 0.6rem 0.9rem;
+                border-radius: 9999px;
+                font-size: 0.85rem;
+                flex-shrink: 0;
+            }
+            .save-draft-btn {
+                min-height: 48px;
+                padding: 0.6rem 0.9rem;
+                border-radius: 9999px;
+                font-size: 0.85rem;
+                flex-shrink: 0;
+                white-space: nowrap;
+            }
+            .wizard-btn-continue,
             #submitBtn {
+                flex: 1 1 auto;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                width: 100%;
                 min-height: 52px;
                 font-size: 16px;
                 border-radius: 9999px;
                 background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);
                 box-shadow: 0 6px 18px rgba(255, 125, 160, 0.30);
             }
-            #submitBtn:hover { transform: none; }
+            #submitBtn:hover,
+            .wizard-btn-continue:hover { transform: none; }
+
+            /* Compact stepper header on mobile */
+            .wizard-header { padding: 0.75rem 0.875rem; }
+            .wizard-chip .chip-label { font-size: 0.7rem; }
 
             /* Live preview stacks below the form: drop the nested
                scrollbox / sticky so it reads as a normal card */
@@ -931,7 +1130,25 @@
                         {{ isset($product) ? 'Update the product details below' : 'Fill in the details below to list your product' }}
                     </p>
 
-                    <form class="space-y-6" id="productForm" 
+                    @php
+                        $fixedCategories = [
+                            'Auto Parts & Accessories',
+                            'Car Tools & Maintenance',
+                            'Perfumes & Fragrances',
+                            'Fitness & Gym Equipment',
+                            "Women's Fashion",
+                            "Men's Accessories",
+                            'Clothing & Apparel',
+                            'Mobile Accessories',
+                            'Home & Living',
+                            'Gifts & General Items',
+                            'Cosmetics',
+                        ];
+                        $isCustomCategory = isset($product) && ($product->category ?? '') !== '' && !in_array($product->category, $fixedCategories);
+                        $isDraft = isset($product) && $product->status === 'draft';
+                    @endphp
+
+                    <form class="space-y-6" id="productForm"
                         action="{{ isset($product) ? route('vendor.products.update', $product->id) : route('vendor.products.store') }}" 
                         method="post" enctype="multipart/form-data" novalidate>
                         @csrf
@@ -940,6 +1157,162 @@
                             @method('PUT')
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                         @endif
+
+                        <input type="hidden" name="save_as_draft" id="saveAsDraftInput" value="0">
+
+                        <!-- Wizard Stepper Header -->
+                        <div class="wizard-header" id="wizardHeader">
+                            @if($isDraft)
+                            <div class="draft-chip">
+                                <i class="fas fa-file-pen"></i>
+                                <span>Draft — not published yet</span>
+                            </div>
+                            @endif
+                            <div class="wizard-progress">
+                                <div class="wizard-progress-bar" id="wizardProgressBar" style="width: 20%;"></div>
+                            </div>
+                            <div class="wizard-chips scrollbar-hide" id="wizardChips">
+                                <button type="button" class="wizard-chip current" data-step="1"><span class="chip-num">1</span><span class="chip-label">Basic Info</span></button>
+                                <button type="button" class="wizard-chip" data-step="2"><span class="chip-num">2</span><span class="chip-label">Photos</span></button>
+                                <button type="button" class="wizard-chip" data-step="3"><span class="chip-num">3</span><span class="chip-label">Pricing</span></button>
+                                <button type="button" class="wizard-chip" data-step="4"><span class="chip-num">4</span><span class="chip-label">Shipping</span></button>
+                                <button type="button" class="wizard-chip" data-step="5"><span class="chip-num">5</span><span class="chip-label">Publish</span></button>
+                            </div>
+                        </div>
+
+                        <!-- ============ STEP 1: Basic Info ============ -->
+                        <div class="wizard-step active space-y-6" data-step="1">
+
+                        <!-- Product Name -->
+                        <div class="form-section">
+                            <label class="form-label">Product Name*</label>
+                            <input type="text" id="productName" name="product_name" placeholder="Enter product name" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-input"
+                                value="{{ isset($product) ? $product->name : '' }}" />
+                            <div class="error-message hidden" id="productNameError"></div>
+                        </div>
+
+                        <!-- Category Section -->
+                        <div class="form-section">
+                            <h2>Category & Subcategory</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Main Category -->
+                                <div>
+                                    <label class="form-label">Category*</label>
+                                    <select
+                                        name="category"
+                                        id="mainCategory"
+                                        required
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-select"
+                                    >
+                                        <option value="">Select category</option>
+                                        <option value="Auto Parts & Accessories" {{ isset($product) && $product->category == 'Auto Parts & Accessories' ? 'selected' : '' }}>🚗 Auto Parts & Accessories</option>
+                                        <option value="Car Tools & Maintenance" {{ isset($product) && $product->category == 'Car Tools & Maintenance' ? 'selected' : '' }}>🛠️ Car Tools & Maintenance</option>
+                                        <option value="Perfumes & Fragrances" {{ isset($product) && $product->category == 'Perfumes & Fragrances' ? 'selected' : '' }}>🧴 Perfumes & Fragrances</option>
+                                        <option value="Fitness & Gym Equipment" {{ isset($product) && $product->category == 'Fitness & Gym Equipment' ? 'selected' : '' }}>🏋️ Fitness & Gym Equipment</option>
+                                        <option value="Women's Fashion" {{ isset($product) && $product->category == 'Women\'s Fashion' ? 'selected' : '' }}>👜 Women's Fashion</option>
+                                        <option value="Men's Accessories" {{ isset($product) && $product->category == 'Men\'s Accessories' ? 'selected' : '' }}>👔 Men's Accessories</option>
+                                        <option value="Clothing & Apparel" {{ isset($product) && $product->category == 'Clothing & Apparel' ? 'selected' : '' }}>👕 Clothing & Apparel</option>
+                                        <option value="Mobile Accessories" {{ isset($product) && $product->category == 'Mobile Accessories' ? 'selected' : '' }}>📱 Mobile Accessories</option>
+                                        <option value="Home & Living" {{ isset($product) && $product->category == 'Home & Living' ? 'selected' : '' }}>🏠 Home & Living</option>
+                                        <option value="Gifts & General Items" {{ isset($product) && $product->category == 'Gifts & General Items' ? 'selected' : '' }}>🎁 Gifts & General Items</option>
+                                        <option value="Cosmetics" {{ isset($product) && $product->category == 'Cosmetics' ? 'selected' : '' }}>💄 Cosmetics</option>
+                                        <option value="__other__" {{ $isCustomCategory ? 'selected' : '' }}>➕ Other — suggest a new category</option>
+                                    </select>
+                                    <div class="error-message hidden" id="categoryError"></div>
+                                </div>
+
+                                <!-- Subcategory -->
+                                <div>
+                                    <label class="form-label">Subcategory*</label>
+                                    <select
+                                        name="subcategory"
+                                        id="subCategory"
+                                        required
+                                        disabled
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-select"
+                                    >
+                                        <option value="">First select a category</option>
+                                    </select>
+                                    <div class="error-message hidden" id="subcategoryError"></div>
+                                </div>
+                            </div>
+
+                            <!-- Custom "Other" Category Block -->
+                            <div id="customCategoryBlock" class="mt-4 {{ $isCustomCategory ? '' : 'hidden' }}">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="form-label">Your Category Name*</label>
+                                        <input type="text" id="customCategory" name="custom_category" placeholder="e.g. Kitchen Appliances"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-input"
+                                            value="{{ $isCustomCategory ? $product->category : '' }}" />
+                                        <div class="error-message hidden" id="customCategoryError"></div>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Subcategory (optional)</label>
+                                        <input type="text" id="customSubcategory" name="custom_subcategory" placeholder="e.g. Blenders & Juicers"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-input"
+                                            value="{{ $isCustomCategory ? $product->subcategory : '' }}" />
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-2">
+                                    <i class="fas fa-info-circle mr-1 text-[#E85D85]"></i>
+                                    Nayi category admin ko review ke liye bheji jayegi.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Brand, Model & Made In Section -->
+                        <div class="form-section">
+                            <h2>Product Details</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="form-label">Brand*</label>
+                                    <input type="text" id="brand" name="brand" placeholder="MJ cheezain" required
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-input"
+                                    value="{{ isset($product) ? $product->brand : '' }}" />
+                                    <div class="error-message hidden" id="brandError"></div>
+                                </div>
+                                <div>
+                                    <label id="modelLabel" class="form-label">------</label>
+                                    <div id="dynamicInputContainer">
+                                        <input type="text" id="model" name="model" placeholder="Enter value" required
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-input"
+                                            value="{{ isset($product) ? $product->model : '' }}" />
+                                    </div>
+                                    <div class="error-message hidden" id="modelError"></div>
+                                </div>
+                                <div>
+                                    <label class="form-label">Made In*</label>
+                                    <input type="text" id="madeIn" name="made_in" placeholder="Country of origin" required
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-input"
+                                        value="{{ isset($product) ? $product->made_in : '' }}" />
+                                    <div class="error-message hidden" id="madeInError"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Condition -->
+                        <div class="form-section">
+                            <label class="form-label">Condition*</label>
+                            <select name="condition" id="condition" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-select" required>
+                                <option value="">Select condition</option>
+                                <option value="New" {{ isset($product) && $product->pcondition == 'New' ? 'selected' : '' }}>New</option>
+                                <option value="Used" {{ isset($product) && $product->pcondition == 'Used' ? 'selected' : '' }}>Used</option>
+                                <option value="Refurbished" {{ isset($product) && $product->pcondition == 'Refurbished' ? 'selected' : '' }}>Refurbished</option>
+                            </select>
+                            <div class="error-message hidden" id="conditionError"></div>
+                        </div>
+
+                        <!-- Step 1 Nav -->
+                        <div class="wizard-nav">
+                            <button type="button" class="save-draft-btn"><i class="fas fa-save mr-2"></i><span class="draft-btn-text">Save as Draft</span></button>
+                            <button type="button" class="wizard-btn-continue" data-wizard-next>Continue<i class="fas fa-arrow-right ml-2"></i></button>
+                        </div>
+                        </div>
+
+                        <!-- ============ STEP 2: Photos & Video ============ -->
+                        <div class="wizard-step space-y-6" data-step="2">
 
                         <!-- Existing Images Section (Only in Edit Mode) -->
                         @if(isset($productImages) && count($productImages) > 0)
@@ -965,7 +1338,7 @@
                         @endif
 
                         <!-- Product Images Section -->
-                        <div class="form-section">
+                        <div class="form-section" id="productImagesSection">
                             <h2>Product Images</h2>
                             <p class="text-sm text-gray-500 mb-4">Minimum 5, Maximum 10 images required</p>
                             
@@ -1029,102 +1402,16 @@
                             @endif
                         </div>
 
-                        <!-- Product Name -->
-                        <div class="form-section">
-                            <label class="form-label">Product Name*</label>
-                            <input type="text" id="productName" name="product_name" placeholder="Enter product name" required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-input" 
-                                value="{{ isset($product) ? $product->name : '' }}" />
-                            <div class="error-message hidden" id="productNameError"></div>
+                        <!-- Step 2 Nav -->
+                        <div class="wizard-nav">
+                            <button type="button" class="wizard-btn-back" data-wizard-back><i class="fas fa-arrow-left mr-2"></i>Back</button>
+                            <button type="button" class="save-draft-btn"><i class="fas fa-save mr-2"></i><span class="draft-btn-text">Save as Draft</span></button>
+                            <button type="button" class="wizard-btn-continue" data-wizard-next>Continue<i class="fas fa-arrow-right ml-2"></i></button>
+                        </div>
                         </div>
 
-                        <!-- Category Section -->
-                        <div class="form-section">
-                            <h2>Category & Subcategory</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <!-- Main Category -->
-                                <div>
-                                    <label class="form-label">Category*</label>
-                                    <select 
-                                        name="category" 
-                                        id="mainCategory"
-                                        required
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-select"
-                                    >
-                                        <option value="">Select category</option>
-                                        <option value="Auto Parts & Accessories" {{ isset($product) && $product->category == 'Auto Parts & Accessories' ? 'selected' : '' }}>🚗 Auto Parts & Accessories</option>
-                                        <option value="Car Tools & Maintenance" {{ isset($product) && $product->category == 'Car Tools & Maintenance' ? 'selected' : '' }}>🛠️ Car Tools & Maintenance</option>
-                                        <option value="Perfumes & Fragrances" {{ isset($product) && $product->category == 'Perfumes & Fragrances' ? 'selected' : '' }}>🧴 Perfumes & Fragrances</option>
-                                        <option value="Fitness & Gym Equipment" {{ isset($product) && $product->category == 'Fitness & Gym Equipment' ? 'selected' : '' }}>🏋️ Fitness & Gym Equipment</option>
-                                        <option value="Women's Fashion" {{ isset($product) && $product->category == 'Women\'s Fashion' ? 'selected' : '' }}>👜 Women's Fashion</option>
-                                        <option value="Men's Accessories" {{ isset($product) && $product->category == 'Men\'s Accessories' ? 'selected' : '' }}>👔 Men's Accessories</option>
-                                        <option value="Clothing & Apparel" {{ isset($product) && $product->category == 'Clothing & Apparel' ? 'selected' : '' }}>👕 Clothing & Apparel</option>
-                                        <option value="Mobile Accessories" {{ isset($product) && $product->category == 'Mobile Accessories' ? 'selected' : '' }}>📱 Mobile Accessories</option>
-                                        <option value="Home & Living" {{ isset($product) && $product->category == 'Home & Living' ? 'selected' : '' }}>🏠 Home & Living</option>
-                                        <option value="Gifts & General Items" {{ isset($product) && $product->category == 'Gifts & General Items' ? 'selected' : '' }}>🎁 Gifts & General Items</option>
-                                        <option value="Cosmetics" {{ isset($product) && $product->category == 'Cosmetics' ? 'selected' : '' }}>💄 Cosmetics</option>
-                                    </select>
-                                    <div class="error-message hidden" id="categoryError"></div>
-                                </div>
-
-                                <!-- Subcategory -->
-                                <div>
-                                    <label class="form-label">Subcategory*</label>
-                                    <select 
-                                        name="subcategory" 
-                                        id="subCategory"
-                                        required
-                                        disabled
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-select"
-                                    >
-                                        <option value="">First select a category</option>
-                                    </select>
-                                    <div class="error-message hidden" id="subcategoryError"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Brand, Model & Made In Section -->
-                        <div class="form-section">
-                            <h2>Product Details</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div>
-                                    <label class="form-label">Brand*</label>
-                                    <input type="text" id="brand" name="brand" placeholder="MJ cheezain" required
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-input" 
-                                    value="{{ isset($product) ? $product->brand : '' }}" />
-                                    <div class="error-message hidden" id="brandError"></div>
-                                </div>
-                                <div>
-                                    <label id="modelLabel" class="form-label">------</label>
-                                    <div id="dynamicInputContainer">
-                                        <input type="text" id="model" name="model" placeholder="Enter value" required
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-input" 
-                                            value="{{ isset($product) ? $product->model : '' }}" />
-                                    </div>
-                                    <div class="error-message hidden" id="modelError"></div>
-                                </div>
-                                <div>
-                                    <label class="form-label">Made In*</label>
-                                    <input type="text" id="madeIn" name="made_in" placeholder="Country of origin" required
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-input" 
-                                        value="{{ isset($product) ? $product->made_in : '' }}" />
-                                    <div class="error-message hidden" id="madeInError"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Condition -->
-                        <div class="form-section">
-                            <label class="form-label">Condition*</label>
-                            <select name="condition" id="condition" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-select" required>
-                                <option value="">Select condition</option>
-                                <option value="New" {{ isset($product) && $product->pcondition == 'New' ? 'selected' : '' }}>New</option>
-                                <option value="Used" {{ isset($product) && $product->pcondition == 'Used' ? 'selected' : '' }}>Used</option>
-                                <option value="Refurbished" {{ isset($product) && $product->pcondition == 'Refurbished' ? 'selected' : '' }}>Refurbished</option>
-                            </select>
-                            <div class="error-message hidden" id="conditionError"></div>
-                        </div>
+                        <!-- ============ STEP 3: Pricing ============ -->
+                        <div class="wizard-step space-y-6" data-step="3">
 
                         <!-- Price & Quantity Section -->
                         <div class="form-section">
@@ -1246,6 +1533,17 @@
                             </div>
                         </div>
 
+                        <!-- Step 3 Nav -->
+                        <div class="wizard-nav">
+                            <button type="button" class="wizard-btn-back" data-wizard-back><i class="fas fa-arrow-left mr-2"></i>Back</button>
+                            <button type="button" class="save-draft-btn"><i class="fas fa-save mr-2"></i><span class="draft-btn-text">Save as Draft</span></button>
+                            <button type="button" class="wizard-btn-continue" data-wizard-next>Continue<i class="fas fa-arrow-right ml-2"></i></button>
+                        </div>
+                        </div>
+
+                        <!-- ============ STEP 4: Shipping & Details ============ -->
+                        <div class="wizard-step space-y-6" data-step="4">
+
                         <!-- Shipping -->
                         <div class="form-section">
                             <h2>Shipping Information</h2>
@@ -1295,6 +1593,26 @@
                             </div>
                         </div>
 
+                        <!-- Location -->
+                        <div class="form-section">
+                            <label class="form-label">Location*</label>
+                            <input type="text" id="location" name="location" placeholder="Vendor shop or city name" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-input" 
+                                value="{{ isset($product) ? $product->location : '' }}" />
+                            <div class="error-message hidden" id="locationError"></div>
+                        </div>
+
+                        <!-- Step 4 Nav -->
+                        <div class="wizard-nav">
+                            <button type="button" class="wizard-btn-back" data-wizard-back><i class="fas fa-arrow-left mr-2"></i>Back</button>
+                            <button type="button" class="save-draft-btn"><i class="fas fa-save mr-2"></i><span class="draft-btn-text">Save as Draft</span></button>
+                            <button type="button" class="wizard-btn-continue" data-wizard-next>Continue<i class="fas fa-arrow-right ml-2"></i></button>
+                        </div>
+                        </div>
+
+                        <!-- ============ STEP 5: Extras & Publish ============ -->
+                        <div class="wizard-step space-y-6" data-step="5">
+
                         <!-- Faults Section -->
                         <div class="form-section">
                             <div class="flex justify-between items-center mb-4">
@@ -1308,23 +1626,17 @@
                             </div>
                         </div>
 
-                        <!-- Location -->
-                        <div class="form-section">
-                            <label class="form-label">Location*</label>
-                            <input type="text" id="location" name="location" placeholder="Vendor shop or city name" required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-input" 
-                                value="{{ isset($product) ? $product->location : '' }}" />
-                            <div class="error-message hidden" id="locationError"></div>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <div class="text-right pt-4">
+                        <!-- Step 5 Nav: Back + Save as Draft + Publish -->
+                        <div class="wizard-nav">
+                            <button type="button" class="wizard-btn-back" data-wizard-back><i class="fas fa-arrow-left mr-2"></i>Back</button>
+                            <button type="button" id="saveDraftBtn" class="save-draft-btn"><i class="fas fa-save mr-2"></i><span class="draft-btn-text">Save as Draft</span></button>
                             <button type="submit" class="btn-primary px-8 py-3" id="submitBtn">
-                                <span id="submitText">{{ isset($product) ? 'Update Product' : 'Submit Product' }}</span>
+                                <span id="submitText">{{ isset($product) ? ($isDraft ? 'Publish Product' : 'Update Product') : 'Publish Product' }}</span>
                                 <div id="submitLoader" class="hidden ml-2 inline-block">
                                     <div class="spinner-small"></div>
                                 </div>
                             </button>
+                        </div>
                         </div>
                     </form>
                 </div>
@@ -1581,12 +1893,17 @@
             totalImages: 5,
             maxImages: 10,
             editingMode: {{ isset($product) && $product ? 'true' : 'false' }},
+            isDraft: {{ $isDraft ? 'true' : 'false' }},
+            savingDraft: false, // Save-as-Draft submit in flight
+            currentStep: 1, // Wizard current step
             imagePreviews: [],
             formErrors: {},
             videoFile: null,
             deletedImages: [], // Store IDs of deleted existing images
             deletedVideo: false // Track if existing video was deleted
         };
+
+        const WIZARD_TOTAL_STEPS = 5;
 
         // Subcategories data
         const subcategories = {
@@ -1688,12 +2005,19 @@
             if (state.editingMode) {
                 autoFillForm();
                 loadExistingData();
-                // Update UI for edit mode
-                document.getElementById('submitText').textContent = 'Update Product';
-            } else {
-                document.getElementById('submitText').textContent = 'Submit Product';
             }
+
+            // Submit label: create + draft-edit => Publish, normal edit => Update
+            document.getElementById('submitText').textContent = getSubmitLabel();
+
+            // Initialize the wizard (steps, chips, nav, draft buttons)
+            initWizard();
         });
+
+        // Submit button label helper
+        function getSubmitLabel() {
+            return (state.editingMode && !state.isDraft) ? 'Update Product' : 'Publish Product';
+        }
 
         // Initialize image inputs
         function initializeImageInputs() {
@@ -1884,7 +2208,7 @@
             if (existingImages.length > 0) hasImages = true;
             
             if (hasImages) {
-                const imageSection = document.querySelector('.form-section');
+                const imageSection = document.getElementById('productImagesSection');
                 if (imageSection) {
                     imageSection.classList.remove('error-section');
                 }
@@ -2098,8 +2422,22 @@
             const mainCategory = document.getElementById("mainCategory");
             const subCategory = document.getElementById("subCategory");
             const modelLabel = document.getElementById("modelLabel");
+            const customCategoryBlock = document.getElementById("customCategoryBlock");
 
             if (!mainCategory) return;
+
+            // "Other" category: show custom inputs, disable the subcategory select
+            if (mainCategory.value === '__other__') {
+                subCategory.innerHTML = '<option value="">First select a category</option>';
+                subCategory.disabled = true;
+                subCategory.classList.add('bg-gray-100');
+                if (customCategoryBlock) customCategoryBlock.classList.remove('hidden');
+                if (modelLabel) modelLabel.textContent = 'Size';
+                return;
+            }
+
+            // Not "Other": hide custom inputs (values are kept, just hidden)
+            if (customCategoryBlock) customCategoryBlock.classList.add('hidden');
 
             // Clear subcategories
             subCategory.innerHTML = '<option value="">Select subcategory</option>';
@@ -2529,7 +2867,11 @@
             // Product details
             updatePreviewText('previewName', document.getElementById('productName')?.value);
             updatePreviewText('previewBrand', document.getElementById('brand')?.value);
-            updatePreviewText('previewCategory', document.getElementById('mainCategory')?.value);
+            let previewCategoryValue = document.getElementById('mainCategory')?.value;
+            if (previewCategoryValue === '__other__') {
+                previewCategoryValue = document.getElementById('customCategory')?.value?.trim() || 'Other (new category)';
+            }
+            updatePreviewText('previewCategory', previewCategoryValue);
             updatePreviewText('previewCondition', document.getElementById('condition')?.value);
             updatePreviewText('previewModel', document.getElementById('model')?.value);
             updatePreviewText('previewMadeIn', document.getElementById('madeIn')?.value);
@@ -2691,19 +3033,26 @@
         // Handle form submission
         async function handleFormSubmit(e) {
             e.preventDefault();
-            
+
             // Clear previous errors
             clearErrors();
-            
-            // Validate form
-            if (!validateForm()) {
-                scrollToFirstError();
-                return false;
+
+            const savingDraft = state.savingDraft;
+
+            if (savingDraft) {
+                // Draft save: skip validateForm entirely (server tolerates missing fields)
+                setDraftButtonsLoading(true);
+            } else {
+                // Validate form
+                if (!validateForm()) {
+                    scrollToFirstError();
+                    return false;
+                }
+
+                // Show loading state
+                setSubmitButtonLoading(true);
             }
-            
-            // Show loading state
-            setSubmitButtonLoading(true);
-            
+
             try {
                 // Submit the form
                 const form = e.target;
@@ -2732,14 +3081,14 @@
                     
                     if (result.success) {
                         // Success handling
-                        showSuccess(result.message || (state.editingMode ? 'Product updated successfully!' : 'Product submitted successfully!'));
+                        showSuccess(result.message || (savingDraft ? 'Draft saved successfully!' : (state.editingMode ? 'Product updated successfully!' : 'Product submitted successfully!')));
                         setTimeout(() => {
                             window.location.href = result.redirect || '/vendor/products';
                         }, 1500);
                     } else {
                         // Error handling
-                        setSubmitButtonLoading(false);
-                        
+                        resetSubmitState(savingDraft);
+
                         if (result.errors) {
                             // Display field errors
                             Object.entries(result.errors).forEach(([field, messages]) => {
@@ -2747,28 +3096,54 @@
                             });
                             scrollToFirstError();
                         } else {
-                            showError(result.message || (state.editingMode ? 'Failed to update product.' : 'Failed to submit product.'));
+                            showError(result.message || (savingDraft ? 'Failed to save draft.' : (state.editingMode ? 'Failed to update product.' : 'Failed to submit product.')));
                         }
                     }
                 } else {
                     // Not a JSON response, might be HTML or redirect
-                    setSubmitButtonLoading(false);
+                    resetSubmitState(savingDraft);
                     showError('Server returned unexpected response. Please try again.');
                     console.error('Non-JSON response received');
                 }
             } catch (error) {
-                setSubmitButtonLoading(false);
+                resetSubmitState(savingDraft);
                 showError('Network error. Please check your connection and try again.');
                 console.error('Form submission error:', error);
             }
-            
+
             return false;
+        }
+
+        // Reset loading/draft state after a failed submit
+        function resetSubmitState(savingDraft) {
+            if (savingDraft) {
+                state.savingDraft = false;
+                const draftInput = document.getElementById('saveAsDraftInput');
+                if (draftInput) draftInput.value = '0';
+                setDraftButtonsLoading(false);
+            } else {
+                setSubmitButtonLoading(false);
+            }
+        }
+
+        // Toggle loading state on every Save-as-Draft button
+        function setDraftButtonsLoading(isLoading) {
+            document.querySelectorAll('.save-draft-btn').forEach(btn => {
+                btn.disabled = isLoading;
+                const txt = btn.querySelector('.draft-btn-text');
+                if (txt) txt.textContent = isLoading ? 'Saving…' : 'Save as Draft';
+            });
+            // Block publish while a draft save is in flight
+            const submitBtn = document.getElementById('submitBtn');
+            if (submitBtn) submitBtn.disabled = isLoading;
         }
 
         // Validate form
         function validateForm() {
             let isValid = true;
-            
+
+            const isOtherCategory = document.getElementById('mainCategory')?.value === '__other__';
+
             // Required fields
             const requiredFields = [
                 {id: 'productName', name: 'product_name'},
@@ -2784,15 +3159,26 @@
                 {id: 'shippingTime', name: 'shipping_time'},
                 {id: 'location', name: 'location'}
             ];
-            
+
             requiredFields.forEach(field => {
+                // "Other" category: subcategory select is disabled/not required
+                if (isOtherCategory && field.id === 'subCategory') return;
                 const element = document.getElementById(field.id);
                 if (element && !element.value.trim()) {
                     showFieldError(field.id, `This field is required`);
                     isValid = false;
                 }
             });
-            
+
+            // "Other" category requires a custom category name instead
+            if (isOtherCategory) {
+                const customCategory = document.getElementById('customCategory');
+                if (!customCategory || !customCategory.value.trim()) {
+                    showFieldError('customCategory', 'Please enter your category name');
+                    isValid = false;
+                }
+            }
+
             // Image validation - check total image count (existing + new - deleted)
             const newInputs = document.querySelectorAll('input[name="productImages[]"]');
             const existingInputs = document.querySelectorAll('input[name="existing_images[]"]');
@@ -2807,7 +3193,7 @@
             const totalImages = newFilledCount + existingCount;
             
             if (totalImages < 5) {
-                const imageSection = document.querySelector('.form-section');
+                const imageSection = document.getElementById('productImagesSection');
                 if (imageSection) {
                     imageSection.classList.add('error-section');
                 }
@@ -2863,11 +3249,17 @@
             return isValid;
         }
 
+        // Error-message div ids that don't follow the `${fieldId}Error` convention
+        const fieldErrorIdMap = {
+            'mainCategory': 'categoryError',
+            'subCategory': 'subcategoryError'
+        };
+
         // Show field error
         function showFieldError(field, message) {
             // Handle field name mapping
             let fieldId = field;
-            
+
             // Map field names to element IDs
             const fieldMap = {
                 'selling_price': 'sellingPrice',
@@ -2875,19 +3267,23 @@
                 'product_name': 'productName',
                 'made_in': 'madeIn',
                 'shipping_method': 'shippingMethod',
-                'shipping_time': 'shippingTime'
+                'shipping_time': 'shippingTime',
+                'category': 'mainCategory',
+                'subcategory': 'subCategory',
+                'custom_category': 'customCategory',
+                'custom_subcategory': 'customSubcategory'
             };
-            
+
             if (fieldMap[field]) {
                 fieldId = fieldMap[field];
             }
-            
+
             const element = document.getElementById(fieldId);
             if (element) {
                 element.classList.add('has-error');
                 element.closest('.form-section')?.classList.add('error-section');
-                
-                const errorElement = document.getElementById(fieldId + 'Error');
+
+                const errorElement = document.getElementById(fieldErrorIdMap[fieldId] || (fieldId + 'Error'));
                 if (errorElement) {
                     errorElement.innerHTML = `<i class="fas fa-exclamation-circle error-icon"></i> ${message}`;
                     errorElement.classList.remove('hidden');
@@ -2902,8 +3298,8 @@
             if (element) {
                 element.classList.remove('has-error');
                 element.closest('.form-section')?.classList.remove('error-section');
-                
-                const errorElement = document.getElementById(fieldId + 'Error');
+
+                const errorElement = document.getElementById(fieldErrorIdMap[fieldId] || (fieldId + 'Error'));
                 if (errorElement) {
                     errorElement.classList.add('hidden');
                     errorElement.innerHTML = '';
@@ -2994,24 +3390,249 @@
             if (submitBtn && submitText && submitLoader) {
                 submitBtn.disabled = isLoading;
                 if (isLoading) {
-                    submitText.textContent = state.editingMode ? 'Updating...' : 'Processing...';
+                    submitText.textContent = (state.editingMode && !state.isDraft) ? 'Updating...' : 'Publishing...';
                     submitLoader.classList.remove('hidden');
                 } else {
-                    submitText.textContent = state.editingMode ? 'Update Product' : 'Submit Product';
+                    submitText.textContent = getSubmitLabel();
                     submitLoader.classList.add('hidden');
                 }
             }
         }
 
-        // Scroll to first error
+        // Scroll to first error (activates the wizard step containing it first)
         function scrollToFirstError() {
-            const firstError = document.querySelector('.has-error');
+            const firstError = document.querySelector('.has-error') || document.querySelector('.form-section.error-section');
             if (firstError) {
+                const stepEl = firstError.closest('.wizard-step');
+                if (stepEl) {
+                    const stepNum = parseInt(stepEl.dataset.step, 10);
+                    if (stepNum && stepNum !== state.currentStep) {
+                        showWizardStep(stepNum, { noScroll: true });
+                    }
+                }
                 firstError.scrollIntoView({
                     behavior: 'smooth',
                     block: 'center'
                 });
             }
+        }
+
+        // ================================================================
+        // Wizard: step switching, per-step validation, save-as-draft
+        // ================================================================
+
+        // Show a wizard step (steps, chips, progress bar, scroll)
+        function showWizardStep(step, opts = {}) {
+            step = Math.max(1, Math.min(WIZARD_TOTAL_STEPS, step));
+            state.currentStep = step;
+
+            // Toggle step containers
+            document.querySelectorAll('.wizard-step').forEach(el => {
+                el.classList.toggle('active', parseInt(el.dataset.step, 10) === step);
+            });
+
+            // Update chips
+            document.querySelectorAll('.wizard-chip').forEach(chip => {
+                const s = parseInt(chip.dataset.step, 10);
+                chip.classList.toggle('current', s === step);
+                chip.classList.toggle('done', s < step);
+                const num = chip.querySelector('.chip-num');
+                if (num) {
+                    num.innerHTML = s < step ? '<i class="fas fa-check"></i>' : s;
+                }
+            });
+
+            // Animate progress bar
+            const bar = document.getElementById('wizardProgressBar');
+            if (bar) {
+                bar.style.width = ((step / WIZARD_TOTAL_STEPS) * 100) + '%';
+            }
+
+            // Scroll to top of the form
+            if (!opts.noScroll) {
+                const header = document.getElementById('wizardHeader') || document.getElementById('productForm');
+                if (header) {
+                    header.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        }
+
+        // Count total product images (new inputs with files + existing - deleted)
+        function countTotalProductImages() {
+            const newInputs = document.querySelectorAll('input[name="productImages[]"]');
+            const existingInputs = document.querySelectorAll('input[name="existing_images[]"]');
+            const deletedInputs = document.querySelectorAll('input[name="deleted_images[]"]');
+
+            let newFilledCount = 0;
+            newInputs.forEach(input => {
+                if (input.files.length > 0) newFilledCount++;
+            });
+
+            return newFilledCount + (existingInputs.length - deletedInputs.length);
+        }
+
+        // Validate a single wizard step before advancing
+        function validateWizardStep(step) {
+            let isValid = true;
+
+            if (step === 1) {
+                const isOtherCategory = document.getElementById('mainCategory')?.value === '__other__';
+                const fields = isOtherCategory
+                    ? ['productName', 'mainCategory', 'brand', 'model', 'madeIn', 'condition']
+                    : ['productName', 'mainCategory', 'subCategory', 'brand', 'model', 'madeIn', 'condition'];
+
+                fields.forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element && !element.value.trim()) {
+                        showFieldError(id, 'This field is required');
+                        isValid = false;
+                    }
+                });
+
+                if (isOtherCategory) {
+                    const customCategory = document.getElementById('customCategory');
+                    if (!customCategory || !customCategory.value.trim()) {
+                        showFieldError('customCategory', 'Please enter your category name');
+                        isValid = false;
+                    }
+                }
+            } else if (step === 2) {
+                const totalImages = countTotalProductImages();
+                if (totalImages < 5) {
+                    const imageSection = document.getElementById('productImagesSection');
+                    if (imageSection) {
+                        imageSection.classList.add('error-section');
+                    }
+                    showError(`Please upload at least 5 product images total (existing + new). Currently have ${totalImages}.`);
+                    isValid = false;
+                }
+            } else if (step === 3) {
+                const sellingPrice = parseFloat(document.getElementById('sellingPrice')?.value) || 0;
+                const mrp = parseFloat(document.getElementById('mrp')?.value) || 0;
+
+                clearFieldError('sellingPrice');
+                clearFieldError('mrp');
+
+                if (sellingPrice <= 0) {
+                    showFieldError('sellingPrice', 'Selling price must be greater than 0');
+                    isValid = false;
+                }
+
+                if (mrp > 0) {
+                    const gstAmount = sellingPrice * 0.17;
+                    const sellingPriceWithGST = sellingPrice + gstAmount;
+
+                    if (mrp <= sellingPrice) {
+                        showFieldError('mrp', 'MRP must be greater than selling price');
+                        isValid = false;
+                    }
+
+                    if (mrp < sellingPriceWithGST) {
+                        showFieldError('mrp', `MRP must be at least PKR ${formatCurrencyNumber(sellingPriceWithGST)} (Selling Price + GST)`);
+                        isValid = false;
+                    }
+                }
+
+                const quantity = parseInt(document.getElementById('quantity')?.value) || 0;
+                if (quantity < 1) {
+                    showFieldError('quantity', 'Quantity must be at least 1');
+                    isValid = false;
+                }
+            } else if (step === 4) {
+                ['shippingMethod', 'shippingTime', 'location'].forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element && !element.value.trim()) {
+                        showFieldError(id, 'This field is required');
+                        isValid = false;
+                    }
+                });
+
+                const description = document.getElementById('description')?.value || '';
+                const wordCount = description.trim().split(/\s+/).filter(w => w.length > 0).length;
+                if (wordCount < 100) {
+                    showFieldError('description', `Description must have at least 100 words (currently ${wordCount})`);
+                    isValid = false;
+                }
+            }
+
+            return isValid;
+        }
+
+        // Wire up wizard controls + save-as-draft buttons
+        function initWizard() {
+            // Continue buttons
+            document.querySelectorAll('[data-wizard-next]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    clearErrors();
+                    if (validateWizardStep(state.currentStep)) {
+                        showWizardStep(state.currentStep + 1);
+                    } else {
+                        scrollToFirstError();
+                    }
+                });
+            });
+
+            // Back buttons
+            document.querySelectorAll('[data-wizard-back]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    showWizardStep(state.currentStep - 1);
+                });
+            });
+
+            // Stepper chips: back freely; forward only through valid steps
+            document.querySelectorAll('.wizard-chip').forEach(chip => {
+                chip.addEventListener('click', function() {
+                    const target = parseInt(this.dataset.step, 10);
+                    if (!target || target === state.currentStep) return;
+
+                    if (target < state.currentStep) {
+                        showWizardStep(target);
+                        return;
+                    }
+
+                    clearErrors();
+                    for (let i = state.currentStep; i < target; i++) {
+                        if (!validateWizardStep(i)) {
+                            showWizardStep(i, { noScroll: true });
+                            scrollToFirstError();
+                            return;
+                        }
+                    }
+                    showWizardStep(target);
+                });
+            });
+
+            // Save-as-Draft buttons (one per step nav)
+            document.querySelectorAll('.save-draft-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (state.savingDraft) return;
+
+                    // Lightweight validation: product name only
+                    const nameInput = document.getElementById('productName');
+                    if (!nameInput || !nameInput.value.trim()) {
+                        clearErrors();
+                        showFieldError('productName', 'Please enter a product name before saving a draft');
+                        showWizardStep(1, { noScroll: true });
+                        scrollToFirstError();
+                        return;
+                    }
+
+                    const draftInput = document.getElementById('saveAsDraftInput');
+                    if (draftInput) draftInput.value = '1';
+                    state.savingDraft = true;
+                    setDraftButtonsLoading(true);
+
+                    const form = document.getElementById('productForm');
+                    if (typeof form.requestSubmit === 'function') {
+                        form.requestSubmit();
+                    } else {
+                        form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+                    }
+                });
+            });
+
+            // Initial paint (progress bar, chips)
+            showWizardStep(1, { noScroll: true });
         }
 
         // Add form submit event listener

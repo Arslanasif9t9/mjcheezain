@@ -24,8 +24,10 @@
                             @php
                                 $position_map = [
                                     'online' => 'Online',
+                                    'approved' => 'Online',
                                     'pending' => 'Pending',
                                     'offline' => 'Offline',
+                                    'rejected' => 'Offline',
                                     'draft' => 'Draft'
                                 ];
                                 // echo $position_map[];
