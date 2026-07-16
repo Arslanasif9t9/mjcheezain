@@ -4,7 +4,10 @@
 
 ## 🔄 Currently Working On
 
-- 2026-07-16: MJGuider nav-tab + vendor mobile redesign + add-product wizard/draft/other-category — sab locally done, **awaiting owner test + push approval**
+- *(session closed 2026-07-16 — owner khud `git push` kar raha hai)*
+- **⏳ PUSH KE BAAD PENDING**: phpMyAdmin mein `database/hostinger-deploy-2026-07-16.sql` import (tables + 13/103 category seed + 2 naye admin accounts). Full steps: `docx/deploy-2026-07-16.md`. Live verify bhi wahin checklist mein.
+- Naye admin logins (username = poora email): `arslanadmin@gmail.com`, `mjcheezain@gmail.com` (hashed). Purana `admin`/`admin123` weak — live par change karwana.
+- Baqi future kaam: purani live videos ka extension-repair script (local wala pattern), returns/replacements ka "har request admin se guzray" enforcement agar owner sakht flow chahe (abhi admin ko full visibility + override hai), MJGuider `GROK_API_KEY`.
 - **⚠ DEPLOY NOTE**: autodeploy FTP-only hai — server DB par YE MIGRATIONS manually chalani hongi: `2026_07_16_000001_create_category_suggestions_table` AUR `2026_07_16_000002_create_site_categories_tables` (`php artisan migrate --path=database/migrations/<file>.php` server par). Storefront/vendor-form CategoryCatalog fallback ki wajah se table ke baghair bhi chalta rahega (hardcoded list), lekin admin categories page error degi. Admin login pehli bar par password bcrypt-upgrade karega.
 - Future MJGuider todos jab owner chahe: `GROK_API_KEY` dalna (fallback abhi key-less — Gemini fail par polite fallback msg hi aata hai), real phone number aane par `app/Services/MjGuide/knowledge.md` update + server par `php artisan cache:clear`.
 - **⚠ GOTCHA (2026-07-15):** naye Gemini keys par 2.0/2.5 models ka free-tier quota **0** hai (429/404 dete hain) — is liye model `gemini-3.1-flash-lite` use ho raha hai (free tier OK, tested). GeminiProvider ab "thought" parts skip kar ke sirf visible text jorta hai.
