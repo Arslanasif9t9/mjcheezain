@@ -92,6 +92,17 @@ class SearchController extends Controller
                     $join->on('vp.id', '=', 'vpi.product_id')
                         ->where('vpi.is_primary', '=', 1);
                 })
+                // Delivered-cart count per product (units sold) for quality ordering
+                ->leftJoinSub(
+                    DB::table('carts')
+                        ->select('product_id', DB::raw('COUNT(*) as sold_count'))
+                        ->where('status', 'delivered')
+                        ->groupBy('product_id'),
+                    'sold',
+                    function ($join) {
+                        $join->on('sold.product_id', '=', 'vp.id');
+                    }
+                )
                 ->where('vp.position', 'approved')
                 ->where(function ($query) use ($searchPattern) {
                     $query->where('vp.name', 'like', $searchPattern)
@@ -114,6 +125,7 @@ class SearchController extends Controller
                     $searchPattern
                 ])
                 ->orderBy('vp.rating', 'desc')
+                ->orderByRaw('COALESCE(sold.sold_count, 0) DESC')
                 ->orderBy('vp.created_at', 'desc')
                 ->limit(50)
                 ->get();

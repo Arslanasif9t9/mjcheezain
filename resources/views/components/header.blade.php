@@ -30,8 +30,8 @@
         <!-- Content Grid Layout -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-6 px-1 md:px-0">
 
-            <!-- 1. Large Featured Card (Responsive height) -->
-            <div class="lg:col-span-2 relative h-[250px] sm:h-[350px] lg:h-[503px] rounded-2xl overflow-hidden shadow-xl group cursor-pointer transition transform duration-300">
+            <!-- 1. Large Featured Card (Responsive height, whole card clickable) -->
+            <a href="/cosmetics" class="block lg:col-span-2 relative h-[250px] sm:h-[350px] lg:h-[503px] rounded-2xl overflow-hidden shadow-xl group cursor-pointer transition transform duration-300">
                 <img src="{{ asset('img/hero-1.jpeg') }}"
                      alt="Luxury Fragrance" class="w-full h-full object-cover brightness-95 group-hover:scale-110 transition duration-500">
 
@@ -40,17 +40,17 @@
                     <h2 class="text-2xl sm:text-4xl font-light text-white mb-3 tracking-wide drop-shadow-lg">
                         Indulge in Elegance!
                     </h2>
-                    <button onclick="location.href='/cosmetics'" class="w-fit px-5 py-2.5 bg-white text-gray-900 text-sm font-bold rounded-xl shadow-lg hover:bg-gray-200 transition duration-300">
+                    <button type="button" onclick="location.href='/cosmetics'" class="w-fit px-5 py-2.5 bg-white text-gray-900 text-sm font-bold rounded-xl shadow-lg hover:bg-gray-200 transition duration-300">
                         Shop Now
                     </button>
                 </div>
-            </div>
+            </a>
 
             <!-- 2. Horizontal scrollable list on mobile, stacked column on desktop -->
             <div class="lg:col-span-1 flex overflow-x-auto gap-4 scrollbar-none snap-x snap-mandatory lg:grid lg:grid-cols-1 lg:overflow-x-visible lg:gap-6 py-2 px-1" id="mobile-scroll-container">
 
-                <!-- Top Small Card: Lipstick (tall Amazon-style card on mobile) -->
-                <div class="scroll-animate opacity-0 translate-y-12 transition-all duration-700 ease-out relative h-[430px] sm:h-[480px] lg:h-[240px] w-[80vw] lg:w-auto flex-shrink-0 snap-start rounded-2xl overflow-hidden shadow-lg group cursor-pointer">
+                <!-- Top Small Card: Lipstick (tall Amazon-style card on mobile, whole card clickable) -->
+                <a href="/products/all-page?category={{ urlencode('Cosmetics') }}" class="block scroll-animate opacity-0 translate-y-12 transition-all duration-700 ease-out relative h-[430px] sm:h-[480px] lg:h-[240px] w-[80vw] lg:w-auto flex-shrink-0 snap-start rounded-2xl overflow-hidden shadow-lg group cursor-pointer">
                     <img src="{{ asset('img/hero-2.jpeg') }}"
                          alt="Red Lipstick" class="w-full h-full object-cover brightness-95 group-hover:scale-110 transition duration-500">
                     <div class="absolute top-0 left-0 p-4">
@@ -58,10 +58,10 @@
                             Matte Finish
                         </h3>
                     </div>
-                </div>
+                </a>
 
-                <!-- Bottom Small Card: Apparel/Model (tall Amazon-style card on mobile) -->
-                <div class="scroll-animate opacity-0 translate-y-12 transition-all duration-700 ease-out relative h-[430px] sm:h-[480px] lg:h-[240px] w-[80vw] lg:w-auto flex-shrink-0 snap-start rounded-2xl overflow-hidden shadow-lg group cursor-pointer" style="transition-delay: 150ms;">
+                <!-- Bottom Small Card: Apparel/Model (tall Amazon-style card on mobile, whole card clickable) -->
+                <a href="/products/all-page?category={{ urlencode("Women's Fashion") }}" class="block scroll-animate opacity-0 translate-y-12 transition-all duration-700 ease-out relative h-[430px] sm:h-[480px] lg:h-[240px] w-[80vw] lg:w-auto flex-shrink-0 snap-start rounded-2xl overflow-hidden shadow-lg group cursor-pointer" style="transition-delay: 150ms;">
                     <img src="{{ asset('img/hero-3.jpeg') }}"
                          alt="Summer Apparel" class="w-full h-full object-cover brightness-95 group-hover:scale-110 transition duration-500">
                     <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/50 to-transparent">
@@ -69,7 +69,7 @@
                             The Coastal Look
                         </h3>
                     </div>
-                </div>
+                </a>
 
             </div>
 

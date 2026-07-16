@@ -670,7 +670,7 @@
             box-shadow: none;
         }
 
-        /* Video preview in sidebar */
+        /* Video preview inside the step-5 review card */
         #previewVideo video {
             width: 100%;
             height: 180px;
@@ -947,6 +947,37 @@
             transform: none;
         }
 
+        /* Review card (step 5): per-section Edit shortcut pills */
+        .review-edit-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.8rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(232, 93, 133, 0.4);
+            background: #fdf2f8;
+            color: #C94A72;
+            font-size: 0.72rem;
+            font-weight: 600;
+            line-height: 1.2;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .review-edit-btn i {
+            font-size: 0.65rem;
+        }
+
+        .review-edit-btn:hover {
+            background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);
+            border-color: transparent;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(255, 125, 160, 0.35);
+        }
+
         /* ================================================================
            Mobile app-style overrides (< 768px only) — desktop untouched.
            CSS-only usability pass: cards, touch targets, sticky submit.
@@ -955,7 +986,7 @@
             /* Header sits flush; content column gets p-4 + clearance for
                the fixed bottom nav (z-9999) */
             main.flex-1 { padding: 0 !important; }
-            main.flex-1 > .max-w-7xl {
+            main.flex-1 > .max-w-4xl {
                 padding: 1rem !important;
                 padding-bottom: 7rem !important;
             }
@@ -1048,13 +1079,6 @@
             /* Compact stepper header on mobile */
             .wizard-header { padding: 0.75rem 0.875rem; }
             .wizard-chip .chip-label { font-size: 0.7rem; }
-
-            /* Live preview stacks below the form: drop the nested
-               scrollbox / sticky so it reads as a normal card */
-            .preview-box {
-                position: static !important;
-                max-height: none !important;
-            }
         }
     </style>
 </head>
@@ -1121,8 +1145,8 @@
                 </div>
             </div>
 
-            <div class="max-w-7xl mx-auto p-4 sm:p-6 text-gray-800 grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="lg:col-span-2">
+            <div class="max-w-4xl mx-auto p-4 sm:p-6 text-gray-800">
+                <div>
                     <h1 class="hidden md:block text-3xl font-bold mb-2 text-gray-900">
                         {{ isset($product) ? 'Edit Product' : 'Add New Product' }}
                     </h1>
@@ -1131,19 +1155,7 @@
                     </p>
 
                     @php
-                        $fixedCategories = [
-                            'Auto Parts & Accessories',
-                            'Car Tools & Maintenance',
-                            'Perfumes & Fragrances',
-                            'Fitness & Gym Equipment',
-                            "Women's Fashion",
-                            "Men's Accessories",
-                            'Clothing & Apparel',
-                            'Mobile Accessories',
-                            'Home & Living',
-                            'Gifts & General Items',
-                            'Cosmetics',
-                        ];
+                        $fixedCategories = \App\Support\CategoryCatalog::active()->pluck('name')->all();
                         $isCustomCategory = isset($product) && ($product->category ?? '') !== '' && !in_array($product->category, $fixedCategories);
                         $isDraft = isset($product) && $product->status === 'draft';
                     @endphp
@@ -1176,7 +1188,7 @@
                                 <button type="button" class="wizard-chip" data-step="2"><span class="chip-num">2</span><span class="chip-label">Photos</span></button>
                                 <button type="button" class="wizard-chip" data-step="3"><span class="chip-num">3</span><span class="chip-label">Pricing</span></button>
                                 <button type="button" class="wizard-chip" data-step="4"><span class="chip-num">4</span><span class="chip-label">Shipping</span></button>
-                                <button type="button" class="wizard-chip" data-step="5"><span class="chip-num">5</span><span class="chip-label">Publish</span></button>
+                                <button type="button" class="wizard-chip" data-step="5"><span class="chip-num">5</span><span class="chip-label">Review &amp; Publish</span></button>
                             </div>
                         </div>
 
@@ -1206,17 +1218,9 @@
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-select"
                                     >
                                         <option value="">Select category</option>
-                                        <option value="Auto Parts & Accessories" {{ isset($product) && $product->category == 'Auto Parts & Accessories' ? 'selected' : '' }}>🚗 Auto Parts & Accessories</option>
-                                        <option value="Car Tools & Maintenance" {{ isset($product) && $product->category == 'Car Tools & Maintenance' ? 'selected' : '' }}>🛠️ Car Tools & Maintenance</option>
-                                        <option value="Perfumes & Fragrances" {{ isset($product) && $product->category == 'Perfumes & Fragrances' ? 'selected' : '' }}>🧴 Perfumes & Fragrances</option>
-                                        <option value="Fitness & Gym Equipment" {{ isset($product) && $product->category == 'Fitness & Gym Equipment' ? 'selected' : '' }}>🏋️ Fitness & Gym Equipment</option>
-                                        <option value="Women's Fashion" {{ isset($product) && $product->category == 'Women\'s Fashion' ? 'selected' : '' }}>👜 Women's Fashion</option>
-                                        <option value="Men's Accessories" {{ isset($product) && $product->category == 'Men\'s Accessories' ? 'selected' : '' }}>👔 Men's Accessories</option>
-                                        <option value="Clothing & Apparel" {{ isset($product) && $product->category == 'Clothing & Apparel' ? 'selected' : '' }}>👕 Clothing & Apparel</option>
-                                        <option value="Mobile Accessories" {{ isset($product) && $product->category == 'Mobile Accessories' ? 'selected' : '' }}>📱 Mobile Accessories</option>
-                                        <option value="Home & Living" {{ isset($product) && $product->category == 'Home & Living' ? 'selected' : '' }}>🏠 Home & Living</option>
-                                        <option value="Gifts & General Items" {{ isset($product) && $product->category == 'Gifts & General Items' ? 'selected' : '' }}>🎁 Gifts & General Items</option>
-                                        <option value="Cosmetics" {{ isset($product) && $product->category == 'Cosmetics' ? 'selected' : '' }}>💄 Cosmetics</option>
+                                        @foreach(\App\Support\CategoryCatalog::active() as $cat)
+                                            <option value="{{ $cat->name }}" {{ isset($product) && $product->category == $cat->name ? 'selected' : '' }}>{{ $cat->emoji }} {{ $cat->name }}</option>
+                                        @endforeach
                                         <option value="__other__" {{ $isCustomCategory ? 'selected' : '' }}>➕ Other — suggest a new category</option>
                                     </select>
                                     <div class="error-message hidden" id="categoryError"></div>
@@ -1610,8 +1614,194 @@
                         </div>
                         </div>
 
-                        <!-- ============ STEP 5: Extras & Publish ============ -->
+                        <!-- ============ STEP 5: Review & Publish ============ -->
                         <div class="wizard-step space-y-6" data-step="5">
+
+                        <!-- Review your product (live preview, moved from the old side column) -->
+                        <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-4 sm:p-6 preview-box w-full">
+                            <h2 class="text-xl font-bold text-gray-800 mb-4 pb-3 border-b border-gray-100 flex items-center">
+                                <i class="fas fa-eye text-[#E85D85] mr-2"></i> Review — aisa dikhega aapka product
+                            </h2>
+
+                            <div class="space-y-4">
+                                <!-- Photos & Video -->
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h3 class="font-semibold text-gray-700 flex items-center">
+                                            <i class="fas fa-images text-[#E85D85] mr-2"></i>
+                                            Photos &amp; Video
+                                        </h3>
+                                        <button type="button" class="review-edit-btn" onclick="showWizardStep(2)"><i class="fas fa-pen"></i>Edit</button>
+                                    </div>
+                                    <!-- Image Preview -->
+                                    <div class="preview-images-grid" id="previewImages">
+                                        <!-- Images will be populated here -->
+                                    </div>
+                                    <!-- Video Preview (filled by JS when a video is added) -->
+                                    <div id="previewVideo" class="hidden">
+                                        <video controls playsinline></video>
+                                    </div>
+                                </div>
+
+                                <!-- Basic Details -->
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h3 class="font-semibold text-gray-700 flex items-center">
+                                            <i class="fas fa-info-circle text-[#E85D85] mr-2"></i>
+                                            Product Details
+                                        </h3>
+                                        <button type="button" class="review-edit-btn" onclick="showWizardStep(1)"><i class="fas fa-pen"></i>Edit</button>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between items-start">
+                                            <span class="text-gray-600 text-sm font-medium">Product Name:</span>
+                                            <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewName">-</span>
+                                        </div>
+                                        <div class="flex justify-between items-start">
+                                            <span class="text-gray-600 text-sm font-medium">Brand:</span>
+                                            <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewBrand">-</span>
+                                        </div>
+                                        <div class="flex justify-between items-start">
+                                            <span class="text-gray-600 text-sm font-medium">Category:</span>
+                                            <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewCategory">-</span>
+                                        </div>
+                                        <div class="flex justify-between items-start">
+                                            <span class="text-gray-600 text-sm font-medium">Condition:</span>
+                                            <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewCondition">-</span>
+                                        </div>
+                                        <div class="flex justify-between items-start">
+                                            <span class="text-gray-600 text-sm font-medium">Model/Size:</span>
+                                            <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewModel">-</span>
+                                        </div>
+                                        <div class="flex justify-between items-start">
+                                            <span class="text-gray-600 text-sm font-medium">Made In:</span>
+                                            <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewMadeIn">-</span>
+                                        </div>
+                                        <div class="flex justify-between items-start">
+                                            <span class="text-gray-600 text-sm font-medium">Location:</span>
+                                            <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewLocation">-</span>
+                                        </div>
+                                        <div class="flex justify-between items-start">
+                                            <span class="text-gray-600 text-sm font-medium">Quantity:</span>
+                                            <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewQuantity">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Price Breakdown in Review Card -->
+                                <div class="bg-pink-50 border border-pink-100 rounded-lg p-4">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h3 class="font-semibold text-gray-700 flex items-center">
+                                            <i class="fas fa-receipt text-[#E85D85] mr-2"></i>
+                                            Price Breakdown
+                                        </h3>
+                                        <button type="button" class="review-edit-btn" onclick="showWizardStep(3)"><i class="fas fa-pen"></i>Edit</button>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <!-- Selling Price -->
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-gray-600 text-sm">Selling Price:</span>
+                                            <span class="text-gray-800 font-medium" id="previewSellingPrice">PKR 0.00</span>
+                                        </div>
+
+                                        <!-- MRP (if exists) -->
+                                        <div id="previewMRPContainer" class="hidden">
+                                            <div class="flex justify-between items-center">
+                                                <span class="text-gray-600 text-sm line-through">MRP:</span>
+                                                <span class="text-gray-500 line-through" id="previewMRP">PKR 0.00</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Discount (if applicable) -->
+                                        <div id="previewDiscountContainer" class="hidden">
+                                            <div class="flex justify-between items-center bg-green-50 px-2 py-1 rounded">
+                                                <span class="text-green-600 text-sm font-medium">You Save:</span>
+                                                <span class="discount-badge" id="previewDiscount">0% OFF</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- GST -->
+                                        <div class="flex justify-between items-center bg-pink-100 px-2 py-1 rounded">
+                                            <div class="flex items-center">
+                                                <span class="text-gray-600 text-sm flex items-center">
+                                                    <i class="fas fa-percentage text-xs mr-1 text-[#E85D85]"></i>
+                                                    GST (17%):
+                                                </span>
+                                            </div>
+                                            <span class="text-[#C94A72] font-medium" id="previewGST">PKR 0.00</span>
+                                        </div>
+
+                                        <!-- Delivery Charges -->
+                                        <div class="flex justify-between items-center hidden">
+                                            <span class="text-gray-600 text-sm">Delivery Charges:</span>
+                                            <span class="text-gray-800 font-medium" id="previewDelivery">PKR 250.00</span>
+                                        </div>
+
+                                        <!-- Total Price -->
+                                        <div class="flex justify-between items-center pt-2 border-t border-pink-200 mt-2">
+                                            <span class="text-gray-800 font-bold">Total Price:</span>
+                                            <span class="text-[#E85D85] font-bold text-lg" id="previewTotalPrice">PKR 0.00</span>
+                                        </div>
+
+                                        <!-- Price Summary Note -->
+                                        <div class="mt-3 pt-2 border-t border-pink-200">
+                                            <p class="text-xs text-[#E85D85]">
+                                                <i class="fas fa-info-circle mr-1"></i>
+                                                Total = Selling Price + 17% GST + Delivery
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Shipping Info -->
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h3 class="font-semibold text-gray-700 flex items-center">
+                                            <i class="fas fa-shipping-fast text-green-500 mr-2"></i>
+                                            Shipping Information
+                                        </h3>
+                                        <button type="button" class="review-edit-btn" onclick="showWizardStep(4)"><i class="fas fa-pen"></i>Edit</button>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between items-start">
+                                            <span class="text-gray-600 text-sm font-medium">Shipping Method:</span>
+                                            <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewShippingMethod">-</span>
+                                        </div>
+                                        <div class="flex justify-between items-start">
+                                            <span class="text-gray-600 text-sm font-medium">Shipping Time:</span>
+                                            <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewShippingTime">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Description Preview -->
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <h3 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                        <i class="fas fa-align-left text-purple-500 mr-2"></i>
+                                        Description
+                                    </h3>
+                                    <div id="previewDescription" class="text-gray-700 text-sm leading-relaxed max-h-32 overflow-y-auto">
+                                        <div class="text-gray-500 italic text-center py-2">
+                                            <i class="fas fa-info-circle mr-1"></i>
+                                            No description provided
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Preview Status -->
+                            <div class="mt-6 pt-4 border-t border-gray-200">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center text-gray-600">
+                                        <i class="fas fa-sync-alt text-[#E85D85] mr-2 animate-spin"></i>
+                                        <span class="text-sm">Live Updates</span>
+                                    </div>
+                                    <div class="text-xs text-gray-500" id="previewStatus">
+                                        All changes reflected instantly
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Faults Section -->
                         <div class="form-section">
@@ -1639,171 +1829,6 @@
                         </div>
                         </div>
                     </form>
-                </div>
-
-                <!-- Right Column: Preview Box -->
-                <div class="lg:col-span-1">
-                    <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-4 sm:p-6 lg:sticky lg:top-6 max-h-[calc(100vh-4rem)] overflow-y-auto preview-box w-full">
-                        <h2 class="text-xl font-bold text-gray-800 mb-4 pb-3 border-b border-gray-100 text-center flex items-center justify-center">
-                            <i class="fas fa-eye text-[#E85D85] mr-2"></i> Live Preview
-                        </h2>
-                        
-                        <div class="space-y-4">
-                            <!-- Image Preview -->
-                            <div class="preview-images-grid" id="previewImages">
-                                <!-- Images will be populated here -->
-                            </div>
-                            
-                            <!-- Basic Details -->
-                            <div class="bg-gray-50 rounded-lg p-4">
-                                <h3 class="font-semibold text-gray-700 mb-3 flex items-center">
-                                    <i class="fas fa-info-circle text-[#E85D85] mr-2"></i>
-                                    Product Details
-                                </h3>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between items-start">
-                                        <span class="text-gray-600 text-sm font-medium">Product Name:</span>
-                                        <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewName">-</span>
-                                    </div>
-                                    <div class="flex justify-between items-start">
-                                        <span class="text-gray-600 text-sm font-medium">Brand:</span>
-                                        <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewBrand">-</span>
-                                    </div>
-                                    <div class="flex justify-between items-start">
-                                        <span class="text-gray-600 text-sm font-medium">Category:</span>
-                                        <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewCategory">-</span>
-                                    </div>
-                                    <div class="flex justify-between items-start">
-                                        <span class="text-gray-600 text-sm font-medium">Condition:</span>
-                                        <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewCondition">-</span>
-                                    </div>
-                                    <div class="flex justify-between items-start">
-                                        <span class="text-gray-600 text-sm font-medium">Model/Size:</span>
-                                        <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewModel">-</span>
-                                    </div>
-                                    <div class="flex justify-between items-start">
-                                        <span class="text-gray-600 text-sm font-medium">Made In:</span>
-                                        <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewMadeIn">-</span>
-                                    </div>
-                                    <div class="flex justify-between items-start">
-                                        <span class="text-gray-600 text-sm font-medium">Location:</span>
-                                        <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewLocation">-</span>
-                                    </div>
-                                    <div class="flex justify-between items-start">
-                                        <span class="text-gray-600 text-sm font-medium">Quantity:</span>
-                                        <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewQuantity">-</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Price Breakdown in Preview Box -->
-                            <div class="bg-pink-50 border border-pink-100 rounded-lg p-4">
-                                <h3 class="font-semibold text-gray-700 mb-3 flex items-center">
-                                    <i class="fas fa-receipt text-[#E85D85] mr-2"></i>
-                                    Price Breakdown
-                                </h3>
-                                <div class="space-y-2">
-                                    <!-- Selling Price -->
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-gray-600 text-sm">Selling Price:</span>
-                                        <span class="text-gray-800 font-medium" id="previewSellingPrice">PKR 0.00</span>
-                                    </div>
-                                    
-                                    <!-- MRP (if exists) -->
-                                    <div id="previewMRPContainer" class="hidden">
-                                        <div class="flex justify-between items-center">
-                                            <span class="text-gray-600 text-sm line-through">MRP:</span>
-                                            <span class="text-gray-500 line-through" id="previewMRP">PKR 0.00</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Discount (if applicable) -->
-                                    <div id="previewDiscountContainer" class="hidden">
-                                        <div class="flex justify-between items-center bg-green-50 px-2 py-1 rounded">
-                                            <span class="text-green-600 text-sm font-medium">You Save:</span>
-                                            <span class="discount-badge" id="previewDiscount">0% OFF</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- GST -->
-                                    <div class="flex justify-between items-center bg-pink-100 px-2 py-1 rounded">
-                                        <div class="flex items-center">
-                                            <span class="text-gray-600 text-sm flex items-center">
-                                                <i class="fas fa-percentage text-xs mr-1 text-[#E85D85]"></i>
-                                                GST (17%):
-                                            </span>
-                                        </div>
-                                        <span class="text-[#C94A72] font-medium" id="previewGST">PKR 0.00</span>
-                                    </div>
-                                    
-                                    <!-- Delivery Charges -->
-                                    <div class="flex justify-between items-center hidden">
-                                        <span class="text-gray-600 text-sm">Delivery Charges:</span>
-                                        <span class="text-gray-800 font-medium" id="previewDelivery">PKR 250.00</span>
-                                    </div>
-                                    
-                                    <!-- Total Price -->
-                                    <div class="flex justify-between items-center pt-2 border-t border-pink-200 mt-2">
-                                        <span class="text-gray-800 font-bold">Total Price:</span>
-                                        <span class="text-[#E85D85] font-bold text-lg" id="previewTotalPrice">PKR 0.00</span>
-                                    </div>
-                                    
-                                    <!-- Price Summary Note -->
-                                    <div class="mt-3 pt-2 border-t border-pink-200">
-                                        <p class="text-xs text-[#E85D85]">
-                                            <i class="fas fa-info-circle mr-1"></i>
-                                            Total = Selling Price + 17% GST + Delivery
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Shipping Info -->
-                            <div class="bg-gray-50 rounded-lg p-4">
-                                <h3 class="font-semibold text-gray-700 mb-3 flex items-center">
-                                    <i class="fas fa-shipping-fast text-green-500 mr-2"></i>
-                                    Shipping Information
-                                </h3>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between items-start">
-                                        <span class="text-gray-600 text-sm font-medium">Shipping Method:</span>
-                                        <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewShippingMethod">-</span>
-                                    </div>
-                                    <div class="flex justify-between items-start">
-                                        <span class="text-gray-600 text-sm font-medium">Shipping Time:</span>
-                                        <span class="text-gray-800 font-medium text-right max-w-[60%]" id="previewShippingTime">-</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Description Preview -->
-                            <div class="bg-gray-50 rounded-lg p-4">
-                                <h3 class="font-semibold text-gray-700 mb-3 flex items-center">
-                                    <i class="fas fa-align-left text-purple-500 mr-2"></i>
-                                    Description
-                                </h3>
-                                <div id="previewDescription" class="text-gray-700 text-sm leading-relaxed max-h-32 overflow-y-auto">
-                                    <div class="text-gray-500 italic text-center py-2">
-                                        <i class="fas fa-info-circle mr-1"></i>
-                                        No description provided
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Preview Status -->
-                        <div class="mt-6 pt-4 border-t border-gray-200">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center text-gray-600">
-                                    <i class="fas fa-sync-alt text-[#E85D85] mr-2 animate-spin"></i>
-                                    <span class="text-sm">Live Updates</span>
-                                </div>
-                                <div class="text-xs text-gray-500" id="previewStatus">
-                                    All changes reflected instantly
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </main>
@@ -1905,91 +1930,8 @@
 
         const WIZARD_TOTAL_STEPS = 5;
 
-        // Subcategories data
-        const subcategories = {
-            "Fitness & Gym Equipment": [
-                "Dumbbells & Weights",
-                "Barbells & Weight Plates",
-                "Kettlebells",
-                "Weight Benches",
-                "Power Racks & Squat Racks",
-                "Treadmills",
-                "Exercise Bikes",
-                "Cross Trainers / Ellipticals",
-                "Rowing Machines",
-                "Steppers",
-                "Multi Gym Machines",
-                "Smith Machines",
-                "Cable Machines",
-                "Resistance Bands",
-                "Battle Ropes",
-                "Medicine Balls",
-                "Slam Balls",
-                "Pull-Up Bars",
-                "Push-Up Bars",
-                "Ab Rollers",
-                "Gym Rings",
-                "Yoga Mats",
-                "Yoga Blocks",
-                "Yoga Straps",
-                "Foam Rollers",
-                "Punching Bags",
-                "Boxing Gloves",
-                "Hand Wraps",
-                "Skipping Ropes",
-                "Gym Gloves",
-                "Weightlifting Belts",
-                "Wrist / Knee / Elbow Supports",
-                "Lifting Straps"
-            ],
-            "Supplements": [
-                "Protein Supplements",
-                "Mass Gainers",
-                "Creatine",
-                "Pre-Workout Supplements",
-                "Vitamins & Minerals"
-            ],
-            "Gym Accessories": [
-                "Water Bottles",
-                "Shakers",
-                "Gym Bags",
-                "Gym Towels"
-            ],
-            // Keep other categories from your existing object
-            "Auto Parts & Accessories": [
-                "Engine Parts", "Body Parts", "Suspension & Steering", "Brakes & Brake Parts",
-                "Car Electronics", "Interior Accessories", "Exterior Accessories", "Tyres & Wheels", "Car Cleaning"
-            ],
-            "Car Tools & Maintenance": [
-                "Mechanical Tools", "Battery Chargers", "Car Jacks", "Air Compressors", "Diagnostic Tools"
-            ],
-            "Perfumes & Fragrances": [
-                "Men Perfumes", "Women Perfumes", "Body Mists", "Fragrance Oils", "Gift Sets"
-            ],
-            "Women's Fashion": [
-                "Handbags", "Clutches & Wallets", "Shoulder Bags", "Crossbody Bags",
-                "Women Jewelry", "Scarves & Shawls", "Hair Accessories"
-            ],
-            "Men's Accessories": [
-                "Watches", "Bracelets", "Chains", "Rings", "Sunglasses", "Wallets"
-            ],
-            "Clothing & Apparel": [
-                "Men Clothing", "Women Clothing", "Kids Clothing", "Footwear"
-            ],
-            "Mobile Accessories": [
-                "Mobile Covers", "Chargers", "Handsfree & Earphones", "Power Banks", "Screen Protectors"
-            ],
-            "Home & Living": [
-                "Decoration Items", "LED Lights", "Clocks", "Wall Frames", "Artificial Flowers"
-            ],
-            "Gifts & General Items": [
-                "Keychains", "Mugs", "Gift Boxes", "Custom Printed Items", "Souvenirs"
-            ],
-            "Cosmetics": [
-                "Skincare", "Makeup", "Hair Care", "Nail Care", "Body Care", 
-                "Fragrances", "Beauty Tools", "Men's Grooming", "whitening", "Loshion"
-            ]
-        };
+        // Subcategories data — live admin-managed catalog (single source of truth)
+        const subcategories = @json(\App\Support\CategoryCatalog::map());
 
         // Initialize on DOM ready
         document.addEventListener('DOMContentLoaded', function() {
@@ -2619,8 +2561,8 @@
         // Update video preview in right column
         function updateVideoPreview(videoURL) {
             const previewVideo = document.getElementById('previewVideo');
-            const previewVideoElement = previewVideo.querySelector('video');
-            
+            const previewVideoElement = previewVideo ? previewVideo.querySelector('video') : null;
+
             if (previewVideo && previewVideoElement) {
                 previewVideoElement.src = videoURL;
                 previewVideoElement.load();
@@ -2636,7 +2578,7 @@
                 const videoUploadLabel = document.getElementById('videoUploadLabel');
                 
                 if (videoElement && videoUploadLabel) {
-                    const videoUrl = "{{ asset('storage/' . $product->video) }}";
+                    const videoUrl = "{{ asset('storage/vendor/products/videos/' . $product->video) }}";
                     videoElement.src = videoUrl;
                     videoElement.load();
                     videoPreview.classList.add('active');
@@ -3425,6 +3367,14 @@
         function showWizardStep(step, opts = {}) {
             step = Math.max(1, Math.min(WIZARD_TOTAL_STEPS, step));
             state.currentStep = step;
+
+            // Entering the review step: refresh the existing live-preview
+            // pipeline so the review card shows current values
+            // (updateLivePreview already calls calculatePrices +
+            // updatePreviewImages internally).
+            if (step === WIZARD_TOTAL_STEPS && typeof updateLivePreview === 'function') {
+                updateLivePreview();
+            }
 
             // Toggle step containers
             document.querySelectorAll('.wizard-step').forEach(el => {

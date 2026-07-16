@@ -24,11 +24,34 @@ class ProductController extends Controller
         return view('products.biggest-savings', compact('products'));
     }
 
-    // Get all approved products (for the product-listing page)
-    public function allProducts()
+    // Grouped subquery: delivered-cart count per product (proxy for units sold).
+    private function soldCountsSubquery()
     {
-        $products = Product::where('position', 'approved')
-            ->orderByDesc('updated_at')
+        return DB::table('carts')
+            ->select('product_id', DB::raw('COUNT(*) as sold_count'))
+            ->where('status', 'delivered')
+            ->groupBy('product_id');
+    }
+
+    // Get all approved products (for the product-listing page).
+    // Optional ?category= filter; quality-first ordering (rating, sold, freshness).
+    public function allProducts(Request $request)
+    {
+        $query = Product::query()
+            ->where('vendor_products.position', 'approved')
+            ->leftJoinSub($this->soldCountsSubquery(), 'sold', function ($join) {
+                $join->on('sold.product_id', '=', 'vendor_products.id');
+            })
+            ->select('vendor_products.*');
+
+        if ($request->filled('category')) {
+            $query->where('vendor_products.category', $request->input('category'));
+        }
+
+        $products = $query
+            ->orderByDesc('vendor_products.rating')
+            ->orderByRaw('COALESCE(sold.sold_count, 0) DESC')
+            ->orderByDesc('vendor_products.updated_at')
             ->get();
 
         $productIds = $products->pluck('id');
@@ -47,9 +70,16 @@ class ProductController extends Controller
         // return response()->json([
         //     'data' => $request->name
         // ]);
-        $products = Product::where('category', $request->name)
-            ->where('position', 'approved')
-            ->orderByDesc('updated_at')
+        $products = Product::query()
+            ->where('vendor_products.category', $request->name)
+            ->where('vendor_products.position', 'approved')
+            ->leftJoinSub($this->soldCountsSubquery(), 'sold', function ($join) {
+                $join->on('sold.product_id', '=', 'vendor_products.id');
+            })
+            ->select('vendor_products.*')
+            ->orderByDesc('vendor_products.rating')
+            ->orderByRaw('COALESCE(sold.sold_count, 0) DESC')
+            ->orderByDesc('vendor_products.updated_at')
             ->get();
 
         // Get all product IDs

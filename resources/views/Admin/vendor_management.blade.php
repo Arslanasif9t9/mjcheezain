@@ -4,172 +4,78 @@
     <script src="{{ asset('js/img-fallback.js') }}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Vendor Management</title>
+    <title>Vendor Management | MJCheezain Admin</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Tailwind CSS  -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- font-awesome  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google font  -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --sidebar-width: 260px;
-            --sidebar-bg: #2c3e50;
-            --sidebar-color: #ecf0f1;
-            --sidebar-active-bg: #34495e;
-            --sidebar-hover-bg: #3d566e;
-            --header-bg: #ffffff;
-            --content-bg: #f8f9fa;
-            --card-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
-            --primary-color: #3498db;
-            --success-color: #2ecc71;
-            --warning-color: #f39c12;
-            --danger-color: #e74c3c;
-            --info-color: #1abc9c;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--content-bg);
+            font-family: 'Poppins', sans-serif;
+            background-color: #FFF6F0;
             overflow-x: hidden;
         }
 
-        /* Sidebar Styles */
-        #sidebar {
-            width: var(--sidebar-width);
-            position: absolute;
-            left: 0;
-            top: 0;
-            /* height: 100vh; */
-            background: var(--sidebar-bg);
-            color: var(--sidebar-color);
-            transition: all 0.3s;
-            z-index: 1000;
-            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.1);
-        }
+        .brand-gradient { background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); }
 
-        #sidebar .sidebar-header {
-            padding: 1.5rem 1rem;
-            background: rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
+        .main-content { padding: 2rem; }
+        @media (max-width: 767px) { .main-content { padding: 4.5rem 1rem 1.5rem; } }
 
-        #sidebar .sidebar-header h3 {
-            margin-bottom: 0;
-            font-weight: 600;
-        }
-
-        #sidebar ul.components {
-            padding: 1rem 0;
-        }
-
-        #sidebar ul li {
-            padding: 0.5rem 1.5rem;
-        }
-
-        #sidebar ul li a {
-            padding: 0.75rem 1rem;
-            color: var(--sidebar-color);
-            text-decoration: none;
-            display: block;
-            border-radius: 5px;
-            transition: all 0.3s;
-        }
-
-        #sidebar ul li a:hover {
-            background: var(--sidebar-hover-bg);
-            color: white;
-        }
-
-        #sidebar ul li a i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-
-        #sidebar ul li.active > a {
-            background: var(--sidebar-active-bg);
-            font-weight: 500;
-        }
-
-        #sidebar ul li a .badge {
-            float: right;
-            margin-top: 3px;
-        }
-
-        /* Content Styles */
-        #content {
-            width: calc(100% - var(--sidebar-width));
-            /* margin-left: var(--sidebar-width); */
-            min-height: 100vh;
-            transition: all 0.3s;
-        }
-
-        .navbar {
-            padding: 0.75rem 1.5rem;
-            background: var(--header-bg);
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        }
-
-        .main-content {
-            padding: 2rem;
-        }
-
-        /* Card Styles */
+        /* Cards */
         .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: var(--card-shadow);
+            border: 1px solid #FDE7EE;
+            border-radius: 1rem;
+            box-shadow: 0 8px 24px rgba(232, 93, 133, 0.08);
             margin-bottom: 1.5rem;
         }
 
         .card-header {
             background: white;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid #FDE7EE;
             font-weight: 600;
             padding: 1.25rem 1.5rem;
-            border-radius: 10px 10px 0 0 !important;
+            border-radius: 1rem 1rem 0 0 !important;
         }
 
         /* Summary Cards */
         .summary-card {
-            border-radius: 10px;
+            border-radius: 1rem;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
-            box-shadow: var(--card-shadow);
             background: white;
-            transition: transform 0.3s;
+            border: 1px solid #FDE7EE;
+            box-shadow: 0 8px 24px rgba(232, 93, 133, 0.08);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
 
         .summary-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(232, 93, 133, 0.14);
         }
 
         .summary-card i {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            opacity: 0.8;
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            width: 44px; height: 44px;
+            display: inline-flex; align-items: center; justify-content: center;
+            border-radius: 12px;
         }
 
         .summary-card .card-title {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #6c757d;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.35rem;
+            font-weight: 500;
         }
 
         .summary-card .card-value {
-            font-size: 1.75rem;
-            font-weight: 600;
+            font-size: 1.6rem;
+            font-weight: 700;
             margin-bottom: 0;
+            color: #111827;
         }
 
         /* Status Badges */
@@ -177,206 +83,121 @@
             padding: 0.35rem 0.75rem;
             border-radius: 20px;
             font-size: 0.75rem;
-            font-weight: 500;
+            font-weight: 600;
             text-transform: capitalize;
         }
 
-        .status-active {
-            background-color: rgba(46, 204, 113, 0.2);
-            color: var(--success-color);
-        }
+        .status-active { background-color: rgba(46, 204, 113, 0.15); color: #27ae60; }
+        .status-pending { background-color: rgba(243, 156, 18, 0.15); color: #e67e22; }
+        .status-blocked { background-color: rgba(231, 76, 60, 0.15); color: #e74c3c; }
+        .status-unknown { background-color: rgba(149, 165, 166, 0.15); color: #7f8c8d; }
 
-        .status-pending {
-            background-color: rgba(243, 156, 18, 0.2);
-            color: var(--warning-color);
-        }
-
-        .status-blocked {
-            background-color: rgba(231, 76, 60, 0.2);
-            color: var(--danger-color);
-        }
-
-        /* Table Styles */
-        .table {
-            margin-bottom: 0;
-        }
-
+        /* Table */
+        .table { margin-bottom: 0; }
         .table th {
             font-weight: 600;
             border-top: none;
-            border-bottom: 1px solid #dee2e6;
+            border-bottom: 1px solid #FDE7EE;
             padding: 1rem 0.75rem;
-            color: #495057;
+            color: #6b7280;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            white-space: nowrap;
         }
-
-        .table td {
-            padding: 0.75rem;
-            vertical-align: middle;
-        }
-
-        .table-hover tbody tr:hover {
-            background-color: rgba(52, 152, 219, 0.05);
-        }
+        .table td { padding: 0.75rem; vertical-align: middle; font-size: 0.875rem; }
+        .table-hover tbody tr:hover { background-color: rgba(255, 125, 160, 0.05); }
 
         /* Action Buttons */
         .action-btn {
             padding: 0.35rem 0.65rem;
             margin: 0 2px;
             font-size: 0.75rem;
-            border-radius: 4px;
+            border-radius: 8px;
             transition: all 0.2s;
         }
+        .action-btn:hover { transform: translateY(-1px); box-shadow: 0 2px 6px rgba(232, 93, 133, 0.2); }
 
-        .action-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        /* Icon tints */
+        .tint-pink { background: rgba(232, 93, 133, 0.12); color: #E85D85; }
+        .tint-green { background: rgba(46, 204, 113, 0.12); color: #27ae60; }
+        .tint-red { background: rgba(231, 76, 60, 0.12); color: #e74c3c; }
+        .tint-amber { background: rgba(243, 156, 18, 0.12); color: #e67e22; }
+
+        /* Search / filter controls */
+        .form-control:focus, .btn:focus {
+            border-color: #E85D85;
+            box-shadow: 0 0 0 0.2rem rgba(232, 93, 133, 0.15);
         }
 
-        /* Custom Colors */
-        .bg-primary-light {
-            background-color: rgba(52, 152, 219, 0.1);
-            color: var(--primary-color);
-        }
-
-        .bg-success-light {
-            background-color: rgba(46, 204, 113, 0.1);
-            color: var(--success-color);
-        }
-
-        .bg-warning-light {
-            background-color: rgba(243, 156, 18, 0.1);
-            color: var(--warning-color);
-        }
-
-        .bg-danger-light {
-            background-color: rgba(231, 76, 60, 0.1);
-            color: var(--danger-color);
-        }
-
-        .bg-info-light {
-            background-color: rgba(26, 188, 156, 0.1);
-            color: var(--info-color);
-        }
-
-        /* Responsive Adjustments */
-        @media (max-width: 992px) {
-            #sidebar {
-                margin-left: -var(--sidebar-width);
-            }
-            #sidebar.active {
-                margin-left: 0;
-            }
-            #content {
-                width: 100%;
-                margin-left: 0;
-            }
-            #content.active {
-                margin-left: var(--sidebar-width);
-                width: calc(100% - var(--sidebar-width));
-            }
-        }
+        /* Bootstrap modal must sit above the sticky sidebar (z-index 10001) */
+        .modal-backdrop { z-index: 19999; }
+        .modal { z-index: 20000; }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8;
-        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #FFF6F0; }
+        ::-webkit-scrollbar-thumb { background: #F9C7D5; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #E85D85; }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="text-gray-800">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
         <x-admin.sidebar />
 
         <!-- Page Content -->
-        <div id="content">
-    
+        <div id="content" class="flex-1 min-w-0">
+
             <!-- Main Content -->
-            <div class="main-content">    
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 class="mb-0"><i class="fas fa-users-cog me-2"></i> Vendor Management</h2>
-                    {{-- <a href="add_vendor.php" class="btn btn-primary"><i class="fas fa-plus me-2"></i> Add New Vendor</a> --}}
+            <div class="main-content">
+                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                    <div>
+                        <h2 class="mb-0 fw-bold"><i class="fas fa-store me-2" style="color:#E85D85;"></i> Vendor Management</h2>
+                        <p class="text-muted mb-0" style="font-size: 0.875rem;">Approve, block and review marketplace vendors</p>
+                    </div>
                 </div>
-    
+
                 <!-- Summary Cards -->
                 <div class="row">
-                    <div class="col-xl-3 col-md-4 col-sm-6 mb-4">
-                        <div class="summary-card bg-primary-light">
-                            <i class="fas fa-users text-primary"></i>
+                    <div class="col-xl-3 col-md-4 col-sm-6 mb-2">
+                        <div class="summary-card">
+                            <i class="fas fa-store tint-pink"></i>
                             <h6 class="card-title">Total Vendors</h6>
-                            <h3 class="card-value">
-                                {{ $totalUsers }}
-                            </h3>
+                            <h3 class="card-value">{{ $totalUsers }}</h3>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-4 col-sm-6 mb-4">
-                        <div class="summary-card bg-success-light">
-                            <i class="fas fa-check-circle text-success"></i>
+                    <div class="col-xl-3 col-md-4 col-sm-6 mb-2">
+                        <div class="summary-card">
+                            <i class="fas fa-check-circle tint-green"></i>
                             <h6 class="card-title">Active</h6>
-                            <h3 class="card-value">
-                                {{ $activeUsers }}
-                            </h3>
+                            <h3 class="card-value">{{ $activeUsers }}</h3>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-4 col-sm-6 mb-4">
-                        <div class="summary-card bg-danger-light">
-                            <i class="fas fa-ban text-danger"></i>
+                    <div class="col-xl-3 col-md-4 col-sm-6 mb-2">
+                        <div class="summary-card">
+                            <i class="fas fa-ban tint-red"></i>
                             <h6 class="card-title">Blocked</h6>
-                            <h3 class="card-value">
-                                {{ $blocked }}
-                            </h3>
+                            <h3 class="card-value">{{ $blocked }}</h3>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-4 col-sm-6 mb-4">
-                        <div class="summary-card bg-warning-light">
-                            <i class="fas fa-clock text-warning"></i>
+                    <div class="col-xl-3 col-md-4 col-sm-6 mb-2">
+                        <div class="summary-card">
+                            <i class="fas fa-clock tint-amber"></i>
                             <h6 class="card-title">Pending</h6>
-                            <h3 class="card-value">
-                                {{ $pendding }}
-                            </h3>
+                            <h3 class="card-value">{{ $pendding }}</h3>
                         </div>
                     </div>
-                    {{-- <div class="col-xl-3 col-md-4 col-sm-6 mb-4">
-                        <div class="summary-card bg-info-light">
-                            <i class="fas fa-boxes text-info"></i>
-                            <h6 class="card-title">Products</h6>
-                            <h3 class="card-value">
-                                {{ $products }}
-                            </h3>
-                        </div>
-                    </div> --}}
-                    {{-- <div class="col-xl-2 col-md-4 col-sm-6 mb-4">
-                        <div class="summary-card" style="background-color: rgba(155, 89, 182, 0.1); color: #9b59b6;">
-                            <i class="fas fa-dollar-sign" style="color: #9b59b6;"></i>
-                            <h6 class="card-title">Earnings</h6>
-                            <h3 class="card-value">Rs. 
-                                0
-                            </h3>
-                        </div>
-                    </div> --}}
                 </div>
-    
+
                 <!-- Vendor Table -->
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
                         <h5 class="mb-0">All Vendors</h5>
-                        <div class="d-flex">
-                            <form method="get" class="input-group me-3" style="width: 250px;">
+                        <div class="d-flex flex-wrap gap-2">
+                            <form method="get" class="input-group me-3" style="width: 280px;" onsubmit="return false;">
                                 <input type="hidden" name="status" value="">
-                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
                                 <input type="text" id="searchInput" class="form-control" placeholder="Search vendors..." value="">
                                 <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
                             </form>
@@ -418,36 +239,32 @@
                                 <tbody id="vendorTableBody">
                                     @foreach ($vendors as $vendor)
                                         @php
-                                            // Try to get vendor details from $vendors first, then fall back to $vendorsBasic
-                                            $vendorData = $vendor;
-                                            $vendorBasic = DB::table('vendor_basic_info')->where('user_id', $vendor->user_id)->first();
-                                            $products = DB::table('vendor_products')->where('user_id', $vendor->user_id)->count();
-                                            
-                                            // Use basic info if main vendor data is missing certain fields
+                                            // Pre-fetched by the controller (keyed by user_id) — no per-row queries.
+                                            $vendorBasic = $vendorsBasic[$vendor->user_id] ?? null;
+                                            $productCount = $productCounts[$vendor->user_id] ?? 0;
+                                            $orderCount = $orderCounts[$vendor->user_id] ?? 0;
+                                            $earningsTotal = $vendorEarnings[$vendor->user_id] ?? 0;
+
                                             $fullName = $vendor->full_name ?? $vendorBasic->full_name ?? 'N/A';
                                             $email = $vendor->email ?? $vendorBasic->email ?? 'N/A';
                                             $phone = $vendor->phone ?? $vendorBasic->phone ?? 'N/A';
                                             $status = $vendor->status ?? $vendorBasic->status ?? 'unknown';
                                             $userId = $vendor->user_id ?? $vendorBasic->user_id ?? null;
+                                            $storeName = $vendor->store_name ?? $vendorBasic->store_name ??
+                                                    $vendor->business_name ?? $vendorBasic->business_name ?? 'N/A';
+                                            $createdAt = $vendor->created_at ?? $vendorBasic->created_at ?? null;
                                         @endphp
 
                                         <tr id="vendor-row-{{ $userId }}">
-                                            {{-- <td>{{ $vendor->user_id }}</td> --}}
-                                            <td>USR-{{ str_pad($vendor->user_id, 6, '0', STR_PAD_LEFT) }}-{{ \Carbon\Carbon::parse($vendor->created_at)->format('y') }}</td>
+                                            <td class="text-nowrap">USR-{{ str_pad($vendor->user_id, 6, '0', STR_PAD_LEFT) }}-{{ \Carbon\Carbon::parse($vendor->created_at)->format('y') }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="{{ asset('storage/vendor/profile/' . ($vendorBasic->profile_picture ?? 'default_profile.webp')) }}" 
-                                                        width="32" height="32" class="rounded-circle me-2">
+                                                    <img src="{{ asset('storage/vendor/profile/' . ($vendorBasic->profile_picture ?? 'default_profile.webp')) }}"
+                                                        width="32" height="32" class="rounded-circle me-2" style="object-fit: cover;">
                                                     <span>{{ $fullName }}</span>
                                                 </div>
                                             </td>
-                                            <td>
-                                                @php
-                                                    $storeName = $vendor->store_name ?? $vendorBasic->store_name ?? 
-                                                            $vendor->business_name ?? $vendorBasic->business_name ?? 'N/A';
-                                                @endphp
-                                                {{ $storeName }}
-                                            </td>
+                                            <td>{{ $storeName }}</td>
                                             <td>{{ $email }}</td>
                                             <td>{{ $phone }}</td>
                                             <td>
@@ -455,39 +272,34 @@
                                                     {{ $status }}
                                                 </span>
                                             </td>
-                                            <td>
-                                                @php
-                                                    $createdAt = $vendor->created_at ?? $vendorBasic->created_at ?? null;
-                                                @endphp
-                                                {{ $createdAt ? date('d M Y', strtotime($createdAt)) : 'N/A' }}
-                                            </td>
-                                            <td>{{ $products }}</td>
-                                            <td>{{ DB::table('orders')->where('user_id', $vendor->user_id)->count() }}</td>
-                                            <td>Rs. {{ DB::table('orders')->where('vendor_id', $vendor->user_id)->sum('total_amount') ?? 0 }}</td>
-                                            <td id="action-buttons-{{ $userId }}">
+                                            <td class="text-nowrap">{{ $createdAt ? date('d M Y', strtotime($createdAt)) : 'N/A' }}</td>
+                                            <td>{{ $productCount }}</td>
+                                            <td>{{ $orderCount }}</td>
+                                            <td class="text-nowrap">Rs. {{ number_format($earningsTotal) }}</td>
+                                            <td id="action-buttons-{{ $userId }}" class="text-nowrap">
                                                 @if($userId)
-                                                    <button class="btn btn-sm btn-info action-btn" title="View Details" 
+                                                    <button class="btn btn-sm btn-info action-btn" title="View Details"
                                                             data-bs-toggle="modal" data-bs-target="#vendorDetailsModal"
                                                             onclick="loadVendorDetails({{ $userId }})">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
-                                                    
+
                                                     @if ($status == 'active')
-                                                        <button class="btn btn-sm btn-danger action-btn" title="Block" 
+                                                        <button class="btn btn-sm btn-danger action-btn" title="Block"
                                                                 onclick="confirmStatusChange({{ $userId }}, 'blocked', 'Block')">
                                                             <i class="fas fa-ban"></i>
                                                         </button>
                                                     @elseif ($status == 'pending')
-                                                        <button class="btn btn-sm btn-success action-btn" title="Approve" 
+                                                        <button class="btn btn-sm btn-success action-btn" title="Approve"
                                                                 onclick="confirmStatusChange({{ $userId }}, 'active', 'Approve')">
                                                             <i class="fas fa-check"></i>
                                                         </button>
-                                                        <button class="btn btn-sm btn-danger action-btn" title="Reject" 
+                                                        <button class="btn btn-sm btn-danger action-btn" title="Reject"
                                                                 onclick="confirmStatusChange({{ $userId }}, 'blocked', 'Reject')">
                                                             <i class="fas fa-times"></i>
                                                         </button>
                                                     @elseif ($status == 'blocked')
-                                                        <button class="btn btn-sm btn-warning action-btn" title="Unblock" 
+                                                        <button class="btn btn-sm btn-warning action-btn" title="Unblock"
                                                                 onclick="confirmStatusChange({{ $userId }}, 'active', 'Unblock')">
                                                             <i class="fas fa-lock-open"></i>
                                                         </button>
@@ -501,207 +313,6 @@
                                 </tbody>
                             </table>
                         </div>
-
-                        <script>
-                            // Search and Filter Functionality
-                            document.addEventListener('DOMContentLoaded', function() {
-                                // Get all vendor rows from the table
-                                const vendorRows = Array.from(document.querySelectorAll('#vendorTableBody tr'));
-                                let currentFilter = 'all';
-                                let currentSearch = '';
-                                
-                                // Store original rows for resetting
-                                const originalRows = vendorRows.map(row => ({
-                                    element: row,
-                                    name: row.cells[1].textContent.toLowerCase(),
-                                    store: row.cells[2].textContent.toLowerCase(),
-                                    email: row.cells[3].textContent.toLowerCase(),
-                                    phone: row.cells[4].textContent.toLowerCase(),
-                                    status: row.cells[5].querySelector('.status-badge').textContent.trim(),
-                                    id: row.cells[0].textContent.trim()
-                                }));
-                                
-                                // Search functionality
-                                const searchInput = document.getElementById('searchInput');
-                                const searchButton = document.getElementById('searchButton');
-                                
-                                // Search when button is clicked
-                                if (searchButton) {
-                                    searchButton.addEventListener('click', performSearch);
-                                }
-                                
-                                // Search when Enter key is pressed
-                                if (searchInput) {
-                                    let searchTimeout;
-                                    searchInput.addEventListener('keyup', function(event) {
-                                        clearTimeout(searchTimeout);
-                                        searchTimeout = setTimeout(() => {
-                                            currentSearch = this.value.toLowerCase().trim();
-                                            filterAndSearch();
-                                        }, 300); // 300ms delay for better performance
-                                    });
-                                }
-                                
-                                // Filter functionality
-                                const filterOptions = document.querySelectorAll('.filter-option');
-                                filterOptions.forEach(option => {
-                                    option.addEventListener('click', function(e) {
-                                        e.preventDefault();
-                                        currentFilter = this.getAttribute('data-status');
-                                        updateFilterButtonText(this.textContent.trim());
-                                        filterAndSearch();
-                                    });
-                                });
-                                
-                                function performSearch() {
-                                    currentSearch = searchInput.value.toLowerCase().trim();
-                                    filterAndSearch();
-                                }
-                                
-                                function filterAndSearch() {
-                                    const tbody = document.getElementById('vendorTableBody');
-                                    
-                                    // Clear current table content
-                                    tbody.innerHTML = '';
-                                    
-                                    // Filter rows
-                                    const filteredRows = originalRows.filter(row => {
-                                        // Apply status filter
-                                        if (currentFilter !== 'all' && row.status !== currentFilter) {
-                                            return false;
-                                        }
-                                        
-                                        // Apply search filter
-                                        if (currentSearch) {
-                                            const searchTerms = currentSearch.toLowerCase();
-                                            return (
-                                                row.name.includes(searchTerms) ||
-                                                row.store.includes(searchTerms) ||
-                                                row.email.includes(searchTerms) ||
-                                                row.phone.includes(searchTerms) ||
-                                                row.id.includes(searchTerms)
-                                            );
-                                        }
-                                        
-                                        return true;
-                                    });
-                                    
-                                    // Add filtered rows back to table
-                                    if (filteredRows.length > 0) {
-                                        filteredRows.forEach(row => {
-                                            tbody.appendChild(row.element);
-                                        });
-                                    } else {
-                                        // Show "no results" message
-                                        tbody.innerHTML = `
-                                            <tr>
-                                                <td colspan="11" class="text-center py-4">
-                                                    <div class="text-muted">
-                                                        <i class="fas fa-search fa-2x mb-3"></i>
-                                                        <h5>No vendors found</h5>
-                                                        <p>Try adjusting your search or filter</p>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        `;
-                                    }
-                                    
-                                    // Update pagination visibility (hide if filtered)
-                                    updatePaginationVisibility(filteredRows.length);
-                                }
-                                
-                                function updateFilterButtonText(text) {
-                                    const filterButton = document.getElementById('filterDropdown');
-                                    if (filterButton) {
-                                        // Remove status badge text from button text
-                                        const cleanText = text.replace('●', '').trim();
-                                        filterButton.innerHTML = `<i class="fas fa-filter"></i> ${cleanText}`;
-                                    }
-                                }
-                                
-                                function updatePaginationVisibility(visibleRows) {
-                                    const pagination = document.querySelector('.pagination');
-                                    if (pagination) {
-                                        if (currentSearch !== '' || currentFilter !== 'all') {
-                                            pagination.style.display = 'none';
-                                        } else {
-                                            pagination.style.display = 'flex';
-                                        }
-                                    }
-                                }
-                                
-                                // Clear search and filter
-                                function clearFilters() {
-                                    searchInput.value = '';
-                                    currentSearch = '';
-                                    currentFilter = 'all';
-                                    updateFilterButtonText('Filter');
-                                    filterAndSearch();
-                                }
-                                
-                                // Add clear button (optional)
-                                function addClearButton() {
-                                    const searchContainer = document.querySelector('.input-group');
-                                    if (searchContainer) {
-                                        const clearButton = document.createElement('button');
-                                        clearButton.type = 'button';
-                                        clearButton.className = 'btn btn-outline-secondary';
-                                        clearButton.id = 'clearButton';
-                                        clearButton.innerHTML = '<i class="fas fa-times"></i>';
-                                        clearButton.title = 'Clear search and filters';
-                                        clearButton.addEventListener('click', clearFilters);
-                                        
-                                        // Insert after search button
-                                        const searchBtn = document.getElementById('searchButton');
-                                        searchContainer.insertBefore(clearButton, searchBtn.nextSibling);
-                                    }
-                                }
-                                
-                                // Initialize
-                                addClearButton();
-                                filterAndSearch(); // Initial filter to show all rows
-                            });
-
-                            // If you want to add a reset filter option in dropdown, add this:
-                            function addResetFilterOption() {
-                                const filterDropdown = document.querySelector('.dropdown-menu');
-                                if (filterDropdown) {
-                                    const resetItem = document.createElement('li');
-                                    resetItem.innerHTML = '<hr class="dropdown-divider">';
-                                    filterDropdown.appendChild(resetItem);
-                                    
-                                    const resetLink = document.createElement('li');
-                                    resetLink.innerHTML = '<a class="dropdown-item text-primary" href="#" id="resetFilter"><i class="fas fa-sync-alt me-2"></i> Reset Filters</a>';
-                                    filterDropdown.appendChild(resetLink);
-                                    
-                                    document.getElementById('resetFilter').addEventListener('click', function(e) {
-                                        e.preventDefault();
-                                        document.getElementById('searchInput').value = '';
-                                        currentSearch = '';
-                                        currentFilter = 'all';
-                                        updateFilterButtonText('Filter');
-                                        filterAndSearch();
-                                    });
-                                }
-                            }
-
-                            // Call this after DOM is loaded
-                            document.addEventListener('DOMContentLoaded', addResetFilterOption);
-                        </script>
-                        
-                        {{-- <nav aria-label="Page navigation" class="mt-3">
-                            <ul class="pagination justify-content-center">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
-                                </li>
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Next</a>
-                                </li>
-                            </ul>
-                        </nav> --}}
                     </div>
                 </div>
             </div>
@@ -712,10 +323,10 @@
     <!-- Vendor Details Modal -->
     <div class="modal fade" id="vendorDetailsModal" tabindex="-1" aria-labelledby="vendorDetailsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="vendorDetailsModalLabel">Vendor Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content" style="border-radius: 1rem; border: 1px solid #FDE7EE;">
+                <div class="modal-header brand-gradient text-white" style="border-radius: 1rem 1rem 0 0;">
+                    <h5 class="modal-title fw-bold" id="vendorDetailsModalLabel"><i class="fas fa-store me-2"></i>Vendor Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="vendorDetailsContent">
                     <!-- Content will be loaded via AJAX -->
@@ -729,31 +340,167 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Toggle sidebar
+    // Search and Filter Functionality
     document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('sidebarCollapse').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('content').classList.toggle('active');
+        // Get all vendor rows from the table
+        const vendorRows = Array.from(document.querySelectorAll('#vendorTableBody tr'));
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        // Store original rows for resetting
+        const originalRows = vendorRows.map(row => ({
+            element: row,
+            name: row.cells[1].textContent.toLowerCase(),
+            store: row.cells[2].textContent.toLowerCase(),
+            email: row.cells[3].textContent.toLowerCase(),
+            phone: row.cells[4].textContent.toLowerCase(),
+            status: row.cells[5].querySelector('.status-badge').textContent.trim(),
+            id: row.cells[0].textContent.trim()
+        }));
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+
+        // Search when button is clicked
+        if (searchButton) {
+            searchButton.addEventListener('click', performSearch);
+        }
+
+        // Search as you type (debounced)
+        if (searchInput) {
+            let searchTimeout;
+            searchInput.addEventListener('keyup', function(event) {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    currentSearch = this.value.toLowerCase().trim();
+                    filterAndSearch();
+                }, 300);
+            });
+        }
+
+        // Filter functionality
+        const filterOptions = document.querySelectorAll('.filter-option');
+        filterOptions.forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.preventDefault();
+                currentFilter = this.getAttribute('data-status');
+                updateFilterButtonText(this.textContent.trim());
+                filterAndSearch();
+            });
         });
+
+        function performSearch() {
+            currentSearch = searchInput.value.toLowerCase().trim();
+            filterAndSearch();
+        }
+
+        function filterAndSearch() {
+            const tbody = document.getElementById('vendorTableBody');
+
+            // Clear current table content
+            tbody.innerHTML = '';
+
+            // Filter rows
+            const filteredRows = originalRows.filter(row => {
+                // Apply status filter
+                if (currentFilter !== 'all' && row.status !== currentFilter) {
+                    return false;
+                }
+
+                // Apply search filter
+                if (currentSearch) {
+                    const searchTerms = currentSearch.toLowerCase();
+                    return (
+                        row.name.includes(searchTerms) ||
+                        row.store.includes(searchTerms) ||
+                        row.email.includes(searchTerms) ||
+                        row.phone.includes(searchTerms) ||
+                        row.id.includes(searchTerms)
+                    );
+                }
+
+                return true;
+            });
+
+            // Add filtered rows back to table
+            if (filteredRows.length > 0) {
+                filteredRows.forEach(row => {
+                    tbody.appendChild(row.element);
+                });
+            } else {
+                // Show "no results" message
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="11" class="text-center py-4">
+                            <div class="text-muted">
+                                <i class="fas fa-search fa-2x mb-3" style="color:#E85D85;"></i>
+                                <h5>No vendors found</h5>
+                                <p>Try adjusting your search or filter</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        function updateFilterButtonText(text) {
+            const filterButton = document.getElementById('filterDropdown');
+            if (filterButton) {
+                const cleanText = text.replace('●', '').trim();
+                filterButton.innerHTML = `<i class="fas fa-filter"></i> ${cleanText}`;
+            }
+        }
+
+        // Clear search and filter
+        function clearFilters() {
+            searchInput.value = '';
+            currentSearch = '';
+            currentFilter = 'all';
+            updateFilterButtonText('Filter');
+            filterAndSearch();
+        }
+
+        // Add clear button next to search
+        function addClearButton() {
+            const searchContainer = document.querySelector('.input-group');
+            if (searchContainer) {
+                const clearButton = document.createElement('button');
+                clearButton.type = 'button';
+                clearButton.className = 'btn btn-outline-secondary';
+                clearButton.id = 'clearButton';
+                clearButton.innerHTML = '<i class="fas fa-times"></i>';
+                clearButton.title = 'Clear search and filters';
+                clearButton.addEventListener('click', clearFilters);
+
+                const searchBtn = document.getElementById('searchButton');
+                searchContainer.insertBefore(clearButton, searchBtn.nextSibling);
+            }
+        }
+
+        // Initialize
+        addClearButton();
+        filterAndSearch();
     });
 
     // Load vendor details via AJAX
     function loadVendorDetails(userId) {
+        document.getElementById('vendorDetailsContent').innerHTML =
+            '<div class="text-center py-5 text-muted"><i class="fas fa-spinner fa-spin fa-2x mb-3" style="color:#E85D85;"></i><p>Loading vendor details...</p></div>';
+
         fetch(`/admin/vendor/details/${userId}`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                
                 if (data.success) {
                     document.getElementById('vendorDetailsContent').innerHTML = data.html;
                 } else {
-                    document.getElementById('vendorDetailsContent').innerHTML = 
+                    document.getElementById('vendorDetailsContent').innerHTML =
                         `<div class="alert alert-danger">${data.message}</div>`;
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                document.getElementById('vendorDetailsContent').innerHTML = 
+                document.getElementById('vendorDetailsContent').innerHTML =
                     '<div class="alert alert-danger">Error loading vendor details</div>';
             });
     }
@@ -764,16 +511,16 @@
             'active': 'approve',
             'blocked': action.toLowerCase() === 'reject' ? 'reject' : 'block'
         };
-        
+
         const actionText = action.toLowerCase();
         const vendorName = document.querySelector(`#vendor-row-${userId} td:nth-child(2) span`).textContent;
-        
+
         Swal.fire({
             title: `${action} Vendor`,
             html: `Are you sure you want to <strong>${actionText}</strong> vendor <strong>"${vendorName}"</strong>?`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: newStatus === 'active' ? '#28a745' : (actionText === 'reject' ? '#dc3545' : '#ffc107'),
+            confirmButtonColor: newStatus === 'active' ? '#28a745' : (actionText === 'reject' ? '#dc3545' : '#E85D85'),
             cancelButtonColor: '#6c757d',
             confirmButtonText: `Yes, ${actionText}!`,
             cancelButtonText: 'Cancel',
@@ -817,7 +564,7 @@
 
                 // Show success message
                 showMessage(`Vendor ${action}ed successfully!`, 'success');
-                
+
                 return true;
             } else {
                 throw new Error(data.message || 'Failed to update status');
@@ -832,9 +579,9 @@
     // Update action buttons based on new status
     function updateActionButtons(userId, newStatus) {
         const actionContainer = document.getElementById(`action-buttons-${userId}`);
-        
+
         let buttonsHtml = `
-            <button class="btn btn-sm btn-info action-btn" title="View Details" 
+            <button class="btn btn-sm btn-info action-btn" title="View Details"
                     data-bs-toggle="modal" data-bs-target="#vendorDetailsModal"
                     onclick="loadVendorDetails(${userId})">
                 <i class="fas fa-eye"></i>
@@ -843,25 +590,25 @@
 
         if (newStatus === 'active') {
             buttonsHtml += `
-                <button class="btn btn-sm btn-danger action-btn" title="Block" 
+                <button class="btn btn-sm btn-danger action-btn" title="Block"
                         onclick="confirmStatusChange(${userId}, 'blocked', 'Block')">
                     <i class="fas fa-ban"></i>
                 </button>
             `;
         } else if (newStatus === 'pending') {
             buttonsHtml += `
-                <button class="btn btn-sm btn-success action-btn" title="Approve" 
+                <button class="btn btn-sm btn-success action-btn" title="Approve"
                         onclick="confirmStatusChange(${userId}, 'active', 'Approve')">
                     <i class="fas fa-check"></i>
                 </button>
-                <button class="btn btn-sm btn-danger action-btn" title="Reject" 
+                <button class="btn btn-sm btn-danger action-btn" title="Reject"
                         onclick="confirmStatusChange(${userId}, 'blocked', 'Reject')">
                     <i class="fas fa-times"></i>
                 </button>
             `;
         } else if (newStatus === 'blocked') {
             buttonsHtml += `
-                <button class="btn btn-sm btn-warning action-btn" title="Unblock" 
+                <button class="btn btn-sm btn-warning action-btn" title="Unblock"
                         onclick="confirmStatusChange(${userId}, 'active', 'Unblock')">
                     <i class="fas fa-lock-open"></i>
                 </button>
@@ -881,15 +628,12 @@
                 <button type="button" class="btn-close" onclick="this.parentElement.parentElement.classList.add('d-none')"></button>
             </div>
         `;
-        
+
         // Auto hide after 5 seconds
         setTimeout(() => {
             messageDiv.classList.add('d-none');
         }, 5000);
     }
-
-    // Add SweetAlert2 for beautiful alerts (include this CDN in your head)
-    // <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </script>
 </body>
 </html>

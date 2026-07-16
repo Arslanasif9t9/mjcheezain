@@ -214,7 +214,29 @@ class VendorReturnController extends Controller
                 'description' => $stepDescription,
                 'created_at' => now()
             ]);
-            
+
+            // Notify the customer about the return status change (best-effort)
+            try {
+                $rr = DB::table('return_requests')->where('id', $request->return_id)->first();
+                if ($rr && $rr->customer_id) {
+                    $productName = DB::table('vendor_products')->where('id', $rr->product_id)->value('name') ?? 'Product';
+                    DB::table('notifications')->insert([
+                        'user_id' => $rr->customer_id,
+                        'title' => 'Return update',
+                        'message' => "Your return request for \"{$productName}\" is now: " . ucwords($request->status) . ".",
+                        // notifications.type is an enum('shipping','payment','offer','loyalty','order','message','alert')
+                        'type' => 'order',
+                        'icon_class' => 'fas fa-bell',
+                        'icon_color' => 'bg-pink-100 text-[#E85D85]',
+                        'dot_color' => 'bg-[#FF7DA0]',
+                        'is_read' => 0,
+                        'created_at' => now(),
+                    ]);
+                }
+            } catch (\Throwable $e) {
+                \Log::warning('return status notify failed: ' . $e->getMessage());
+            }
+
             DB::commit();
             
             return response()->json([

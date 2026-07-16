@@ -182,6 +182,49 @@
     <!-- Hero Section -->
     <x-auto.hero-video />
 
+    <!-- Hero video: fullscreen support (controls + playsinline + fullscreen button overlay) -->
+    <script>
+        (function () {
+            var heroVideo = document.getElementById('background-video');
+            var heroWrap = document.getElementById('video-hero');
+            if (!heroVideo || !heroWrap) return;
+
+            // Fullscreen-friendly attributes (autoplay/loop/muted stay untouched)
+            heroVideo.setAttribute('controls', '');
+            heroVideo.setAttribute('playsinline', '');
+            heroVideo.setAttribute('webkit-playsinline', '');
+            // Full width / cover on all screens (defensive — component already sets these)
+            heroVideo.classList.add('w-full', 'object-cover');
+
+            // Visible fullscreen button — bottom-right gradient circle
+            var fsBtn = document.createElement('button');
+            fsBtn.type = 'button';
+            fsBtn.id = 'hero-fullscreen-btn';
+            fsBtn.setAttribute('aria-label', 'Play video fullscreen');
+            fsBtn.innerHTML = '<i class="fas fa-expand" aria-hidden="true"></i>';
+            fsBtn.style.cssText = 'position:absolute;bottom:1rem;right:1rem;z-index:30;width:2.9rem;height:2.9rem;'
+                + 'border-radius:9999px;border:none;cursor:pointer;color:#fff;font-size:1.05rem;'
+                + 'display:flex;align-items:center;justify-content:center;'
+                + 'background:linear-gradient(to right,#FF7DA0,#FFC275);'
+                + 'box-shadow:0 4px 14px rgba(0,0,0,.35);transition:transform .2s ease;';
+            fsBtn.addEventListener('mouseenter', function () { fsBtn.style.transform = 'scale(1.08)'; });
+            fsBtn.addEventListener('mouseleave', function () { fsBtn.style.transform = 'scale(1)'; });
+
+            fsBtn.addEventListener('click', function () {
+                if (heroVideo.requestFullscreen) {
+                    heroVideo.requestFullscreen();
+                } else if (heroVideo.webkitRequestFullscreen) {
+                    heroVideo.webkitRequestFullscreen();
+                } else if (heroVideo.webkitEnterFullscreen) {
+                    // iOS Safari: native fullscreen video player
+                    heroVideo.webkitEnterFullscreen();
+                }
+            });
+
+            heroWrap.appendChild(fsBtn);
+        })();
+    </script>
+
     {{-- ============================================================
          COMING SOON MODE — everything below the hero is temporarily
          disabled (NOT deleted). To bring the full page back, change

@@ -234,18 +234,25 @@ class CustomerController extends Controller
     /**
      * Mark notification as read
      */
-    public function markAsRead()
+    public function markAsRead(Request $request)
     {
         $user = Auth::user();
-        
-        DB::table('notifications')
-            // ->where('id', $id)
-            ->where('user_id', $user->user_id)
-            ->update([
-                'is_read' => 1,
-                'read_at' => now()
-            ]);
-        
+
+        // When an id is supplied, mark only that notification (scoped to this user).
+        // Without an id, keep the legacy "mark everything read" behavior — the
+        // notifications page calls this route with no payload on load to clear the badge.
+        $query = DB::table('notifications')
+            ->where('user_id', $user->user_id);
+
+        if ($request->filled('id')) {
+            $query->where('id', (int) $request->input('id'));
+        }
+
+        $query->update([
+            'is_read' => 1,
+            'read_at' => now()
+        ]);
+
         return response()->json(['success' => true]);
     }
     

@@ -670,11 +670,12 @@ class VendorController extends Controller
 
         // Handle product video
         if ($request->hasFile('productVideo')) {
-            $extension = $image->getClientOriginalExtension();
+            $video = $request->file('productVideo');
+            $extension = $video->getClientOriginalExtension(); // was $image — saved videos with an image extension (or crashed with no images)
             $filename = uniqid() . '.' . $extension; // unique filename
-            $videoPath = $request->file('productVideo')->storeAs('vendor/products/videos', $filename, 'public');
+            $videoPath = $video->storeAs('vendor/products/videos', $filename, 'public');
             $destinationPath = public_path('storage/vendor/products/videos');
-            $request->file('productVideo')->move($destinationPath, $filename);
+            $video->move($destinationPath, $filename);
             VendorProduct::where('id', $product->id)
                 ->update([
                     'video' => $filename
@@ -684,7 +685,7 @@ class VendorController extends Controller
         // Handle product faults
         if ($request->hasFile('faults')) {
             foreach ($request->file('faults') as $index => $faultImage) {
-                $extension = $image->getClientOriginalExtension();
+                $extension = $faultImage->getClientOriginalExtension();
                 $filename = uniqid() . '.' . $extension; // unique filename
                 $faultImagePath = $faultImage->storeAs('vendor/products/faults', $filename, 'public');
                 $destinationPath = public_path('storage/vendor/products/faults');
@@ -1025,6 +1026,15 @@ class VendorController extends Controller
                 ->limit(5)
                 ->get();
 
+            // Total earnings = sum of delivered line items for this vendor's products
+            $earnings = (object) [
+                'total_earnings' => (float) DB::table('carts as c')
+                    ->join('vendor_products as vp', 'c.product_id', '=', 'vp.id')
+                    ->where('vp.user_id', $user_id)
+                    ->where('c.status', 'delivered')
+                    ->sum(DB::raw('c.price * c.quantity'))
+            ];
+
             // // Get vendor orders
             // $orders = DB::table('orders as o')
             //     ->join('vendor_products as p', 'o.product_id', '=', 'p.id')
@@ -1060,7 +1070,7 @@ class VendorController extends Controller
 
             // Generate HTML content
             $html = view('admin/vendor_details', compact([
-                'vendor', 'products'
+                'vendor', 'products', 'earnings'
             ]))->render();
 
             return response()->json([
@@ -1146,6 +1156,27 @@ class VendorController extends Controller
                 'status' => $request->status,
                 'updated_at' => now()
             ]);
+
+        // Notify the customer about the status change (best-effort; never break the update)
+        try {
+            $cart = DB::table('carts')->where('id', $request->order_id)->first();
+            if ($cart && $cart->user_id) {
+                $productName = DB::table('vendor_products')->where('id', $cart->product_id)->value('name') ?? 'Product';
+                DB::table('notifications')->insert([
+                    'user_id' => $cart->user_id,
+                    'title' => 'Order update',
+                    'message' => "Your order item \"{$productName}\" is now: " . ucwords($request->status) . ".",
+                    'type' => 'order',
+                    'icon_class' => 'fas fa-bell',
+                    'icon_color' => 'bg-pink-100 text-[#E85D85]',
+                    'dot_color' => 'bg-[#FF7DA0]',
+                    'is_read' => 0,
+                    'created_at' => now(),
+                ]);
+            }
+        } catch (\Throwable $e) {
+            \Log::warning('order status notify failed: ' . $e->getMessage());
+        }
 
         return response()->json([
             'success' => true,

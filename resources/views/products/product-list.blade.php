@@ -1,3 +1,8 @@
+@php
+    // NOTE: the parent include already passes a $category variable — do not reuse that name.
+    $activeCategories = \App\Support\CategoryCatalog::active();
+    $selectedCategory = trim((string) request('category', ''));
+@endphp
 <script src="{{ asset('js/product-card.js') }}?v={{ time() }}"></script>
 <style>
     .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
@@ -32,12 +37,28 @@
                 All Products
             </h2>
             <div class="brand-divider"></div>
+
+            @if ($selectedCategory !== '')
+                <!-- Active category chip (✕ clears the filter) -->
+                <div class="mt-3 flex justify-center">
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold text-white shadow-sm"
+                          style="background: linear-gradient(115deg, #FF7DA0, #FFC275);">
+                        Category: {{ $selectedCategory }}
+                        <a href="/products/all-page" class="text-white/90 hover:text-white font-bold no-underline leading-none"
+                           title="Clear category filter" aria-label="Clear category filter">&#10005;</a>
+                    </span>
+                </div>
+            @endif
         </div>
 
-        <!-- Category Chips (ss4-style tab row, horizontally scrollable) -->
+        <!-- Category Chips (ss4-style tab row, horizontally scrollable; clicking reloads with ?category=) -->
         <div id="category-chips" class="flex overflow-x-auto whitespace-nowrap scrollbar-none gap-5 sm:gap-7 border-b border-gray-100 mb-4 sm:mb-6 px-1 text-sm sm:text-base text-gray-500">
-            <button data-cat="" class="chip-active flex-shrink-0 pb-2.5 transition-colors" onclick="filterByCategory(this, '')">All</button>
-            <!-- category chips injected by JS -->
+            <a href="/products/all-page"
+               class="{{ $selectedCategory === '' ? 'chip-active' : 'hover:text-gray-900' }} flex-shrink-0 pb-2.5 transition-colors no-underline">All</a>
+            @foreach ($activeCategories as $chipCat)
+                <a href="/products/all-page?category={{ urlencode($chipCat->name) }}"
+                   class="{{ $selectedCategory === $chipCat->name ? 'chip-active' : 'hover:text-gray-900' }} flex-shrink-0 pb-2.5 transition-colors no-underline">{{ $chipCat->emoji }} {{ $chipCat->name }}</a>
+            @endforeach
         </div>
 
         <!-- Products Grid (ss10-style: uniform cards, same size as every other section) -->
@@ -64,7 +85,15 @@
 
     async function loadAllProducts() {
         try {
-            const response = await fetch('/products/all', {
+            // Pass the page's ?category= filter through to the products endpoint.
+            // Without it, /products/all behaves exactly as before (backward compatible).
+            const pageParams = new URLSearchParams(window.location.search);
+            const selectedCategory = (pageParams.get('category') || '').trim();
+            const fetchUrl = selectedCategory
+                ? '/products/all?category=' + encodeURIComponent(selectedCategory)
+                : '/products/all';
+
+            const response = await fetch(fetchUrl, {
                 headers: { 'Accept': 'application/json' }
             });
             const result = await response.json();
@@ -72,33 +101,12 @@
             allListingProducts = result.data || [];
             allListingImages = result.images || {};
 
-            buildCategoryChips(allListingProducts);
             renderListing(allListingProducts);
         } catch (error) {
             console.error('Failed to load products:', error);
             document.getElementById('product-list').innerHTML = '';
             document.getElementById('list-empty').classList.remove('hidden');
         }
-    }
-
-    function buildCategoryChips(products) {
-        const chipRow = document.getElementById('category-chips');
-        const categories = [...new Set(products.map(p => p.category).filter(Boolean))];
-        categories.forEach(cat => {
-            const btn = document.createElement('button');
-            btn.className = 'flex-shrink-0 pb-2.5 hover:text-gray-900 transition-colors';
-            btn.textContent = cat;
-            btn.setAttribute('data-cat', cat);
-            btn.onclick = function () { filterByCategory(this, cat); };
-            chipRow.appendChild(btn);
-        });
-    }
-
-    function filterByCategory(chipEl, category) {
-        document.querySelectorAll('#category-chips button').forEach(b => b.classList.remove('chip-active'));
-        chipEl.classList.add('chip-active');
-        const filtered = category ? allListingProducts.filter(p => p.category === category) : allListingProducts;
-        renderListing(filtered);
     }
 
     function renderListing(products) {

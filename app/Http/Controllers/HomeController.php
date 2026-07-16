@@ -85,13 +85,28 @@ class HomeController extends Controller
         if (!$product) {
             abort(404);
         }
-        if($product->position != 'approved' && $product->user_id != ($user->user_id ?? null)) {
-            return 'blocked';
+        // Non-approved (pending/draft/rejected) products: only the owner vendor
+        // and a logged-in admin may preview them; everyone else gets a 404.
+        $isOwner = $product->user_id == ($user->user_id ?? null);
+        $isAdmin = (bool) session('admin_logged_in');
+        if ($product->position != 'approved' && !$isOwner && !$isAdmin) {
+            abort(404);
         }
+        $isOwnerPreview = $product->position != 'approved';
+
         $vendor = VendorBasicInfo::where('user_id', $product->user_id)->first();
         $vendorUser = DB::table('users')
                         ->where('user_id', $product->user_id)
                         ->first();
+
+        // Some vendors have no vendor_basic_info row yet — fall back to the user record
+        if (!$vendor) {
+            $vendor = (object) [
+                'user_id' => $product->user_id,
+                'full_name' => $vendorUser->full_name ?? 'MJ Cheezain Vendor',
+                'profile_picture' => null,
+            ];
+        }
         $imageMain = VendorProductImage::where('product_id', $product->id)
                     ->where('is_primary', 1)
                     ->first();
@@ -125,9 +140,9 @@ class HomeController extends Controller
             ->avg('rating');
 
         return view('product', compact(
-            'user', 'profile', 'dashboardPage', 'imgPath', 
+            'user', 'profile', 'dashboardPage', 'imgPath',
             'product', 'vendor', 'imageMain', 'images', 'vendorUser',
-            'reviews', 'reviewCount', 'avgRating'
+            'reviews', 'reviewCount', 'avgRating', 'isOwnerPreview'
         ));
     }
 

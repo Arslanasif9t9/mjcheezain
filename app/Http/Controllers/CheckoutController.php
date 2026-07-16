@@ -99,7 +99,7 @@ class CheckoutController extends Controller
         ));
     }
 
-    public function process() {
+    public function process(Request $request) {
         $user = Auth::user();
         $userId = $user->user_id;
 
@@ -108,10 +108,31 @@ class CheckoutController extends Controller
             ->whereNull('order_id')
             ->count();
 
+        // Real money math — mirrors the checkout view:
+        //  - cart flow (CheckoutController::checkout): shipping 2.50, tax 0%, discount 0
+        //  - buy-now flow (CartController::buy):       shipping 2.50, tax 5%, discount 15
+        $subtotal = (float) DB::table('carts')
+            ->where('user_id', $userId)
+            ->whereNull('order_id')
+            ->sum(DB::raw('price * quantity'));
+
+        $shipping = 2.50;
+        if ($request->input('single_buy')) {
+            $tax = $subtotal * 0.05;
+            $discount = 15.00;
+        } else {
+            $tax = $subtotal * 0.00;
+            $discount = 0.00;
+        }
+        $totalAmount = round($subtotal + $shipping + $tax - $discount, 2);
+
         $orderId = DB::table('orders')->insertGetId([
             'user_id' => $userId,
             'quantity' => $totalFound,
-            'total_amount' => 999,
+            'subtotal' => round($subtotal, 2),
+            'delivery_charges' => $shipping,
+            'total_amount' => $totalAmount,
+            'payment_method' => $request->input('payment_method', 'cod'),
             'order_date' => now(),
             'updated_at' => now()
         ]);

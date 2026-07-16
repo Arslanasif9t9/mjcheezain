@@ -45,6 +45,7 @@
                                     <th class="px-4 py-3 text-left">First Product</th>
                                     <th class="px-4 py-3 text-left">Date</th>
                                     <th class="px-4 py-3 text-left">Status</th>
+                                    <th class="px-4 py-3 text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
@@ -82,6 +83,23 @@
                                                 {{ ucfirst($s->status) }}
                                             </span>
                                         </td>
+                                        <td class="px-4 py-3">
+                                            @if($s->status === 'pending')
+                                                <div class="flex items-center justify-end gap-2 whitespace-nowrap">
+                                                    <button onclick="suggestionAction({{ $s->id }}, 'approve')"
+                                                            class="px-3 py-1.5 rounded-lg text-xs font-semibold text-white hover:opacity-90 transition"
+                                                            style="background:linear-gradient(115deg,#FF7DA0,#FFC275)">
+                                                        <i class="fas fa-check mr-1"></i>Approve
+                                                    </button>
+                                                    <button onclick="suggestionAction({{ $s->id }}, 'reject')"
+                                                            class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-50 text-red-500 hover:bg-red-100 transition">
+                                                        <i class="fas fa-xmark mr-1"></i>Reject
+                                                    </button>
+                                                </div>
+                                            @else
+                                                <div class="text-right text-gray-300 text-xs">—</div>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -91,5 +109,44 @@
             @endif
         </div>
     </div>
+
+    <script>
+        function toast(msg, ok = true) {
+            const t = document.createElement('div');
+            t.className = 'fixed bottom-6 right-6 z-[9999] px-5 py-3 rounded-xl shadow-lg text-white text-sm font-medium flex items-center gap-2 ' + (ok ? '' : 'bg-red-500');
+            if (ok) t.style.background = 'linear-gradient(115deg,#FF7DA0,#FFC275)';
+            t.innerHTML = '<i class="fas ' + (ok ? 'fa-check-circle' : 'fa-exclamation-circle') + '"></i><span></span>';
+            t.querySelector('span').textContent = msg;
+            document.body.appendChild(t);
+            setTimeout(() => { t.style.transition = 'opacity .4s'; t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 2500);
+        }
+        async function post(url, body = {}) {
+            try {
+                const r = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(body)
+                });
+                return await r.json();
+            } catch (e) { return { success: false, message: 'Network error — please retry.' }; }
+        }
+        async function suggestionAction(id, action) {
+            const msg = action === 'approve'
+                ? 'Approve this category request? The category (and subcategory, if any) will go live.'
+                : 'Reject this category request?';
+            if (!confirm(msg)) return;
+            const res = await post('/admin/category-suggestions/' + id + '/' + action, {});
+            if (res.success) {
+                toast(res.message || 'Done.');
+                setTimeout(() => location.reload(), 700);
+            } else {
+                toast(res.message || 'Action failed.', false);
+            }
+        }
+    </script>
 </body>
 </html>

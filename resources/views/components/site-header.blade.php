@@ -122,6 +122,13 @@
                      All items are direct flex children so CSS `order` can move
                      the hamburger to the right side in the compact (scrolled) state. -->
                 <div class="flex items-center w-full px-1 gap-1.5">
+                    <!-- Back Button (mobile only; revealed by JS when there is history and we're not on home) -->
+                    <button id="mobile-back-btn" onclick="history.back()"
+                            class="hidden md:hidden items-center justify-center w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm text-[#000000] flex-shrink-0 focus:outline-none hover:bg-white/30 transition-colors"
+                            aria-label="Go back">
+                        <i class="fa-solid fa-arrow-left text-base"></i>
+                    </button>
+
                     <!-- Hamburger Menu Toggle Button (moves to the right on scroll) -->
                     <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-[#000000] focus:outline-none p-1 hover:opacity-75 transition-colors" aria-label="Toggle Menu">
                         <i class="fa-solid fa-bars text-xl"></i>
@@ -309,6 +316,17 @@
     </div>
 
     <script>
+        // Mobile back button: only show when there's somewhere to go back to
+        // and we're not already on the home page. history.back() uses the
+        // bfcache where available, so no unnecessary refresh.
+        (function () {
+            var backBtn = document.getElementById('mobile-back-btn');
+            if (backBtn && window.history.length > 1 && window.location.pathname !== '/') {
+                backBtn.classList.remove('hidden');
+                backBtn.classList.add('flex');
+            }
+        })();
+
         // Toggles dropdowns on desktop
         function toggleDropdown(elementId) {
             const dropdown = document.getElementById(elementId);

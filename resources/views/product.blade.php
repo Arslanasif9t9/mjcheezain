@@ -88,6 +88,16 @@
 
     <div id="main" class="mx-auto px-0 pt-0 pb-12 sm:px-6 lg:px-8 sm:py-12">
 
+        @if($isOwnerPreview ?? false)
+            <div class="mx-4 sm:mx-0 mb-4 flex items-center gap-2.5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+                <i class="fas fa-eye text-amber-500"></i>
+                <p class="text-sm text-amber-700 font-medium m-0">
+                    Preview mode — yeh product abhi live nahi hai
+                    ({{ ucfirst($product->position ?? 'pending') }}). Sirf aap (aur admin) isay dekh sakte hain.
+                </p>
+            </div>
+        @endif
+
         <!-- Product Summary Section -->
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-12 mb-12">
 
@@ -96,7 +106,7 @@
                 <!-- Main Image with icons -->
                 <div class="relative">
                     <img id="main-image"
-                        src="{{ asset('storage/vendor/products/images/'.$imageMain->image_path) }}"
+                        src="{{ $imageMain ? asset('storage/vendor/products/images/'.$imageMain->image_path) : asset('img/default-product.jpg') }}"
                         class="border-0 sm:border-2 sm:border-pink-200 w-full h-[55vh] sm:h-[60vh] lg:h-[72vh] aspect-square object-contain rounded-none sm:rounded-lg overflow-hidden">
                     {{-- <img id="main-image"
                         src="https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg" 

@@ -22,6 +22,8 @@ use App\Http\Controllers\ProfileImageController;
 use App\Http\Controllers\Vendor\AutoPartsProductController;
 use App\Http\Controllers\Vendor\AutoPartsProductShowController;
 use App\Http\Controllers\MjGuideController;
+use App\Http\Controllers\AdminCategoryController;
+use App\Http\Controllers\AdminOpsController;
 
 // Auto Parts Public Routes
 Route::prefix('auto-parts')->name('auto-parts.')->group(function () {
@@ -76,6 +78,7 @@ if (app()->environment('local')) {
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('cosmetics', [HomeController::class, 'cosmetics']);
 Route::get('/product-listing', [HomeController::class, 'productList']);
+Route::get('/products/all-page', [HomeController::class, 'productList']); // filtered listing page (?category=)
 
 Route::view('/login-user', 'home/login');
 Route::post('/send-otp', [AuthController::class, 'sendOtp']);
@@ -186,6 +189,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('customer')->group(function () {
         Route::get('/notifications', [CustomerController::class, 'notifications'])->name('customer.notifications');
         Route::post('/notifications/read', [CustomerController::class, 'markAsRead'])->name('customer.notifications.read');
+        Route::post('/notifications/{id}/read', [CustomerController::class, 'markAsRead'])->name('customer.notifications.read.single');
     });
     Route::prefix('vendor')->group(function () {
         Route::get('/notifications', [VendorController::class, 'notifications'])->name('vendor.notifications');
@@ -290,18 +294,41 @@ Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout
 Route::prefix('admin')->group(function () {
     Route::get('/login', [AdminAuthController::class, 'loginForm']);
     Route::post('/login', [AdminAuthController::class, 'login']);
+    Route::get('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+});
+
+// Every admin page/action beyond login requires the admin session (see AdminAuth middleware)
+Route::prefix('admin')->middleware('admin.auth')->group(function () {
     Route::get('/dashboard', [AdminAuthController::class, 'dashboard']);
     Route::get('/sales-data', [SalesController::class, 'getSalesData']);
 
     Route::get('/vendors', [AdminAuthController::class, 'vendors']);
-    Route::post('/admin/vendor/status', [VendorController::class, 'updateStatus'])->name('admin.vendor.status');
+    Route::post('/vendor/status', [VendorController::class, 'updateStatus'])->name('admin.vendor.status');
     Route::get('/vendor/details/{user_id}', [VendorController::class, 'getVendorDetails']);
 
     Route::get('/products', [AdminAuthController::class, 'products']);
     Route::post('/change-product-position', [ProductController::class, 'changeProductPosition']);
     Route::post('/delete-product', [ProductController::class, 'deleteProduct']);
 
+    // Categories management + vendor suggestions
+    Route::get('/categories', [AdminCategoryController::class, 'index'])->name('admin.categories');
+    Route::post('/categories', [AdminCategoryController::class, 'store']);
+    Route::post('/categories/{id}/update', [AdminCategoryController::class, 'update']);
+    Route::post('/categories/{id}/delete', [AdminCategoryController::class, 'destroy']);
+    Route::post('/categories/{id}/subcategories', [AdminCategoryController::class, 'storeSub']);
+    Route::post('/subcategories/{subId}/delete', [AdminCategoryController::class, 'destroySub']);
     Route::get('/category-suggestions', [AdminAuthController::class, 'categorySuggestions']);
+    Route::post('/category-suggestions/{id}/approve', [AdminCategoryController::class, 'approveSuggestion']);
+    Route::post('/category-suggestions/{id}/reject', [AdminCategoryController::class, 'rejectSuggestion']);
 
-    Route::get('/orders', [AdminAuthController::class, 'orders']);
+    // Operations: orders, withdraw requests, customers, returns & replacements oversight
+    Route::get('/orders', [AdminOpsController::class, 'orders']);
+    Route::post('/orders/update-status', [AdminOpsController::class, 'updateOrderStatus'])->name('admin.orders.status');
+    Route::get('/withdraw-requests', [AdminOpsController::class, 'withdrawRequests'])->name('admin.withdraws');
+    Route::post('/withdraw-requests/{id}/status', [AdminOpsController::class, 'updateWithdrawStatus']);
+    Route::get('/customers', [AdminOpsController::class, 'customers'])->name('admin.customers');
+    Route::get('/returns', [AdminOpsController::class, 'returns'])->name('admin.returns');
+    Route::post('/returns/{id}/status', [AdminOpsController::class, 'updateReturnStatus']);
+    Route::get('/replacements', [AdminOpsController::class, 'replacements'])->name('admin.replacements');
+    Route::post('/replacements/{id}/status', [AdminOpsController::class, 'updateReplacementStatus']);
 });

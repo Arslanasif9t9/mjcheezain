@@ -107,7 +107,8 @@ class CartController extends Controller
             'session_id' => $sessionId,
             'product_id' => $product_id,
             'quantity' => $quantity,
-            'price' => $product->mrp ?: $product->selling_price,
+            // Same pricing rule as addToCart() so checkout math is consistent
+            'price' => $product->selling_price * 1.17,
             'single_buy' => true
         ]);
         // dd($temp);

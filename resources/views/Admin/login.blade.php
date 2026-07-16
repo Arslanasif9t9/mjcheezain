@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,158 +5,121 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Admin Panel Login</title>
+    <title>Admin Login | MJCheezain</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .brand-gradient { background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); }
+        .brand-input:focus {
+            border-color: #E85D85;
+            box-shadow: 0 0 0 3px rgba(232, 93, 133, 0.15);
+            outline: none;
+        }
+    </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-[#FFF6F0]">
     <div class="min-h-screen flex items-center justify-center p-4">
-        <!-- Login Form -->
-        <div id="loginFormContainer" class="w-full max-w-md bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300">
-            <div class="p-8">
-                <div class="text-center mb-8">
-                    <i class="fas fa-lock text-4xl text-blue-600 mb-4"></i>
-                    <h1 class="text-2xl font-bold text-gray-800">Admin Panel</h1>
-                    <p class="text-gray-600 mt-2">Enter your credentials to access the dashboard</p>
+        <div id="loginFormContainer" class="w-full max-w-4xl bg-white rounded-2xl overflow-hidden flex flex-col md:flex-row" style="box-shadow: 0 20px 50px rgba(232, 93, 133, 0.18);">
+
+            <!-- Brand panel -->
+            <div class="brand-gradient md:w-5/12 p-10 flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full pointer-events-none"></div>
+                <div class="absolute -bottom-16 -left-10 w-56 h-56 bg-white/10 rounded-full pointer-events-none"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center gap-2">
+                        <span class="text-white font-extrabold text-3xl tracking-wider">MJ</span>
+                        <span class="text-white/90 font-semibold text-lg">Cheezain</span>
+                    </div>
+                    <p class="text-white/80 text-sm mt-1">Marketplace Control Center</p>
+                </div>
+                <div class="relative z-10 mt-10 md:mt-0">
+                    <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center mb-4">
+                        <i class="fas fa-shield-halved text-white text-2xl"></i>
+                    </div>
+                    <h2 class="text-white text-2xl font-bold leading-snug">Admin Panel</h2>
+                    <p class="text-white/85 text-sm mt-2">Manage vendors, products, orders and payouts from one place.</p>
+                </div>
+            </div>
+
+            <!-- Login card -->
+            <div class="md:w-7/12 p-8 md:p-12">
+                <div class="mb-8">
+                    <h1 class="text-2xl font-bold text-gray-900">Welcome back</h1>
+                    <p class="text-gray-500 text-sm mt-1">Enter your credentials to access the dashboard</p>
                 </div>
 
                 <!-- Error Message -->
-                <div id="errorMessage" class="hidden bg-red-50 border-l-4 border-red-500 p-4 mb-6">
-                    <div class="flex">
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-exclamation-circle text-red-500"></i>
-                        </div>
-                        <div class="ml-3">
-                            <p id="errorText" class="text-sm text-red-700"></p>
-                        </div>
+                <div id="errorMessage" class="hidden bg-red-50 border-l-4 border-red-400 rounded-lg p-4 mb-6">
+                    <div class="flex items-center">
+                        <i class="fas fa-exclamation-circle text-red-500 flex-shrink-0"></i>
+                        <p id="errorText" class="ml-3 text-sm text-red-700"></p>
                     </div>
-                </div>
-
-                <form id="loginForm" class="space-y-6">
-                    <div>
-                        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-user text-gray-400"></i>
-                            </div>
-                            <input type="text" id="username" name="username" required autocomplete="username"
-                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-lock text-gray-400"></i>
-                            </div>
-                            <input type="password" id="password" name="password" required autocomplete="current-password"
-                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <input id="remember-me" name="remember-me" type="checkbox"
-                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                            <label for="remember-me" class="ml-2 block text-sm text-gray-700">Remember me</label>
-                        </div>
-
-                        <div class="text-sm">
-                            <a href="#" id="forgotPasswordLink" class="font-medium text-blue-600 hover:text-blue-500">Forgot password?</a>
-                        </div>
-                    </div>
-
-                    <div>
-                        <button type="submit"
-                            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Sign in
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Forgot Password Form (Hidden by default) -->
-        <div id="forgotPasswordContainer" class="hidden w-full max-w-md bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300">
-            <div class="p-8">
-                <div class="text-center mb-8">
-                    <i class="fas fa-key text-4xl text-blue-600 mb-4"></i>
-                    <h1 class="text-2xl font-bold text-gray-800">Reset Password</h1>
-                    <p class="text-gray-600 mt-2">Enter your email to receive a reset link</p>
                 </div>
 
                 <!-- Success Message -->
-                <div id="successMessage" class="hidden bg-green-50 border-l-4 border-green-500 p-4 mb-6">
-                    <div class="flex">
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-check-circle text-green-500"></i>
-                        </div>
-                        <div class="ml-3">
-                            <p id="successText" class="text-sm text-green-700"></p>
-                        </div>
+                <div id="successMessage" class="hidden bg-green-50 border-l-4 border-green-400 rounded-lg p-4 mb-6">
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle text-green-500 flex-shrink-0"></i>
+                        <p id="successText" class="ml-3 text-sm text-green-700"></p>
                     </div>
                 </div>
 
-                <form id="forgotPasswordForm" class="space-y-6">
+                <form id="loginForm" class="space-y-5">
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+                        <label for="username" class="block text-sm font-semibold text-gray-700 mb-1.5">Username</label>
                         <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-envelope text-gray-400"></i>
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                <i class="fas fa-user text-gray-400 text-sm"></i>
                             </div>
-                            <input type="email" id="email" name="email" required autocomplete="email"
-                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <input type="text" id="username" name="username" required autocomplete="username"
+                                class="brand-input block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white transition-colors"
+                                placeholder="Your admin username">
                         </div>
-                        <p class="mt-2 text-sm text-gray-500">
-                            You'll receive an email with a password reset link if this email is registered.
-                        </p>
                     </div>
 
-                    <div class="flex items-center justify-between">
-                        <div class="text-sm">
-                            <a href="#" id="backToLoginLink" class="font-medium text-blue-600 hover:text-blue-500">
-                                <i class="fas fa-arrow-left mr-1"></i> Back to login
-                            </a>
+                    <div>
+                        <label for="password" class="block text-sm font-semibold text-gray-700 mb-1.5">Password</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                <i class="fas fa-lock text-gray-400 text-sm"></i>
+                            </div>
+                            <input type="password" id="password" name="password" required autocomplete="current-password"
+                                class="brand-input block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white transition-colors"
+                                placeholder="••••••••">
                         </div>
-
-                        <button type="submit"
-                            class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Send Reset Link
-                        </button>
                     </div>
+
+                    <div class="flex items-center">
+                        <input id="remember-me" name="remember-me" type="checkbox"
+                            class="h-4 w-4 border-gray-300 rounded" style="accent-color: #E85D85;">
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-600">Remember me</label>
+                    </div>
+
+                    <button type="submit" id="loginSubmitBtn"
+                        class="brand-gradient w-full flex justify-center items-center gap-2 py-3 px-4 rounded-xl text-sm font-bold text-white hover:opacity-90 transition-opacity"
+                        style="box-shadow: 0 8px 20px rgba(255, 125, 160, 0.35);">
+                        <i class="fas fa-right-to-bracket"></i> Sign in
+                    </button>
                 </form>
+
+                <p class="text-center text-xs text-gray-400 mt-8">
+                    Restricted area — authorized administrators only.
+                </p>
             </div>
         </div>
     </div>
 
     <script>
         // DOM Elements
-        const loginFormContainer = document.getElementById('loginFormContainer');
-        const forgotPasswordContainer = document.getElementById('forgotPasswordContainer');
-        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
-        const backToLoginLink = document.getElementById('backToLoginLink');
         const errorMessage = document.getElementById('errorMessage');
         const errorText = document.getElementById('errorText');
         const successMessage = document.getElementById('successMessage');
         const successText = document.getElementById('successText');
         const loginForm = document.getElementById('loginForm');
-        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
-
-        // Toggle between login and forgot password forms
-        forgotPasswordLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            loginFormContainer.classList.add('hidden');
-            forgotPasswordContainer.classList.remove('hidden');
-            hideMessages();
-        });
-
-        backToLoginLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            forgotPasswordContainer.classList.add('hidden');
-            loginFormContainer.classList.remove('hidden');
-            hideMessages();
-        });
 
         // Hide all messages
         function hideMessages() {
@@ -181,17 +143,17 @@
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             hideMessages();
-            
+
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const rememberMe = document.getElementById('remember-me').checked;
-            
+
             if (!username || !password) {
                 showError('Please enter both username and password');
                 return;
             }
-            
+
             try {
                 const response = await fetch('/admin/login', {
                     method: 'POST',
@@ -206,11 +168,10 @@
                         remember_me: rememberMe
                     })
                 });
-                
-                // console.log(response);
+
                 const data = await response.json();
                 console.log(data);
-                
+
                 if (data.success) {
                     showSuccess(data.message);
                     // Redirect to dashboard after 1 second
@@ -223,50 +184,6 @@
             } catch (error) {
                 showError('An error occurred during login. Please try again.');
                 console.error('Login error:', error);
-            }
-        });
-
-        // Forgot password form submission
-        forgotPasswordForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            hideMessages();
-            
-            const email = document.getElementById('email').value;
-            
-            if (!email) {
-                showError('Please enter your email address');
-                return;
-            }
-            
-            // Validate email format
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                showError('Please enter a valid email address');
-                return;
-            }
-            
-            try {
-                const response = await fetch('auth_handler.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({
-                        action: 'forgot_password',
-                        email: email
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    showSuccess(data.message);
-                    forgotPasswordForm.reset();
-                } else {
-                    showError(data.message);
-                }
-            } catch (error) {
-                showError('An error occurred. Please try again later.');
-                console.error('Forgot password error:', error);
             }
         });
 

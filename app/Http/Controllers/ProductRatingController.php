@@ -284,7 +284,9 @@ class ProductRatingController extends Controller
                 ], 404);
             }
             
-            if ($replacement->current_step !== 'request_approved') {
+            // 'request_approved' is the canonical approved step; 'approved' is accepted
+            // for legacy rows written before the vendor/customer vocabulary was unified.
+            if (!in_array($replacement->current_step, ['request_approved', 'approved'])) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Cannot mark as shipped at this stage'

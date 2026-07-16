@@ -3,350 +3,221 @@
 
 <head>
     <script src="{{ asset('js/img-fallback.js') }}"></script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard</title>
-  <!-- Tailwind CSS  -->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- font-awesome  -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google font  -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="{{ asset('css/css/style.css') }}">
-  <style>
-    .scrollbar-hide::-webkit-scrollbar {
-      display: none;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | MJCheezain</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .brand-gradient { background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); }
+        .stat-card {
+            background: #ffffff;
+            border-radius: 1rem;
+            border: 1px solid #FDE7EE;
+            box-shadow: 0 8px 24px rgba(232, 93, 133, 0.08);
+            padding: 1.25rem;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(232, 93, 133, 0.14); }
+        .stat-icon {
+            width: 44px; height: 44px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; flex-shrink: 0;
+        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+    </style>
 </head>
 
-<body class="bg-gray-100 text-gray-800">
-  <div class="flex min-h-screen">
-    <!-- Sidebar -->
-    <x-admin.sidebar />
+<body class="bg-[#FFF6F0] text-gray-800">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <x-admin.sidebar />
 
-    <!-- Main Content -->
-    <main class="flex-1 p-6 space-y-6">
-      <!-- Top Cards -->
-      <div class="flex">
-        <div class="w-max bg-green-500 text-white px-4 py-2 mx-2 rounded font-bold">Earnings</div>
-        <div class="w-max bg-green-500 text-white px-4 py-2 mx-2 rounded font-bold">Earnings</div>
-        <div class="w-max bg-green-500 text-white px-4 py-2 mx-2 rounded font-bold">Earnings</div>
-      </div>
-      <div class="flex flex-wrap gap-4 top-cards">
-          <div class="bg-blue-300 text-white shadow rounded p-4 w-[23%]">
-            <div class="text-2xl font-bold">
-               {{ $active_users }} <small class="text-sm font-normal"> ({{ $total_users }}) </small>
+        <!-- Main Content -->
+        <main class="flex-1 min-w-0 p-4 md:p-8 space-y-6">
+            <!-- Page header -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pt-12 md:pt-0">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900"><i class="fa-solid fa-house text-[#E85D85] mr-2"></i>Dashboard</h1>
+                    <p class="text-sm text-gray-500 mt-0.5">Overview of your marketplace performance</p>
+                </div>
+                <div class="text-sm text-gray-500 bg-white border border-pink-100 rounded-xl px-4 py-2 shadow-sm w-max">
+                    <i class="fa-regular fa-calendar mr-1.5 text-[#E85D85]"></i>{{ now()->format('d M Y') }}
+                </div>
             </div>
-            <div class="text-right row-span-2 text-3xl"><i class="fa-solid fa-users"></i></div>
-            <div>Total Users</div>
-          </div>
-          <div class="bg-green-500 text-white shadow rounded p-4 w-[23%]">
-            <div class="text-2xl font-bold">
-              {{ $orders }}
-            </div>
-            <div class="text-right row-span-2 text-3xl"><i class="fa-solid fa-truck"></i></div>
-            <div>Total Orders</div>
-          </div>
-          <div class="bg-red-500 text-white shadow rounded p-4 w-[23%]">
-            <div class="text-2xl font-bold">
-              0
-            </div>
-            <div class="text-right row-span-2 text-3xl"><i class="fa-solid fa-rotate-left"></i></div>
-            <div>Total Return Orders</div>
-          </div>
-          <div class="bg-orange-500 text-white shadow rounded p-4 w-[23%]">
-            <div class="text-2xl font-bold">
-              0
-            </div>
-            <div class="text-right row-span-2 text-3xl font-bold"><i class="fa-solid fa-xmark"></i></div>
-            <div>Total Cancelled Orders</div>
-          </div>
-          <div class="bg-orange-500 text-white shadow rounded p-4 w-[23%]" style="grid-template-columns: 1fr 2fr;">
-            <div class="row-span-2 text-3xl font-bold"><i class="fa-solid fa-users"></i></div>
-            <div class="text-right text-2xl font-bold">
-              {{ $active_vendors }} <small class="text-sm font-normal"> ({{ $vendors }}) </small>
-            </div>
-            <div class="text-right">Total Vendors</div>
-          </div>
-          <div class="bg-red-500 text-white shadow rounded p-4 w-[23%]" style="grid-template-columns: 1fr 5fr;">
-            <div class="row-span-2 text-3xl font-bold"><i class="fa-solid fa-file"></i></div>
-            <div class="text-right text-2xl font-bold">
-                  0 <br>
-                  <span class='text-sm font-normal'> V(0) </span>
-                  <span class='text-sm font-normal'> PR(0) </span>
-                  <span class='text-sm font-normal'> PM(0) </span>
-                  <span class='text-sm font-normal'> W(0) </span>
-            </div>
-            <div class="text-right">Total requests</div>
-          </div>
-          <div class="bg-green-500 text-white shadow rounded p-4 w-[23%]" style="grid-template-columns: 1fr 5fr;">
-            <div class="row-span-2 text-3xl font-bold"><i class="fa-solid fa-file"></i></div>
-            <div class="text-right text-2xl font-bold">
-              0
-            </div>
-            <div class="text-right">Total value of sales</div>
-          </div>
-          <div class="bg-blue-300 text-white shadow rounded p-4 w-[23%]" style="grid-template-columns: 1fr 3fr;">
-            <div class="row-span-2 text-3xl font-bold"><i class="fa-solid fa-file"></i></div>
-            <div class="text-right text-2xl font-bold">0</div>
-            <div class="text-right">Your Balance</div>
-          </div>
-      </div>
 
-      <!-- Statistics and Table -->
-      <div class="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-6">
-        <div class="bg-white shadow rounded p-4 w-full  mx-auto">
-          <div class="font-semibold mb-4 text-center text-xl w-full">Statistics - Last 6 Months Sales</div>
-          <canvas id="salesPieChart" class="w-full"></canvas>
-        </div>
+            <!-- Stat cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                <div class="stat-card flex items-center gap-4">
+                    <div class="stat-icon bg-pink-50 text-[#E85D85]"><i class="fa-solid fa-users"></i></div>
+                    <div>
+                        <div class="text-xs text-gray-500 font-medium">Total Users</div>
+                        <div class="text-xl font-bold text-gray-900">{{ $active_users }} <span class="text-xs font-medium text-gray-400">/ {{ $total_users }}</span></div>
+                    </div>
+                </div>
+                <div class="stat-card flex items-center gap-4">
+                    <div class="stat-icon bg-orange-50 text-orange-500"><i class="fa-solid fa-store"></i></div>
+                    <div>
+                        <div class="text-xs text-gray-500 font-medium">Vendors (active / total)</div>
+                        <div class="text-xl font-bold text-gray-900">{{ $active_vendors }} <span class="text-xs font-medium text-gray-400">/ {{ $vendors }}</span></div>
+                    </div>
+                </div>
+                <div class="stat-card flex items-center gap-4">
+                    <div class="stat-icon bg-blue-50 text-blue-500"><i class="fa-solid fa-truck"></i></div>
+                    <div>
+                        <div class="text-xs text-gray-500 font-medium">Total Orders</div>
+                        <div class="text-xl font-bold text-gray-900">{{ $orders }}</div>
+                    </div>
+                </div>
+                <div class="stat-card flex items-center gap-4">
+                    <div class="stat-icon brand-gradient text-white"><i class="fa-solid fa-sack-dollar"></i></div>
+                    <div>
+                        <div class="text-xs text-gray-500 font-medium">Total Sales (delivered)</div>
+                        <div class="text-xl font-bold text-gray-900">Rs. {{ number_format($total_sales) }}</div>
+                    </div>
+                </div>
+                <div class="stat-card flex items-center gap-4">
+                    <div class="stat-icon bg-red-50 text-red-500"><i class="fa-solid fa-rotate-left"></i></div>
+                    <div>
+                        <div class="text-xs text-gray-500 font-medium">Return Requests</div>
+                        <div class="text-xl font-bold text-gray-900">{{ $total_returns }}</div>
+                    </div>
+                </div>
+                <div class="stat-card flex items-center gap-4">
+                    <div class="stat-icon bg-purple-50 text-purple-500"><i class="fa-solid fa-right-left"></i></div>
+                    <div>
+                        <div class="text-xs text-gray-500 font-medium">Replacement Requests</div>
+                        <div class="text-xl font-bold text-gray-900">{{ $total_replacements }}</div>
+                    </div>
+                </div>
+                <div class="stat-card flex items-center gap-4">
+                    <div class="stat-icon bg-amber-50 text-amber-500"><i class="fa-solid fa-wallet"></i></div>
+                    <div>
+                        <div class="text-xs text-gray-500 font-medium">Pending Withdrawals</div>
+                        <div class="text-xl font-bold text-gray-900">Rs. {{ number_format($pending_withdrawals) }}</div>
+                    </div>
+                </div>
+                <div class="stat-card flex items-center gap-4">
+                    <div class="stat-icon bg-teal-50 text-teal-500"><i class="fa-solid fa-box"></i></div>
+                    <div>
+                        <div class="text-xs text-gray-500 font-medium">Pending Products</div>
+                        <div class="text-xl font-bold text-gray-900">{{ $pending_products }}</div>
+                    </div>
+                </div>
+            </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-          document.addEventListener('DOMContentLoaded', function () {
-            fetch('/admin/sales-data') // replace with your PHP file path
-              .then(response => response.json())
-              .then(chartData => {
-                const ctx = document.getElementById('salesPieChart').getContext('2d');
-                new Chart(ctx, {
-                  type: 'pie',
-                  data: {
-                    labels: chartData.labels,
-                    datasets: [{
-                      label: 'Orders',
-                      data: chartData.data,
-                      backgroundColor: [
-                        '#3b82f6', // August - Blue
-                        '#f97316', // September - Orange
-                        '#ef4444', // October - Red
-                        '#67e8f9', // November - Teal
-                        '#4ade80', // December - Green
-                        '#eb8bfaff'  // Extra fallback
-                      ],
-                      borderColor: '#ffffff',
-                      borderWidth: 2
-                    }]
-                  },
-                  options: {
-                    responsive: false,
-                    plugins: {
-                      legend: {
-                        position: 'top'
-                      }
-                    }
-                  }
-                });
-              });
-          });
-        </script>
+            <!-- Secondary row -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="stat-card flex items-center gap-4">
+                    <div class="stat-icon bg-gray-100 text-gray-500"><i class="fa-solid fa-xmark"></i></div>
+                    <div>
+                        <div class="text-xs text-gray-500 font-medium">Cancelled Orders</div>
+                        <div class="text-xl font-bold text-gray-900">{{ $cancelled_orders }}</div>
+                    </div>
+                </div>
+                <a href="/admin/withdraw-requests" class="stat-card flex items-center justify-between gap-4 no-underline hover:no-underline">
+                    <div class="flex items-center gap-4">
+                        <div class="stat-icon brand-gradient text-white"><i class="fa-solid fa-arrow-right"></i></div>
+                        <div>
+                            <div class="text-xs text-gray-500 font-medium">Quick Action</div>
+                            <div class="text-base font-bold text-gray-900">Review withdraw requests</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-[#E85D85]"></i>
+                </a>
+            </div>
 
-        {{-- <div class="bg-white shadow rounded p-4 overflow-auto">
-          <div class="font-semibold mb-2">Recent Orders</div>
-          <?php 
-            // Query to get top 5 recent orders with vendor and customer info
-            $sql = "SELECT 
-                        o.id,
-                        v.store_name AS vendor_name,
-                        o.id AS order_number,
-                        p.name AS product_name,
-                        CONCAT(c.first_name, ' ', c.last_name) AS customer_name,
-                        o.total_amount AS order_total,
-                        o.order_date,
-                        o.fulfillment
-                    FROM 
-                        orders o
-                    JOIN 
-                        vendor_basic_info v ON o.vendor_id = v.user_id
-                    JOIN 
-                        vendor_products p ON o.product_id = p.id
-                    JOIN 
-                        customer_profile c ON o.user_id = c.user_id
-                    ORDER BY 
-                        o.order_date DESC
-                    LIMIT 5";
+            <!-- Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-6">
+                <div class="bg-white rounded-2xl border border-pink-100 p-6" style="box-shadow: 0 8px 24px rgba(232, 93, 133, 0.08);">
+                    <div class="font-semibold mb-4 text-gray-900">Statistics — Last 6 Months Sales</div>
+                    <div class="flex justify-center">
+                        <canvas id="salesPieChart" class="max-w-full"></canvas>
+                    </div>
+                </div>
 
-            $result = $conn->query($sql);
-          ?>
-          <style>
-            .ellipsis {
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              max-width: 150px;
-              display: inline-block;
-            }
-            
-            @media (max-width: 768px) {
-                table {
-                    display: block;
-                    overflow-x: auto;
-                    white-space: nowrap;
-                }
-            }
-          </style>
-          <table class="min-w-full text-sm" style="font-size: 15px">
-                <thead>
-                    <tr class="text-left border-b">
-                        <th class="py-2">#</th>
-                        <th class="py-2">Vendor name</th>
-                        <th class="py-2">Order number</th>
-                        <th class="py-2">Product name</th>
-                        <th class="py-2">Customer</th>
-                        <th class="py-2">Order total</th>
-                        <th class="py-2">Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if ($result->num_rows > 0) {
-                        $counter = 1;
-                        while($row = $result->fetch_assoc()) {
-                            echo '<tr class="border-b hover:bg-gray-50">';
-                            echo '<td class="py-3">' . $counter . '</td>';
-                            echo '<td class="py-3"><span class="ellipsis" title="' . htmlspecialchars($row['vendor_name']) . '">' . htmlspecialchars($row['vendor_name']) . '</span></td>';
-                            echo '<td class="py-3">' . htmlspecialchars($row['order_number']) . '</td>';
-                            echo '<td class="py-3"><span class="ellipsis" title="' . htmlspecialchars($row['product_name']) . '">' . htmlspecialchars($row['product_name']) . '</span></td>';
-                            echo '<td class="py-3"><span class="ellipsis" title="' . htmlspecialchars($row['customer_name']) . '">' . htmlspecialchars($row['customer_name']) . '</span></td>';
-                            echo '<td class="py-3">$' . number_format($row['order_total'], 2) . '</td>';
-                            echo '<td class="py-3">' . date('d F Y', strtotime($row['order_date'])) . '</td>';
-                            echo '</tr>';
-                            $counter++;
-                        }
-                    } else {
-                        echo '<tr><td colspan="7" class="py-4 text-center">No orders found</td></tr>';
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div> --}}
-        <!-- Charts -->
-      {{-- <div class="grid grid-cols-1 md:grid-cols-2 gap-6"> --}}
-        <div class="bg-white shadow rounded p-4">
-          <div class="font-semibold mb-2">Monthly Orders - Last 6 Months Sales</div>
-            <canvas id="ordersChart" height="100"></canvas>
+                <div class="bg-white rounded-2xl border border-pink-100 p-6" style="box-shadow: 0 8px 24px rgba(232, 93, 133, 0.08);">
+                    <div class="font-semibold mb-4 text-gray-900">Monthly Orders — Last 6 Months</div>
+                    <canvas id="ordersChart" height="120"></canvas>
+                </div>
+            </div>
 
-            <script>
-              // Fetch the data from PHP
-              fetch('/admin/sales-data')
-                .then(response => response.json())
-                .then(result => {
-                  const ctx = document.getElementById('ordersChart').getContext('2d');
+            <footer class="text-center text-xs text-gray-400 py-4">&copy; {{ date('Y') }} MJCheezain — Admin Panel</footer>
+        </main>
+    </div>
 
-                  new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                      labels: result.labels,
-                      datasets: [{
-                        label: 'Orders',
-                        data: result.data,
-                        backgroundColor: 'rgba(59, 130, 246, 0.7)', // Tailwind blue
-                        borderRadius: 4,
-                        barThickness: 40
-                      }]
-                    },
-                    options: {
-                      responsive: true,
-                      plugins: {
-                        legend: {
-                          display: true,
-                          position: 'top'
-                        }
-                      },
-                      scales: {
-                        y: {
-                          beginAtZero: true,
-                          ticks: {
-                            stepSize: 5
-                          }
-                        }
-                      }
-                    }
-                  });
-                })
-                .catch(error => {
-                  console.error('Error loading chart data:', error);
-                });
-            </script>
-        {{-- </div> --}}
-        {{-- <div class="bg-white shadow rounded p-4">
-          <div class="font-semibold mb-2">Monthly Users - Last 6 Months Sales</div>
-          <canvas id="userAreaChart"></canvas>
-          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-          <script>
-            document.addEventListener('DOMContentLoaded', function () {
-              fetch('get_sales_data.php')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/admin/sales-data')
                 .then(response => response.json())
                 .then(chartData => {
-                  console.log(chartData);
-                  const ctx = document.getElementById('userAreaChart').getContext('2d');
-                  new Chart(ctx, {
-                    type: 'line', // area chart is a line chart with "fill"
-                    data: {
-                      labels: chartData.labels,
-                      // labels: ["Feb","Mar","Apr","May","Jun","Jul"],
-                      datasets: [{
-                        label: 'Users',
-                        data: chartData.data,
-                        backgroundColor: 'rgba(59, 130, 246, 0.5)', // blue with opacity
-                        borderColor: '#3b82f6', // solid blue border
-                        fill: true, // this makes it an area chart
-                        tension: 0.4, // smooth curve
-                        pointBackgroundColor: '#3b82f6',
-                        pointRadius: 5
-                      }]
-                    },
-                    options: {
-                      responsive: true,
-                      plugins: {
-                        legend: {
-                          position: 'top'
+                    // Pie chart
+                    const pieCtx = document.getElementById('salesPieChart').getContext('2d');
+                    new Chart(pieCtx, {
+                        type: 'pie',
+                        data: {
+                            labels: chartData.labels,
+                            datasets: [{
+                                label: 'Orders',
+                                data: chartData.data,
+                                backgroundColor: [
+                                    '#FF7DA0',
+                                    '#FFC275',
+                                    '#E85D85',
+                                    '#FFD9A8',
+                                    '#F9A8C0',
+                                    '#FCEBDD'
+                                ],
+                                borderColor: '#ffffff',
+                                borderWidth: 2
+                            }]
                         },
-                        tooltip: {
-                          callbacks: {
-                            label: function(context) {
-                              return `Users: ${context.raw}`;
+                        options: {
+                            responsive: false,
+                            plugins: {
+                                legend: { position: 'top' }
                             }
-                          }
                         }
-                      },
-                      scales: {
-                        y: {
-                          beginAtZero: true,
-                          ticks: {
-                            stepSize: 2
-                          },
-                          title: {
-                            display: true,
-                            text: 'Users'
-                          }
+                    });
+
+                    // Bar chart
+                    const barCtx = document.getElementById('ordersChart').getContext('2d');
+                    new Chart(barCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: chartData.labels,
+                            datasets: [{
+                                label: 'Orders',
+                                data: chartData.data,
+                                backgroundColor: 'rgba(232, 93, 133, 0.65)',
+                                borderRadius: 6,
+                                barThickness: 40
+                            }]
                         },
-                        x: {
-                          title: {
-                            display: true,
-                            text: 'Month'
-                          }
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: true, position: 'top' }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: { stepSize: 5 }
+                                }
+                            }
                         }
-                      }
-                    }
-                  });
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading chart data:', error);
                 });
-            });
-          </script>
-        </div> --}}
-      </div>
-      </div>
-
-      
-
-      <footer class="text-center text-sm text-gray-500 py-4">&copy;Copyright 2020-2021.</footer>
-    </main>
-  </div>
+        });
+    </script>
 </body>
 
 </html>

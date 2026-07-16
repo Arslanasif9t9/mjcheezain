@@ -24,8 +24,21 @@ class AdminAuthController extends Controller
             ]);
         }
 
-        // Check password
-        if ($request->password == $admin->password_hash) {
+        // Check password: bcrypt hash preferred; legacy plaintext rows are
+        // upgraded to a hash on first successful login.
+        $given = (string) $request->password;
+        $stored = (string) $admin->password_hash;
+        $isHashed = str_starts_with($stored, '$2y$') || str_starts_with($stored, '$argon2');
+        $ok = $isHashed
+            ? \Illuminate\Support\Facades\Hash::check($given, $stored)
+            : hash_equals($stored, $given);
+
+        if ($ok && !$isHashed) {
+            DB::table('admin_users')->where('id', $admin->id)
+                ->update(['password_hash' => \Illuminate\Support\Facades\Hash::make($given)]);
+        }
+
+        if ($ok) {
             // Set session data
             Session::put('admin_logged_in', true);
             Session::put('admin_id', $admin->id);
@@ -77,15 +90,34 @@ class AdminAuthController extends Controller
                         ->where('verified', 1)
                         ->count();
 
-        
-            
-        // Pass session data to view
+        // Real operational stats (previously hardcoded zeros in the view)
+        $totalReturns = DB::table('return_requests')->count();
+        $totalReplacements = DB::table('replacement_requests')->count();
+        $cancelledOrders = DB::table('carts')
+                        ->whereIn('status', ['cancelled', 'cencelled']) // legacy rows used the misspelling
+                        ->count();
+        $totalSales = (float) DB::table('carts')
+                        ->where('status', 'delivered')
+                        ->sum(DB::raw('price * quantity'));
+        $pendingWithdrawals = (float) DB::table('withdrawal_requests')
+                        ->where('status', 'pending')
+                        ->sum('amount');
+        $pendingProducts = DB::table('vendor_products')
+                        ->where('position', 'pending')
+                        ->count();
+
         return view('Admin/admin_dashboard', [
             'total_users' => $totalUsers,
             'active_users' => $activeUsers,
             'orders' => $orders,
             'vendors' => $vendors,
-            'active_vendors' => $activeVendors
+            'active_vendors' => $activeVendors,
+            'total_returns' => $totalReturns,
+            'total_replacements' => $totalReplacements,
+            'cancelled_orders' => $cancelledOrders,
+            'total_sales' => $totalSales,
+            'pending_withdrawals' => $pendingWithdrawals,
+            'pending_products' => $pendingProducts,
         ]);
     }
 
@@ -117,9 +149,28 @@ class AdminAuthController extends Controller
                         ->where('type', 'vendor')
                         ->get()
                         ->toArray();
+
+        // Prefetch per-vendor data with grouped queries (avoids N+1 in the view),
+        // each keyed by user_id.
         $vendorsBasic = DB::table('vendor_basic_info')
                         ->get()
+                        ->keyBy('user_id');
+        $productCounts = DB::table('vendor_products')
+                        ->select('user_id', DB::raw('COUNT(*) as total'))
+                        ->groupBy('user_id')
+                        ->pluck('total', 'user_id')
                         ->toArray();
+        $orderCounts = DB::table('orders')
+                        ->select('user_id', DB::raw('COUNT(*) as total'))
+                        ->groupBy('user_id')
+                        ->pluck('total', 'user_id')
+                        ->toArray();
+        $vendorEarnings = DB::table('orders')
+                        ->select('vendor_id', DB::raw('SUM(total_amount) as total'))
+                        ->groupBy('vendor_id')
+                        ->pluck('total', 'vendor_id')
+                        ->toArray();
+
         return view('Admin/vendor_management', compact([
             'totalUsers',
             'activeUsers',
@@ -127,7 +178,10 @@ class AdminAuthController extends Controller
             'pendding',
             'products',
             'vendors',
-            'vendorsBasic'
+            'vendorsBasic',
+            'productCounts',
+            'orderCounts',
+            'vendorEarnings'
         ]));
     }
 
@@ -162,9 +216,14 @@ class AdminAuthController extends Controller
                 ->get()
                 ->toArray();
 
+        // Prefetch store names once (avoids one query per table row in the view).
+        $storeNames = DB::table('vendor_basic_info')
+                ->pluck('store_name', 'user_id')
+                ->toArray();
+
         return view('Admin/product_management', compact([
             'total', 'pending', 'approved', 'rejected', 'out',
-            'products', 'autoProducts'
+            'products', 'autoProducts', 'storeNames'
         ]));
     }
 

@@ -165,7 +165,9 @@ class VendorReplacementController extends Controller
             // Prepare update data
             $statusToStep = [
                 'pending'    => 'request_submitted',
-                'approved'   => 'approved',
+                // 'request_approved' matches the customer-side guard in
+                // ProductRatingController::markReplacementShipped and the admin panel vocabulary.
+                'approved'   => 'request_approved',
                 'processing' => 'replacement_processing',
                 'completed'  => 'replacement_delivered',
                 'rejected'   => 'request_submitted',
@@ -205,7 +207,29 @@ class VendorReplacementController extends Controller
                 'description' => $request->notes ?? $stepDescription,
                 'created_at' => now()
             ]);
-            
+
+            // Notify the customer about the replacement status change (best-effort)
+            try {
+                $rr = DB::table('replacement_requests')->where('id', $request->replacement_id)->first();
+                if ($rr && $rr->customer_id) {
+                    $productName = DB::table('vendor_products')->where('id', $rr->product_id)->value('name') ?? 'Product';
+                    DB::table('notifications')->insert([
+                        'user_id' => $rr->customer_id,
+                        'title' => 'Replacement update',
+                        'message' => "Your replacement request for \"{$productName}\" is now: " . ucwords($request->status) . ".",
+                        // notifications.type is an enum('shipping','payment','offer','loyalty','order','message','alert')
+                        'type' => 'order',
+                        'icon_class' => 'fas fa-bell',
+                        'icon_color' => 'bg-pink-100 text-[#E85D85]',
+                        'dot_color' => 'bg-[#FF7DA0]',
+                        'is_read' => 0,
+                        'created_at' => now(),
+                    ]);
+                }
+            } catch (\Throwable $e) {
+                \Log::warning('replacement status notify failed: ' . $e->getMessage());
+            }
+
             DB::commit();
             
             return response()->json([
