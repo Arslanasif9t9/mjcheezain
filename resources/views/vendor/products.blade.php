@@ -164,7 +164,7 @@
                              data-search="{{ strtolower($product->name . ' ' . $product->category . ' ' . $m_prd_code) }}">
                             <div class="flex gap-3">
                                 <a href="/product/{{ $product->id }}" target="_blank" class="flex-shrink-0">
-                                    <img src="{{ $product->primary_image ? asset('storage/vendor/products/images/'.$product->primary_image) : asset('img/default-product.jpg') }}"
+                                    <img src="{{ $product->primary_image ? asset('storage/vendor/products/images/'.$product->primary_image) : asset('img/default_img.png') }}"
                                          alt="{{ $product->name }}"
                                          class="w-16 h-16 rounded-xl object-cover border border-pink-50">
                                 </a>

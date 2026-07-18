@@ -17,15 +17,16 @@ class OrderController extends Controller
             ->select([
                 'orders.id AS order_id',
                 'orders.order_date',
-                'orders.quantity', 
+                'orders.quantity',
                 'orders.total_amount',
-                'orders.status'
+                'orders.status',
+                'orders.fulfillment'
             ])
             ->where('orders.user_id', $user_id);
 
-        // Add status filter if not 'all'
+        // Add fulfillment-state filter if not 'all' (tabs are order states, not payment status)
         if ($status !== 'all') {
-            $query->where('orders.status', $status);
+            $query->where('orders.fulfillment', $status);
         }
 
         $orders = $query->get();

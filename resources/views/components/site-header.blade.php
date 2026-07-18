@@ -74,10 +74,10 @@
                             <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
                         <div id="categories-dropdown-desktop" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 z-10 hidden border border-gray-100">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cosmetics</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Skincare</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Fragrances</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Accessories</a>
+                            <a href="/cosmetics" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cosmetics</a>
+                            <a href="/products/all-page?category=Skincare" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Skincare</a>
+                            <a href="/products/all-page?category=Fragrances" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Fragrances</a>
+                            <a href="/products/all-page" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">All Products</a>
                         </div>
                     </div>
 
@@ -90,9 +90,8 @@
                         </button>
                         <div id="bell-dropdown-desktop" class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl py-2 z-10 hidden border border-gray-100">
                             <p class="px-4 py-2 text-sm font-semibold text-gray-900 border-b">Notifications</p>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 truncate">Your order #1234 has shipped.</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 truncate">New discount available!</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-center text-[#E85D85] hover:bg-gray-100">View All</a>
+                            <p class="px-4 py-3 text-sm text-gray-500 text-center">No new notifications</p>
+                            <a href="/customer/notifications" class="block px-4 py-2 text-sm text-center text-[#E85D85] hover:bg-gray-100">View All</a>
                         </div>
                     </div>
 
@@ -102,9 +101,9 @@
                             <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
                         <div id="more-dropdown-desktop" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 z-10 hidden border border-gray-100">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Blog</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Help Center</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Partner Program</a>
+                            <a href="/about" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">About Us</a>
+                            <a href="/FAQs" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Help Center</a>
+                            <a href="/vendor-zone" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Become a Seller</a>
                         </div>
                     </div>
                 </nav>
@@ -192,13 +191,13 @@
                                 <!-- Logged in state: profile picture (app-like), dropdown on tap -->
                                 <div class="relative">
                                     <button onclick="toggleDropdown('mobile-user-dropdown')" class="flex items-center focus:outline-none py-0.5" aria-label="Account menu">
-                                        <img src="{{ $imgPath ? asset('storage/'.$imgPath) : asset('storage/default_profile.webp') }}" alt="Account"
+                                        <img src="{{ $imgPath ? (\Illuminate\Support\Str::startsWith($imgPath, 'img/') ? asset($imgPath) : asset('storage/'.$imgPath)) : asset('storage/default_profile.webp') }}" alt="Account"
                                              class="w-8 h-8 rounded-full object-cover ring-2 ring-white/80 shadow-md">
                                         <svg class="w-3 h-3 ml-1 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                     </button>
                                     <div id="mobile-user-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
                                         <div class="px-4 py-2 border-b border-gray-100 flex items-center gap-2.5">
-                                            <img src="{{ $imgPath ? asset('storage/'.$imgPath) : asset('storage/default_profile.webp') }}" alt=""
+                                            <img src="{{ $imgPath ? (\Illuminate\Support\Str::startsWith($imgPath, 'img/') ? asset($imgPath) : asset('storage/'.$imgPath)) : asset('storage/default_profile.webp') }}" alt=""
                                                  class="w-8 h-8 rounded-full object-cover flex-shrink-0">
                                             <div class="min-w-0">
                                                 <p class="text-xs font-bold text-gray-900 truncate m-0">{{ $user->full_name ?? ($user->username ?? 'My Account') }}</p>
@@ -293,7 +292,7 @@
         <div class="p-4 border-t border-gray-100 bg-gray-50">
             @auth
                 <div class="flex items-center space-x-3 mb-3">
-                    <img class="w-10 h-10 rounded-full object-cover" src="{{ asset('storage/'.$imgPath) }}" alt="Profile">
+                    <img class="w-10 h-10 rounded-full object-cover" src="{{ $imgPath ? (\Illuminate\Support\Str::startsWith($imgPath, 'img/') ? asset($imgPath) : asset('storage/'.$imgPath)) : asset('storage/default_profile.webp') }}" alt="Profile">
                     <div class="min-w-0 flex-1">
                         <p class="font-bold text-sm text-gray-900 truncate">{{ $user->full_name ?? $user->username }}</p>
                         <p class="text-xs text-gray-500 capitalize">{{ $user->type }}</p>

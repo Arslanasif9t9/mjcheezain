@@ -192,8 +192,8 @@
                                         <div class="min-w-0">
                                             <span class="text-[10px] md:text-xs ${stockCls} px-2 py-0.5 rounded-full font-semibold">${stockLabel}</span>
                                             <div class="mt-1">
-                                                <small class="text-gray-400 line-through text-[10px] md:text-xs">Rs. ${product.selling_price}</small>
-                                                <span class="text-base md:text-lg font-extrabold text-gray-900 ml-1">Rs. ${product.mrp}</span>
+                                                ${(product.mrp && Number(product.mrp) > (Number(product.selling_price) * 1.17)) ? `<small class="text-gray-400 line-through text-[10px] md:text-xs">Rs. ${Number(product.mrp).toLocaleString()}</small>` : ''}
+                                                <span class="text-base md:text-lg font-extrabold text-gray-900 ml-1">Rs. ${(Number(product.selling_price) * 1.17).toFixed(2)}</span>
                                             </div>
                                         </div>
                                         <a href="/product/${product.id}" target="_blank"
@@ -270,6 +270,5 @@
         }
     </script>
     <!-- Notification  -->
-    <script src="../script/customer_notification.js"></script>
 </body>
 </html>

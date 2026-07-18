@@ -1424,7 +1424,7 @@
                                 <!-- Selling Price -->
                                 <div>
                                     <label class="form-label">Selling Price*</label>
-                                    <input type="number" id="sellingPrice" name="selling_price" placeholder="PKR" min="1" required step="0.01"
+                                    <input type="number" id="sellingPrice" name="selling_price" placeholder="Rs." min="1" required step="0.01"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-input" 
                                         value="{{ isset($product) ? $product->selling_price : '' }}" />
                                     <div class="error-message hidden" id="sellingPriceError"></div>
@@ -1436,7 +1436,7 @@
                                 <!-- MRP -->
                                 <div>
                                     <label class="form-label">MRP (Optional)</label>
-                                    <input type="number" id="mrp" name="mrp" placeholder="PKR" min="0" step="0.01"
+                                    <input type="number" id="mrp" name="mrp" placeholder="Rs." min="0" step="0.01"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 form-input" 
                                         value="{{ isset($product) ? $product->mrp : '' }}" />
                                     <div class="error-message hidden" id="mrpError"></div>
@@ -1474,15 +1474,15 @@
                                         <div class="space-y-2">
                                             <div class="flex justify-between items-center">
                                                 <span class="text-sm text-[#E85D85]">Selling Price:</span>
-                                                <span class="text-[#C94A72] font-medium" id="gstSellingPrice">PKR 0.00</span>
+                                                <span class="text-[#C94A72] font-medium" id="gstSellingPrice">Rs. 0.00</span>
                                             </div>
                                             <div class="flex justify-between items-center">
                                                 <span class="text-sm text-[#E85D85]">GST (17%):</span>
-                                                <span class="text-[#C94A72] font-medium" id="gstAmount">PKR 0.00</span>
+                                                <span class="text-[#C94A72] font-medium" id="gstAmount">Rs. 0.00</span>
                                             </div>
                                             <div class="flex justify-between items-center pt-2 border-t border-pink-200">
                                                 <span class="text-sm font-semibold text-[#C94A72]">Total with GST:</span>
-                                                <span class="text-[#C94A72] font-bold" id="gstTotal">PKR 0.00</span>
+                                                <span class="text-[#C94A72] font-bold" id="gstTotal">Rs. 0.00</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1495,11 +1495,11 @@
                                         <div class="space-y-2">
                                             <div class="flex justify-between items-center">
                                                 <span class="text-sm text-purple-600">MRP:</span>
-                                                <span class="text-purple-700 font-medium" id="mrpDisplay">PKR 0.00</span>
+                                                <span class="text-purple-700 font-medium" id="mrpDisplay">Rs. 0.00</span>
                                             </div>
                                             <div class="flex justify-between items-center">
                                                 <span class="text-sm text-purple-600">Selling Price:</span>
-                                                <span class="text-purple-700 font-medium" id="sellingPriceDisplay">PKR 0.00</span>
+                                                <span class="text-purple-700 font-medium" id="sellingPriceDisplay">Rs. 0.00</span>
                                             </div>
                                             <div id="discountCalculation" class="hidden">
                                                 <div class="flex justify-between items-center pt-2 border-t border-purple-200">
@@ -1701,14 +1701,14 @@
                                         <!-- Selling Price -->
                                         <div class="flex justify-between items-center">
                                             <span class="text-gray-600 text-sm">Selling Price:</span>
-                                            <span class="text-gray-800 font-medium" id="previewSellingPrice">PKR 0.00</span>
+                                            <span class="text-gray-800 font-medium" id="previewSellingPrice">Rs. 0.00</span>
                                         </div>
 
                                         <!-- MRP (if exists) -->
                                         <div id="previewMRPContainer" class="hidden">
                                             <div class="flex justify-between items-center">
                                                 <span class="text-gray-600 text-sm line-through">MRP:</span>
-                                                <span class="text-gray-500 line-through" id="previewMRP">PKR 0.00</span>
+                                                <span class="text-gray-500 line-through" id="previewMRP">Rs. 0.00</span>
                                             </div>
                                         </div>
 
@@ -1728,19 +1728,19 @@
                                                     GST (17%):
                                                 </span>
                                             </div>
-                                            <span class="text-[#C94A72] font-medium" id="previewGST">PKR 0.00</span>
+                                            <span class="text-[#C94A72] font-medium" id="previewGST">Rs. 0.00</span>
                                         </div>
 
                                         <!-- Delivery Charges -->
                                         <div class="flex justify-between items-center hidden">
                                             <span class="text-gray-600 text-sm">Delivery Charges:</span>
-                                            <span class="text-gray-800 font-medium" id="previewDelivery">PKR 250.00</span>
+                                            <span class="text-gray-800 font-medium" id="previewDelivery">Rs. 250.00</span>
                                         </div>
 
                                         <!-- Total Price -->
                                         <div class="flex justify-between items-center pt-2 border-t border-pink-200 mt-2">
                                             <span class="text-gray-800 font-bold">Total Price:</span>
-                                            <span class="text-[#E85D85] font-bold text-lg" id="previewTotalPrice">PKR 0.00</span>
+                                            <span class="text-[#E85D85] font-bold text-lg" id="previewTotalPrice">Rs. 0.00</span>
                                         </div>
 
                                         <!-- Price Summary Note -->
@@ -2331,7 +2331,7 @@
             
             // MRP must be at least equal to (selling price + GST)
             if (mrp < sellingPriceWithGST) {
-                showFieldError('mrp', `MRP must be at least PKR ${formatCurrencyNumber(sellingPriceWithGST)} (Selling Price + GST)`);
+                showFieldError('mrp', `MRP must be at least Rs. ${formatCurrencyNumber(sellingPriceWithGST)} (Selling Price + GST)`);
                 showMRPWarning(`MRP is below (Selling Price + GST)`);
                 return false;
             }
@@ -2656,7 +2656,7 @@
                     if (mrp <= sellingPrice) {
                         mrpValidation.innerHTML = `<i class="fas fa-exclamation-triangle mr-1"></i><span>MRP must be greater than selling price for discount</span>`;
                     } else {
-                        mrpValidation.innerHTML = `<i class="fas fa-exclamation-triangle mr-1"></i><span>MRP should be at least PKR ${formatCurrencyNumber(sellingPriceWithGST)}</span>`;
+                        mrpValidation.innerHTML = `<i class="fas fa-exclamation-triangle mr-1"></i><span>MRP should be at least Rs. ${formatCurrencyNumber(sellingPriceWithGST)}</span>`;
                     }
                 }
             } else {
@@ -2877,7 +2877,7 @@
 
         // Format currency
         function formatCurrency(amount) {
-            return 'PKR ' + amount.toLocaleString('en-PK', {
+            return 'Rs. ' + amount.toLocaleString('en-PK', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             });
@@ -3176,7 +3176,7 @@
                 }
                 
                 if (mrp < sellingPriceWithGST) {
-                    showFieldError('mrp', `MRP must be at least PKR ${formatCurrencyNumber(sellingPriceWithGST)} (Selling Price + GST)`);
+                    showFieldError('mrp', `MRP must be at least Rs. ${formatCurrencyNumber(sellingPriceWithGST)} (Selling Price + GST)`);
                     isValid = false;
                 }
             }
@@ -3478,7 +3478,7 @@
                     }
 
                     if (mrp < sellingPriceWithGST) {
-                        showFieldError('mrp', `MRP must be at least PKR ${formatCurrencyNumber(sellingPriceWithGST)} (Selling Price + GST)`);
+                        showFieldError('mrp', `MRP must be at least Rs. ${formatCurrencyNumber(sellingPriceWithGST)} (Selling Price + GST)`);
                         isValid = false;
                     }
                 }

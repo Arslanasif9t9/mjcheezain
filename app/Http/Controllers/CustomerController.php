@@ -153,9 +153,9 @@ class CustomerController extends Controller
                 $inserted = DB::table('customer_profile')->insert($insertData);
 
                 if ($inserted) {
-                    return redirect()->route('profile.page')->with('success', 'Profile saved successfully.');
+                    return redirect()->route('customer.cprofile')->with('success', 'Profile saved successfully.');
                 } else {
-                    return redirect()->route('profile.page')->with('error', 'Error saving profile.');
+                    return redirect()->route('customer.cprofile')->with('error', 'Error saving profile.');
                 }
             }
 

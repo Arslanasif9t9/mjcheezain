@@ -309,7 +309,7 @@
 
                         <!-- Price Range -->
                         <div>
-                            <h4 class="font-semibold mb-3 text-xs uppercase tracking-wider text-gray-400">Price Range (PKR)</h4>
+                            <h4 class="font-semibold mb-3 text-xs uppercase tracking-wider text-gray-400">Price Range (Rs.)</h4>
                             <div class="space-y-3">
                                 <div class="flex items-center justify-between text-sm">
                                     <span id="price-min-display">0</span>
@@ -688,7 +688,7 @@
                                  alt="${product.name || 'Product'}"
                                  class="product-img w-full h-full object-cover"
                                  loading="lazy"
-                                 onerror="this.onerror=null; this.src='/images/default-product.jpg';" />
+                                 onerror="this.onerror=null; this.src='/img/default_img.png';" />
                             <span class="badge condition-${conditionClass} absolute top-3 left-3">
                                 ${condition}
                             </span>
@@ -997,14 +997,14 @@
             // Main image (first image or default)
             const mainImage = product.images && product.images.length > 0 
                 ? (product.images.find(img => img.is_primary)?.url || product.images[0].url)
-                : '{{ asset("images/default-product.jpg") }}';
+                : '{{ asset("img/default_img.png") }}';
 
             // Thumbnail images
             const thumbnails = product.images && product.images.length > 0 
                 ? product.images.map(img => `
                     <img src="${img.url}" 
                          class="w-20 h-20 object-cover rounded-lg cursor-pointer border-2 hover:border-[#e8461e] transition-colors"
-                         onerror="this.onerror=null; this.src='{{ asset("images/default-product.jpg") }}';"
+                         onerror="this.onerror=null; this.src='{{ asset("img/default_img.png") }}';"
                          onclick="document.getElementById('modal-main-image').src='${img.url}'" />
                 `).join('')
                 : '';
@@ -1018,7 +1018,7 @@
                                  src="${mainImage}" 
                                  alt="${product.name || 'Product'}" 
                                  class="w-full h-96 object-cover"
-                                 onerror="this.onerror=null; this.src='{{ asset("images/default-product.jpg") }}';" />
+                                 onerror="this.onerror=null; this.src='{{ asset("img/default_img.png") }}';" />
                         </div>
                         ${product.images && product.images.length > 1 ? `
                             <div class="flex gap-2 overflow-x-auto pb-2">

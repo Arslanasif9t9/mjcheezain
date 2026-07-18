@@ -84,11 +84,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const timeAgo = formatTimeAgo(product.updated_at);
             const discount = product.mrp > product.selling_price ? `
                 <div class="flex items-center gap-2">
-                    <p class="text-gray-500 line-through text-sm">${product.mrp} PKR</p>
-                    <p class="text-[#c50] font-bold">${product.selling_price} PKR</p>
+                    <p class="text-gray-500 line-through text-sm">${product.mrp} Rs.</p>
+                    <p class="text-[#c50] font-bold">${product.selling_price} Rs.</p>
                 </div>
-                <p class="text-green-600 text-sm">Save ${product.mrp - product.selling_price} PKR</p>
-            ` : `<p class="text-[#c50] font-bold">${product.selling_price} PKR</p>`;
+                <p class="text-green-600 text-sm">Save ${product.mrp - product.selling_price} Rs.</p>
+            ` : `<p class="text-[#c50] font-bold">${product.selling_price} Rs.</p>`;
 
             const productElement = document.createElement('a');
             productElement.href = `/product/${product.id}`;

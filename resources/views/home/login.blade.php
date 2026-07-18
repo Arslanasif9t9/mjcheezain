@@ -888,7 +888,12 @@
                         if (page === '/' || page === '%2F' || !page) {
                             window.location.href = `/${result.type}/dashboard`;
                         } else {
-                            window.location.href = decodeURIComponent(page);
+                            let target = decodeURIComponent(page);
+                            // Only allow same-site relative paths (block //evil.com and http://evil.com)
+                            if (!/^\/[^\/]/.test(target)) {
+                                target = `/${result.type}/dashboard`;
+                            }
+                            window.location.href = target;
                         }
                     }, 500);
                 } else {

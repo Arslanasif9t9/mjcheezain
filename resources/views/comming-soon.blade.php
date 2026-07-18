@@ -259,23 +259,25 @@
 
 
         
-        // Countdown Timer
+        // Countdown Timer — fixed target set ONCE (30 days from first load) so it
+        // actually counts down and never goes negative.
+        const launchDate = new Date().getTime() + (30 * 24 * 60 * 60 * 1000);
         function updateCountdown() {
-            const launchDate = new Date('December 01, 2025 00:00:00').getTime();
             const now = new Date().getTime();
-            const timeLeft = launchDate - now;
-            
+            let timeLeft = launchDate - now;
+            if (timeLeft < 0) timeLeft = 0;
+
             const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
             const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-            
+
             document.getElementById('days').innerHTML = days.toString().padStart(2, '0');
             document.getElementById('hours').innerHTML = hours.toString().padStart(2, '0');
             document.getElementById('minutes').innerHTML = minutes.toString().padStart(2, '0');
             document.getElementById('seconds').innerHTML = seconds.toString().padStart(2, '0');
         }
-        
+
         setInterval(updateCountdown, 1000);
         updateCountdown();
     </script>

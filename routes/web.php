@@ -36,8 +36,8 @@ Route::prefix('auto-parts')->name('auto-parts.')->group(function () {
 Route::get('/auto/{id}', [AutoPartsProductShowController::class, 'singleShow']);
 
 
-// Auto Parts Products Routes
-Route::prefix('vendor/products/autoparts')->name('vendor.products.autoparts.')->group(function () {
+// Auto Parts Products Routes (vendor-only — must be logged in)
+Route::middleware(['auth'])->prefix('vendor/products/autoparts')->name('vendor.products.autoparts.')->group(function () {
     Route::get('/create', [App\Http\Controllers\Vendor\AutoPartsProductController::class, 'create'])->name('create');
     Route::post('/store', [App\Http\Controllers\Vendor\AutoPartsProductController::class, 'store'])->name('store');
     Route::get('/{id}/edit', [App\Http\Controllers\Vendor\AutoPartsProductController::class, 'edit'])->name('edit');
@@ -83,6 +83,7 @@ Route::get('/products/all-page', [HomeController::class, 'productList']); // fil
 Route::view('/login-user', 'home/login');
 Route::post('/send-otp', [AuthController::class, 'sendOtp']);
 Route::view('/vendor-forgot-password', 'home/forgot');
+Route::view('/customer-forgot-password', 'home/forgot');
 // Forgot Password Routes
 Route::post('/send-password-reset-otp', [AuthController::class, 'sendPasswordResetOtp']);
 Route::post('/verify-password-reset-otp', [AuthController::class, 'verifyPasswordResetOtp']);
@@ -141,7 +142,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/addresses', [CustomerController::class, 'addresses']);
         Route::get('/wishlist', [CustomerController::class, 'wishlist']);
         // Add other customer routes here
-        Example: Route::get('/orders', [CustomerController::class, 'orders'])->name('orders');
+        Route::get('/orders', [CustomerController::class, 'orders'])->name('orders');
     });
     
     // ----------------------------
@@ -231,7 +232,7 @@ Route::middleware(['auth'])->prefix('vendor')->name('vendor.')->group(function (
 });
 
 // Vendor Replacement Routes
-Route::prefix('vendor')->name('vendor.')->group(function () {
+Route::middleware(['auth'])->prefix('vendor')->name('vendor.')->group(function () {
     Route::get('/replacements', [VendorReplacementController::class, 'index'])->name('replacements.index');
     Route::get('/replacements/{id}', [VendorReplacementController::class, 'show'])->name('replacements.show');
     Route::get('/replacements/filter/{status}', [VendorReplacementController::class, 'filter'])->name('replacements.filter');
@@ -265,10 +266,13 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-Route::post('/customer/address/save', [AddressController::class, 'saveAddress']);
-Route::get('/customer/address/get/{id}', [AddressController::class, 'getAddress']);
-Route::get('/customer/address/set-default/{id}', [AddressController::class, 'setDefault'])->name('addresses.set_default');
-Route::get('/customer/address/delete/{id}', [AddressController::class, 'delete'])->name('addresses.delete');
+// Customer addresses — must be logged in (rows are keyed to the user)
+Route::middleware(['auth'])->group(function () {
+    Route::post('/customer/address/save', [AddressController::class, 'saveAddress']);
+    Route::get('/customer/address/get/{id}', [AddressController::class, 'getAddress']);
+    Route::get('/customer/address/set-default/{id}', [AddressController::class, 'setDefault'])->name('addresses.set_default');
+    Route::get('/customer/address/delete/{id}', [AddressController::class, 'delete'])->name('addresses.delete');
+});
 
 Route::post('/favorites/toggle', [FavoriteController::class, 'toggleFavorite']);
 Route::get('/favorites/check/{product_id}', [FavoriteController::class, 'checkFavorite']);
@@ -293,7 +297,7 @@ Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout
 
 Route::prefix('admin')->group(function () {
     Route::get('/login', [AdminAuthController::class, 'loginForm']);
-    Route::post('/login', [AdminAuthController::class, 'login']);
+    Route::post('/login', [AdminAuthController::class, 'login'])->middleware('throttle:5,1');
     Route::get('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 });
 

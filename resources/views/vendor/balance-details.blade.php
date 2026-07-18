@@ -61,7 +61,8 @@
 <body class="min-h-screen" style="background-color: #FFF6F0;">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <x-vendor.sidebar 
+        <x-vendor.sidebar
+            :user="$user ?? null"
             :profilePicture="$vendorBasicInfo->profile_picture ?? 'default_profile.webp'"
             :fullName="$vendorBasicInfo->full_name ?? $user->full_name ?? null"
             :profile_visibility="$vendorBasicInfo->profile_visibility ?? 1"

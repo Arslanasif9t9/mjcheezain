@@ -72,7 +72,7 @@
             </a>
             <a href="{{ route('vendor.notifications') }}" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-pink-50 hover:text-gray-900 transition-all duration-200 relative">
                 <i class="fa fa-bell w-5 text-center"></i> Notifications
-                @php $unreadCount = DB::table('notifications')->where('user_id', $user->user_id)->where('is_read', 0)->count(); @endphp
+                @php $unreadCount = DB::table('notifications')->where('user_id', $user->user_id ?? auth()->id())->where('is_read', 0)->count(); @endphp
                 @if ($unreadCount != 0)
                     <span id="noti-num" class="absolute right-3 min-w-[20px] h-5 px-1 text-xs v-brand-gradient text-white flex justify-center items-center rounded-full font-bold shadow">
                         {{ $unreadCount }}

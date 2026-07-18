@@ -106,7 +106,7 @@
                 <!-- Main Image with icons -->
                 <div class="relative">
                     <img id="main-image"
-                        src="{{ $imageMain ? asset('storage/vendor/products/images/'.$imageMain->image_path) : asset('img/default-product.jpg') }}"
+                        src="{{ $imageMain ? asset('storage/vendor/products/images/'.$imageMain->image_path) : asset('img/default_img.png') }}"
                         class="border-0 sm:border-2 sm:border-pink-200 w-full h-[55vh] sm:h-[60vh] lg:h-[72vh] aspect-square object-contain rounded-none sm:rounded-lg overflow-hidden">
                     {{-- <img id="main-image"
                         src="https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg" 
@@ -167,7 +167,10 @@
             <div class="mt-4 md:mt-32 col-span-2 relative px-4 sm:px-0">
                 @php
                     $gst = $product->selling_price * 1.17;
-                    $discount = round((($product->mrp - $gst) / $product->mrp) * 100);
+                    // Guard against products with no / zero MRP (avoids divide-by-zero 500)
+                    $discount = ($product->mrp && $product->mrp > 0)
+                        ? round((($product->mrp - $gst) / $product->mrp) * 100)
+                        : 0;
                 @endphp
 
                 <!-- Title with inline discount badge -->
@@ -187,7 +190,7 @@
                         <span class="text-gray-500">(125 reviews)</span>
                     </div>
                     {{-- {{ dd($vendor) }} --}}
-                    @if($vendorUser->verified)
+                    @if(($vendorUser->verified ?? false))
                         <div class="flex items-center text-green-600">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
                             Verified Seller
@@ -204,12 +207,12 @@
 
                 <!-- Price -->
                 <p class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">
-                    PKR 
+                    Rs.&nbsp;
                     @if ($product->mrp)
-                        {{ $gst }} <br>
-                        <small class="font-normal text-md"><del> {{ $product->mrp }} </del></small>  &nbsp; 
+                        {{ number_format($gst, 2) }} <br>
+                        <small class="font-normal text-md"><del> Rs. {{ number_format($product->mrp, 2) }} </del></small>  &nbsp;
                     @else
-                        {{ $gst }}
+                        {{ number_format($gst, 2) }}
                     @endif
                 </p>
                 
@@ -308,7 +311,7 @@
                 <div class="space-y-3 text-sm">
                     <div class="flex items-center text-gray-700">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-[#E85D85]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M13 8V4.835a1 1 0 01.325-.758l2.25-2.25a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-2.25 2.25a1 1 0 01-.758.325H16M3 9h11a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6a1 1 0 011-1zm0 0l-1.5 7" /></svg>
-                        Delivery charges PKR {{ $product->delivery_charges }} (already included)
+                        Delivery charges Rs. {{ $product->delivery_charges }} (already included)
                     </div>
                     <div class="flex items-center text-gray-700">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-[#E85D85]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
@@ -345,7 +348,7 @@
                 </div>
                 <div class="min-w-0">
                     <p class="font-semibold text-gray-800 text-sm sm:text-base truncate"><span id="totalItems">0</span> items in cart</p>
-                    <p class="text-xs sm:text-sm text-gray-600 truncate">Total: PKR <span id="totalPrice">0.00</span></p>
+                    <p class="text-xs sm:text-sm text-gray-600 truncate">Total: Rs. <span id="totalPrice">0.00</span></p>
                 </div>
             </div>
             <button id="viewCartBtn" class="text-white font-bold py-2.5 px-5 sm:px-7 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg text-sm sm:text-base flex-shrink-0 ml-3" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 4px 14px rgba(255, 125, 160, 0.35);">
@@ -910,14 +913,14 @@
                 <div class="relative w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl border-4 border-pink-200 hover:border-pink-400 transition-all duration-300">
                     <video
                         controls
-                        poster="{{ asset('img/video-poster.jpg') }}"
+                        poster="{{ asset('img/default_img.png') }}"
                         class="w-full rounded-2xl h-auto sm:h-[366px]">
                         <source src="{{ asset('storage/vendor/products/videos/'.$product->video) }}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                     {{-- <video
                         controls
-                        poster="{{ asset('img/video-poster.jpg') }}"
+                        poster="{{ asset('img/default_img.png') }}"
                         class="w-full rounded-2xl object-cover h-[366px]">
                         <source src="{{ asset('video/cosmetics.mp4') }}" type="video/mp4">
                         Your browser does not support the video tag.
@@ -1078,6 +1081,16 @@
                             return;
                         }
 
+                        // Escape any user-submitted text before putting it in HTML (prevents XSS)
+                        function esc(str) {
+                            return String(str == null ? '' : str)
+                                .replace(/&/g, '&amp;')
+                                .replace(/</g, '&lt;')
+                                .replace(/>/g, '&gt;')
+                                .replace(/"/g, '&quot;')
+                                .replace(/'/g, '&#039;');
+                        }
+
                         reviews.forEach(function(review) {
                             let stars = '';
                             for (let i = 1; i <= 5; i++) {
@@ -1087,8 +1100,11 @@
                             }
 
                             let commentHtml = review.comment
-                                ? '<p class="text-gray-700">' + review.comment + '</p>'
+                                ? '<p class="text-gray-700">' + esc(review.comment) + '</p>'
                                 : '';
+
+                            let name = esc(review.customer_name);
+                            let initial = esc(String(review.customer_name || '?').charAt(0).toUpperCase());
 
                             let date = new Date(review.created_at);
                             let dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -1096,10 +1112,10 @@
                             let html = '<div class="border-t pt-4 mt-4 space-y-2">'
                                 + '<div class="flex items-center space-x-3">'
                                 + '<div class="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center">'
-                                + '<span class="text-xs font-bold text-[#E85D85]">' + review.customer_name.charAt(0).toUpperCase() + '</span>'
+                                + '<span class="text-xs font-bold text-[#E85D85]">' + initial + '</span>'
                                 + '</div>'
                                 + '<div>'
-                                + '<p class="text-sm font-semibold text-gray-800">' + review.customer_name + '</p>'
+                                + '<p class="text-sm font-semibold text-gray-800">' + name + '</p>'
                                 + '<div class="text-yellow-500 text-lg">' + stars + '</div>'
                                 + '<span class="text-xs text-green-600 font-medium">&#10003; Verified Purchase</span>'
                                 + '</div>'

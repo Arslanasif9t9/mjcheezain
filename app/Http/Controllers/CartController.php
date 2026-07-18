@@ -100,7 +100,18 @@ class CartController extends Controller
         $sessionId = session()->getId();
         $userId = Auth::check() ? Auth::id() : null;
 
-        Cart::where('single_buy', true)->whereNull('order_id')->delete();
+        // Only clear THIS user's / this guest-session's previous buy-now row —
+        // never touch other shoppers' pending single-buy carts.
+        Cart::where('single_buy', true)
+            ->whereNull('order_id')
+            ->where(function ($q) use ($userId, $sessionId) {
+                if ($userId) {
+                    $q->where('user_id', $userId);
+                } else {
+                    $q->where('session_id', $sessionId)->whereNull('user_id');
+                }
+            })
+            ->delete();
 
         $temp = Cart::create([
             'user_id' => $userId,

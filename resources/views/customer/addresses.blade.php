@@ -117,6 +117,7 @@
                                 <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
                                 <select id="country" name="country" class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300" >
                                     <option value="">Select Country</option>
+                                    <option value="PK" selected>Pakistan</option>
                                     <option value="US">United States</option>
                                     <option value="CA">Canada</option>
                                     <option value="UK">United Kingdom</option>
@@ -740,6 +741,5 @@
     </script>
 
     <!-- Notification  -->
-    <script src="../script/customer_notification.js"></script>
 </body>
 </html>

@@ -58,7 +58,7 @@
                     <div class="brand-gradient h-36 md:h-48 relative" id="cover-container">
                         {{-- @if ($bannerImage) --}}
                         <img
-                            src="{{ asset('storage/customer/banner/' . $bannerImage) }}"
+                            src="{{ ($bannerImage ?? null) ? asset('storage/customer/banner/' . $bannerImage) : asset('img/default-banner.jpg') }}"
                             class="w-full h-36 md:h-48 object-cover object-center rounded-t-xl shadow-md border-b border-pink-100"
                             id="cover-image"
                         >
@@ -94,8 +94,8 @@
                         <div class="flex flex-col md:flex-row md:items-end md:justify-between">
                             <div class="flex flex-col sm:flex-row items-center sm:items-end text-center sm:text-left">
                                 <div class="relative">
-                                    <img class="w-32 h-32 rounded-full border-4 border-white mx-auto" 
-                                        src="{{ asset('storage/customer/profile/' . $basic_info->profile_image) }}" 
+                                    <img class="w-32 h-32 rounded-full border-4 border-white mx-auto"
+                                        src="{{ ($basic_info->profile_image ?? null) ? asset('storage/customer/profile/' . $basic_info->profile_image) : asset('storage/default_profile.webp') }}"
                                         alt="Profile"
                                         id="profile-image">
                                     
@@ -742,6 +742,5 @@
     </script>
 
     <!-- Notification  -->
-    <script src="../script/customer_notification.js"></script>
 </body>
 </html>

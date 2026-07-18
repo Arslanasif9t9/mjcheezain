@@ -80,14 +80,55 @@
                     <div class="space-y-3">
                         <label for="email-subscribe" class="text-gray-700 text-sm block">Join Our Luxury Circle</label>
                         <div class="relative flex items-center bg-white rounded-full border border-gray-200 focus-within:border-transparent focus-within:ring-2 focus-within:ring-[#FFC275]/60 transition duration-200 shadow-sm pl-4 pr-1.5 py-1.5">
-                            <input type="email" id="email-subscribe" placeholder="Your Email Address" 
+                            <input type="email" id="email-subscribe" placeholder="Your Email Address"
                                    class="w-full bg-transparent text-gray-900 placeholder-gray-500 focus:outline-none text-sm">
-                            <button class="btn-brand-gradient p-2 rounded-full flex items-center justify-center shadow-sm">
+                            <button type="button" id="footer-subscribe-btn" class="btn-brand-gradient p-2 rounded-full flex items-center justify-center shadow-sm">
                                 <!-- Right Arrow Icon -->
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                             </button>
                         </div>
+                        <p id="footer-subscribe-msg" class="text-xs mt-1 hidden"></p>
                     </div>
+                    @once
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            var btn = document.getElementById('footer-subscribe-btn');
+                            if (!btn) return;
+                            var input = document.getElementById('email-subscribe');
+                            var msg = document.getElementById('footer-subscribe-msg');
+                            function show(text, ok) {
+                                if (!msg) return;
+                                msg.textContent = text;
+                                msg.classList.remove('hidden');
+                                msg.style.color = ok ? '#16a34a' : '#dc2626';
+                            }
+                            btn.addEventListener('click', function () {
+                                var email = (input.value || '').trim();
+                                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                                    show('Please enter a valid email address.', false);
+                                    return;
+                                }
+                                btn.disabled = true;
+                                fetch('/subscribe', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                        'Accept': 'application/json'
+                                    },
+                                    body: JSON.stringify({ email: email })
+                                })
+                                .then(function (r) { return r.json().catch(function () { return {}; }); })
+                                .then(function (data) {
+                                    show((data && data.message) ? data.message : 'Thanks for subscribing!', true);
+                                    input.value = '';
+                                })
+                                .catch(function () { show('Something went wrong. Please try again.', false); })
+                                .finally(function () { btn.disabled = false; });
+                            });
+                        });
+                    </script>
+                    @endonce
                     
                     <!-- Contact Email -->
                     <div class="mt-6">
@@ -101,8 +142,8 @@
         <!-- Bottom Section: Copyright & Developer Credit -->
         <div class="mt-12 pt-8 border-t border-gray-200">
             <p class="text-center text-gray-500 text-xs">
-                &copy; 2025 MJ Cheezain. All rights reserved. | Developed by 
-                <a href="" class="text-custom-gold font-medium">Arslan Asif</a>.
+                &copy; {{ date('Y') }} MJ Cheezain. All rights reserved. | Developed by
+                <span class="text-custom-gold font-medium">Arslan Asif</span>.
             </p>
         </div>
 

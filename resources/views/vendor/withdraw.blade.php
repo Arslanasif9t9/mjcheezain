@@ -212,7 +212,7 @@
                                     Withdrawal Amount <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
-                                    <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold text-sm">PKR</span>
+                                    <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold text-sm">Rs.</span>
                                     <input type="number" 
                                            id="amount"
                                            name="amount"

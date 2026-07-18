@@ -18,7 +18,7 @@
                 <th class="p-4">Action</th>
             </tr>
         </thead>
-        <tbody style="font-size: 14px">
+        <tbody id="product-table-body" style="font-size: 14px">
             @if(count($products) > 0)
                 @foreach($products as $product)
                             @php
@@ -42,7 +42,7 @@
                         <td class="p-2 whitespace-nowrap">
                             <a href="/product/{{ $product->id }}" target="_blank">
                                 <img style="width: 75px !important; height: 75px !important; border-radius: 10px;" 
-                                     src="{{ $product->primary_image ? asset('storage/vendor/products/images/'.$product->primary_image) : asset('img/default-product.jpg') }}" 
+                                     src="{{ $product->primary_image ? asset('storage/vendor/products/images/'.$product->primary_image) : asset('img/default_img.png') }}" 
                                      alt="{{ $product->name }}"
                                      class="object-cover">
                             </a>
@@ -243,6 +243,7 @@
         
         function checkEmptyTable() {
             const tableBody = document.getElementById('product-table-body');
+            if (!tableBody) return;
             const visibleRows = tableBody.querySelectorAll('tr[style*="display: table-row"], tr:not([style])');
             
             if (visibleRows.length === 0) {

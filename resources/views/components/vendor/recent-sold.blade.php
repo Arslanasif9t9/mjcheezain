@@ -32,12 +32,12 @@
                     <tr class="hover:bg-gray-50/50 transition-colors">
                         <td class="py-3.5">
                             <img class="w-12 h-12 rounded-lg object-cover border border-gray-100"
-                                 src="{{ $order['image_path'] ? asset('storage/vendor/products/images/' . $order['image_path']) : asset('img/default-product.jpg') }}"
+                                 src="{{ $order['image_path'] ? asset('storage/vendor/products/images/' . $order['image_path']) : asset('img/default_img.png') }}"
                                  alt="Product Image">
                         </td>
                         <td class="py-3.5 font-medium text-gray-850">{{ $order['product_name'] }}</td>
                         <td class="py-3.5 text-gray-500">{{ $order['product_category'] }}</td>
-                        <td class="py-3.5 font-semibold text-gray-800">{{ number_format($order['total_amount'], 2) }} PKR</td>
+                        <td class="py-3.5 font-semibold text-gray-800">{{ number_format($order['total_amount'], 2) }} Rs.</td>
                         <td class="py-3.5 text-gray-550">{{ date('d/m/Y', strtotime($order['order_date'])) }}</td>
                         <td class="py-3.5 text-gray-550">{{ $order['customer_name'] ?: 'N/A' }}</td>
                         <td class="py-3.5">
@@ -67,7 +67,7 @@
             <div class="rounded-2xl border border-pink-100 bg-white p-3.5">
                 <div class="flex items-center">
                     <img class="w-12 h-12 rounded-xl object-cover border border-pink-50 flex-shrink-0"
-                         src="{{ $order['image_path'] ? asset('storage/vendor/products/images/' . $order['image_path']) : asset('img/default-product.jpg') }}"
+                         src="{{ $order['image_path'] ? asset('storage/vendor/products/images/' . $order['image_path']) : asset('img/default_img.png') }}"
                          alt="Product Image">
                     <div class="ml-3 min-w-0 flex-1">
                         <p class="text-sm font-bold text-gray-800 truncate">{{ $order['product_name'] }}</p>

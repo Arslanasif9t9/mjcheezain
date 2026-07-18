@@ -60,13 +60,12 @@ class VendorController extends Controller
         $chartData = array_values($months);
         // dd($chartLabels, $chartData);
 
-        // ✅ Vendor balance
-        // $balanceRow = DB::table('vendor_balance')
-        //     ->where('user_id', $vendor_id)
-        //     ->select('total_balance')
-        //     ->first();
-        // $balance = $balanceRow->total_balance ?? 0.00;
-        $balance = 999;
+        // ✅ Vendor balance (real value from vendor_balances; 0 if no wallet row yet)
+        $balanceRow = DB::table('vendor_balances')
+            ->where('vendor_id', $vendor_id)
+            ->select('total_balance')
+            ->first();
+        $balance = $balanceRow->total_balance ?? 0.00;
 
         // ✅ Products (from vendor_products)
         $products = DB::table('vendor_products')
@@ -123,7 +122,7 @@ class VendorController extends Controller
                     'order_date' => $order->order_date,
                     'customer_name' => $order->customer_name ?: 'N/A',
                     'fulfillment' => $order->fulfillment,
-                    'image_path' => $order->image_path ? asset('uploads/' . $order->image_path) : asset('img/default_product.webp')
+                    'image_path' => $order->image_path ? asset('storage/vendor/products/images/' . $order->image_path) : asset('img/default_img.png')
                 ];
             })
             ->toArray();
@@ -253,22 +252,21 @@ class VendorController extends Controller
             ->where('user_id', $vendor_id)->first();
             
             if (!$vendor) {
-                // return response()->json([
-                //     'success' => false,
-                //     'message' => 'Vendor not found'
-                // ], 404);
                 VendorBasicInfo::create([
                     'user_id' => $vendor_id,
                     'full_name' => $request->full_name
                 ]);
+                // Re-fetch so the rest of the method has a real row to work with
+                $vendor = db::table('vendor_basic_info')
+                    ->where('user_id', $vendor_id)->first();
             }
 
             // Handle profile picture upload
             if ($request->hasFile('profile_picture')) {
                 $profilePicture = $request->file('profile_picture');
-                
+
                 // Delete old profile picture if exists
-                if ($vendor->profile_picture) {
+                if ($vendor && $vendor->profile_picture) {
                     Storage::delete('public/vendor/profile/' . $vendor->profile_picture);
                 }
                 
@@ -785,20 +783,25 @@ class VendorController extends Controller
                 ], 403);
             }
             
-            // return response()->json(['success' => $product]);
-            // Delete product images from storage
-            if ($product->primary_image) {
-                Storage::delete('vendor/products/images/' . $product->primary_image);
-            }
-
-            // Delete additional images if any
-            if ($product->images) {
-                foreach ($product->images as $image) {
-                    Storage::delete('vendor/products/images/' . $image);
+            // Delete every image file for this product from BOTH storage trees
+            // (the app double-writes to storage/app/public and public/storage).
+            $imageRows = DB::table('vendor_product_images')
+                ->where('product_id', $product->id)
+                ->get();
+            foreach ($imageRows as $img) {
+                $file = $img->image_path ?? null;
+                if (!$file) {
+                    continue;
+                }
+                Storage::disk('public')->delete('vendor/products/images/' . $file);
+                $publicCopy = public_path('storage/vendor/products/images/' . $file);
+                if (is_file($publicCopy)) {
+                    @unlink($publicCopy);
                 }
             }
 
-            // Delete the product
+            // Remove image rows, then the product itself
+            DB::table('vendor_product_images')->where('product_id', $product->id)->delete();
             $product->delete();
 
             return response()->json([
@@ -806,7 +809,7 @@ class VendorController extends Controller
                 'message' => 'Product deleted successfully.'
             ]);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
                 'message' => \App\Support\ErrorReason::friendly($e, 'Failed to delete product')
@@ -862,6 +865,32 @@ class VendorController extends Controller
 
         if ($customCategory) {
             $this->queueCategorySuggestion($validated, $product->id);
+        }
+
+        // Handle product images - REMOVE the ones the vendor deleted in the editor
+        $deletedImageIds = array_filter((array) $request->input('deleted_images', []));
+        if (!empty($deletedImageIds)) {
+            $toDelete = VendorProductImage::where('product_id', $product->id)
+                ->whereIn('id', $deletedImageIds)
+                ->get();
+            foreach ($toDelete as $img) {
+                if ($img->image_path) {
+                    Storage::disk('public')->delete('vendor/products/images/' . $img->image_path);
+                    $publicCopy = public_path('storage/vendor/products/images/' . $img->image_path);
+                    if (is_file($publicCopy)) {
+                        @unlink($publicCopy);
+                    }
+                }
+                $img->delete();
+            }
+            // If we removed the primary image, promote another one so the product still shows
+            $hasPrimary = VendorProductImage::where('product_id', $product->id)->where('is_primary', 1)->exists();
+            if (!$hasPrimary) {
+                $next = VendorProductImage::where('product_id', $product->id)->orderBy('id')->first();
+                if ($next) {
+                    $next->update(['is_primary' => 1]);
+                }
+            }
         }
 
         // Handle product images - ADD NEW IMAGES ONLY

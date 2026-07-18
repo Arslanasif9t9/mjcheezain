@@ -101,7 +101,7 @@
                                     <div class="md:w-1/3 mb-6 md:mb-0 md:pr-6">
                                         <div class="flex flex-col items-center">
                                             <div class="relative mb-4">
-                                                <img id="profile-preview" src="{{ asset('storage/customer/profile/' . $basic_info->profile_image) }}" alt="Profile" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow">
+                                                <img id="profile-preview" src="{{ ($basic_info->profile_image ?? null) ? asset('storage/customer/profile/' . $basic_info->profile_image) : asset('storage/default_profile.webp') }}" alt="Profile" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow">
                                                 <div class="absolute bottom-0 right-0 brand-gradient brand-shadow rounded-full p-2">
                                                     <input type="file" id="profile-upload" name="profile-upload" class="file-upload-input" accept="image/*">
                                                     <label for="profile-upload" class="file-upload-label">
@@ -550,6 +550,5 @@
     </script>
 
     <!-- Notification  -->
-    <script src="../script/customer_notification.js"></script>
 </body>
 </html>

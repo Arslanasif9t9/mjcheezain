@@ -255,10 +255,10 @@
 
                 <!-- Price -->
                 <p class="text-3xl font-extrabold text-gray-900 mb-4">
-                    PKR {{ number_format($gst, 2) }}
+                    Rs. {{ number_format($gst, 2) }}
                     @if ($productOriginalPrice > $gst)
                         <br>
-                        <small class="font-normal text-md"><del>PKR {{ number_format($productOriginalPrice, 2) }}</del></small>
+                        <small class="font-normal text-md"><del>Rs. {{ number_format($productOriginalPrice, 2) }}</del></small>
                     @endif
                 </p>
                 
@@ -357,7 +357,7 @@
                 </div>
                 <div>
                     <p class="font-semibold text-gray-800"><span id="totalItems">0</span> items in cart</p>
-                    <p class="text-sm text-gray-600">Total: PKR <span id="totalPrice">0.00</span></p>
+                    <p class="text-sm text-gray-600">Total: Rs. <span id="totalPrice">0.00</span></p>
                 </div>
             </div>
             <button id="viewCartBtn" class="bg-gradient-to-r from-[#FF7DA0] to-[#FFC275] text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-md">
@@ -905,7 +905,7 @@
                 <div class="relative w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl border-4 border-pink-200 hover:border-pink-400 transition-all duration-300">
                     <video
                         controls
-                        poster="{{ asset('img/video-poster.jpg') }}"
+                        poster="{{ asset('img/default_img.png') }}"
                         class="w-full rounded-2xl h-[366px]">
                         <source src="{{ $productVideo }}" type="video/mp4">
                         Your browser does not support the video tag.

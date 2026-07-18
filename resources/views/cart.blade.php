@@ -235,7 +235,7 @@
                     <div class="text-gray-300 text-8xl mb-6">🛒</div>
                     <p class="text-gray-500 text-xl font-medium mb-4">Your cart is empty</p>
                     <p class="text-gray-400 mb-8">Add some products to your cart</p>
-                    <a href="/products" class="inline-block bg-umart-blue hover:bg-umart-blue/90 text-white px-8 py-3 rounded-lg font-semibold text-lg transition duration-300 shadow-md hover:shadow-lg">
+                    <a href="/products/all-page" class="inline-block bg-umart-blue hover:bg-umart-blue/90 text-white px-8 py-3 rounded-lg font-semibold text-lg transition duration-300 shadow-md hover:shadow-lg">
                         Continue Shopping
                     </a>
                 </div>

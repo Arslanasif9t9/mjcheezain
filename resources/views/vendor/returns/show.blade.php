@@ -254,8 +254,8 @@
                     </h2>
                     <div class="image-gallery">
                         @foreach($images as $image)
-                        <div class="image-item" onclick="openImageModal('{{ asset('storage/return_images/' . $image->image_path) }}')">
-                            <img src="{{ asset('storage/return_images/' . $image->image_path) }}" 
+                        <div class="image-item" onclick="openImageModal('{{ asset('storage/' . $image->image_path) }}')">
+                            <img src="{{ asset('storage/' . $image->image_path) }}"
                                  alt="Return Image {{ $loop->iteration }}">
                         </div>
                         @endforeach

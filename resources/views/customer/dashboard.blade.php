@@ -23,8 +23,9 @@
 
                 @php
                     $totalOrders = DB::table('orders')->where('user_id', $basic_info->user_id)->count();
-                    $activeOrders = DB::table('orders')->where('user_id', $basic_info->user_id)->where('status', '!=', 'completed')->count();
-                    $completedOrders = DB::table('orders')->where('user_id', $basic_info->user_id)->where('status', 'completed')->count();
+                    // Order STATE lives in `fulfillment` (order placed|processing|shipping|delivered|cancelled)
+                    $activeOrders = DB::table('orders')->where('user_id', $basic_info->user_id)->whereNotIn('fulfillment', ['delivered', 'cancelled'])->count();
+                    $completedOrders = DB::table('orders')->where('user_id', $basic_info->user_id)->where('fulfillment', 'delivered')->count();
                     $wishlistCount = DB::table('favorites')->where('user_id', $basic_info->user_id)->count();
                 @endphp
 

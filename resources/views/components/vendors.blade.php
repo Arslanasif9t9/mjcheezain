@@ -1,111 +1,42 @@
-<!-- 
-        MOCK DATA: This script block contains the JSON data 
-        that would typically be fetched from an API endpoint.
-    -->
-    <script id="vendor-data" type="application/json">
-        [
-            {
-                "id": 1,
-                "name": "Lumière Paris",
-                "tagline": "Luxury Skincare & Cosmetics",
-                "location": "Paris, France",
-                "rating": 4.9,
-                "product_count": 156,
-                "is_verified": true,
-                "image_url": "https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=400&auto=format&fit=crop"
-            },
-            {
-                "id": 2,
-                "name": "Bella Essence",
-                "tagline": "Premium Fragrances",
-                "location": "Milan, Italy",
-                "rating": 5,
-                "product_count": 89,
-                "is_verified": true,
-                "image_url": "https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=400&auto=format&fit=crop"
-            },
-            {
-                "id": 3,
-                "name": "Luxe Tokyo",
-                "tagline": "Asian Beauty Innovations",
-                "location": "Tokyo, Japan",
-                "rating": 4.8,
-                "product_count": 203,
-                "is_verified": true,
-                "image_url": "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=400&auto=format&fit=crop"
-            },
-            {
-                "id": 4,
-                "name": "Maison Beauté",
-                "tagline": "Artisanal Cosmetics",
-                "location": "New York, USA",
-                "rating": 4.9,
-                "product_count": 124,
-                "is_verified": true,
-                "image_url": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=400&auto=format&fit=crop"
-            },
-            {
-                "id": 5,
-                "name": "Golden Glow",
-                "tagline": "Organic Skincare Solutions",
-                "location": "California, USA",
-                "rating": 4.7,
-                "product_count": 92,
-                "is_verified": false,
-                "image_url": "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400&auto=format&fit=crop"
-            },
-            {
-                "id": 6,
-                "name": "Aether & Co.",
-                "tagline": "High-End Hair Products",
-                "location": "London, UK",
-                "rating": 5,
-                "product_count": 45,
-                "is_verified": true,
-                "image_url": "https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=400&auto=format&fit=crop"
-            },
-            {
-                "id": 7,
-                "name": "Silk Road",
-                "tagline": "Handmade Silk Accessories",
-                "location": "Chengdu, China",
-                "rating": 4.6,
-                "product_count": 310,
-                "is_verified": false,
-                "image_url": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400&auto=format&fit=crop"
-            },
-            {
-                "id": 8,
-                "name": "Urban Edge",
-                "tagline": "Modern Apparel & Jewelry",
-                "location": "Berlin, Germany",
-                "rating": 4.8,
-                "product_count": 188,
-                "is_verified": true,
-                "image_url": "https://images.unsplash.com/photo-1513094735237-8f2714d57c13?q=80&w=400&auto=format&fit=crop"
-            },
-            {
-                "id": 9,
-                "name": "Pure Botanicals",
-                "tagline": "Natural Bath & Body",
-                "location": "Sydney, Australia",
-                "rating": 4.9,
-                "product_count": 76,
-                "is_verified": true,
-                "image_url": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=400&auto=format&fit=crop"
-            },
-            {
-                "id": 10,
-                "name": "The Vintage Spot",
-                "tagline": "Curated Designer Finds",
-                "location": "Paris, France",
-                "rating": 4.5,
-                "product_count": 55,
-                "is_verified": false,
-                "image_url": "https://images.unsplash.com/photo-1594913785162-e678537db36f?q=80&w=400&auto=format&fit=crop"
-            }
-        ]
-    </script>
+    @php
+        // Real featured vendors: sellers who have at least one APPROVED product.
+        // Wrapped in try/catch so the home page can never 500 over this section.
+        $featuredVendors = collect();
+        try {
+            $featuredVendors = \Illuminate\Support\Facades\DB::table('vendor_products as vp')
+                ->join('users as u', 'vp.user_id', '=', 'u.user_id')
+                ->leftJoin('vendor_basic_info as vbi', 'u.user_id', '=', 'vbi.user_id')
+                ->where('vp.position', 'approved')
+                ->where('u.type', 'vendor')
+                ->groupBy('u.user_id', 'vbi.full_name', 'vbi.profile_picture', 'u.verified')
+                ->select(
+                    'u.user_id as id',
+                    \Illuminate\Support\Facades\DB::raw("COALESCE(NULLIF(vbi.full_name, ''), 'MJ Store') as name"),
+                    'vbi.profile_picture',
+                    'u.verified as is_verified',
+                    \Illuminate\Support\Facades\DB::raw('COUNT(vp.id) as product_count')
+                )
+                ->orderByDesc('product_count')
+                ->limit(10)
+                ->get()
+                ->map(function ($v) {
+                    return [
+                        'id' => $v->id,
+                        'name' => $v->name,
+                        'location' => 'Pakistan',
+                        'rating' => null,
+                        'product_count' => (int) $v->product_count,
+                        'is_verified' => (bool) $v->is_verified,
+                        'image_url' => $v->profile_picture
+                            ? asset('storage/vendor/profile/' . $v->profile_picture)
+                            : asset('img/default_profile.webp'),
+                    ];
+                });
+        } catch (\Throwable $e) {
+            $featuredVendors = collect();
+        }
+    @endphp
+    <script id="vendor-data" type="application/json">{!! $featuredVendors->toJson() !!}</script>
 
     <!-- Main Section Container (Will be hidden if no data is present) -->
     <section id="featured-vendors-section" class="py-10 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-full mx-auto hidden">
@@ -187,11 +118,13 @@
                         <img src="${vendor.image_url}" alt="${vendor.name} store front" loading="lazy" onload="this.classList.add('is-loaded')"
                              class="fade-in-img w-full h-full object-cover transition duration-700 ease-in-out group-hover:scale-105 brightness-95">
                         
+                        ${(vendor.rating !== null && vendor.rating !== undefined && vendor.rating !== '') ? `
                         <!-- Rating Badge Overlay -->
                         <div class="absolute bottom-2 left-2 bg-white/95 backdrop-blur-sm px-1.5 py-0.5 rounded-full text-[10px] font-bold text-gray-800 shadow-sm flex items-center space-x-1">
                             <span class="text-amber-500">★</span>
                             <span>${vendor.rating}</span>
                         </div>
+                        ` : ''}
 
                         ${vendor.is_verified ? `
                             <!-- Verified Badge Overlay -->

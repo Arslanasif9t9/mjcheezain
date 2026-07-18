@@ -57,12 +57,15 @@ class BalanceController extends Controller
         ]);
         
         $vendorId = Auth::id();
-        
-        // Get current balance
+
+        // Get current balance (auto-create so a first-time vendor never null-crashes)
         $balance = DB::table('vendor_balances')
                     ->where('vendor_id', $vendorId)
                     ->first();
-        
+        if (!$balance) {
+            $balance = $this->createBalanceRecord($vendorId);
+        }
+
         // Check if sufficient balance is available
         if ($balance->available_balance < $request->amount) {
             return redirect()->back()
@@ -121,25 +124,31 @@ class BalanceController extends Controller
     public function showBalanceDetails()
     {
         $vendorId = Auth::id();
-        
-        // Get current balance
+
+        // Get current balance (auto-create so the page + summary cards never null-crash)
         $balance = DB::table('vendor_balances')
                     ->where('vendor_id', $vendorId)
                     ->first();
-        
+        if (!$balance) {
+            $balance = $this->createBalanceRecord($vendorId);
+        }
+
         // Get recent transactions
         $transactions = DB::table('balance_transactions')
                         ->where('vendor_id', $vendorId)
                         ->orderBy('transaction_date', 'desc')
                         ->paginate(10);
-        
+
         // Get withdrawal history
         $withdrawals = DB::table('withdrawal_requests')
                         ->where('vendor_id', $vendorId)
                         ->orderBy('requested_at', 'desc')
                         ->paginate(10);
-        
-        return view('vendor.balance-details', compact('balance', 'transactions', 'withdrawals'));
+
+        // Sidebar (included by the view) needs $user->user_id
+        $user = (object) ['user_id' => $vendorId];
+
+        return view('vendor.balance-details', compact('balance', 'transactions', 'withdrawals', 'user'));
     }
     
     // Record transaction helper method

@@ -33,7 +33,7 @@
             <span class="text-4xl font-extrabold text-gray-800 tracking-tight">
                 {{ number_format($balance, 2) }}
             </span>
-            <span class="text-sm font-bold text-gray-500 ml-1">PKR</span>
+            <span class="text-sm font-bold text-gray-500 ml-1">Rs.</span>
         </div>
 
         <div class="w-2/3 h-px bg-gray-100 mx-auto my-5"></div>

@@ -18,10 +18,11 @@ class AdminAuthController extends Controller
                     ->where('username', $request->username)
                     ->first();
         if (!$admin) {
+            // Generic message — never reveal whether the username exists
             return response()->json([
-                'status' => 'error',
-                'message' => 'User not found'
-            ]);
+                'success' => false,
+                'message' => 'Invalid credentials'
+            ], 401);
         }
 
         // Check password: bcrypt hash preferred; legacy plaintext rows are
@@ -39,22 +40,27 @@ class AdminAuthController extends Controller
         }
 
         if ($ok) {
-            // Set session data
+            // Sanitised copy — never store or ship the password hash
+            $safeAdmin = (object) collect((array) $admin)->except(['password_hash'])->all();
+
+            // Regenerate the session id to prevent session fixation
+            $request->session()->regenerate();
+
             Session::put('admin_logged_in', true);
             Session::put('admin_id', $admin->id);
             Session::put('admin_username', $admin->username);
-            Session::put('admin_data', $admin); // Store entire admin object if needed
-            
+            Session::put('admin_data', $safeAdmin);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Login successful',
-                'data' => $admin
+                'data' => $safeAdmin
             ]);
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid password'
-            ]);
+                'message' => 'Invalid credentials'
+            ], 401);
         }
     }
 

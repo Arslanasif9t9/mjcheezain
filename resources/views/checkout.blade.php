@@ -127,7 +127,7 @@
                                                 <input type="text" name="city" placeholder="City" class="border border-pink-100 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300">
                                                 <input type="text" name="state" placeholder="State" class="border border-pink-100 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300">
                                                 <input type="text" name="zip_code" placeholder="Zip Code" class="border border-pink-100 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300">
-                                                <input type="text" name="country" placeholder="Country" value="Kuwait" class="border border-pink-100 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300">
+                                                <input type="text" name="country" placeholder="Country" value="Pakistan" class="border border-pink-100 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300">
                                             </div>
                                             <div class="flex justify-end space-x-2">
                                                 <button type="button" onclick="cancelNewAddress()" class="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50">Cancel</button>
@@ -154,20 +154,6 @@
                                 Payment Method
                             </h2>
                             <div class="space-y-2">
-                                <!-- KNET Payment -->
-                                <label class="flex items-center p-3 border border-pink-100 rounded-xl cursor-pointer hover:border-primary has-[:checked]:border-primary has-[:checked]:bg-pink-50/40 transition-colors duration-200">
-                                    <input type="radio" name="payment_method" value="knet" class="text-primary focus:ring-primary" checked>
-                                    <div class="ml-2.5 flex items-center gap-2.5 flex-1 min-w-0">
-                                        <div class="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                            <span class="text-[#E85D85] font-bold text-sm">K</span>
-                                        </div>
-                                        <div class="min-w-0">
-                                            <span class="font-semibold text-gray-800 text-sm">KNET</span>
-                                            <p class="text-xs text-gray-400 m-0 truncate">Secure online payment</p>
-                                        </div>
-                                    </div>
-                                </label>
-
                                 <!-- Credit/Debit Card Payment -->
                                 <label class="flex items-center p-3 border border-pink-100 rounded-xl cursor-pointer hover:border-primary has-[:checked]:border-primary has-[:checked]:bg-pink-50/40 transition-colors duration-200" onclick="showCreditCardForm()">
                                     <input type="radio" name="payment_method" value="credit_card" class="text-primary focus:ring-primary">
@@ -264,7 +250,7 @@
 
                                 <!-- Cash on Delivery -->
                                 <label class="flex items-center p-3 border border-pink-100 rounded-xl cursor-pointer hover:border-primary has-[:checked]:border-primary has-[:checked]:bg-pink-50/40 transition-colors duration-200" onclick="hideCreditCardForm()">
-                                    <input type="radio" name="payment_method" value="cod" class="text-primary focus:ring-primary">
+                                    <input type="radio" name="payment_method" value="cod" class="text-primary focus:ring-primary" checked>
                                     <div class="ml-2.5 flex items-center gap-2.5 flex-1 min-w-0">
                                         <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
                                             <i class="fas fa-money-bill text-green-600 text-sm"></i>
@@ -336,7 +322,7 @@
                             <div class="flex items-start">
                                 <input type="checkbox" id="terms" name="terms" required class="text-primary focus:ring-primary mt-0.5 rounded">
                                 <label for="terms" class="ml-2 text-xs text-gray-500 leading-relaxed">
-                                    I agree to the <a href="#" class="text-primary hover:underline font-semibold">Terms &amp; Conditions</a> and <a href="" class="text-primary hover:underline font-semibold">Privacy Policy</a>.
+                                    I agree to the <a href="/legal-policies" target="_blank" class="text-primary hover:underline font-semibold">Terms &amp; Conditions</a> and <a href="/privacy-policy" target="_blank" class="text-primary hover:underline font-semibold">Privacy Policy</a>.
                                 </label>
                             </div>
                         </div>
@@ -442,11 +428,11 @@
             <div class="bg-gray-50 rounded-lg p-4 mb-4 text-left">
                 <div class="flex justify-between items-center mb-2">
                     <span class="text-sm text-gray-600">Order Number:</span>
-                    <span class="font-semibold text-gray-800">ORD-{{ strtoupper(uniqid()) }}</span>
+                    <span class="font-semibold text-gray-800" id="successOrderNumber">—</span>
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-sm text-gray-600">Estimated Delivery:</span>
-                    <span class="font-semibold text-gray-800">{{ date('M d-e, Y', strtotime('+3 days')) }}</span>
+                    <span class="font-semibold text-gray-800">{{ date('M d, Y', strtotime('+3 days')) }}</span>
                 </div>
             </div>
             <div class="flex space-x-3">
@@ -565,10 +551,16 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                // return;
+                if (data.login_required && data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
                 if (data.success) {
-                    // Show success modal
+                    // Show the REAL order number returned by the server
+                    if (data.order_id) {
+                        const el = document.getElementById('successOrderNumber');
+                        if (el) el.textContent = 'ORD-' + String(data.order_id).padStart(6, '0');
+                    }
                     document.getElementById('successModal').classList.remove('hidden');
                 } else {
                     showMessage(data.message || 'Something went wrong', 'error');
@@ -663,17 +655,18 @@
             }, 3000);
         }
 
-        // Auto-format phone number
+        // Auto-format phone number (Pakistan)
         document.getElementById('phone').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
-            if (value.startsWith('965')) {
-                value = '+' + value;
-            }
-            if (value.length > 4) {
-                value = value.substring(0, 4) + ' ' + value.substring(4);
-            }
-            if (value.length > 9) {
-                value = value.substring(0, 9) + ' ' + value.substring(9, 13);
+            if (value.startsWith('92')) {
+                // +92 3XX XXXXXXX
+                value = '+' + value.substring(0, 12);
+                if (value.length > 3) value = value.substring(0, 3) + ' ' + value.substring(3);
+                if (value.length > 7) value = value.substring(0, 7) + ' ' + value.substring(7);
+            } else {
+                // Local 0XXX XXXXXXX (11 digits)
+                value = value.substring(0, 11);
+                if (value.length > 4) value = value.substring(0, 4) + ' ' + value.substring(4);
             }
             e.target.value = value;
         });

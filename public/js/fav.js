@@ -1,6 +1,6 @@
 const heartBtn = document.getElementById('heart-btn');
 const heartIcon = document.getElementById('heart-icon');
-const productId = heartBtn.getAttribute('data-product-id'); // Make sure to add this attribute to your button
+const productId = heartBtn ? heartBtn.getAttribute('data-product-id') : null; // null on pages with no product heart
 
 // Function to show notification
 function showNotification(message, type = 'info') {
@@ -37,9 +37,8 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
-// Heart icon toggle with API call
-heartBtn.addEventListener('click', async () => {
-    console.log('click')
+// Heart icon toggle with API call (only wire up when the product heart exists)
+heartBtn && heartBtn.addEventListener('click', async () => {
     try {
         // Show loading state
         heartBtn.disabled = true;
@@ -82,6 +81,7 @@ heartBtn.addEventListener('click', async () => {
 
 // Check initial favorite status on page load
 document.addEventListener('DOMContentLoaded', async () => {
+    if (!heartBtn || !productId) return; // no product heart on this page
     try {
         const response = await fetch(`/favorites/check/${productId}`);
         const data = await response.json();
