@@ -16,90 +16,10 @@
             return new Promise(resolve => {
                 // Simulate network delay
                 setTimeout(() => {
-                    if (allProducts.length < 1) {
-                        let mockProducts = [];
-                        
-                        if (categoryName === 'Fitness & Gym Equipment') {
-                            mockProducts = [
-                                {
-                                    id: 101,
-                                    name: 'Premium Adjustable Dumbbell Set',
-                                    description: 'High quality adjustable dumbbells ranging from 5 to 50 lbs.',
-                                    selling_price: 120,
-                                    original_price: 150,
-                                    rating: 4.8,
-                                    quantity: 15,
-                                    pcondition: 'New',
-                                    mock_image_url: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=400'
-                                },
-                                {
-                                    id: 102,
-                                    name: 'Foldable Electric Treadmill',
-                                    description: 'Smart space-saving treadmill with LCD display and 12 preset programs.',
-                                    selling_price: 299,
-                                    original_price: 399,
-                                    rating: 4.7,
-                                    quantity: 8,
-                                    pcondition: 'New',
-                                    mock_image_url: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=400'
-                                }
-                            ];
-                        } else if (categoryName === 'Bundle Sales') {
-                            mockProducts = [
-                                {
-                                    id: 201,
-                                    name: 'Complete Matte Makeup Bundle',
-                                    description: 'All-in-one bundle featuring lipstick, primer, foundation, and eyeliner.',
-                                    selling_price: 59,
-                                    original_price: 80,
-                                    rating: 4.9,
-                                    quantity: 25,
-                                    pcondition: 'New',
-                                    mock_image_url: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400'
-                                },
-                                {
-                                    id: 202,
-                                    name: 'Organic Skincare Glow Kit',
-                                    description: 'Includes vitamin C serum, daily moisturizer, and gentle facial cleanser.',
-                                    selling_price: 45,
-                                    original_price: 60,
-                                    rating: 4.8,
-                                    quantity: 30,
-                                    pcondition: 'New',
-                                    mock_image_url: 'https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?w=400'
-                                }
-                            ];
-                        } else if (categoryName === 'Auto Parts & Accessories') {
-                            mockProducts = [
-                                {
-                                    id: 301,
-                                    name: 'Premium Car Polisher & Detailing Kit',
-                                    description: 'Complete professional detailing kit for polishing and waxing your vehicle.',
-                                    selling_price: 35,
-                                    original_price: 45,
-                                    rating: 4.7,
-                                    quantity: 12,
-                                    pcondition: 'New',
-                                    mock_image_url: 'https://images.unsplash.com/photo-1542282088-fe8426682b8f?w=400'
-                                },
-                                {
-                                    id: 302,
-                                    name: 'High-Intensity LED Headlight Bulbs',
-                                    description: 'Ultra-bright headlights with cooling fan and easy plug-and-play installation.',
-                                    selling_price: 24,
-                                    original_price: 35,
-                                    rating: 4.6,
-                                    quantity: 40,
-                                    pcondition: 'New',
-                                    mock_image_url: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=400'
-                                }
-                            ];
-                        }
-                        
-                        resolve({ products: mockProducts, images: {} });
-                    } else {
-                        resolve({ products: allProducts.slice(0, 8), images: imagesMap });
-                    }
+                    // Real products only — no demo/mock fallback. Empty
+                    // category resolves empty so loadCategoryProducts hides
+                    // the section instead of showing placeholder cards.
+                    resolve({ products: allProducts.slice(0, 8), images: imagesMap });
                 }, 100);
             });
         };

@@ -14,6 +14,18 @@
 
 ## ✅ Completed
 
+### 2026-07-18 — FULL DATA WIPE (fresh launch prep) — NO push (no code change)
+- **Owner request**: saara user data + uploaded media clear, sirf admin logins + category config bache.
+- **Local DB**: 35 tables TRUNCATE (FK checks off/on) — users, vendor_products, vendor_product_images(783), vendor_product_faults/cards, vendor_basic_info/store_details/address/documents/payments/balances, balance_transactions, withdrawal_requests, customer_profile/addresses/banner/notes/recent_activity, favorites, carts(143), orders(26), payments, product_ratings, products, notifications(121), return_requests/tracking/images, replacement_requests/tracking, category_suggestions, auto_parts_products+images+videos+faults. IDs reset (TRUNCATE).
+- **KEPT (untouched)**: `admin_users`(3: admin/arslanadmin/mjcheezain), `admin_password_reset_tokens`, `site_categories`(13), `site_subcategories`(103), `auto_parts_categories`(7), `auto_parts_subcategories`(23), migrations/cache. Owner ne categories "Rakho" choose kiya.
+- **Local files**: 414 upload files deleted from BOTH trees (`public/storage/vendor|customer/**` + `storage/app/public/vendor|customer|returns/**`); preserved 3 defaults (`default_profile.webp`×2, `customer/banner/default_img.png`) + `public/img`(80) + `public/video`(2) intact.
+- **Safety backup**: full local dump (652KB) scratchpad mein — `mjcheezain-backup-2026-07-18.sql`.
+- **GitHub**: kuch nahi kiya — uploads gitignored (`/public/storage`, `storage/app/public/*`), DB git mein nahi, code change 0 → repo untouched.
+- **Hostinger**: `database/wipe-all-data-2026-07-18.sql` banaya (idempotent 35× TRUNCATE, FK-safe, category_suggestions optional-line note). Owner phpMyAdmin → backup lo → Import. Server disk uploads (public/storage + storage/app/public ke vendor|customer|returns folders) File Manager/FTP se manually saaf karein — git/deploy inhe touch nahi karta.
+- **Verified**: DB counts (wipe=0, keep intact), home 200 (categories render, products khaali), /admin/login 200, 3 admin accounts present, seed assets intact.
+- `php artisan cache:clear` + `view:clear` done.
+- **FIX (wipe ke baad mila)**: home ke 3 sections (Fitness & Gym Equipment / Bundle Sales / Auto Parts & Accessories) empty hone par bhi 2-2 cards dikha rahe the — `public/js/category_fetch_v2.js` (home) + `category_fetch.js` ke `mockFetchProducts()` mein **hardcoded DEMO products (Unsplash)** the jo API 0 dene par inject hote the. Mock fallback dono files se hataya → ab empty category `loadCategoryProducts` section ko `hidden` kar deta hai. node --check pass; API teeno categories `{"data":[],"images":[]}`. Script pe `?v=time()` cache-buster hai.
+
 ### 2026-07-16 — MEGA SPRINT: admin overhaul + categories system + storefront + flow fixes (5 parallel agents + core by main session)
 - **Categories system (main session)**: `site_categories` + `site_subcategories` tables (migration `2026_07_16_000002`, seeded 13 cats / 103 subs from purani hardcoded list), `App\Support\CategoryCatalog` helper (10-min cache + hardcoded fallback agar table missing — FTP-only deploy safety), `AdminCategoryController` (CRUD + placement toggles + rename syncs product strings + suggestion approve/reject), routes sab `admin.auth` ke andar.
 - **Admin SECURITY (main session)**: naya `AdminAuth` middleware — SAB admin routes ab protected (pehle POST endpoints anonymous the: product delete/approve, vendor status!). Login ab bcrypt `Hash::check` (legacy plaintext first-login par auto-upgrade). `/admin/logout` route added. Route double-prefix `/admin/admin/vendor/status` → `/admin/vendor/status` (name same).
