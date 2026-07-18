@@ -4,6 +4,8 @@
 
 ## 🔄 Currently Working On
 
+- *(session closed 2026-07-18 — DATA WIPE session, niche Completed dekho)*
+- **⏳ 2026-07-18 PENDING (owner manual)**: Hostinger File Manager se 5 upload folders delete (guide di) — `public/storage/{vendor,customer}` + `storage/app/public/{vendor,customer,returns}`. Optional: `arslanadmin@`/`mjcheezain@` admin passwords reset (plaintext lost; abhi `admin`/`admin123` se login ho sakta hai).
 - *(session closed 2026-07-16 — owner khud `git push` kar raha hai)*
 - **⏳ PUSH KE BAAD PENDING**: phpMyAdmin mein `database/hostinger-deploy-2026-07-16.sql` import (tables + 13/103 category seed + 2 naye admin accounts). Full steps: `docx/deploy-2026-07-16.md`. Live verify bhi wahin checklist mein.
 - Naye admin logins (username = poora email): `arslanadmin@gmail.com`, `mjcheezain@gmail.com` (hashed). Purana `admin`/`admin123` weak — live par change karwana.
@@ -21,7 +23,9 @@
 - **Local files**: 414 upload files deleted from BOTH trees (`public/storage/vendor|customer/**` + `storage/app/public/vendor|customer|returns/**`); preserved 3 defaults (`default_profile.webp`×2, `customer/banner/default_img.png`) + `public/img`(80) + `public/video`(2) intact.
 - **Safety backup**: full local dump (652KB) scratchpad mein — `mjcheezain-backup-2026-07-18.sql`.
 - **GitHub**: kuch nahi kiya — uploads gitignored (`/public/storage`, `storage/app/public/*`), DB git mein nahi, code change 0 → repo untouched.
-- **Hostinger**: `database/wipe-all-data-2026-07-18.sql` banaya (idempotent 35× TRUNCATE, FK-safe, category_suggestions optional-line note). Owner phpMyAdmin → backup lo → Import. Server disk uploads (public/storage + storage/app/public ke vendor|customer|returns folders) File Manager/FTP se manually saaf karein — git/deploy inhe touch nahi karta.
+- **Hostinger DB**: `database/wipe-all-data-2026-07-18.sql` — ⚠ v1 TRUNCATE tha jo MariaDB par #1701 (FK-referenced table) diya; v2 DELETE bhi #1451 (parent-before-child) diya; **v3 = child-first DELETE order, users SABSE aakhir** — FK checks ON forced karke local par test (backup restore → wipe → exit 0, wipe=0, keep intact). Idempotent. **Owner ne v3 live import kar diya (DONE).** Live DB naam `u425346958_Arslan` (local `u425346958_DB` se alag — dono XAMPP: `admin`/no-pass, mysqldump/mysql at `C:\xampp\mysql\bin`).
+- **Hostinger server disk uploads**: File Manager se ye 5 folders delete karne hain (auto-recreate on next upload): `public/storage/vendor`, `public/storage/customer`, `storage/app/public/{vendor,customer,returns}`. Bachao: `public/storage/default_img.png` + `default_profile.webp` (root), `public/img/`, `public/video/`, `storage/app/public/.gitignore`. (Owner ko step-by-step guide di.)
+- **Admin logins** (login `/admin/login`, username field): `admin` / **`admin123`** ✅ works (row1, plaintext hash). `arslanadmin@gmail.com` + `mjcheezain@gmail.com` = **bcrypt `$2y$12$` hashed, plaintext kahin save NAHI** — reset chahiye to naye hash ka UPDATE dena hoga.
 - **Verified**: DB counts (wipe=0, keep intact), home 200 (categories render, products khaali), /admin/login 200, 3 admin accounts present, seed assets intact.
 - `php artisan cache:clear` + `view:clear` done.
 - **FIX (wipe ke baad mila)**: home ke 3 sections (Fitness & Gym Equipment / Bundle Sales / Auto Parts & Accessories) empty hone par bhi 2-2 cards dikha rahe the — `public/js/category_fetch_v2.js` (home) + `category_fetch.js` ke `mockFetchProducts()` mein **hardcoded DEMO products (Unsplash)** the jo API 0 dene par inject hote the. Mock fallback dono files se hataya → ab empty category `loadCategoryProducts` section ko `hidden` kar deta hai. node --check pass; API teeno categories `{"data":[],"images":[]}`. Script pe `?v=time()` cache-buster hai.

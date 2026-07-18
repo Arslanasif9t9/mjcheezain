@@ -1,80 +1,81 @@
 -- =====================================================================
 --  MJ Cheezain — WIPE ALL USER DATA  (keep admins + category config)
---  Date: 2026-07-18   |   v2 (DELETE-based, MariaDB/Hostinger safe)
+--  Date: 2026-07-18   |   v3 — child-first DELETE order (FK-proof)
 --
---  NOTE: TRUNCATE MariaDB par FK-referenced tables (jaise `users`) pe
---  fail hota hai (#1701) chahe FK checks off ho. Isliye ye script
---  `DELETE FROM` use karta hai — same result, bilkul safe.
+--  Ye script child tables ko PEHLE delete karta hai aur parent (users)
+--  ko SABSE AAKHIR mein — isliye foreign-key checks ON hon ya OFF,
+--  koi #1451 / #1701 error kabhi nahi aayega. Idempotent bhi hai
+--  (adhe-adhoore delete ke baad dobara chalao to bhi safe).
 --
---  Ye script SIRF user-generated data hataata hai:
---    accounts (vendor+customer), products, images/videos rows, carts,
---    orders, payments, notifications, returns, replacements, wallets,
---    withdrawals, favorites, category suggestions, auto-parts products.
---
---  KABHI TOUCH NAHI karta (safe):
+--  KABHI TOUCH NAHI karta:
 --    admin_users, admin_password_reset_tokens   <- admin logins/passwords
 --    site_categories, site_subcategories        <- store category config
 --    auto_parts_categories, auto_parts_subcategories
 --
---  KAISE CHALAYEN (Hostinger):
---    1. phpMyAdmin -> apni database select karo
---    2. PEHLE "Export" tab se ek backup le lo (safety)
---    3. "Import" tab -> ye file choose karo -> Go
+--  KAISE CHALAYEN (Hostinger phpMyAdmin):
+--    1. Apni database select karo
+--    2. "Import" tab -> ye file choose karo
+--    3. (Recommended) neeche "Enable foreign key checks" ka TICK HATA do
+--    4. Go
 --
---  AGAR ERROR: "Table 'xxx' doesn't exist"  (mostly category_suggestions)
+--  AGAR ERROR: "Table 'xxx' doesn't exist" (mostly category_suggestions)
 --    -> us ek DELETE line ko hata do aur dobara Import karo.
 -- =====================================================================
 
 SET FOREIGN_KEY_CHECKS = 0;
 
--- ---- Accounts ------------------------------------------------------
-DELETE FROM `users`;
-DELETE FROM `vendor_basic_info`;
-DELETE FROM `vendor_store_details`;
-DELETE FROM `vendor_address`;
-DELETE FROM `vendor_documents`;
-DELETE FROM `vendor_payments`;
-DELETE FROM `customer_profile`;
+-- ---- 1) Sabse deep children (orders/products se judi) --------------
+DELETE FROM `payments`;
+DELETE FROM `product_ratings`;
+DELETE FROM `return_images`;
+DELETE FROM `return_tracking`;
+DELETE FROM `replacement_tracking`;
+
+-- ---- 2) Return / replacement requests ------------------------------
+DELETE FROM `return_requests`;
+DELETE FROM `replacement_requests`;
+
+-- ---- 3) Orders / cart / wishlist -----------------------------------
+DELETE FROM `orders`;
+DELETE FROM `carts`;
+DELETE FROM `favorites`;
+
+-- ---- 4) Product media -> products ----------------------------------
+DELETE FROM `vendor_product_images`;
+DELETE FROM `vendor_product_faults`;
+DELETE FROM `vendor_product_cards`;
+DELETE FROM `vendor_products`;
+
+-- ---- 5) Auto-parts products (category tables KEEP) -----------------
+DELETE FROM `auto_parts_product_images`;
+DELETE FROM `auto_parts_product_videos`;
+DELETE FROM `auto_parts_product_faults`;
+DELETE FROM `auto_parts_products`;
+
+-- ---- 6) Customer satellite data ------------------------------------
 DELETE FROM `customer_addresses`;
 DELETE FROM `customer_banner`;
 DELETE FROM `customer_notes`;
 DELETE FROM `customer_recent_activity`;
+DELETE FROM `customer_profile`;
 
--- ---- Products & media rows -----------------------------------------
-DELETE FROM `vendor_products`;
-DELETE FROM `vendor_product_images`;
-DELETE FROM `vendor_product_faults`;
-DELETE FROM `vendor_product_cards`;
-DELETE FROM `products`;
-DELETE FROM `product_ratings`;
-
--- ---- Orders / cart / payments --------------------------------------
-DELETE FROM `carts`;
-DELETE FROM `orders`;
-DELETE FROM `payments`;
-DELETE FROM `favorites`;
-
--- ---- Wallet / withdrawals ------------------------------------------
-DELETE FROM `vendor_balances`;
+-- ---- 7) Vendor satellite data + wallet -----------------------------
+DELETE FROM `vendor_documents`;
+DELETE FROM `vendor_payments`;
+DELETE FROM `vendor_address`;
+DELETE FROM `vendor_store_details`;
+DELETE FROM `vendor_basic_info`;
 DELETE FROM `balance_transactions`;
+DELETE FROM `vendor_balances`;
 DELETE FROM `withdrawal_requests`;
 
--- ---- Returns / replacements ----------------------------------------
-DELETE FROM `return_requests`;
-DELETE FROM `return_tracking`;
-DELETE FROM `return_images`;
-DELETE FROM `replacement_requests`;
-DELETE FROM `replacement_tracking`;
-
--- ---- Notifications & misc ------------------------------------------
+-- ---- 8) Misc -------------------------------------------------------
 DELETE FROM `notifications`;
 DELETE FROM `category_suggestions`;   -- agar exist na kare to ye line hata do
+DELETE FROM `products`;
 
--- ---- Auto-parts products (category tables KEEP) --------------------
-DELETE FROM `auto_parts_products`;
-DELETE FROM `auto_parts_product_images`;
-DELETE FROM `auto_parts_product_videos`;
-DELETE FROM `auto_parts_product_faults`;
+-- ---- 9) Parent account table SABSE AAKHIR --------------------------
+DELETE FROM `users`;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
