@@ -13,6 +13,7 @@ class MjGuideController extends Controller
             return response()->json([
                 'reply' => ChatService::FALLBACK_REPLY,
                 'provider' => 'none',
+                'products' => [],
             ]);
         }
 
@@ -20,7 +21,7 @@ class MjGuideController extends Controller
             'message' => 'required|string|max:1000',
             'context' => 'nullable|array|max:10',
             'context.*.role' => 'required|string|in:user,assistant',
-            'context.*.text' => 'required|string|max:2000',
+            'context.*.text' => 'required|string|max:3000',
         ]);
 
         $context = array_map(fn ($m) => [

@@ -33,7 +33,7 @@ class GrokProvider
                 'model' => $model,
                 'messages' => $chat,
                 'temperature' => 0.4,
-                'max_tokens' => 600,
+                'max_tokens' => 800,
             ]);
 
         if ($response->failed()) {

@@ -116,7 +116,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // MJ Guide chatbot (public — guests, customers, vendors; stateless, history lives in the browser)
 Route::post('/mj-guide/message', [MjGuideController::class, 'message'])
-    ->middleware('throttle:10,1')
+    ->middleware('throttle:15,1')
     ->name('mj-guide.message');
 
 // Search route

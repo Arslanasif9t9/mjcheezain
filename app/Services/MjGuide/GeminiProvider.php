@@ -13,7 +13,7 @@ class GeminiProvider
     public function chat(string $systemPrompt, array $messages): string
     {
         $key = config('services.gemini.key');
-        $model = config('services.gemini.model', 'gemini-2.0-flash');
+        $model = config('services.gemini.model', 'gemini-3.1-flash-lite');
 
         if (empty($key)) {
             throw new RuntimeException('Gemini API key is not configured');
@@ -34,7 +34,7 @@ class GeminiProvider
                 'contents' => $contents,
                 'generationConfig' => [
                     'temperature' => 0.4,
-                    'maxOutputTokens' => 600,
+                    'maxOutputTokens' => 800,
                 ],
             ]
         );
