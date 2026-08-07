@@ -681,7 +681,7 @@
                     : null;
 
                 return `
-                <a href="/product/${product.vendor_product_id || product.id}" class="block">
+                <a href="/japan/${product.id}" class="block">
                     <div class="product-card animate-fade-up" style="animation-delay: ${index * 0.02}s">
                         <div class="relative overflow-hidden h-40 sm:h-56">
                             <img src="${product.image}"

@@ -31,6 +31,7 @@ Route::prefix('japan')->name('japan.')->group(function () {
     Route::get('/api/products', [JapanController::class, 'apiProducts'])->name('api.products');
     Route::get('/api/filters', [JapanController::class, 'apiFilters'])->name('api.filters');
 });
+Route::get('/japan/{id}', [JapanController::class, 'show'])->name('japan.show');
 
 // Auto Parts Public Routes
 Route::prefix('auto-parts')->name('auto-parts.')->group(function () {
