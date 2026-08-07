@@ -24,6 +24,13 @@ use App\Http\Controllers\Vendor\AutoPartsProductShowController;
 use App\Http\Controllers\MjGuideController;
 use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminOpsController;
+use App\Http\Controllers\JapanController;
+
+Route::prefix('japan')->name('japan.')->group(function () {
+    Route::get('/', [JapanController::class, 'index'])->name('index');
+    Route::get('/api/products', [JapanController::class, 'apiProducts'])->name('api.products');
+    Route::get('/api/filters', [JapanController::class, 'apiFilters'])->name('api.filters');
+});
 
 // Auto Parts Public Routes
 Route::prefix('auto-parts')->name('auto-parts.')->group(function () {

@@ -48,7 +48,7 @@
     <!-- Video Element -->
     <video id="background-video" autoplay loop muted playsinline
            class="absolute inset-0 w-full h-full object-cover z-0">
-        <source src="{{ asset('video/auto-part.mp4') }}" type="video/mp4">
+        <source src="{{ asset('video/cosmetics.mp4') }}" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 
