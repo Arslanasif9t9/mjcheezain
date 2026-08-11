@@ -4,6 +4,10 @@
 
 ## 🔄 Currently Working On
 
+- *(session 2026-08-12 — Coming Soon page + Japan admin panel + WhatsApp Buy Now control. Sab push ho chuka, live SQL bhi owner ne chala di.)*
+- **⏳ 2026-08-12 PENDING — `mjcheezain.com` par 403**: primary domain ka **Document Root** `public_html` par hai (wahan `index.php` nahi, is liye 403). Fix: hPanel → Websites → mjcheezain.com → Document Root ko `public_html/public` karna. `.htaccess` bilkul theek hai (sirf `public/.htaccess`, standard Laravel), `.env` ka masla NAHI (wo hota to 500 aata, 403 nahi).
+- **⚠ 2026-08-12 KHOJ — dono domain ek hi folder share kar rahe hain**: `/public_html/` hi autodeploy ka target hai (proof: `ftp-deploy-sync-state.json` server par hai lekin local repo mein nahi — wo FTP action banata hai). `repo.mjcheezain.com` → `public_html/public`, `mjcheezain.com` → `public_html`. Owner ne manually bhi wahin poora repo upload kiya (kuch files ke dot gayab ho gaye: `gitignore`/`htaccess`/`editorconfig` — bekaar hain, baad mein delete karna).
+- **⏳ 2026-08-12 NEXT PLAN (owner ka, discuss ho chuka, implement pending)**: do-branch deploy — `main` → `repo.mjcheezain.com` (testing, jaisa abhi hai), nayi **`MJ`** branch → `mjcheezain.com` (public). **Blocker**: pehle `mjcheezain.com` ko server par apna ALAG folder chahiye (warna dono same files dikhayenge aur staging/live ka farq khatam). Steps: (1) naya folder + document root, (2) `deploy.yml` mein branch-wise FTP dir + naya GitHub secret, (3) release command `git checkout MJ && git merge main && git push origin MJ && git checkout main`. Owner se hPanel → Websites ki info maangi hai (kitni sites listed, har ek ka folder, document root editable hai ya nahi). Alag **test database** bhi sochna hai warna testing live data ko chhuegi.
 - *(session closed 2026-07-19 — MJGuider v2 product recommendations + UI/UX redesign, niche Completed dekho. **Owner ki explicit permission par commit + push kar diya gaya.**)*
 - **⏳ MJGuider v2 deploy notes**: push ke baad server par `php artisan cache:clear` (knowledge.md 1h cache) + `php artisan view:clear`. Koi migration nahi (kuch bhi DB mein add nahi hua). Store abhi khaali hai — jab tak vendor approved products add nahi karte, bot honestly "abhi available nahi" kahega (ye by design hai). `GROK_API_KEY` abhi bhi khaali — Gemini fail hone par fallback message aayega.
 - *(session closed 2026-07-18 — DATA WIPE session, niche Completed dekho)*
@@ -17,6 +21,36 @@
 - **⚠ GOTCHA (2026-07-15):** naye Gemini keys par 2.0/2.5 models ka free-tier quota **0** hai (429/404 dete hain) — is liye model `gemini-3.1-flash-lite` use ho raha hai (free tier OK, tested). GeminiProvider ab "thought" parts skip kar ke sirf visible text jorta hai.
 
 ## ✅ Completed
+
+### 2026-08-12 — Coming Soon page + Japan admin panel + WhatsApp Buy Now control — commits `bd14a3f`, `4592115`, `50c07de` (sab pushed + live)
+
+**1. Coming Soon landing page — commit `bd14a3f`**
+- `resources/views/brands/japan-coming-soon.blade.php`: brand theme (pink→peach gradient, Cinzel "MJ" wordmark, `#FFF6F0` bg), fully responsive, "Perfumes Pre-Launch — Flat 40% OFF" banner, 3 trust badges (100% Original / COD / Secure Shopping), WhatsApp click-to-chat button (pulse ring), chhota vendor CTA. **Poora English** (owner ne Roman Urdu reject kiya).
+- **Routes**: `/` ab Coming Soon dikhata hai (`name('coming-soon')`), purana home `/a456` par shift (route name `home` wahi rakha — is liye saare `route('home')` links khud sahi jagah jate hain).
+- ⚠ 14 jagah hardcoded `href="/"` (panel sidebars, "Continue/Start Shopping") abhi bhi Coming Soon par jaate hain — owner ne "abhi nahi" kaha, baad ke liye pending.
+- **WhatsApp number placeholder** `819012345678` — 2 jagah hai (customer button + vendor line), file mein ⚠ comment laga hai.
+
+**2. Japan mini admin panel `/japanadmin` — commit `4592115`**
+- Owner ko `japan_products` (jo `/japan` par dikhte hain) manage karne ka simple alag panel chahiye tha — sirf list/add/edit/delete, koi extra feature nahi.
+- `JapanAdminController` + `JapanAdminAuth` middleware (alias `japanadmin.auth` in `bootstrap/app.php`): **existing `admin_users` credentials reuse** karta hai lekin session keys alag (`japanadmin_*`) — `/admin` aur `/japanadmin` ek dusre ko bilkul affect nahi karte (browser mein verify kiya).
+- Views `resources/views/JapanAdmin/{login,products}.blade.php` — Admin/ wali styling (Tailwind Play CDN, brand gradient), standalone (main admin sidebar mein nahi).
+- Image upload `VendorController` wale double-write pattern par (`storage/app/public` + `public/storage`), `deleteImageFile()` sirf apni uploaded files delete karta hai (external `placehold.co` URLs ko chhodta hai).
+- ⚠ **Schema gotcha**: `japan_products` ka asal structure guess se alag nikla — `vendor_id` **NOT NULL** (admin-added rows ke liye `0` set hota hai), `conditionp` = enum(`New`,`Used`,`Refurbished`), `status` = enum(`pending`,`approved`,`rejected`). Naya product hamesha `approved` (koi moderation UI nahi).
+- Migration `2026_08_12_000001_create_japan_products_table.php` — table pehle **kisi migration mein tracked nahi thi** (out-of-band bani thi); guard `Schema::hasTable()` se local par no-op.
+
+**3. Admin "Controls" page + WhatsApp Buy Now — commit `50c07de` (owner ne khud commit+push kiya)**
+- Naya `/admin/controls` (sidebar mein "Controls", icon `fa-sliders`) — extensible toggle page, pehla control: **WhatsApp Buy Now** (on/off + number).
+- Naya generic **`site_settings`** key/value table (project mein pehle koi settings table thi hi nahi) + `App\Support\SiteSettings` helper (`CategoryCatalog` jaisa: 10-min cache + try/catch fallback, table missing ho to bhi page kabhi 500 nahi deta).
+- **View Composer** `AppServiceProvider::boot()` → `$whatsappBuyNow` teeno product views mein inject hota hai, **teeno product controllers untouched**.
+- Toggle ON par: teeno single-product pages (`product`, `product-auto`, `product-auto-japan`) ka Buy Now WhatsApp kholta hai (product name + qty + price incl. 17% GST + page URL pre-filled). Japan ka Buy Now (jo pehle **hamesha `disabled`** tha, kabhi kaam hi nahi karta tha) ab sirf toggle ON par enable hota hai — OFF par disabled hi rehta hai kyunki Japan products ka koi asal checkout backend nahi.
+- **⚠ OWNER KA KHAAS REQUIREMENT — website par order lena poora band ho**: sirf Buy Now redirect kaafi nahi tha. Gate **`CheckoutController::process()`** mein laga (wahi ek jagah jahan `orders` row banti hai — Buy Now aur Cart→Checkout dono isi se guzarte hain), server-side, `orders`/`carts` ko chhue baghair 409 + WhatsApp URL return karta hai. `checkout.blade.php` ka JS `whatsapp_mode` branch handle karta hai. Yani UI bypass karke bhi koi order nahi bana sakta.
+- Buy Now handler teeno files mein **duplicate inline** tha (koi shared JS nahi) — teeno alag alag edit karne pare. `product.blade.php` mein pehle se ek **commented-out WhatsApp implementation** pari thi (purana placeholder number), wo replace ho gayi.
+
+**Verify (teeno features)**: `php -l` sab clean; migrations isolated test (chain-wide `php artisan migrate` is env mein pehle se broken hai — kai purani migrations "Pending" dikhati hain jabke tables exist karti hain, ye pre-existing hai, chheda nahi); direct-controller tests marker rows ke sath (`Zz JapanAdmin Test*`, `Zz ControlsTest*`) — CRUD + image cleanup + order-block dono states, phir **sirf marker rows** delete; real browser pass — admin login, Controls save+persist, product page Buy Now se asal `wa.me` URL capture (window.open intercept karke), toggle OFF par purana flow wapas, Japan page dono states, `/japanadmin` login/list/add-with-image/edit + auth-guard + session isolation. Toggle **safe default (OFF, khaali number)** par chhoda.
+
+**Live DB**: `database/hostinger-deploy-2026-08-12.sql` — dono nayi tables (`japan_products`, `site_settings`) + 2 seed rows. Idempotent (`IF NOT EXISTS`/`WHERE NOT EXISTS`), koi existing table touch nahi. Ek **temp database bana kar actually test kiya** (do baar chalayi, structure local se identical nikla), phir temp DB drop. **Owner ne live par chala di — DONE.** Demo/dummy Japan products jaan-boojh kar shamil nahi kiye (fake `placehold.co` products live par na dikhein).
+
+**Env note**: `gh` CLI is machine par **authenticated hai** (purani memory galat thi) — `gh run list` se deploy status check ho sakta hai.
 
 ### 2026-07-19 — MJGuider v2: PRODUCT KNOWLEDGE + RECOMMENDATION AI + hardened knowledge base — 11 files (2 new), NOT pushed
 - **Owner requirement**: chatbot ko DB ki saari products ka pata ho, natural-language se search kare, **max 3** products recommend kare with **existing ss10 product card** (image/name/price/rating/URL), vague ya skin/health asks par pehle sawal kare (doctor nahi banna, serious case par doctor suggest), "highest rated" + "most selling" support, aur security (koi personal/admin/vendor data, DB structure, keys, hacking help nahi).
