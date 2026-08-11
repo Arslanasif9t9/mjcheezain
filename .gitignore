@@ -27,6 +27,7 @@
 # Claude Code local data (not for push)
 /claude-code-data/
 /for-claude-code-just/
+/.claude/
 
 # IDEs and local configurations
 .DS_Store

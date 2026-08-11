@@ -83,7 +83,10 @@ if (app()->environment('local')) {
 
 
 // Public routes
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', function () {
+    return view('brands.japan-coming-soon');
+})->name('coming-soon');
+Route::get('/a456', [HomeController::class, 'index'])->name('home');
 Route::get('cosmetics', [HomeController::class, 'cosmetics']);
 Route::get('/product-listing', [HomeController::class, 'productList']);
 Route::get('/products/all-page', [HomeController::class, 'productList']); // filtered listing page (?category=)
