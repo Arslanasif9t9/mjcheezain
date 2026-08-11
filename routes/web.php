@@ -26,6 +26,7 @@ use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminOpsController;
 use App\Http\Controllers\JapanController;
 use App\Http\Controllers\JapanAdminController;
+use App\Http\Controllers\AdminControlsController;
 
 Route::prefix('japan')->name('japan.')->group(function () {
     Route::get('/', [JapanController::class, 'index'])->name('index');
@@ -349,6 +350,10 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     Route::get('/category-suggestions', [AdminAuthController::class, 'categorySuggestions']);
     Route::post('/category-suggestions/{id}/approve', [AdminCategoryController::class, 'approveSuggestion']);
     Route::post('/category-suggestions/{id}/reject', [AdminCategoryController::class, 'rejectSuggestion']);
+
+    // Site-wide controls (e.g. WhatsApp Buy Now)
+    Route::get('/controls', [AdminControlsController::class, 'index'])->name('admin.controls');
+    Route::post('/controls', [AdminControlsController::class, 'save']);
 
     // Operations: orders, withdraw requests, customers, returns & replacements oversight
     Route::get('/orders', [AdminOpsController::class, 'orders']);

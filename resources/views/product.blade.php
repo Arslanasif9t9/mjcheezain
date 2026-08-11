@@ -294,16 +294,16 @@
                 </div>
 
                 <script>
-                    document.getElementById("wh-btn").addEventListener("click", function () {
-                        location.href = "/product/{{ $product->id }}/buy/" + quantity.value;
-                        // const phone = "923048609067"; // your number
-                        // const msg = "I want to buy it!";
-                        // const url = window.location.href; // current product URL
-
-                        // const finalMsg = `Product link: ${url}\n${msg}\n\n`;
-                        // const encoded = encodeURIComponent(finalMsg);
-
-                        // window.open(`https://wa.me/${phone}?text=${encoded}`, "_blank");
+                    document.getElementById("wh-btn")?.addEventListener("click", function () {
+                        const qty = document.getElementById('quantity')?.value || 1;
+                        @if(($whatsappBuyNow['enabled'] ?? false) && !empty($whatsappBuyNow['number']))
+                            const msg = "Hi! I want to order:\n\n" + @json($product->name) +
+                                "\nQty: " + qty + "\nPrice: Rs. " + @json(number_format($gst)) +
+                                "\n\n" + @json(url()->current());
+                            window.open("https://wa.me/{{ $whatsappBuyNow['number'] }}?text=" + encodeURIComponent(msg), "_blank");
+                        @else
+                            location.href = "/product/{{ $product->id }}/buy/" + qty;
+                        @endif
                     });
                 </script>
 

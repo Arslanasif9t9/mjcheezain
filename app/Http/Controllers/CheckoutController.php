@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\SiteSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -112,6 +113,33 @@ class CheckoutController extends Controller
 
         $user = Auth::user();
         $userId = $user->user_id;
+
+        // Owner has switched the site to WhatsApp-only ordering (admin Controls
+        // page) — block real order placement here, the single choke point both
+        // the cart-checkout AND buy-now flows go through. No orders/carts rows
+        // are touched.
+        if (SiteSettings::get('whatsapp_buy_now_enabled', '0') === '1') {
+            $pendingItems = DB::table('carts as c')
+                ->join('vendor_products as vp', 'c.product_id', '=', 'vp.id')
+                ->where('c.user_id', $userId)
+                ->whereNull('c.order_id')
+                ->select('vp.name', 'c.quantity', 'c.price')
+                ->get();
+
+            $lines = $pendingItems->map(function ($item) {
+                return "- {$item->name} (x{$item->quantity}) — Rs. " . number_format($item->price * $item->quantity);
+            })->implode("\n");
+
+            $message = "Hi! I want to order:\n\n" . ($lines ?: 'My cart items') .
+                "\n\nTotal: Rs. " . number_format($pendingItems->sum(fn($i) => $i->price * $i->quantity));
+
+            return response()->json([
+                'success' => false,
+                'whatsapp_mode' => true,
+                'whatsapp_url' => 'https://wa.me/' . SiteSettings::get('whatsapp_buy_now_number', '') . '?text=' . urlencode($message),
+                'message' => 'Website ordering is currently paused — please complete your order on WhatsApp.',
+            ], 409);
+        }
 
         $totalFound = DB::table('carts')
             ->where('user_id', $userId)

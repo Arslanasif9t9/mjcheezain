@@ -296,8 +296,12 @@
                         Add to Cart
                     </button>
                     <button class="flex-1 py-3 px-6 border border-[#E85D85] text-[#E85D85] font-semibold rounded-lg hover:bg-pink-50 transition duration-150"
+                    @if ($isOwner || $productQuantity <= 0 || !($whatsappBuyNow['enabled'] ?? false))
                         style="background-color: #9ca3af; cursor: not-allowed; opacity: 0.6"
                         disabled
+                    @else
+                        id="wh-btn"
+                    @endif
                     >
                         Buy Now
                     </button>
@@ -311,8 +315,11 @@
 
                 <script>
                     document.getElementById("wh-btn")?.addEventListener("click", function () {
-                        const quantity = document.getElementById('quantity');
-                        location.href = "/product/{{ $productId }}/buy/" + quantity.value;
+                        const qty = document.getElementById('quantity')?.value || 1;
+                        const msg = "Hi! I want to order:\n\n" + @json($productName) +
+                            "\nQty: " + qty + "\nPrice: Rs. " + @json(number_format($gst)) +
+                            "\n\n" + @json(url()->current());
+                        window.open("https://wa.me/{{ $whatsappBuyNow['number'] ?? '' }}?text=" + encodeURIComponent(msg), "_blank");
                     });
                 </script>
 

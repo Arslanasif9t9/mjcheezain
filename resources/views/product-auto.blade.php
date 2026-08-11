@@ -319,8 +319,15 @@
 
                 <script>
                     document.getElementById("wh-btn")?.addEventListener("click", function () {
-                        const quantity = document.getElementById('quantity');
-                        location.href = "/product/{{ $productId }}/buy/" + quantity.value;
+                        const qty = document.getElementById('quantity')?.value || 1;
+                        @if(($whatsappBuyNow['enabled'] ?? false) && !empty($whatsappBuyNow['number']))
+                            const msg = "Hi! I want to order:\n\n" + @json($productName) +
+                                "\nQty: " + qty + "\nPrice: Rs. " + @json(number_format($gst)) +
+                                "\n\n" + @json(url()->current());
+                            window.open("https://wa.me/{{ $whatsappBuyNow['number'] }}?text=" + encodeURIComponent(msg), "_blank");
+                        @else
+                            location.href = "/product/{{ $productId }}/buy/" + qty;
+                        @endif
                     });
                 </script>
 

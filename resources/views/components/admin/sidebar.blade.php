@@ -10,6 +10,7 @@
         ['href' => '/admin/withdraw-requests',  'icon' => 'fa-wallet',       'label' => 'Withdraw Requests', 'match' => 'admin/withdraw-requests*'],
         ['href' => '/admin/categories',         'icon' => 'fa-tags',         'label' => 'Categories',        'match' => 'admin/categories*'],
         ['href' => '/admin/category-suggestions','icon' => 'fa-lightbulb',   'label' => 'Category Requests', 'match' => 'admin/category-suggestions*'],
+        ['href' => '/admin/controls',            'icon' => 'fa-sliders',      'label' => 'Controls',           'match' => 'admin/controls*'],
     ];
 @endphp
 

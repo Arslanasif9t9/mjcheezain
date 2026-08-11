@@ -555,6 +555,13 @@
                     window.location.href = data.redirect;
                     return;
                 }
+                if (data.whatsapp_mode && data.whatsapp_url) {
+                    showMessage(data.message || 'Please complete your order on WhatsApp.', 'error');
+                    window.open(data.whatsapp_url, '_blank');
+                    submitButton.innerHTML = originalText;
+                    submitButton.disabled = false;
+                    return;
+                }
                 if (data.success) {
                     // Show the REAL order number returned by the server
                     if (data.order_id) {
