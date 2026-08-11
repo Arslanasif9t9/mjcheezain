@@ -25,6 +25,7 @@ use App\Http\Controllers\MjGuideController;
 use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminOpsController;
 use App\Http\Controllers\JapanController;
+use App\Http\Controllers\JapanAdminController;
 
 Route::prefix('japan')->name('japan.')->group(function () {
     Route::get('/', [JapanController::class, 'index'])->name('index');
@@ -32,6 +33,19 @@ Route::prefix('japan')->name('japan.')->group(function () {
     Route::get('/api/filters', [JapanController::class, 'apiFilters'])->name('api.filters');
 });
 Route::get('/japan/{id}', [JapanController::class, 'show'])->name('japan.show');
+
+// Japan products — small standalone admin CRUD panel (separate session from /admin)
+Route::prefix('japanadmin')->group(function () {
+    Route::get('/login', [JapanAdminController::class, 'loginForm']);
+    Route::post('/login', [JapanAdminController::class, 'login'])->middleware('throttle:5,1');
+    Route::get('/logout', [JapanAdminController::class, 'logout']);
+});
+Route::prefix('japanadmin')->middleware('japanadmin.auth')->group(function () {
+    Route::get('/products', [JapanAdminController::class, 'index']);
+    Route::post('/products', [JapanAdminController::class, 'store']);
+    Route::post('/products/{id}/update', [JapanAdminController::class, 'update']);
+    Route::post('/products/{id}/delete', [JapanAdminController::class, 'destroy']);
+});
 
 // Auto Parts Public Routes
 Route::prefix('auto-parts')->name('auto-parts.')->group(function () {
