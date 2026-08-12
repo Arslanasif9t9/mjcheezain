@@ -61,8 +61,23 @@
                             </div>
                         </div>
 
-                        <button id="checkoutBtn" class="w-full mt-6 text-white py-3 rounded-full font-bold text-base sm:text-lg tracking-wide transition duration-300 shadow-md hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-md" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 6px 18px rgba(255, 125, 160, 0.3);" disabled>
-                            PROCEED TO CHECKOUT
+                        @php
+                            // Admin Controls: WhatsApp-only ordering swaps this button's
+                            // job, so it says what it actually does.
+                            $cartWaOn = ($whatsappBuyNow['enabled'] ?? false) && ($whatsappBuyNow['number'] ?? '') !== '';
+                        @endphp
+                        <button id="checkoutBtn" class="w-full mt-6 text-white py-3 rounded-full font-bold text-base sm:text-lg tracking-wide transition duration-300 shadow-md hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-md flex items-center justify-center gap-2"
+                            @if($cartWaOn)
+                                style="background:#25D366; box-shadow: 0 6px 18px rgba(37,211,102,.3);"
+                            @else
+                                style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 6px 18px rgba(255, 125, 160, 0.3);"
+                            @endif
+                            disabled>
+                            @if($cartWaOn)
+                                <i class="fa-brands fa-whatsapp text-xl"></i> ORDER ON WHATSAPP
+                            @else
+                                PROCEED TO CHECKOUT
+                            @endif
                         </button>
                         
                         <div class="mt-4 text-center">
@@ -432,8 +447,40 @@
 
         // Checkout button handler — guests get the auth popup instead of the checkout page
         const isLoggedIn = @json(auth()->check());
+        const CART_WHATSAPP = @json($cartWaOn ? ($whatsappBuyNow['number'] ?? '') : '');
+        const CUSTOMER_LOGIN_OPEN = @json($siteAccess['customer_login'] ?? true);
+
+        // Builds the WhatsApp order text from what the shopper is actually
+        // looking at, line by line.
+        function buildWhatsappOrder() {
+            const items = (cartState.items || []);
+            const lines = items.map(i => {
+                const qty = Number(i.quantity) || 1;
+                const unit = Number(i.price) || 0;
+                return `- ${i.product_name} (x${qty}) — Rs. ${(unit * qty).toLocaleString()}`;
+            });
+            const total = items.reduce((s, i) => s + (Number(i.price) || 0) * (Number(i.quantity) || 1), 0);
+
+            return 'Hi! I want to order:\n\n'
+                + (lines.length ? lines.join('\n') : 'My cart items')
+                + `\n\nTotal: Rs. ${total.toLocaleString()}`
+                + `\n\n${window.location.origin}/cart`;
+        }
+
         document.getElementById('checkoutBtn').addEventListener('click', function() {
+            // WhatsApp mode comes FIRST — guests must be able to order too, and
+            // the cart already works without an account.
+            if (CART_WHATSAPP) {
+                window.open('https://wa.me/' + CART_WHATSAPP + '?text=' + encodeURIComponent(buildWhatsappOrder()), '_blank');
+                return;
+            }
+
             if (!isLoggedIn) {
+                // Sign-in switched off? Then there's no login page to send them to.
+                if (!CUSTOMER_LOGIN_OPEN) {
+                    showNotification('Ordering is currently unavailable. Please contact us.', 'error');
+                    return;
+                }
                 const loginUrl = '/login-user?type=customer-login&page=checkout';
                 if (typeof window.apOpen === 'function') {
                     window.apOpen(loginUrl);

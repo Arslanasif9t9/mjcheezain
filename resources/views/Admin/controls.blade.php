@@ -73,6 +73,70 @@
                 <i class="fas fa-check mr-1"></i> Save
             </button>
         </div>
+
+        {{-- Account access switches --}}
+        <h2 class="text-lg font-bold text-gray-800 mt-8 mb-1">Account Access</h2>
+        <p class="text-sm text-gray-500 mb-4">
+            Turn sign-in or new registration off for a role. The buttons disappear from the whole site
+            <em>and</em> the server refuses the request &mdash; hiding alone is never enough.
+            <strong>No account is ever deleted.</strong>
+        </p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 max-w-4xl">
+            @foreach (['customer' => 'fa-user', 'vendor' => 'fa-store'] as $role => $icon)
+                <div class="bg-white rounded-2xl shadow-card p-6" data-role-card="{{ $role }}">
+                    <h3 class="font-bold text-gray-800 flex items-center gap-2 mb-4">
+                        <i class="fas {{ $icon }} text-brand"></i> {{ ucfirst($role) }} Access
+                    </h3>
+
+                    <div class="space-y-3">
+                        <label class="flex items-center justify-between gap-4 cursor-pointer">
+                            <span class="text-sm text-gray-700">Allow sign in</span>
+                            <span class="relative inline-flex items-center shrink-0">
+                                <input type="checkbox" class="sr-only peer" data-field="login"
+                                       {{ $access[$role . '_login'] ? 'checked' : '' }}>
+                                <span class="toggle-track w-11 h-6 bg-gray-300 rounded-full relative">
+                                    <span class="toggle-thumb absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow"></span>
+                                </span>
+                            </span>
+                        </label>
+
+                        <label class="flex items-center justify-between gap-4 cursor-pointer">
+                            <span class="text-sm text-gray-700">Allow new registration</span>
+                            <span class="relative inline-flex items-center shrink-0">
+                                <input type="checkbox" class="sr-only peer" data-field="register"
+                                       {{ $access[$role . '_register'] ? 'checked' : '' }}>
+                                <span class="toggle-track w-11 h-6 bg-gray-300 rounded-full relative">
+                                    <span class="toggle-thumb absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow"></span>
+                                </span>
+                            </span>
+                        </label>
+
+                        <label class="flex items-start justify-between gap-4 cursor-pointer pt-3 border-t border-gray-100">
+                            <span class="text-sm text-gray-700">
+                                Sign out everyone already logged in
+                                <span class="block text-[11px] text-gray-400 mt-0.5 font-normal">
+                                    Only applies while sign-in is off. Ends sessions &mdash; accounts stay safe.
+                                </span>
+                            </span>
+                            <span class="relative inline-flex items-center shrink-0 mt-0.5">
+                                <input type="checkbox" class="sr-only peer" data-field="force_logout"
+                                       {{ $forceLogout[$role] ? 'checked' : '' }}>
+                                <span class="toggle-track w-11 h-6 bg-gray-300 rounded-full relative">
+                                    <span class="toggle-thumb absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow"></span>
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <button onclick="saveAccess('{{ $role }}', this)"
+                            class="mt-5 w-full text-white font-bold text-sm py-2.5 rounded-xl"
+                            style="background:linear-gradient(115deg,#FF7DA0,#FFC275)">
+                        <i class="fas fa-check mr-1"></i> Save {{ ucfirst($role) }} Access
+                    </button>
+                </div>
+            @endforeach
+        </div>
     </main>
 </div>
 
@@ -124,6 +188,21 @@
         } else {
             toast(res.message || 'Something went wrong.', false);
         }
+    }
+
+    async function saveAccess(role, btn) {
+        const card = document.querySelector(`[data-role-card="${role}"]`);
+        const val = (field) => card.querySelector(`[data-field="${field}"]`).checked;
+
+        btn.disabled = true;
+        const res = await post('/admin/controls/access', {
+            role: role,
+            login: val('login'),
+            register: val('register'),
+            force_logout: val('force_logout')
+        });
+        btn.disabled = false;
+        toast(res.message || (res.success ? 'Saved.' : 'Something went wrong.'), !!res.success);
     }
 </script>
 </body>

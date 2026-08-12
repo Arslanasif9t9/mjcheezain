@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\AccessControl;
 use App\Support\SiteSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,13 @@ class CheckoutController extends Controller
     //
     public function checkout()
     {
+        // WhatsApp-only ordering: there is no working checkout to show, so send
+        // people back to the cart where the "Order on WhatsApp" button lives.
+        // (Closes the door on typing /checkout directly.)
+        if (SiteSettings::get('whatsapp_buy_now_enabled', '0') === '1') {
+            return redirect('/cart');
+        }
+
         $user = null;
         $profile = null;
         $dashboardPage = null;
@@ -85,7 +93,12 @@ class CheckoutController extends Controller
 
         if(!$user) {
             // Guest checkout isn't supported — send them to login and bring
-            // them back to checkout afterwards (relative URL, works on any domain)
+            // them back to checkout afterwards (relative URL, works on any domain).
+            // With customer sign-in switched off there IS no login page, so the
+            // cart (which carries the WhatsApp order button) is the right place.
+            if (!AccessControl::loginAllowed('customer')) {
+                return redirect('/cart');
+            }
             return redirect('/login-user?type=customer-login&page=checkout');
         }
         return view('checkout', compact(
@@ -106,7 +119,9 @@ class CheckoutController extends Controller
             return response()->json([
                 'success' => false,
                 'login_required' => true,
-                'redirect' => '/login-user?type=customer-login&page=checkout',
+                'redirect' => AccessControl::loginAllowed('customer')
+                    ? '/login-user?type=customer-login&page=checkout'
+                    : '/cart',
                 'message' => 'Please log in to place your order.'
             ], 401);
         }

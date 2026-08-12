@@ -2,8 +2,15 @@
     <div class="h-[3px] w-full bg-gradient-to-r from-[#FF7DA0] to-[#FFC275]"></div>
     <div class="max-w-7xl mx-auto py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
 
+        @php
+            // Admin Controls (Account Access): with vendor accounts switched off the
+            // whole Vendor Zone column goes, so the site reads as "no vendor side at
+            // all" — the xl grid drops to 4 columns so nothing is left hanging.
+            $ftVendorAny = $siteAccess['vendor_any'] ?? true;
+        @endphp
+
         <!-- Top Half: compact 2 columns on mobile, expanding on larger screens -->
-        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 sm:gap-10">
+        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 {{ $ftVendorAny ? 'xl:grid-cols-5' : 'xl:grid-cols-4' }} gap-6 sm:gap-10">
             
             <!-- Column 1: About MJ CHEEZAIN -->
             <div>
@@ -27,18 +34,24 @@
                 </ul>
             </div>
 
+            @if($ftVendorAny)
             <!-- Column 3: Vendor Zone -->
             <div>
                 <h3 class="footer-heading text-base sm:text-xl font-serif font-bold text-gray-900 mb-3 sm:mb-6">Vendor Zone</h3>
                 <ul class="space-y-3">
+                    @if($siteAccess['vendor_register'] ?? true)
                     <li><a href="/vendor-zone?tab=become-seller" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">Become a Seller</a></li>
+                    @endif
                     <li><a href="/vendor-zone?tab=vendor-dashboard" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">Vendor Dashboard Features</a></li>
+                    @if($siteAccess['vendor_login'] ?? true)
                     <li><a href="/vendor-zone?tab=vendor-login" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">Vendor Login</a></li>
+                    @endif
                     <li><a href="/vendor-zone?tab=commission-policy" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">Commission Policy</a></li>
                     <li><a href="/vendor-zone?tab=product-guidelines" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">Product Guidelines</a></li>
                     {{-- <li><a href="/vendor-zone?tab=vendor-terms-consitions" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">Vendor Terms & Conditions</a></li> --}}
                 </ul>
             </div>
+            @endif
             
             <!-- Column 4: Legal & Social (Combined/Split in the original design) -->
             <!-- Legal & Policies (Upper part of column 4 in mobile/desktop) -->

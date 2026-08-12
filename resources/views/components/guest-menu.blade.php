@@ -1,51 +1,72 @@
+@php
+    // Admin Controls switches — a dropdown only renders if it has an item left,
+    // and the "|" separator only if BOTH dropdowns are showing.
+    $showSignup = ($siteAccess['customer_register'] ?? true) || ($siteAccess['vendor_register'] ?? true);
+    $showLogin  = ($siteAccess['customer_login'] ?? true) || ($siteAccess['vendor_login'] ?? true);
+@endphp
+
 <!-- 🔹 START: Header Buttons -->
 <div class="flex items-center ml-auto">
 
+    @if($showSignup)
     <!-- 🔸 SIGN UP DROPDOWN -->
     <div class="relative group">
-        <button 
+        <button
             class="text-gray-600 hover:text-[#E85D85] px-2 sm:px-3 py-2 text-xs sm:text-sm font-semibold transition duration-150 flex items-center focus:outline-none"
             onclick="toggleDropdownMenu(this, event)"
         >
             <span class="hover-text flex items-center">Sign Up <i class="fa fa-caret-down ml-1 text-[10px]"></i></span>
         </button>
 
-        <div 
+        <div
             class="absolute right-0 mt-1 w-44 bg-white border border-gray-100 rounded-lg shadow-xl py-1 z-50 hidden group-hover:block"
             style="z-index: 100;"
         >
-            <a href="/login-user?type=customer-signup&page={{ request()->path() }}" 
+            @if($siteAccess['customer_register'] ?? true)
+            <a href="/login-user?type=customer-signup&page={{ request()->path() }}"
                class="block px-4 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:text-[#E85D85] text-left transition duration-150"
                onclick="userType('customer', 'sign')">Customer Sign Up</a>
+            @endif
 
-            <a href="/login-user?type=vendor-signup&page={{ request()->path() }}" 
+            @if($siteAccess['vendor_register'] ?? true)
+            <a href="/login-user?type=vendor-signup&page={{ request()->path() }}"
                class="block px-4 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:text-[#E85D85] text-left transition duration-150"
                onclick="userType('vendor', 'sign')">Vendor Sign Up</a>
+            @endif
         </div>
     </div>
+    @endif
 
+    @if($showSignup && $showLogin)
     <div class="text-gray-300 mx-1 select-none">|</div>
+    @endif
 
+    @if($showLogin)
     <!-- 🔸 LOGIN DROPDOWN -->
     <div class="relative group">
-        <button 
+        <button
             class="text-gray-600 hover:text-[#E85D85] px-2 sm:px-3 py-2 text-xs sm:text-sm font-semibold transition duration-150 flex items-center focus:outline-none"
             onclick="toggleDropdownMenu(this, event)"
         >
             <span class="hover-text flex items-center">Login <i class="fa fa-caret-down ml-1 text-[10px]"></i></span>
         </button>
 
-        <div 
+        <div
             class="absolute right-0 mt-1 w-44 bg-white border border-gray-100 rounded-lg shadow-xl py-1 z-50 hidden group-hover:block"
             style="z-index: 100;"
         >
-            <a href="/login-user?type=customer-login&page={{ request()->path() }}" 
+            @if($siteAccess['customer_login'] ?? true)
+            <a href="/login-user?type=customer-login&page={{ request()->path() }}"
                class="block px-4 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:text-[#E85D85] text-left transition duration-150" onclick="userType('customer', 'log')">Customer Login</a>
+            @endif
 
-            <a href="/login-user?type=vendor-login&page={{ request()->path() }}" 
+            @if($siteAccess['vendor_login'] ?? true)
+            <a href="/login-user?type=vendor-login&page={{ request()->path() }}"
                class="block px-4 py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:text-[#E85D85] text-left transition duration-150" onclick="userType('vendor', 'log')">Vendor Login</a>
+            @endif
         </div>
     </div>
+    @endif
 </div>
 
 <!-- 🔹 END: Header Buttons -->

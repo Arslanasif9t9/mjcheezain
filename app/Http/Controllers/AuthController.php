@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Support\AccessControl;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,8 +17,49 @@ use Illuminate\Support\Facades\Cache;
 
 class AuthController extends Controller
 {
+    /**
+     * Enforces the admin Controls access switches.
+     * Returns a 403 JSON response when the flow is closed, or null to proceed.
+     *
+     * $role is empty on endpoints that never receive a `type` (OTP, password
+     * reset). In that case we only block when the flow is closed for BOTH
+     * roles, so a half-open site keeps working.
+     *
+     * The response uses a top-level `message` because that is the only key the
+     * login/signup/forgot pages actually read on a failed request.
+     */
+    private function accessDenied(?string $role, string $flow)
+    {
+        $allows = fn (string $r) => $flow === 'register'
+            ? AccessControl::registerAllowed($r)
+            : AccessControl::loginAllowed($r);
+
+        if (in_array($role, AccessControl::ROLES, true)) {
+            $allowed = $allows($role);
+            $label = ucfirst($role);
+        } else {
+            $allowed = $allows('customer') || $allows('vendor');
+            $label = 'Account';
+        }
+
+        if ($allowed) {
+            return null;
+        }
+
+        $what = $flow === 'register' ? 'registration' : 'sign-in';
+
+        return response()->json([
+            'success' => false,
+            'message' => "{$label} {$what} is currently unavailable.",
+        ], 403);
+    }
+
     public function sendOtp(Request $request)
     {
+        if ($denied = $this->accessDenied($request->type, 'register')) {
+            return $denied;
+        }
+
         $request->validate([
             'email' => 'required|email'
         ]);
@@ -51,6 +93,12 @@ class AuthController extends Controller
 
     public function signup(Request $request)
     {
+        // Gate BEFORE validation so a closed flow never runs the unique-email
+        // lookup (no signal about which addresses are registered).
+        if ($denied = $this->accessDenied($request->type, 'register')) {
+            return $denied;
+        }
+
         try {
             $validated = $request->validate([
                 'type' => 'required|in:vendor,customer',
@@ -162,6 +210,12 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        // Gate BEFORE the user lookup so credentials can't be probed while
+        // sign-in is switched off.
+        if ($denied = $this->accessDenied($request->type, 'login')) {
+            return $denied;
+        }
+
         $credentials = $request->validate([
             'id' => 'required',
             'password' => 'required',
@@ -216,6 +270,11 @@ class AuthController extends Controller
     
     public function sendPasswordResetOtp(Request $request)
     {
+        // No point resetting a password for a role that can't sign in.
+        if ($denied = $this->accessDenied($request->type, 'login')) {
+            return $denied;
+        }
+
         $request->validate([
             'email' => 'required|email|exists:users,email'
         ]);
@@ -250,6 +309,10 @@ class AuthController extends Controller
 
     public function verifyPasswordResetOtp(Request $request)
     {
+        if ($denied = $this->accessDenied($request->type, 'login')) {
+            return $denied;
+        }
+
         $request->validate([
             'email' => 'required|email',
             'otp' => 'required|digits:4'
@@ -275,6 +338,10 @@ class AuthController extends Controller
 
     public function resetPassword(Request $request)
     {
+        if ($denied = $this->accessDenied($request->type, 'login')) {
+            return $denied;
+        }
+
         $request->validate([
             'email' => 'required|email|exists:users,email',
             'password' => 'required|min:6|confirmed'

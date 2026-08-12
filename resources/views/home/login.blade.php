@@ -285,6 +285,10 @@
         .auth-section.is-hidden {
             display: none;
         }
+        /* Flows the admin has switched off (Controls page) */
+        .is-access-hidden {
+            display: none !important;
+        }
         .auth-section.is-entering {
             opacity: 0;
             transform: translateY(6px);
@@ -454,12 +458,12 @@
         <!-- Action Buttons Only -->
         <div class="flex flex-col gap-3.5 w-full max-w-md">
             <!-- Continue with Sign In -->
-            <button onclick="openDrawer('signin')" class="enter-fade d3 btn-brand-gradient w-full py-4 px-6 rounded-xl font-bold text-sm tracking-wider uppercase">
+            <button id="btn-open-signin" onclick="openDrawer('signin')" class="enter-fade d3 btn-brand-gradient w-full py-4 px-6 rounded-xl font-bold text-sm tracking-wider uppercase">
                 Continue with Sign In
             </button>
 
             <!-- Continue with Sign Up -->
-            <button onclick="openDrawer('signup')" class="enter-fade d4 btn-outline-brand w-full py-3.5 px-6 border-2 border-pink-400 text-pink-600 hover:bg-pink-50 font-bold text-sm tracking-wider uppercase rounded-xl shadow-sm">
+            <button id="btn-open-signup" onclick="openDrawer('signup')" class="enter-fade d4 btn-outline-brand w-full py-3.5 px-6 border-2 border-pink-400 text-pink-600 hover:bg-pink-50 font-bold text-sm tracking-wider uppercase rounded-xl shadow-sm">
                 Create New Account
             </button>
         </div>
@@ -481,12 +485,16 @@
         <!-- Inner Content Area -->
         <div class="px-5 sm:px-6 py-4 sm:p-8">
 
+            {{-- Admin Controls (Account Access): with only one role available the
+                 segmented control is pointless (and half a pill looks broken). --}}
+            @if(($siteAccess['customer_any'] ?? true) && ($siteAccess['vendor_any'] ?? true))
             <!-- Segmented Control for Role Select (Customer / Vendor Portal) -->
             <div class="segmented-track flex bg-gray-100 p-1.5 rounded-xl mb-6">
                 <div id="segmented-pill" class="segmented-pill"></div>
                 <button id="role-customer-btn" type="button" onclick="setRole('customer')" class="segmented-btn flex-grow py-2 text-xs font-bold rounded-lg text-pink-600">Customer</button>
                 <button id="role-vendor-btn" type="button" onclick="setRole('vendor')" class="segmented-btn flex-grow py-2 text-xs font-bold rounded-lg text-gray-500 hover:text-gray-900">Vendor Portal</button>
             </div>
+            @endif
 
             <!-- 1. SIGN IN FORM -->
             <div id="signin-section" class="auth-section">
@@ -514,7 +522,7 @@
                     <button type="submit" id="loginBtn" class="btn-brand-gradient text-white border-none rounded-xl py-3 px-6 font-bold text-sm tracking-wider uppercase mt-4 w-full">Sign In</button>
                 </form>
 
-                <p class="text-xs text-gray-500 mt-6 text-center">
+                <p id="link-to-signup" class="text-xs text-gray-500 mt-6 text-center">
                     Don't have an account?
                     <button type="button" onclick="toggleFormType('signup')" class="text-pink-500 font-bold hover:underline focus:outline-none ml-1">Sign Up</button>
                 </p>
@@ -565,7 +573,7 @@
                     <button type="submit" id="signupBtn" class="btn-brand-gradient text-white border-none rounded-xl py-3 px-6 font-bold text-sm tracking-wider uppercase mt-4 w-full">Sign Up</button>
                 </form>
 
-                <p class="text-xs text-gray-500 mt-6 text-center">
+                <p id="link-to-signin" class="text-xs text-gray-500 mt-6 text-center">
                     Already have an account?
                     <button type="button" onclick="toggleFormType('signin')" class="text-pink-500 font-bold hover:underline focus:outline-none ml-1">Sign In</button>
                 </p>
@@ -621,32 +629,79 @@
             clearMessages();
         }
 
+        @php
+            // Built here rather than inline: @json() can't parse a multi-line
+            // nested array literal (it miscounts the brackets).
+            $authAccessCfg = [
+                'customer' => [
+                    'login'    => $siteAccess['customer_login'] ?? true,
+                    'register' => $siteAccess['customer_register'] ?? true,
+                ],
+                'vendor' => [
+                    'login'    => $siteAccess['vendor_login'] ?? true,
+                    'register' => $siteAccess['vendor_register'] ?? true,
+                ],
+            ];
+        @endphp
+        // Which flows the admin has left open (Controls page). The server enforces
+        // this too — this only keeps the UI from offering a dead-end.
+        const AUTH_ACCESS = @json($authAccessCfg);
+
+        function roleAllows(role, flow) {
+            return !!(AUTH_ACCESS[role] && AUTH_ACCESS[role][flow]);
+        }
+
+        // Show/hide the sign-in vs sign-up entry points for the selected role,
+        // and bounce off a section that role can't use.
+        function applyAccess(role) {
+            const canLogin = roleAllows(role, 'login');
+            const canReg   = roleAllows(role, 'register');
+
+            const toggle = (el, show) => { if (el) el.classList.toggle('is-access-hidden', !show); };
+
+            toggle(document.getElementById('btn-open-signin'), canLogin);
+            toggle(document.getElementById('btn-open-signup'), canReg);
+            toggle(document.getElementById('link-to-signup'), canReg);
+            toggle(document.getElementById('link-to-signin'), canLogin);
+            toggle(document.getElementById('forgot'), canLogin);
+
+            // If the visible section is closed for this role, switch to the open one.
+            const signinSec = document.getElementById('signin-section');
+            const signupSec = document.getElementById('signup-section');
+            const signinVisible = signinSec && !signinSec.classList.contains('is-hidden');
+            if (signinVisible && !canLogin && canReg) toggleFormType('signup');
+            if (!signinVisible && !canReg && canLogin) toggleFormType('signin');
+        }
+
         // Toggle user type/role between Customer and Vendor — animates a sliding pill for a smoother feel
         let currentRole = 'customer';
         function setRole(role) {
+            // Never select a role the admin has fully switched off.
+            if (!roleAllows(role, 'login') && !roleAllows(role, 'register')) return;
+
             currentRole = role;
             const customerBtn = document.getElementById('role-customer-btn');
             const vendorBtn = document.getElementById('role-vendor-btn');
             const pill = document.getElementById('segmented-pill');
+            const forgot = document.getElementById('forgot');
 
             document.getElementById('userTypeSign').value = role;
             document.getElementById('userTypeLog').value = role;
 
+            // The segmented control is absent when only one role is available.
             if (role === 'customer') {
-                pill.classList.remove('is-vendor');
-                customerBtn.classList.add('text-pink-600');
-                customerBtn.classList.remove('text-gray-500');
-                vendorBtn.classList.add('text-gray-500');
-                vendorBtn.classList.remove('text-pink-600');
-                document.getElementById('forgot').href = "/customer-forgot-password";
+                if (pill) pill.classList.remove('is-vendor');
+                if (customerBtn) { customerBtn.classList.add('text-pink-600'); customerBtn.classList.remove('text-gray-500'); }
+                if (vendorBtn) { vendorBtn.classList.add('text-gray-500'); vendorBtn.classList.remove('text-pink-600'); }
+                if (forgot) forgot.href = "/customer-forgot-password";
             } else {
-                pill.classList.add('is-vendor');
-                vendorBtn.classList.add('text-pink-600');
-                vendorBtn.classList.remove('text-gray-500');
-                customerBtn.classList.add('text-gray-500');
-                customerBtn.classList.remove('text-pink-600');
-                document.getElementById('forgot').href = "/vendor-forgot-password";
+                if (pill) pill.classList.add('is-vendor');
+                if (vendorBtn) { vendorBtn.classList.add('text-pink-600'); vendorBtn.classList.remove('text-gray-500'); }
+                if (customerBtn) { customerBtn.classList.add('text-gray-500'); customerBtn.classList.remove('text-pink-600'); }
+                if (forgot) forgot.href = "/vendor-forgot-password";
             }
+
+            applyAccess(role);
         }
 
         // URL Tab/Role pre-selector on page load
@@ -662,14 +717,21 @@
                 setRole('vendor');
             }
 
-            if (type.includes('signup')) {
+            // Only auto-open a drawer the current role can actually use.
+            if (type.includes('signup') && roleAllows(currentRole, 'register')) {
                 openDrawer('signup');
-            } else if (type.includes('login')) {
+            } else if (type.includes('login') && roleAllows(currentRole, 'login')) {
                 openDrawer('signin');
             }
         }
 
         window.onload = function() {
+            // Land on whichever role is still open (customer first).
+            if (!roleAllows('customer', 'login') && !roleAllows('customer', 'register')) {
+                setRole('vendor');
+            } else {
+                setRole('customer');
+            }
             handleURLTabs();
         };
 
@@ -741,7 +803,8 @@
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
                     },
-                    body: JSON.stringify({ email: email })
+                    // `type` lets the server apply the per-role registration switch
+                    body: JSON.stringify({ type: currentRole, email: email })
                 });
 
                 const result = await response.json();

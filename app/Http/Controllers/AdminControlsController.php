@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\AccessControl;
 use App\Support\SiteSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -33,8 +34,15 @@ class AdminControlsController extends Controller
 
         $whatsappBuyNowEnabled = SiteSettings::get('whatsapp_buy_now_enabled', '0') === '1';
         $whatsappBuyNowNumber = SiteSettings::get('whatsapp_buy_now_number', '');
+        $access = AccessControl::flags();
+        $forceLogout = [
+            'customer' => AccessControl::forceLogout('customer'),
+            'vendor'   => AccessControl::forceLogout('vendor'),
+        ];
 
-        return view('Admin.controls', compact('whatsappBuyNowEnabled', 'whatsappBuyNowNumber'));
+        return view('Admin.controls', compact(
+            'whatsappBuyNowEnabled', 'whatsappBuyNowNumber', 'access', 'forceLogout'
+        ));
     }
 
     public function save(Request $request)
@@ -50,5 +58,32 @@ class AdminControlsController extends Controller
         SiteSettings::set('whatsapp_buy_now_number', trim((string) ($data['number'] ?? '')));
 
         return response()->json(['success' => true, 'message' => 'Controls saved.']);
+    }
+
+    /**
+     * Customer/vendor account access switches. Saved as one block so the admin
+     * never lands in a half-applied state (e.g. login off but force-logout
+     * still pending).
+     */
+    public function saveAccess(Request $request)
+    {
+        $this->guard();
+
+        $data = $request->validate([
+            'role'         => 'required|in:customer,vendor',
+            'login'        => 'required|boolean',
+            'register'     => 'required|boolean',
+            'force_logout' => 'required|boolean',
+        ]);
+
+        $role = $data['role'];
+        SiteSettings::set("{$role}_login_enabled", $data['login'] ? '1' : '0');
+        SiteSettings::set("{$role}_register_enabled", $data['register'] ? '1' : '0');
+        SiteSettings::set("{$role}_force_logout", $data['force_logout'] ? '1' : '0');
+
+        return response()->json([
+            'success' => true,
+            'message' => ucfirst($role) . ' access saved.',
+        ]);
     }
 }

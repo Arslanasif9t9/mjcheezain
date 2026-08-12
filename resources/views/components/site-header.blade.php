@@ -3,6 +3,23 @@
 {{-- Shared site header: the home-page header used across the whole site.
      Pass :vendor to show the "View Store" button (e.g. single product pages). --}}
 
+@php
+    // Admin Controls (Account Access). When a guest has no auth options left we
+    // don't leave a hole where the buttons were — a single-product page gets the
+    // vendor's "View Store" button, anything else gets a WhatsApp contact chip.
+    $hdrGuestAuth = ($siteAccess['customer_any'] ?? true) || ($siteAccess['vendor_any'] ?? true);
+    $hdrCustomerLogin = $siteAccess['customer_login'] ?? true;
+    $hdrCustomerRegister = $siteAccess['customer_register'] ?? true;
+
+    $hdrWa = ($whatsappBuyNow['number'] ?? '') !== '' ? $whatsappBuyNow['number'] : null;
+    $hdrWaUrl = $hdrWa
+        ? 'https://wa.me/' . $hdrWa . '?text=' . rawurlencode("Hi! I'd like to know more about your products.")
+        : null;
+    $hdrStoreUrl = ($vendor->user_id ?? null) ? '/vendor-products/' . $vendor->user_id : null;
+    // Something meaningful exists to put in the empty slot?
+    $hdrHasFallback = $hdrStoreUrl || $hdrWaUrl;
+@endphp
+
     <style>
         @media (max-width: 767px) {
             .mobile-gradient-header {
@@ -67,7 +84,7 @@
 
             <!-- Desktop Links & Auth (Right) -->
             <div class="hidden md:flex items-center space-x-3 ml-auto">
-                <nav class="flex space-x-6 text-sm font-medium text-gray-600 mr-4 items-center">
+                <nav class="flex space-x-6 text-sm font-medium text-gray-600 {{ (auth()->check() || $hdrGuestAuth || $hdrHasFallback) ? 'mr-4' : '' }} items-center">
                     <div class="relative">
                         <button onclick="toggleDropdown('categories-dropdown-desktop')" class="flex items-center hover:text-gray-900 transition duration-150 focus:outline-none">
                             Categories
@@ -103,15 +120,30 @@
                         <div id="more-dropdown-desktop" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 z-10 hidden border border-gray-100">
                             <a href="/about" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">About Us</a>
                             <a href="/FAQs" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Help Center</a>
+                            @if($siteAccess['vendor_register'] ?? true)
                             <a href="/vendor-zone" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Become a Seller</a>
+                            @endif
                         </div>
                     </div>
                 </nav>
 
                 @auth
                     <x-user-profile :user="$user" :profile="$profile" :dashboardPage="$dashboardPage" :imgPath="$imgPath" />
-                @else
+                @elseif($hdrGuestAuth)
                     <x-guest-menu />
+                @elseif($hdrStoreUrl)
+                    {{-- Accounts are switched off: this slot becomes the vendor's store link --}}
+                    <a href="{{ $hdrStoreUrl }}"
+                       class="flex items-center gap-1.5 px-4 py-2 text-white text-xs font-bold rounded-full no-underline hover:opacity-90 transition-opacity whitespace-nowrap"
+                       style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 4px 14px rgba(255,125,160,.35);">
+                        <i class="fa-solid fa-store"></i> View Store
+                    </a>
+                @elseif($hdrWaUrl)
+                    <a href="{{ $hdrWaUrl }}" target="_blank" rel="noopener"
+                       class="flex items-center gap-1.5 px-4 py-2 text-white text-xs font-bold rounded-full no-underline hover:opacity-90 transition-opacity whitespace-nowrap"
+                       style="background:#25D366; box-shadow: 0 4px 14px rgba(37,211,102,.3);">
+                        <i class="fa-brands fa-whatsapp text-base"></i> Contact Us
+                    </a>
                 @endauth
             </div>
 
@@ -162,6 +194,12 @@
                         <!-- Auth links wrapper (hidden on scroll) -->
                         <div id="mobile-auth-wrapper" class="flex items-center space-x-1.5 transition-all duration-300 opacity-1 pointer-events-auto">
                             @guest
+                                @php
+                                    $mSignup = ($siteAccess['customer_register'] ?? true) || ($siteAccess['vendor_register'] ?? true);
+                                    $mLogin  = ($siteAccess['customer_login'] ?? true) || ($siteAccess['vendor_login'] ?? true);
+                                @endphp
+
+                                @if($mSignup)
                                 <!-- Sign Up Dropdown -->
                                 <div class="relative">
                                     <button onclick="toggleDropdown('mobile-signup-dropdown')" class="flex items-center text-gray-900 hover:text-pink-600 transition-colors focus:outline-none py-1">
@@ -169,13 +207,21 @@
                                         <svg class="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                     </button>
                                     <div id="mobile-signup-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
+                                        @if($siteAccess['customer_register'] ?? true)
                                         <a href="{{ url('login-user?type=customer-signup&page=' . request()->path()) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Customer Register</a>
+                                        @endif
+                                        @if($siteAccess['vendor_register'] ?? true)
                                         <a href="{{ url('login-user?type=vendor-signup&page=' . request()->path()) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Vendor Register</a>
+                                        @endif
                                     </div>
                                 </div>
+                                @endif
 
+                                @if($mSignup && $mLogin)
                                 <span class="text-gray-400 font-light">|</span>
+                                @endif
 
+                                @if($mLogin)
                                 <!-- Login Dropdown -->
                                 <div class="relative">
                                     <button onclick="toggleDropdown('mobile-login-dropdown')" class="flex items-center text-gray-900 hover:text-pink-600 transition-colors focus:outline-none py-1">
@@ -183,10 +229,32 @@
                                         <svg class="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                     </button>
                                     <div id="mobile-login-dropdown" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
+                                        @if($siteAccess['customer_login'] ?? true)
                                         <a href="{{ url('login-user?type=customer-login&page=' . request()->path()) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Customer Login</a>
+                                        @endif
+                                        @if($siteAccess['vendor_login'] ?? true)
                                         <a href="{{ url('login-user?type=vendor-login&page=' . request()->path()) }}" class="block px-4 py-2 text-xs text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors no-underline">Vendor Login</a>
+                                        @endif
                                     </div>
                                 </div>
+                                @endif
+
+                                @if(!$mSignup && !$mLogin)
+                                    {{-- Accounts off: keep the slot purposeful instead of empty --}}
+                                    @if($hdrStoreUrl)
+                                        <a href="{{ $hdrStoreUrl }}"
+                                           class="flex items-center gap-1 px-3 py-1.5 text-white text-[11px] font-bold rounded-full no-underline whitespace-nowrap"
+                                           style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 3px 10px rgba(255,125,160,.35);">
+                                            <i class="fa-solid fa-store"></i> Store
+                                        </a>
+                                    @elseif($hdrWaUrl)
+                                        <a href="{{ $hdrWaUrl }}" target="_blank" rel="noopener"
+                                           class="flex items-center gap-1 px-3 py-1.5 text-white text-[11px] font-bold rounded-full no-underline whitespace-nowrap"
+                                           style="background:#25D366; box-shadow: 0 3px 10px rgba(37,211,102,.3);">
+                                            <i class="fa-brands fa-whatsapp text-sm"></i> Contact
+                                        </a>
+                                    @endif
+                                @endif
                             @else
                                 <!-- Logged in state: profile picture (app-like), dropdown on tap -->
                                 <div class="relative">
@@ -243,10 +311,18 @@
             <div class="p-4 pb-5" style="background: linear-gradient(to right, #FF7DA0, #FFC275);">
                 <div class="flex justify-end">
                     @guest
+                        @if($hdrCustomerLogin)
                         <a href="/login-user?type=customer-login&page={{ request()->path() }}" class="flex items-center gap-1.5 text-gray-900 font-semibold text-sm no-underline hover:opacity-75 transition">
                             Sign in
                             <i class="fa-regular fa-user text-base"></i>
                         </a>
+                        @elseif($hdrWaUrl)
+                        {{-- Sign-in switched off: same slot, same styling, useful action --}}
+                        <a href="{{ $hdrWaUrl }}" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-gray-900 font-semibold text-sm no-underline hover:opacity-75 transition">
+                            Contact Us
+                            <i class="fa-brands fa-whatsapp text-base"></i>
+                        </a>
+                        @endif
                     @else
                         <a href="{{ $dashboardPage }}" class="flex items-center gap-1.5 text-gray-900 font-semibold text-sm no-underline hover:opacity-75 transition truncate max-w-[12rem]">
                             {{ $user->full_name ?? $user->username }}
@@ -289,6 +365,12 @@
         </div>
 
         <!-- Drawer Footer Auth/Profile -->
+        @php
+            // The whole strip is hidden when there's nothing to put in it —
+            // an empty bordered gray bar looks broken.
+            $hdrDrawerFooter = auth()->check() || $hdrCustomerLogin || $hdrCustomerRegister || $hdrWaUrl;
+        @endphp
+        @if($hdrDrawerFooter)
         <div class="p-4 border-t border-gray-100 bg-gray-50">
             @auth
                 <div class="flex items-center space-x-3 mb-3">
@@ -301,17 +383,29 @@
                 <a href="{{ $dashboardPage }}" class="block w-full text-center py-2 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-800 transition duration-150 no-underline">
                     Go to Dashboard
                 </a>
-            @else
+            @elseif($hdrCustomerLogin || $hdrCustomerRegister)
                 <div class="space-y-2">
+                    @if($hdrCustomerLogin)
                     <a href="/login-user?type=customer-login&page={{ request()->path() }}" class="block w-full text-center py-2 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-100 transition duration-150 no-underline">
                         Log In
                     </a>
+                    @endif
+                    @if($hdrCustomerRegister)
                     <a href="/login-user?type=customer-signup&page={{ request()->path() }}" class="block w-full text-center py-2 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-800 transition duration-150 no-underline">
                         Register
                     </a>
+                    @endif
                 </div>
+            @else
+                {{-- Accounts off: the strip stays, but it now does something useful --}}
+                <a href="{{ $hdrWaUrl }}" target="_blank" rel="noopener"
+                   class="flex items-center justify-center gap-2 w-full py-2.5 text-white text-sm font-semibold rounded-lg no-underline hover:opacity-90 transition"
+                   style="background:#25D366;">
+                    <i class="fa-brands fa-whatsapp text-base"></i> Order on WhatsApp
+                </a>
             @endauth
         </div>
+        @endif
     </div>
 
     <script>
@@ -561,5 +655,9 @@
     </script>
 
 @once
-    <x-auth-popup />
+    {{-- No auth options anywhere = no reason to ship the popup. Its global
+         link interceptor self-guards when the panel is absent. --}}
+    @if($hdrGuestAuth)
+        <x-auth-popup />
+    @endif
 @endonce

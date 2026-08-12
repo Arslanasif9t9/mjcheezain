@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Product;
+use App\Support\AccessControl;
+use App\Support\SiteSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -93,7 +95,14 @@ class CartController extends Controller
     }
 
     public function buy($product_id, $quantity)
-    {  
+    {
+        // WhatsApp-only ordering: the product page's Buy Now already opens
+        // WhatsApp, so this URL should never lead to a checkout form. Bounce
+        // back to the product (no cart row is created).
+        if (SiteSettings::get('whatsapp_buy_now_enabled', '0') === '1') {
+            return redirect('/product/' . $product_id);
+        }
+
         $product = Product::findOrFail($product_id);
         
         // Get or create session ID for guest users
@@ -209,7 +218,12 @@ class CartController extends Controller
         $total = $subtotal + $shipping + $tax - $discount;
 
         if(!$user) {
-            // Guest "Buy Now" — send to login, then return to this buy URL
+            // Guest "Buy Now" — send to login, then return to this buy URL.
+            // With customer sign-in switched off there is no login page; the
+            // cart carries the WhatsApp order button instead.
+            if (!AccessControl::loginAllowed('customer')) {
+                return redirect('/cart');
+            }
             return redirect('/login-user?type=customer-login&page=' . urlencode("product/{$product_id}/buy/{$quantity}"));
         }
         return view('checkout', compact(

@@ -27,6 +27,7 @@ use App\Http\Controllers\AdminOpsController;
 use App\Http\Controllers\JapanController;
 use App\Http\Controllers\JapanAdminController;
 use App\Http\Controllers\AdminControlsController;
+use App\Http\Controllers\AuthPageController;
 
 Route::prefix('japan')->name('japan.')->group(function () {
     Route::get('/', [JapanController::class, 'index'])->name('index');
@@ -106,10 +107,12 @@ Route::get('cosmetics', [HomeController::class, 'cosmetics']);
 Route::get('/product-listing', [HomeController::class, 'productList']);
 Route::get('/products/all-page', [HomeController::class, 'productList']); // filtered listing page (?category=)
 
-Route::view('/login-user', 'home/login');
+// Auth pages go through AuthPageController so the admin Controls switches can
+// close them (they redirect home instead of rendering).
+Route::get('/login-user', [AuthPageController::class, 'loginUser']);
 Route::post('/send-otp', [AuthController::class, 'sendOtp']);
-Route::view('/vendor-forgot-password', 'home/forgot');
-Route::view('/customer-forgot-password', 'home/forgot');
+Route::get('/vendor-forgot-password', [AuthPageController::class, 'vendorForgot']);
+Route::get('/customer-forgot-password', [AuthPageController::class, 'customerForgot']);
 // Forgot Password Routes
 Route::post('/send-password-reset-otp', [AuthController::class, 'sendPasswordResetOtp']);
 Route::post('/verify-password-reset-otp', [AuthController::class, 'verifyPasswordResetOtp']);
@@ -354,6 +357,7 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     // Site-wide controls (e.g. WhatsApp Buy Now)
     Route::get('/controls', [AdminControlsController::class, 'index'])->name('admin.controls');
     Route::post('/controls', [AdminControlsController::class, 'save']);
+    Route::post('/controls/access', [AdminControlsController::class, 'saveAccess']);
 
     // Operations: orders, withdraw requests, customers, returns & replacements oversight
     Route::get('/orders', [AdminOpsController::class, 'orders']);

@@ -311,16 +311,38 @@
         </svg>
     </div>
 
+    @php
+        // Admin Controls (Account Access). The "OR" divider must go with the
+        // vendor line — a lone "OR" with nothing under it looks broken.
+        $apCustLogin = $siteAccess['customer_login'] ?? true;
+        $apCustReg   = $siteAccess['customer_register'] ?? true;
+        $apVendorAny = $siteAccess['vendor_any'] ?? true;
+    @endphp
+
     <div class="ap-body">
+        @if($apCustLogin)
         <a id="ap-signin" href="/login-user?type=customer-login" class="ap-btn ap-btn-primary ap-stagger d1">Continue with Sign In</a>
+        @endif
+        @if($apCustReg)
         <a id="ap-signup" href="/login-user?type=customer-signup" class="ap-btn ap-btn-outline ap-stagger d2">Create New Account</a>
+        @endif
+        @if($apVendorAny)
+        @if($apCustLogin || $apCustReg)
         <div class="ap-or ap-stagger d3">OR</div>
+        @endif
         <p class="ap-vendor ap-stagger d4">
             Vendor Portal &mdash;
+            @if($siteAccess['vendor_login'] ?? true)
             <a id="ap-vendor-login" href="/login-user?type=vendor-login">Sign In</a>
+            @endif
+            @if(($siteAccess['vendor_login'] ?? true) && ($siteAccess['vendor_register'] ?? true))
             &nbsp;/&nbsp;
+            @endif
+            @if($siteAccess['vendor_register'] ?? true)
             <a id="ap-vendor-signup" href="/login-user?type=vendor-signup">Register</a>
+            @endif
         </p>
+        @endif
     </div>
 </div>
 

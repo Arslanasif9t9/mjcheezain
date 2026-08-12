@@ -97,11 +97,13 @@
                         </button>
                         <div class="accordion-content px-4 sm:px-5 bg-gray-50 text-gray-600">
                             <p class="py-2">Joining MJCheezain as a seller is quick and simple. Click "Register as a Seller", fill out the required details, and start your online store today!</p>
+                            @if($siteAccess['vendor_register'] ?? true)
                             <div class="mt-3 mb-4">
                                 <a href="#" class="btn-brand-gradient inline-flex items-center justify-center w-full sm:w-auto font-semibold py-2.5 px-6 rounded-full">
                                     Register as Seller
                                 </a>
                             </div>
+                            @endif
                         </div>
                     </div>
 
@@ -159,11 +161,13 @@
                         </button>
                         <div class="accordion-content px-4 sm:px-5 bg-gray-50 text-gray-600">
                             <p class="py-2">Once your seller account is approved, you can log in to your Vendor Dashboard using your email and password. The login area is secure and accessible 24/7, giving you full control over your e-commerce operations.</p>
+                            @if($siteAccess['vendor_login'] ?? true)
                             <div class="mt-3 mb-4">
                                 <a href="#" class="btn-brand-gradient inline-flex items-center justify-center w-full sm:w-auto font-semibold py-2.5 px-6 rounded-full">
                                     Vendor Login
                                 </a>
                             </div>
+                            @endif
                         </div>
                     </div>
 

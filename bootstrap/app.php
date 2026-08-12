@@ -19,6 +19,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin.auth' => \App\Http\Middleware\AdminAuth::class,
             'japanadmin.auth' => \App\Http\Middleware\JapanAdminAuth::class,
         ]);
+
+        // Ends sessions of roles the admin has switched off + forced out.
+        $middleware->web(append: [
+            \App\Http\Middleware\EnforceAccountAccess::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Database errors (wrong credentials, missing DB, lost connection, ...)

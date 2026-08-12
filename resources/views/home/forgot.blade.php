@@ -360,7 +360,7 @@
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
-                    body: JSON.stringify({ email: email })
+                    body: JSON.stringify({ type: userType, email: email })
                 });
                 
                 const result = await response.json();
@@ -403,7 +403,7 @@
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
-                    body: JSON.stringify({ email: userEmail })
+                    body: JSON.stringify({ type: userType, email: userEmail })
                 });
                 
                 const result = await response.json();
@@ -445,9 +445,10 @@
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
-                    body: JSON.stringify({ 
+                    body: JSON.stringify({
+                        type: userType,
                         email: userEmail,
-                        otp: otp 
+                        otp: otp
                     })
                 });
                 
