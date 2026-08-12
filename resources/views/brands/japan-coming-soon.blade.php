@@ -79,11 +79,11 @@
         <div class="app-card bg-white rounded-2xl px-5 py-4 md:px-8 md:py-5 shadow-[0_8px_24px_rgba(232,93,133,0.10)] border border-pink-100 max-w-md w-full">
             <p class="text-gray-700 text-sm md:text-base font-medium mb-3">Have a question or want to order early?</p>
             {{--
-                ⚠️ WHATSAPP NUMBER — edit karne ke liye yahan href me number badlo.
-                Format: https://wa.me/<countrycode+number bina + ya spaces>?text=...
-                Abhi placeholder Japan number laga hai (819012345678) — real number se replace karein.
+                WHATSAPP NUMBER: +81 80-2627-1101
+                wa.me needs it with no "+", no spaces and no dashes.
+                It appears twice on this page — here and in the vendor line below.
             --}}
-            <a href="https://wa.me/819012345678?text=Hi%2C%20I%27m%20interested%20in%20MJ%20Cheezain%20Japan%20products"
+            <a href="https://wa.me/818026271101?text=Hi%2C%20I%27m%20interested%20in%20MJ%20Cheezain%20Japan%20products"
                target="_blank" rel="noopener"
                class="relative inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-semibold rounded-full px-6 py-3 w-full transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
                 <span class="relative flex h-3 w-3 pulse-ring">
@@ -97,7 +97,7 @@
         {{-- Vendor mention (secondary, small) --}}
         <p class="text-gray-400 text-xs md:text-sm mt-8">
             Want to sell your products as a vendor?
-            <a href="https://wa.me/819012345678?text=Hi%2C%20I%27m%20interested%20in%20selling%20on%20MJ%20Cheezain%20Japan"
+            <a href="https://wa.me/818026271101?text=Hi%2C%20I%27m%20interested%20in%20selling%20on%20MJ%20Cheezain%20Japan"
                target="_blank" rel="noopener" class="font-semibold text-[#FF7DA0] hover:underline">Get in touch</a>
         </p>
 
