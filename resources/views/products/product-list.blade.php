@@ -3,7 +3,7 @@
     $activeCategories = \App\Support\CategoryCatalog::active();
     $selectedCategory = trim((string) request('category', ''));
 @endphp
-<script src="{{ asset('js/product-card.js') }}?v={{ time() }}"></script>
+<script src="{{ asset('js/product-card.js') }}?v={{ @filemtime(public_path('js/product-card.js')) ?: 1 }}"></script>
 <style>
     .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
     .scrollbar-none::-webkit-scrollbar { display: none; }

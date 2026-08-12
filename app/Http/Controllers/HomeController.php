@@ -107,10 +107,11 @@ class HomeController extends Controller
                 'profile_picture' => null,
             ];
         }
-        $imageMain = VendorProductImage::where('product_id', $product->id)
-                    ->where('is_primary', 1)
-                    ->first();
-        $images = VendorProductImage::where('product_id', $product->id)->pluck('image_path');
+        // One query for both the gallery and the primary image (was two scans
+        // of the same rows).
+        $imageRows = VendorProductImage::where('product_id', $product->id)->get();
+        $imageMain = $imageRows->firstWhere('is_primary', 1);
+        $images = $imageRows->pluck('image_path');
             // ->whereColumn('mrp', '<', 'selling_price')
             // ->with('VendorProductImage')
             // ->select('*')
@@ -129,15 +130,15 @@ class HomeController extends Controller
             ->limit(5)
             ->get();
 
-        $reviewCount = DB::table('product_ratings')
+        // Count and average in one pass (was two identical WHERE clauses).
+        $ratingStats = DB::table('product_ratings')
             ->where('product_id', $product->id)
             ->where('is_replacement', 0)
-            ->count();
+            ->selectRaw('COUNT(*) as review_count, AVG(rating) as avg_rating')
+            ->first();
 
-        $avgRating = DB::table('product_ratings')
-            ->where('product_id', $product->id)
-            ->where('is_replacement', 0)
-            ->avg('rating');
+        $reviewCount = (int) ($ratingStats->review_count ?? 0);
+        $avgRating = $ratingStats->avg_rating ?? null;
 
         return view('product', compact(
             'user', 'profile', 'dashboardPage', 'imgPath',
@@ -359,11 +360,15 @@ class HomeController extends Controller
          // 👉 Add this for products
         $products = Product::where('user_id', $id)->get();
         $vendor = VendorBasicInfo::where('user_id', $id)->first();
+
+        // Primary images in ONE query keyed by product (was a query per
+        // product — a vendor with 200 products cost 200 extra round-trips).
+        $primaryImages = VendorProductImage::whereIn('product_id', $products->pluck('id'))
+            ->where('is_primary', 1)
+            ->pluck('image_path', 'product_id');
+
         foreach ($products as $product) {
-            $productImage = VendorProductImage::where('product_id', $product->id)
-                                            ->where('is_primary', 1)
-                                            ->first();
-            $product->primary_image = $productImage ? $productImage->image_path : null;
+            $product->primary_image = $primaryImages[$product->id] ?? null;
         }
         // $images = VendorProductImage::where('product_id', $product->id)->pluck('image_path');
 

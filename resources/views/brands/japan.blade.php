@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <script src="{{ asset('js/img-fallback.js') }}"></script>
-    <script src="{{ asset('js/page-loader.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/page-loader.js') }}?v={{ @filemtime(public_path('js/page-loader.js')) ?: 1 }}"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Japan - MJ Cheezain</title>
     <meta name="description" content="Premium auto parts, accessories, and performance parts" />
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ asset('css/tailwind.css') }}?v={{ @filemtime(public_path('css/tailwind.css')) ?: 1 }}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
@@ -1142,11 +1142,11 @@
         });
     </script>
 
-    <script src="{{ asset('js/product-card.js') }}?v={{ time() }}"></script>
-    <script src="{{ asset('js/category_fetch.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/product-card.js') }}?v={{ @filemtime(public_path('js/product-card.js')) ?: 1 }}"></script>
+    <script src="{{ asset('js/category_fetch.js') }}?v={{ @filemtime(public_path('js/category_fetch.js')) ?: 1 }}"></script>
     @endif
 
-    <script src="{{ asset('js/search.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/search.js') }}?v={{ @filemtime(public_path('js/search.js')) ?: 1 }}"></script>
     <x-customer.global-nav />
 </body>
 </html>

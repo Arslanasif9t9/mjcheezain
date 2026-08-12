@@ -280,6 +280,9 @@
 
     <x-footer />
 
+    <!-- Lucide icons: loaded here (not in the shared layout) so only the pages
+         that actually use icons pay for it. -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Script to initialize Lucide Icons -->
     <script>
         lucide.createIcons();

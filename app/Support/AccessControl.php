@@ -49,10 +49,23 @@ class AccessControl
         return true;
     }
 
+    /** Per-request memo — flags() is asked for on every view render. */
+    private static ?array $flagsMemo = null;
+
+    /** Called by SiteSettings::set() so a save is reflected immediately. */
+    public static function resetMemo(): void
+    {
+        self::$flagsMemo = null;
+    }
+
     /** Compact flags for views (shared as $siteAccess by AppServiceProvider). */
     public static function flags(): array
     {
-        return [
+        if (self::$flagsMemo !== null) {
+            return self::$flagsMemo;
+        }
+
+        return self::$flagsMemo = [
             'customer_login'    => self::loginAllowed('customer'),
             'customer_register' => self::registerAllowed('customer'),
             'customer_any'      => self::anyAllowed('customer'),

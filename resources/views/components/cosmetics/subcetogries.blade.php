@@ -5,12 +5,12 @@
     // Keep the original PNG artwork where a category name matches the old tiles;
     // everything else gets a brand-gradient emoji circle.
     $tileImages = [
-        'Cosmetics'             => 'img/categories/cosmetics.png',
-        'Skincare'              => 'img/categories/skincare.png',
-        'Haircare'              => 'img/categories/haircare.png',
-        'Fragrances'            => 'img/categories/fragrances.png',
-        'Perfumes & Fragrances' => 'img/categories/fragrances.png',
-        'Accessories'           => 'img/categories/accessories.png',
+        'Cosmetics'             => 'img/categories/cosmetics.webp',
+        'Skincare'              => 'img/categories/skincare.webp',
+        'Haircare'              => 'img/categories/haircare.webp',
+        'Fragrances'            => 'img/categories/fragrances.webp',
+        'Perfumes & Fragrances' => 'img/categories/fragrances.webp',
+        'Accessories'           => 'img/categories/accessories.webp',
     ];
 
     // Real approved-product counts per category (one grouped query, fail-safe).
@@ -59,6 +59,7 @@
                             @if ($tileImg)
                                 <img src="{{ asset($tileImg) }}"
                                      alt="{{ $cat->name }}"
+                                     width="600" height="600" loading="lazy" decoding="async"
                                      class="w-full h-full object-cover absolute inset-0
                                             transition duration-500 ease-in-out
                                             group-hover:scale-110">

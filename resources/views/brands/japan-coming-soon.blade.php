@@ -6,7 +6,7 @@
 <title>Coming Soon - MJ Cheezain</title>
 <meta name="description" content="MJ Cheezain — top-quality products coming soon. Flat 40% off on perfumes at launch.">
 <link rel="icon" href="{{ asset('favicon.ico') }}">
-<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="{{ asset('css/tailwind.css') }}?v={{ @filemtime(public_path('css/tailwind.css')) ?: 1 }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Cinzel:wght@700&display=swap" rel="stylesheet">
 <style>

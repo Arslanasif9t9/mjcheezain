@@ -1,0 +1,6 @@
+/* Source for the site stylesheet. Build with `npm run css`.
+   Output: public/css/tailwind.css (committed to the repo). */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

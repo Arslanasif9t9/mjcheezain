@@ -1,8 +1,0 @@
-.o-cards .card{
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-}
-
-.o-cards .card .font-semibold{
-    text-align: right;
-}

@@ -12,16 +12,13 @@
             const allProducts = response.data || [];
             const imagesMap = response.images || {};
 
-            // Return a limited array (max 8 products) and images map
-            return new Promise(resolve => {
-                // Simulate network delay
-                setTimeout(() => {
-                    // Real products only — no demo/mock fallback. Empty
-                    // category resolves empty so loadCategoryProducts hides
-                    // the section instead of showing placeholder cards.
-                    resolve({ products: allProducts.slice(0, 8), images: imagesMap });
-                }, 100);
-            });
+            // Return a limited array (max 8 products) and images map.
+            // Real products only — no demo/mock fallback. Empty category
+            // resolves empty so loadCategoryProducts hides the section
+            // instead of showing placeholder cards.
+            // (There used to be an artificial 100ms setTimeout here — it ran
+            // 3-6 times per brand page, delaying every product rail.)
+            return { products: allProducts.slice(0, 8), images: imagesMap };
         };
 
         // --- Component Logic Function ---

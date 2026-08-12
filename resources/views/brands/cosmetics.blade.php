@@ -16,9 +16,9 @@
     </main>
     <x-footer />
 
-    <script src="{{ asset('js/search.js') }}?v={{ time() }}"></script>
-    <script src="{{ asset('js/product-card.js') }}?v={{ time() }}"></script>
-    <script src="{{ asset('js/category_fetch.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/search.js') }}?v={{ @filemtime(public_path('js/search.js')) ?: 1 }}"></script>
+    <script src="{{ asset('js/product-card.js') }}?v={{ @filemtime(public_path('js/product-card.js')) ?: 1 }}"></script>
+    <script src="{{ asset('js/category_fetch.js') }}?v={{ @filemtime(public_path('js/category_fetch.js')) ?: 1 }}"></script>
 @endsection --}}
 
 
@@ -56,7 +56,7 @@
     </main>
     <x-footer />
 
-    <script src="{{ asset('js/search.js') }}?v={{ time() }}"></script>
-    <script src="{{ asset('js/product-card.js') }}?v={{ time() }}"></script>
-    <script src="{{ asset('js/category_fetch.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/search.js') }}?v={{ @filemtime(public_path('js/search.js')) ?: 1 }}"></script>
+    <script src="{{ asset('js/product-card.js') }}?v={{ @filemtime(public_path('js/product-card.js')) ?: 1 }}"></script>
+    <script src="{{ asset('js/category_fetch.js') }}?v={{ @filemtime(public_path('js/category_fetch.js')) ?: 1 }}"></script>
 @endsection

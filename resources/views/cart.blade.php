@@ -1,19 +1,6 @@
 @extends('layouts.structure')
 @section('title', 'Cart')
 @section('style')
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'umart-blue': '#E85D85',
-                        'light-bg': '#FFF6F0',
-                        'star-yellow': '#FFC700',
-                    }
-                }
-            }
-        }
-    </script>
 @endsection
 
 @section('body')
@@ -93,7 +80,7 @@
         <x-footer />
     </div>
 
-    <script src="{{ asset('js/search.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/search.js') }}?v={{ @filemtime(public_path('js/search.js')) ?: 1 }}"></script>
     <script>
         // Store cart state in memory for quick updates
         let cartState = {

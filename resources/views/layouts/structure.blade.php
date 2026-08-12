@@ -21,33 +21,28 @@
     <link rel="icon" type="image/jpeg" href="{{ asset('img/short_logo.jpeg') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- Tailwind CSS  -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- font-awesome  -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google font  -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="../css/vendor_dashboard.css">
-    <link rel="stylesheet" href="../css/vendor_chat.css">
-    <link rel="stylesheet" href="../css/vendor_navbar.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- In your layout file -->
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-    <link rel="stylesheet" href="{{ asset('css/login&signup.css') }}">
-    <!-- Shared brand styles (btn-brand-gradient, card-hover-glow, skeleton-shimmer, section-kicker, brand-divider) -->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ time() }}">
+    <!-- Tailwind: one prebuilt stylesheet. (Was previously TWO frameworks at
+         once — a static v2.2.19 build AND the Play CDN, which compiles Tailwind
+         in the browser on every page load.) -->
+    <link rel="stylesheet" href="{{ asset('css/tailwind.css') }}?v={{ @filemtime(public_path('css/tailwind.css')) ?: 1 }}">
 
+    <!-- Font Awesome (was loaded twice: 6.0.0-beta3 + 6.4.0) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google fonts: one request, only the weights actually used
+         (was two overlapping requests totalling ~36 variants) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-    <style>        
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ asset('css/vendor_dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/vendor_chat.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/vendor_navbar.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <!-- Shared brand styles (btn-brand-gradient, card-hover-glow, skeleton-shimmer, section-kicker, brand-divider) -->
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ @filemtime(public_path('css/style.css')) ?: 1 }}">
+
+    <style>
         .PFDI {
             font-family: "Playfair Display", serif;
             font-weight: 900;
@@ -59,7 +54,7 @@
 
     @yield('style')
 
-    <script src="{{ asset('js/page-loader.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/page-loader.js') }}?v={{ @filemtime(public_path('js/page-loader.js')) ?: 1 }}"></script>
 </head>
 <body class="bg-gray-50 font-sans">
     @yield('body')

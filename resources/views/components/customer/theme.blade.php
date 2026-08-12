@@ -2,26 +2,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="{{ asset('css/tailwind.css') }}?v={{ @filemtime(public_path('css/tailwind.css')) ?: 1 }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="{{ asset('js/page-loader.js') }}?v={{ time() }}"></script>
-<script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                colors: {
-                    'brand': '#E85D85',
-                    'brand-light': '#FF7DA0',
-                    'brand-peach': '#FFC275',
-                    'light-bg': '#FFF6F0',
-                },
-                fontFamily: {
-                    'poppins': ['Poppins', 'sans-serif'],
-                }
-            }
-        }
-    }
-</script>
+<script src="{{ asset('js/page-loader.js') }}?v={{ @filemtime(public_path('js/page-loader.js')) ?: 1 }}"></script>
 <style>
     body {
         font-family: 'Poppins', sans-serif;

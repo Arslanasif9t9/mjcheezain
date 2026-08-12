@@ -1,9 +1,14 @@
     @php
         // Real featured vendors: sellers who have at least one APPROVED product.
         // Wrapped in try/catch so the home page can never 500 over this section.
+        //
+        // Cached for 10 minutes: this is a GROUP BY + ORDER BY COUNT(*) over the
+        // whole products table and it runs on every home-page view. The list
+        // only changes when a vendor's products are approved.
         $featuredVendors = collect();
         try {
-            $featuredVendors = \Illuminate\Support\Facades\DB::table('vendor_products as vp')
+            $featuredVendors = \Illuminate\Support\Facades\Cache::remember('featured_vendors_v1', 600, function () {
+            return \Illuminate\Support\Facades\DB::table('vendor_products as vp')
                 ->join('users as u', 'vp.user_id', '=', 'u.user_id')
                 ->leftJoin('vendor_basic_info as vbi', 'u.user_id', '=', 'vbi.user_id')
                 ->where('vp.position', 'approved')
@@ -32,6 +37,7 @@
                             : asset('img/default_profile.webp'),
                     ];
                 });
+            });
         } catch (\Throwable $e) {
             $featuredVendors = collect();
         }

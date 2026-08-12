@@ -405,6 +405,10 @@
 
     <x-footer />
 
+    <!-- Lucide icons: loaded here (not in the shared layout) so only the pages
+         that actually use icons pay for it. -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <script>
         // Function to toggle individual FAQ items (accordion)
         function toggleAccordion(header) {

@@ -1,0 +1,14 @@
+{
+    "name": "mjcheezain",
+    "private": true,
+    "type": "module",
+    "description": "Build tooling for the site's Tailwind stylesheet. The built file (public/css/tailwind.css) is committed, so deploys stay FTP-only — the server never needs npm.",
+    "scripts": {
+        "css": "tailwindcss -i ./resources/css/tailwind-src.css -o ./public/css/tailwind.css --minify",
+        "css:watch": "tailwindcss -i ./resources/css/tailwind-src.css -o ./public/css/tailwind.css --watch"
+    },
+    "devDependencies": {
+        "sharp": "^0.35.3",
+        "tailwindcss": "^3.4.17"
+    }
+}

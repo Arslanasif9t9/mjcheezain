@@ -15,10 +15,21 @@ class SiteSettings
 {
     const CACHE_KEY = 'site_settings_v1';
 
+    /**
+     * Per-request memo. Cache::remember is NOT memoized by Laravel, so without
+     * this every get() is a real cache-store round-trip — and a single page
+     * render asks for these settings well over a hundred times.
+     */
+    private static $memo = null;
+
     /** All settings as a key => value map. */
     public static function all()
     {
-        return Cache::remember(self::CACHE_KEY, 600, function () {
+        if (self::$memo !== null) {
+            return self::$memo;
+        }
+
+        return self::$memo = Cache::remember(self::CACHE_KEY, 600, function () {
             try {
                 return DB::table('site_settings')->pluck('value', 'key');
             } catch (\Throwable $e) {
@@ -43,5 +54,7 @@ class SiteSettings
             DB::table('site_settings')->insert(['key' => $key, 'value' => $value, 'created_at' => now(), 'updated_at' => now()]);
         }
         Cache::forget(self::CACHE_KEY);
+        self::$memo = null;
+        AccessControl::resetMemo();
     }
 }

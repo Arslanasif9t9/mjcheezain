@@ -1000,23 +1000,10 @@
 
     <x-footer />
 
-    <script src="{{ asset('js/search.js') }}?v={{ time() }}"></script>
-    <script src="{{ asset('js/product-card.js') }}?v={{ time() }}"></script>
-    <script src="{{ asset('js/category_fetch.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/search.js') }}?v={{ @filemtime(public_path('js/search.js')) ?: 1 }}"></script>
+    <script src="{{ asset('js/product-card.js') }}?v={{ @filemtime(public_path('js/product-card.js')) ?: 1 }}"></script>
+    <script src="{{ asset('js/category_fetch.js') }}?v={{ @filemtime(public_path('js/category_fetch.js')) ?: 1 }}"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary-blue': '#E85D85',
-                        'dark-bg': '#1f2937',
-                        'star-yellow': '#FFC700',
-                        'verified-green': '#10b981',
-                    }
-                }
-            }
-        }
-
         /**
          * JavaScript for Tab Switching
          * Toggles the visibility of content panels and updates the active tab style.

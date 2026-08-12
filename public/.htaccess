@@ -23,3 +23,65 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# ---------------------------------------------------------------------
+# Performance: compression + caching.
+# Each block is wrapped in <IfModule> so the site still works unchanged
+# if Hostinger doesn't have the module enabled.
+# ---------------------------------------------------------------------
+
+# Gzip text responses. HTML pages here carry a lot of inline CSS/JS,
+# so this is the single biggest transfer saving.
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+    AddOutputFilterByType DEFLATE application/javascript application/x-javascript text/javascript
+    AddOutputFilterByType DEFLATE application/json application/xml
+    AddOutputFilterByType DEFLATE image/svg+xml
+    AddOutputFilterByType DEFLATE font/ttf font/otf font/woff font/woff2 application/font-woff application/vnd.ms-fontobject
+</IfModule>
+
+# Long-lived caching for static assets. Safe because every CSS/JS tag
+# carries a ?v=<filemtime> fingerprint that changes on deploy.
+# HTML is deliberately never cached.
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault                          "access plus 1 month"
+
+    ExpiresByType text/html                 "access plus 0 seconds"
+
+    ExpiresByType text/css                  "access plus 1 year"
+    ExpiresByType application/javascript    "access plus 1 year"
+    ExpiresByType text/javascript           "access plus 1 year"
+
+    ExpiresByType image/jpeg                "access plus 1 year"
+    ExpiresByType image/png                 "access plus 1 year"
+    ExpiresByType image/gif                 "access plus 1 year"
+    ExpiresByType image/webp                "access plus 1 year"
+    ExpiresByType image/svg+xml             "access plus 1 year"
+    ExpiresByType image/x-icon              "access plus 1 year"
+
+    ExpiresByType video/mp4                 "access plus 1 year"
+
+    ExpiresByType font/woff2                "access plus 1 year"
+    ExpiresByType font/woff                 "access plus 1 year"
+    ExpiresByType font/ttf                  "access plus 1 year"
+
+    ExpiresByType application/json          "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+    # Static assets are fingerprinted, so they may be cached immutably.
+    <FilesMatch "\.(css|js|jpg|jpeg|png|gif|webp|svg|ico|woff|woff2|ttf|otf|mp4)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+
+    # Never cache HTML — pages must always reflect the current state.
+    <FilesMatch "\.(html|php)$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+
+    # Drop ETags; Last-Modified + Cache-Control are enough and ETags
+    # behave badly across load-balanced hosts.
+    Header unset ETag
+</IfModule>
+FileETag None

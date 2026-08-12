@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <script src="{{ asset('js/img-fallback.js') }}"></script>
-    <script src="{{ asset('js/page-loader.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/page-loader.js') }}?v={{ @filemtime(public_path('js/page-loader.js')) ?: 1 }}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#FF7DA0">
@@ -22,36 +22,22 @@
 
     <!-- CSS Links -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    {{-- Tailwind: use ONLY the JIT Play CDN build below. Loading the precompiled
-         tailwindcss@2.2.19 stylesheet at the same time as this JIT build caused
-         two different Tailwind resets/utility sets to fight each other, which was
-         part of what broke spacing and widths on small screens. --}}
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'custom-gold': '#C57614'
-                    }
-                }
-            }
-        };
-    </script>
+    {{-- Tailwind: one prebuilt stylesheet (was the Play CDN, which compiled
+         Tailwind in the browser on every page load). --}}
+    <link rel="stylesheet" href="{{ asset('css/tailwind.css') }}?v={{ @filemtime(public_path('css/tailwind.css')) ?: 1 }}">
 
-    <!-- Google Fonts (single combined request) -->
+    <!-- Google Fonts: one request, only the weights actually used -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <!-- Material Icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0">
-    
+
     <!-- Custom CSS (cache-busted by file modification time so live users
          always get the latest styles after a deploy) -->
-    <link rel="stylesheet" href="{{ asset('css/login&signup.css') }}?v={{ @filemtime(public_path('css/login&signup.css')) ?: 1 }}">
     <link rel="stylesheet" href="{{ asset('css/d-mode.css') }}?v={{ @filemtime(public_path('css/d-mode.css')) ?: 1 }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ @filemtime(public_path('css/style.css')) ?: 1 }}">
 
@@ -69,7 +55,6 @@
         .cat-con a img { border-radius: 50%; border: 1px solid black; height: 100px; width: 100px; background-color: rgb(229, 229, 229); }
         .cat-con a { width: 100px !important; }
         .cat-con a span { display: block; font-weight: bold; }
-        .popular-brands { margin: 30px auto !important; }
         .pb-con a img { width: 100px; height: 100px; border-radius: 50%; }
         .header-front { background: url("{{ asset('img/front-header-bg.jpeg') }}"); background-position: center; background-size: cover; }
         .header-front .container { grid-template-columns: 1fr; }
@@ -119,14 +104,6 @@
         <x-vendors />
         {{-- @include('products.biggest-savings') --}}
         @include('products.category', ['category' => 'Fitness & Gym Equipment', 'id' => 'gym', 'related' => false])
-        {{-- <x-popular-brands :brands="[
-            ['image' => 'img/nike sho.jpg', 'name' => 'Nike', 'link' => '#'],
-            ['image' => 'img/adidas.jpeg', 'name' => 'Adidas', 'link' => '#'],
-            ['image' => 'img/gucci.jpeg', 'name' => 'Gucci', 'link' => '#'],
-            ['image' => 'img/honda.jpeg', 'name' => 'Honda', 'link' => '#'],
-            ['image' => 'img/toyota.jpeg', 'name' => 'Toyota', 'link' => '#'],
-            ['image' => 'img/levis.jpeg', 'name' => 'Levis', 'link' => '#'],
-        ]" /> --}}
         @include('products.category', ['category' => 'Bundle Sales', 'id' => 'bSales', 'related' => false])
         @include('products.category', ['category' => 'Auto Parts & Accessories', 'id' => 'auto', 'related' => false])
         {{-- @include('products.category', ['category' => 'Car Tools & Maintenance', 'id' => 'car']) --}}
@@ -156,11 +133,9 @@
     </script>
 
     <!-- Login/Signup Modal -->
-    {{-- <x-auth-modal /> --}}
 
     <!-- Scripts -->
-    <script src="{{ asset('js/search.js') }}?v={{ time() }}"></script>
-    <script src="{{ asset('js/login&signup.js') }}"></script>
+    <script src="{{ asset('js/search.js') }}?v={{ @filemtime(public_path('js/search.js')) ?: 1 }}"></script>
     <script src="{{ asset('js/javascript.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -175,8 +150,8 @@
             }
         }
     </script>
-    <script src="{{ asset('js/product-card.js') }}?v={{ time() }}"></script>
-    <script src="{{ asset('js/category_fetch_v2.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/product-card.js') }}?v={{ @filemtime(public_path('js/product-card.js')) ?: 1 }}"></script>
+    <script src="{{ asset('js/category_fetch_v2.js') }}?v={{ @filemtime(public_path('js/category_fetch_v2.js')) ?: 1 }}"></script>
 
     <x-customer.global-nav />
 

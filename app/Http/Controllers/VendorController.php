@@ -1097,8 +1097,11 @@ class VendorController extends Controller
             //     'html' => [$user_id, $vendor, $products]
             // ]);
 
-            // Generate HTML content
-            $html = view('admin/vendor_details', compact([
+            // Generate HTML content.
+            // NOTE: capital "Admin" — the directory is resources/views/Admin.
+            // Windows resolves this case-insensitively, but the live host is
+            // Linux, where the lowercase form 404s.
+            $html = view('Admin/vendor_details', compact([
                 'vendor', 'products', 'earnings'
             ]))->render();
 
