@@ -175,33 +175,42 @@
         numberInput.disabled = !enabledToggle.checked;
     });
 
-    async function saveControls() {
-        const btn = document.getElementById('saveBtn');
+    /* Spinner while a save is in flight, so it's obvious the click registered.
+       Restores the button's original label whether the save succeeds or fails. */
+    function startSaving(btn) {
+        const original = btn.innerHTML;
         btn.disabled = true;
+        btn.classList.add('opacity-70', 'cursor-not-allowed');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Saving...';
+        return () => {
+            btn.disabled = false;
+            btn.classList.remove('opacity-70', 'cursor-not-allowed');
+            btn.innerHTML = original;
+        };
+    }
+
+    async function saveControls() {
+        const done = startSaving(document.getElementById('saveBtn'));
         const res = await post('/admin/controls', {
             enabled: enabledToggle.checked,
             number: numberInput.value.trim()
         });
-        btn.disabled = false;
-        if (res.success) {
-            toast(res.message || 'Saved.');
-        } else {
-            toast(res.message || 'Something went wrong.', false);
-        }
+        done();
+        toast(res.message || (res.success ? 'Saved.' : 'Something went wrong.'), !!res.success);
     }
 
     async function saveAccess(role, btn) {
         const card = document.querySelector(`[data-role-card="${role}"]`);
         const val = (field) => card.querySelector(`[data-field="${field}"]`).checked;
 
-        btn.disabled = true;
+        const done = startSaving(btn);
         const res = await post('/admin/controls/access', {
             role: role,
             login: val('login'),
             register: val('register'),
             force_logout: val('force_logout')
         });
-        btn.disabled = false;
+        done();
         toast(res.message || (res.success ? 'Saved.' : 'Something went wrong.'), !!res.success);
     }
 </script>

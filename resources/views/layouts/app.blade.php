@@ -103,9 +103,17 @@
         <x-categories />
         <x-vendors />
         {{-- @include('products.biggest-savings') --}}
-        @include('products.category', ['category' => 'Fitness & Gym Equipment', 'id' => 'gym', 'related' => false])
-        @include('products.category', ['category' => 'Bundle Sales', 'id' => 'bSales', 'related' => false])
-        @include('products.category', ['category' => 'Auto Parts & Accessories', 'id' => 'auto', 'related' => false])
+        {{-- Product rails come from the admin Categories page (the "HOME" switch),
+             not a hardcoded list — turning HOME on for a category now actually
+             makes its products appear here. A category with no approved products
+             hides its own section. --}}
+        @foreach (\App\Support\CategoryCatalog::forHomeStocked() as $homeCat)
+            @include('products.category', [
+                'category' => $homeCat->name,
+                'id'       => \Illuminate\Support\Str::slug($homeCat->name) ?: 'cat-' . $homeCat->id,
+                'related'  => false,
+            ])
+        @endforeach
         {{-- @include('products.category', ['category' => 'Car Tools & Maintenance', 'id' => 'car']) --}}
         {{-- @include('products.category', ['category' => 'Mens Accessories', 'id' => 'cr']) --}}
     </main>

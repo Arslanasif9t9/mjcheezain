@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 class CategoryCatalog
 {
     const CACHE_KEY = 'site_category_catalog_v1';
+    const STOCKED_KEY = 'site_category_stocked_v1';
 
     /** All ACTIVE categories, each with ->subcategories (array of names), sorted. */
     public static function active()
@@ -58,6 +59,41 @@ class CategoryCatalog
         return self::active()->filter(fn ($c) => !empty($c->show_on_cosmetics))->values();
     }
 
+    /**
+     * Category names that actually have at least one approved product.
+     * Used to skip rendering an empty product rail (each rail costs the
+     * visitor an XHR, so an always-empty section is pure waste).
+     * Cached separately from the catalog itself since it changes as vendors
+     * add or get products approved.
+     */
+    public static function namesWithProducts()
+    {
+        return Cache::remember(self::STOCKED_KEY, 600, function () {
+            try {
+                return DB::table('vendor_products')
+                    ->where('position', 'approved')
+                    ->distinct()
+                    ->pluck('category');
+            } catch (\Throwable $e) {
+                Log::warning('CategoryCatalog::namesWithProducts fallback: ' . $e->getMessage());
+                return collect();
+            }
+        });
+    }
+
+    /** forHome()/forCosmetics(), minus categories that would render empty. */
+    public static function forHomeStocked()
+    {
+        $stocked = self::namesWithProducts();
+        return self::forHome()->filter(fn ($c) => $stocked->contains($c->name))->values();
+    }
+
+    public static function forCosmeticsStocked()
+    {
+        $stocked = self::namesWithProducts();
+        return self::forCosmetics()->filter(fn ($c) => $stocked->contains($c->name))->values();
+    }
+
     /** ['Category Name' => ['Sub A', 'Sub B'], ...] for selects/JS. */
     public static function map(): array
     {
@@ -67,6 +103,7 @@ class CategoryCatalog
     public static function clearCache(): void
     {
         Cache::forget(self::CACHE_KEY);
+        Cache::forget(self::STOCKED_KEY);
     }
 
     /** Legacy hardcoded catalog as stdClass rows (mirrors the migration seed). */

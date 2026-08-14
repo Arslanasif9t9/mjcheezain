@@ -50,9 +50,14 @@
             </div>
         </section>
 
-        @include('../products.category', ['category' => 'Perfumes & Fragrances', 'id' => 'perfumes'])
-        @include('../products.category', ['category' => 'Gifts & General Items', 'id' => 'gifts'])
-        @include('../products.category', ['category' => 'Home & Living', 'id' => 'home'])
+        {{-- Driven by the admin Categories page ("COSMETICS" switch), same as the
+             chips above — was a hardcoded list that ignored the toggle. --}}
+        @foreach (\App\Support\CategoryCatalog::forCosmeticsStocked() as $cosCat)
+            @include('../products.category', [
+                'category' => $cosCat->name,
+                'id'       => \Illuminate\Support\Str::slug($cosCat->name) ?: 'cat-' . $cosCat->id,
+            ])
+        @endforeach
     </main>
     <x-footer />
 
