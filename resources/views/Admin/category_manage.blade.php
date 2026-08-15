@@ -175,7 +175,29 @@
                         <!-- top row -->
                         <div class="flex items-start justify-between gap-2 mb-4">
                             <div class="flex items-center gap-3 min-w-0">
-                                <button onclick="editEmoji({{ $cat->id }}, @js($cat->emoji ?? ''))" title="Change emoji"
+                                {{-- Home-page tile picture. Click to upload, hover to remove.
+                                     With no picture set the storefront shows the emoji circle. --}}
+                                <div class="relative shrink-0 group/img">
+                                    <button onclick="pickCatImage({{ $cat->id }})" title="Set home-page picture"
+                                            class="w-11 h-11 rounded-xl overflow-hidden bg-pink-50 flex items-center justify-center text-xl hover:bg-pink-100 transition">
+                                        @if(!empty($cat->image))
+                                            <img id="cat-img-{{ $cat->id }}" src="{{ asset($cat->image) }}" alt="" class="w-full h-full object-cover">
+                                        @else
+                                            <i class="fas fa-image text-gray-300 text-sm"></i>
+                                        @endif
+                                    </button>
+                                    @if(!empty($cat->image))
+                                        <button onclick="removeCatImage({{ $cat->id }})" title="Remove picture"
+                                                class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-white text-red-500 border border-red-100 text-[10px] opacity-0 group-hover/img:opacity-100 transition">
+                                            <i class="fas fa-xmark"></i>
+                                        </button>
+                                    @endif
+                                    <input type="file" accept="image/*" class="hidden"
+                                           id="cat-file-{{ $cat->id }}"
+                                           onchange="uploadCatImage({{ $cat->id }}, this)">
+                                </div>
+
+                                <button onclick="editEmoji({{ $cat->id }}, @js($cat->emoji ?? ''))" title="Change emoji (used when no picture is set)"
                                         class="w-11 h-11 rounded-xl bg-pink-50 flex items-center justify-center text-xl hover:bg-pink-100 transition shrink-0">
                                     {{ $cat->emoji ?: '🏷️' }}
                                 </button>
@@ -325,6 +347,43 @@
         const res = await post('/admin/categories/' + id + '/update', { emoji: emoji.trim() });
         if (res.success) { toast(res.message || 'Emoji updated.'); reloadSoon(); }
         else toast(res.message || 'Update failed.', false);
+    }
+
+    /* ---------- home-page tile picture ---------- */
+    function pickCatImage(id) {
+        document.getElementById('cat-file-' + id).click();
+    }
+
+    async function uploadCatImage(id, input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        const fd = new FormData();
+        fd.append('image', file);
+        try {
+            const r = await fetch('/admin/categories/' + id + '/image', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                },
+                body: fd
+            });
+            const res = await r.json();
+            toast(res.message || (res.success ? 'Image updated.' : 'Upload failed.'), !!res.success);
+            if (res.success) reloadSoon();
+        } catch (e) {
+            toast('Network error — please retry.', false);
+        } finally {
+            input.value = '';
+        }
+    }
+
+    async function removeCatImage(id) {
+        if (!confirm('Remove this category picture? The emoji will be shown instead.')) return;
+        const res = await post('/admin/categories/' + id + '/image/delete', {});
+        toast(res.message || (res.success ? 'Image removed.' : 'Something went wrong.'), !!res.success);
+        if (res.success) reloadSoon();
     }
 
     /* ---------- toggles ---------- */

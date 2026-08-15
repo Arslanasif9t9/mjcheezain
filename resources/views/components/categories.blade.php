@@ -4,8 +4,10 @@
     // Admin-managed categories flagged for the home page (falls back to the core list).
     $homeCategories = \App\Support\CategoryCatalog::forHome();
 
-    // Keep the original PNG artwork for names that match the old five tiles;
-    // every other category gets a brand-gradient emoji circle instead.
+    // Tile picture priority:
+    //   1. whatever the admin uploaded on the Categories page ($cat->image)
+    //   2. the bundled artwork for the original five categories (below)
+    //   3. a brand-gradient emoji circle
     $tileImages = [
         'Cosmetics'             => 'img/categories/cosmetics.webp',
         'Skincare'              => 'img/categories/skincare.webp',
@@ -36,7 +38,7 @@
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 px-1 md:px-0">
 
                 @foreach ($homeCategories as $cat)
-                    @php $tileImg = $tileImages[$cat->name] ?? null; @endphp
+                    @php $tileImg = !empty($cat->image) ? $cat->image : ($tileImages[$cat->name] ?? null); @endphp
 
                     <a href="/products/all-page?category={{ urlencode($cat->name) }}"
                        class="group card-hover-glow relative h-40 sm:h-64 md:h-80 {{ $loop->first ? 'col-span-2 md:col-span-1' : '' }} rounded-2xl overflow-hidden shadow-sm cursor-pointer block bg-gray-900">

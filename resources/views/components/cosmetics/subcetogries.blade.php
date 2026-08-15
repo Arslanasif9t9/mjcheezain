@@ -48,7 +48,8 @@
 
                 @foreach ($cosmeticCategories as $cat)
                     @php
-                        $tileImg = $tileImages[$cat->name] ?? null;
+                        // Admin-uploaded picture wins; otherwise the bundled artwork.
+                        $tileImg = !empty($cat->image) ? $cat->image : ($tileImages[$cat->name] ?? null);
                         $count = (int) ($productCounts[$cat->name] ?? 0);
                         $subsPreview = implode(' · ', array_slice($cat->subcategories, 0, 3));
                     @endphp

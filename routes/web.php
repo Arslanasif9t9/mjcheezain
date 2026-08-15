@@ -348,6 +348,8 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     Route::post('/categories', [AdminCategoryController::class, 'store']);
     Route::post('/categories/{id}/update', [AdminCategoryController::class, 'update']);
     Route::post('/categories/{id}/delete', [AdminCategoryController::class, 'destroy']);
+    Route::post('/categories/{id}/image', [AdminCategoryController::class, 'uploadImage']);
+    Route::post('/categories/{id}/image/delete', [AdminCategoryController::class, 'removeImage']);
     Route::post('/categories/{id}/subcategories', [AdminCategoryController::class, 'storeSub']);
     Route::post('/subcategories/{subId}/delete', [AdminCategoryController::class, 'destroySub']);
     Route::get('/category-suggestions', [AdminAuthController::class, 'categorySuggestions']);

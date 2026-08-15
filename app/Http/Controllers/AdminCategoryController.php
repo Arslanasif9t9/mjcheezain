@@ -6,6 +6,7 @@ use App\Support\CategoryCatalog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Admin management of storefront categories/subcategories and
@@ -116,12 +117,73 @@ class AdminCategoryController extends Controller
         return response()->json(['success' => true, 'message' => 'Category updated.']);
     }
 
+    /**
+     * Tile picture for the home page "Shop by Category" section.
+     * Stored under public/storage/categories, double-written the same way
+     * vendor product images are (this project does not rely on storage:link).
+     */
+    public function uploadImage(Request $request, $id)
+    {
+        $this->guard();
+
+        $cat = DB::table('site_categories')->where('id', $id)->first();
+        if (!$cat) return response()->json(['success' => false, 'message' => 'Not found.'], 404);
+
+        $request->validate(['image' => 'required|image|max:5120']);
+
+        $this->deleteImageFile($cat->image ?? null);
+
+        $file = $request->file('image');
+        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->storeAs('categories', $filename, 'public');
+        $file->move(public_path('storage/categories'), $filename);
+
+        $path = 'storage/categories/' . $filename;
+        DB::table('site_categories')->where('id', $id)->update([
+            'image' => $path,
+            'updated_at' => now(),
+        ]);
+
+        CategoryCatalog::clearCache();
+        return response()->json(['success' => true, 'image' => asset($path), 'message' => 'Image updated.']);
+    }
+
+    public function removeImage($id)
+    {
+        $this->guard();
+
+        $cat = DB::table('site_categories')->where('id', $id)->first();
+        if (!$cat) return response()->json(['success' => false, 'message' => 'Not found.'], 404);
+
+        $this->deleteImageFile($cat->image ?? null);
+        DB::table('site_categories')->where('id', $id)->update(['image' => null, 'updated_at' => now()]);
+
+        CategoryCatalog::clearCache();
+        return response()->json(['success' => true, 'message' => 'Image removed.']);
+    }
+
+    /** Only removes files we uploaded; leaves the bundled img/categories/* artwork alone. */
+    private function deleteImageFile(?string $path): void
+    {
+        if (!$path || !str_starts_with($path, 'storage/categories/')) {
+            return;
+        }
+        $filename = basename($path);
+        Storage::disk('public')->delete('categories/' . $filename);
+        $copy = public_path('storage/categories/' . $filename);
+        if (is_file($copy)) {
+            @unlink($copy);
+        }
+    }
+
     public function destroy($id)
     {
         $this->guard();
 
         $cat = DB::table('site_categories')->where('id', $id)->first();
         if (!$cat) return response()->json(['success' => false, 'message' => 'Not found.'], 404);
+
+        $this->deleteImageFile($cat->image ?? null);
 
         // products keep their category string; they just stop being listed under a managed category
         DB::table('site_subcategories')->where('category_id', $id)->delete();
