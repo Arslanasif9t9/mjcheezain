@@ -27,11 +27,17 @@
                 </h2>
                 <div class="brand-divider mb-6"></div>
                 <div class="space-y-5 text-left sm:text-center">
-                    <p class="text-base leading-relaxed text-gray-700">
-                        To make MJCheezain a national symbol of trust and a globally competitive brand that brings convenience, consistency, and care into the daily lives of millions of shoppers.
+                    <p class="text-base leading-relaxed text-gray-700 italic">
+                        MJ CHEEZAIN aims to become a leading international e-commerce platform.
                     </p>
                     <p class="text-base leading-relaxed text-gray-700">
-                        We're not here to be just another platform. We are building an ecosystem — where every product is carefully curated, every seller is verified, and every customer feels 100% confident in what they buy.
+                        Our challenge is to make MJ CHEEZAIN <strong class="text-gray-900">Pakistan's #1 multi-vendor marketplace by 6 September 2027</strong>, earning the highest level of customer trust and building exceptional marketplace value.
+                    </p>
+                    <p class="text-base leading-relaxed text-gray-700 italic">
+                        We aim to build one of Pakistan's best multi-vendor marketplaces and then take MJ CHEEZAIN to the international market.
+                    </p>
+                    <p class="text-base leading-relaxed text-gray-700 italic">
+                        InshaAllah, 6 September 2027 will mark a new milestone in the MJ CHEEZAIN journey.
                     </p>
                 </div>
             </div>
@@ -132,46 +138,46 @@
         <section class="py-12 sm:py-20 md:py-24" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="PFDI text-3xl sm:text-5xl font-medium tracking-wide text-center text-white mb-4">
-                    Global Ambition, Local Roo
+                    Global Ambition, Local Roots
                 </h2>
-                <p class="text-center text-white/90 text-base sm:text-lg max-w-3xl mx-auto mb-10 sm:mb-14 leading-relaxed">While we aim to become a globally competitive brand, we remain committed to our local communities — creating jobs, supporting local businesses, and contributing to economic growth.</p>
+                <p class="text-center text-white/90 text-base sm:text-lg max-w-3xl mx-auto mb-10 sm:mb-14 leading-relaxed">We aim to grow MJ CHEEZAIN internationally while continuing to support local businesses and communities in Pakistan.</p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
 
                     <!-- Column 1: Local Impact -->
                     <div class="bg-white rounded-xl border border-gray-100 shadow-md p-6 sm:p-10">
-                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-4">Local Impact</h3>
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-4">Supporting Local Growth</h3>
                         <ul class="space-y-3">
                             <li class="flex items-start">
                                 <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-1 text-[#FF7DA0] flex-shrink-0"></i>
-                                <span class="text-base text-gray-700">Supporting local manufacturers and artisans</span>
+                                <span class="text-base text-gray-700">Supporting local businesses and manufacturers</span>
                             </li>
                             <li class="flex items-start">
                                 <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-1 text-[#FF7DA0] flex-shrink-0"></i>
-                                <span class="text-base text-gray-700">Competitive pricing across all categories</span>
+                                <span class="text-base text-gray-700">Offering fair prices across different categories</span>
                             </li>
                             <li class="flex items-start">
                                 <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-1 text-[#FF7DA0] flex-shrink-0"></i>
-                                <span class="text-base text-gray-700">Secure payment options</span>
+                                <span class="text-base text-gray-700">Creating opportunities for local sellers</span>
                             </li>
                         </ul>
                     </div>
 
-                    <!-- Column 2: Global Standards -->
+                    <!-- Column 2: Building for the World -->
                     <div class="bg-white rounded-xl border border-gray-100 shadow-md p-6 sm:p-10">
-                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-4">Global Standards</h3>
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-4">Building for the World</h3>
                         <ul class="space-y-3">
                             <li class="flex items-start">
                                 <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-1 text-[#FF7DA0] flex-shrink-0"></i>
-                                <span class="text-base text-gray-700">Low commission rates</span>
+                                <span class="text-base text-gray-700">Professional marketplace standards</span>
                             </li>
                             <li class="flex items-start">
                                 <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-1 text-[#FF7DA0] flex-shrink-0"></i>
-                                <span class="text-base text-gray-700">Easy-to-use vendor dashboard</span>
+                                <span class="text-base text-gray-700">Easy-to-use tools for vendors</span>
                             </li>
                             <li class="flex items-start">
                                 <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-1 text-[#FF7DA0] flex-shrink-0"></i>
-                                <span class="text-base text-gray-700">Marketing and promotional support</span>
+                                <span class="text-base text-gray-700">Marketing and growth opportunities</span>
                             </li>
                         </ul>
                     </div>

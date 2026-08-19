@@ -68,48 +68,91 @@
                 <p class="text-base sm:text-lg italic text-gray-500 mt-5">We Value Your Privacy and Strive to Protect it at Every Step.</p>
             </section>
 
-            <!-- Introduction Section -->
+            <!-- Vendor Privacy Policy -->
             <section class="mb-10 sm:mb-16">
-                <h2 class="PFDI text-xl sm:text-2xl text-gray-900 mb-4">We Value Your Privacy</h2>
-                <p class="mb-8 leading-relaxed text-gray-700">
-                    At MJCheezain, we are fully committed to protecting your personal information. When you use our website, we collect only the necessary data to process your orders, improve your shopping experience, and provide customer support.
+                <h2 class="PFDI text-xl sm:text-2xl text-gray-900 mb-4">Vendor Privacy Policy</h2>
+                <p class="mb-5 leading-relaxed text-gray-700">
+                    At MJ CHEEZAIN, we respect your privacy and work to keep your personal and business information safe.
                 </p>
+                <ul class="space-y-1">
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>We may collect your <strong>name, phone number, email, business details, payment information, and verification information</strong> when you create and use a Vendor account.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>We use this information to <strong>create and manage your Vendor account</strong>, verify your identity, process orders, and provide marketplace services.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Customers will only see the Vendor&rsquo;s approved store and product information, such as the store name, logo, product details, images, prices, and other information needed for shopping. The Vendor&rsquo;s <strong>private and personal information will not be shown to customers</strong>.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>We may use your information to <strong>process Vendor payments, payouts, returns, replacements, and other marketplace activities</strong>.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>We may contact you about <strong>orders, account updates, important policy changes, security, or marketplace-related information</strong>.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>We may use necessary information to <strong>prevent fraud, protect customers and Vendors, and keep MJ CHEEZAIN secure</strong>.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>We do not sell your personal information to third parties for their own marketing purposes.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Your information may be shared with <strong>payment providers, delivery partners, verification services, or other service providers</strong> when necessary to provide marketplace services.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>We take reasonable steps to <strong>protect your personal and business information</strong> from unauthorized access or misuse.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>MJ CHEEZAIN is responsible for protecting Vendor account and personal information through appropriate security measures. Vendors are responsible for keeping their passwords and OTPs confidential and informing MJ CHEEZAIN if they notice any unauthorized access.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>We may keep certain information for as long as necessary to <strong>provide our services, meet legal requirements, resolve disputes, and maintain business records</strong>.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>By creating a Vendor account, you agree to the collection and use of your information as described in this <strong>Vendor Privacy Policy</strong>.</span>
+                    </li>
+                </ul>
             </section>
 
-            <!-- Data Collection Section -->
+            <hr class="border-gray-100 my-8 sm:my-12">
+
+            <!-- Customer Privacy Policy -->
             <section class="policy-section bg-white p-5 sm:p-8 rounded-xl shadow-sm border border-gray-100 mb-8 sm:mb-12">
-                <div class="flex flex-col sm:flex-row items-start gap-4">
-                    <div class="section-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
-                        </svg>
-                    </div>
-                    <div class="min-w-0">
-                        <h2 class="PFDI text-lg sm:text-xl text-gray-900 mb-4">What We Collect</h2>
-                        <ul class="list-disc pl-5 space-y-2 mb-4 text-gray-700">
-                            <li>Name, address, and contact information</li>
-                            <li>Order history and preferences</li>
-                            <li>Payment and transaction details (via secure gateways)</li>
-                        </ul>
-                        <div class="p-4 rounded-lg mb-4" style="background:rgba(255,125,160,.08);">
-                            <p class="font-medium text-pink-700 flex items-start">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                </svg>
-                                <span>We never sell, rent, or misuse your personal data. All information is encrypted and stored securely.</span>
-                            </p>
-                        </div>
-                        <p class="text-gray-700 mb-4">
-                            You have full control over your account and can request data updates or deletion at any time. By using our platform, you agree to our privacy practices.
-                        </p>
-                        <p class="text-gray-900 font-medium flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:#FF7DA0;">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                            </svg>
-                            <span>We believe your data is your property — and our duty is to protect it.</span>
-                        </p>
-                    </div>
-                </div>
+                <h2 class="PFDI text-lg sm:text-xl text-gray-900 mb-4">Customer Privacy Policy</h2>
+                <ul class="space-y-1">
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>We collect basic information such as your <strong>name, phone number, email, delivery address, and order details</strong> to provide our services.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>We use your information to <strong>process orders, payments, deliveries, returns, replacements, and customer support</strong>.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Your personal information is <strong>kept private</strong> and is not shown publicly to Vendors or other customers.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>We may share only the <strong>necessary information</strong> with trusted payment providers, delivery partners, and service providers to complete your order and provide our services.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>MJ CHEEZAIN takes reasonable steps to <strong>protect your personal information</strong> and uses it only as needed to provide, improve, and secure our marketplace services.</span>
+                    </li>
+                </ul>
             </section>
 
             <hr class="border-gray-100 my-8 sm:my-12">
@@ -120,11 +163,17 @@
                     <h2 class="PFDI text-2xl sm:text-3xl text-gray-900">Cookie Policy</h2>
                     <div class="brand-divider"></div>
                 </div>
-                <p class="text-center text-gray-700 mb-6 max-w-2xl mx-auto">
-                    MJCheezain uses cookies to enhance your browsing experience. Cookies are small files stored on your device that help us remember what you've added to your cart, your login status, and your preferences and browsing history.
+                <p class="text-center text-gray-700 mb-2 max-w-2xl mx-auto">
+                    Cookies are small files stored in your browser that help MJ CHEEZAIN remember certain information and preferences.
+                </p>
+                <p class="text-center text-gray-700 mb-2 max-w-2xl mx-auto">
+                    We use necessary cookies for login, shopping carts, language, preferences, and basic website functions.
+                </p>
+                <p class="text-center text-gray-700 mb-2 max-w-2xl mx-auto">
+                    If you save a delivery address in your account, you will not need to enter it again when placing another order. Your saved address will remain securely linked to your account.
                 </p>
                 <p class="text-center text-gray-700 mb-10 max-w-2xl mx-auto">
-                    These cookies help us personalize your shopping journey, display relevant content, and track performance for improvement.
+                    We may use cookies to understand how customers use our website and improve their overall shopping experience.
                 </p>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-center mb-10">
@@ -186,27 +235,16 @@
                     <div class="min-w-0">
                         <h2 class="PFDI text-xl sm:text-2xl text-gray-900 mb-4">Disclaimer</h2>
                         <p class="text-gray-700 mb-4">
-                            The content, product listings, and vendor information on MJCheezain are provided "as-is" and are for general information purposes only.
+                            MJ CHEEZAIN is a marketplace that connects customers with independent Vendors.
                         </p>
-                        <p class="text-gray-700 mb-4 font-medium">
-                            While we strive for 100% accuracy:
+                        <p class="text-gray-700 mb-4">
+                            Product details, prices, images, availability, and other product information are provided by the respective Vendors.
                         </p>
-                        <ul class="list-disc pl-5 space-y-2 mb-4 text-gray-700">
-                            <li>Product images may differ slightly from real items</li>
-                            <li>Vendor descriptions are based on their input</li>
-                            <li>Prices, stock, and availability may change without notice</li>
-                        </ul>
-                        <div class="bg-red-50 p-4 rounded-lg mb-4">
-                            <p class="text-red-600 flex items-start">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <span><span class="font-medium">Important:</span>
-                                MJCheezain is not liable for any losses caused by vendor errors, courier delays, or buyer misuse.</span>
-                            </p>
-                        </div>
+                        <p class="text-gray-700 mb-4">
+                            Customers are encouraged to check product details and conditions before placing an order.
+                        </p>
                         <p class="text-gray-700">
-                            Buyers and sellers must exercise their own judgment and use the platform at their own risk, under the outlined policies.
+                            MJ CHEEZAIN works to provide a safe and reliable shopping experience, but Vendor-related product information and services remain the responsibility of the respective Vendor.
                         </p>
                     </div>
                 </div>

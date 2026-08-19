@@ -42,22 +42,20 @@
 
                 <!-- Contact Methods Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-10 sm:mb-14">
-                    <!-- Phone Support -->
+                    <!-- MJ Guider -->
                     <div class="contact-card bg-white p-6 sm:p-8 rounded-xl shadow-md border border-gray-100 text-center">
                         <div class="contact-icon">
-                            <i class="fas fa-phone-alt text-2xl"></i>
+                            <i class="fas fa-comments text-2xl"></i>
                         </div>
-                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-3">Phone Support</h3>
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-3">Ask MJ Guider</h3>
                         <p class="text-gray-600 mb-4">
-                            Call us directly for general inquiries, order updates, or vendor assistance
+                            Our AI shopping assistant can help you find products, answer questions, and guide you around MJ CHEEZAIN
                         </p>
-                        <div class="bg-gray-50 border border-gray-100 p-3 rounded-lg inline-block max-w-full">
-                            <a href="tel:03XX-XXXXXXX" class="text-gray-900 font-bold text-base sm:text-lg hover:text-pink-600 transition break-all">
-                                <i class="fas fa-phone mr-2"></i> 03XX-XXXXXXX
-                            </a>
-                        </div>
+                        <button type="button" onclick="document.getElementById('mjGuideFab')?.click()" class="btn-brand-gradient inline-block w-full sm:w-auto text-white font-bold py-3 px-6 rounded-full transition duration-300">
+                            <i class="fas fa-comments mr-2"></i> Chat with MJ Guider
+                        </button>
                         <p class="text-gray-500 text-sm mt-3">
-                            <i class="far fa-clock mr-1"></i> 10:00 AM to 6:00 PM, Monday to Saturday
+                            <i class="fas fa-clock mr-1"></i> Available 24/7
                         </p>
                     </div>
 
@@ -108,7 +106,7 @@
                         <p class="text-gray-600 mb-4">
                             Chat with us instantly on WhatsApp for quick queries and support
                         </p>
-                        <a href="https://wa.me/923XXXXXXXXX" class="btn-brand-gradient inline-block w-full sm:w-auto text-white font-bold py-3 px-6 rounded-full transition duration-300">
+                        <a href="https://wa.me/818026271101" target="_blank" rel="noopener" class="btn-brand-gradient inline-block w-full sm:w-auto text-white font-bold py-3 px-6 rounded-full transition duration-300">
                             <i class="fab fa-whatsapp mr-2"></i> Click to Chat on WhatsApp
                         </a>
                         <p class="text-gray-500 text-sm mt-3">

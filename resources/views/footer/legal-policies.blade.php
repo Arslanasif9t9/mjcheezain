@@ -49,43 +49,126 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6-6h6m6 0h-6m6 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </span>
-                    <span>Your Data, Our Responsibility</span>
+                    <span>Terms &amp; Conditions</span>
                 </h1>
                 <div class="brand-divider"></div>
-                <p class="text-base sm:text-lg italic text-gray-500 mt-5">We Value Your Privacy and Strive to Protect it at Every Step.</p>
+                <p class="text-base sm:text-lg italic text-gray-500 mt-5">Please read these terms carefully before using MJ CHEEZAIN.</p>
             </section>
 
-            <!-- Privacy Section -->
+            <!-- Customer Terms & Conditions -->
             <section class="policy-card bg-white rounded-xl border border-gray-100 shadow-sm p-5 sm:p-8 mb-8 sm:mb-12">
-                <h2 class="PFDI text-xl sm:text-2xl text-gray-900 mb-4">We Value Your Privacy</h2>
-                <p class="mb-8 leading-relaxed text-gray-700">
-                    At MJCheezain, we are fully committed to protecting your personal information. When you use our website, we collect only the necessary data to process your orders, improve your shopping experience, and provide customer support.
-                </p>
-
-                <h3 class="PFDI text-lg sm:text-xl text-gray-900 mb-4">What We Collect</h3>
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-start text-base sm:text-lg text-gray-700">
-                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0" style="color:#FF7DA0;">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 11V3m0 8h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        </span>
-                        Name, address, and contact information
+                <h2 class="PFDI text-xl sm:text-2xl text-gray-900 mb-4">Customer Terms &amp; Conditions</h2>
+                <ul class="space-y-1">
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Customers should provide <strong>correct and up-to-date information</strong> when creating an account.</span>
                     </li>
-                    <li class="flex items-start text-base sm:text-lg text-gray-700">
-                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0" style="color:#FF7DA0;">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-                        </span>
-                        Order history and preferences
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Customers are responsible for keeping their <strong>account and login information secure</strong>.</span>
                     </li>
-                    <li class="flex items-start text-base sm:text-lg text-gray-700">
-                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0" style="color:#FF7DA0;">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
-                        </span>
-                        Payment and transaction details (via secure gateways)
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Customers can shop freely across MJ CHEEZAIN and should use the marketplace in a <strong>safe and lawful manner</strong>.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Before placing an order, customers can review the <strong>product details, price, quantity, and return conditions</strong> to make the right choice.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Customers should provide <strong>correct delivery information</strong> to help ensure a smooth delivery.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Customers agree to complete their payment using the <strong>available payment methods</strong> shown at checkout.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Customers can request a <strong>return or replacement within the applicable time period</strong>, according to our Return &amp; Replacement Policy.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>If a return or replacement is requested by the customer&rsquo;s own choice, the <strong>applicable courier charges will be paid by the customer</strong>. If the issue is caused by the Vendor, the applicable courier charges will be handled by the Vendor.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Customers can contact <strong>MJ CHEEZAIN for help</strong> with orders, returns, replacements, payments, or other marketplace-related questions.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>We ask customers to provide <strong>honest information and genuine requests</strong> so we can provide better service to everyone.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>MJ CHEEZAIN may take appropriate action if an account is used for <strong>fraud, abuse, or activities that may harm other customers, Vendors, or the marketplace</strong>.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Customers agree to follow the <strong>MJ CHEEZAIN Privacy Policy, Cookies Policy, Return &amp; Replacement Policy, Payment Policy, and applicable laws</strong>.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>MJ CHEEZAIN is committed to providing a <strong>safe, fair, and smooth shopping experience</strong> and will handle customer concerns according to our marketplace policies.</span>
                     </li>
                 </ul>
+            </section>
 
-                <p class="font-bold text-base sm:text-lg mb-4 text-gray-900">We never sell, rent, or misuse your personal data. All information is encrypted and stored securely.</p>
-                <p class="text-gray-700">You have full control over your account and can request data updates or deletion at any time.</p>
+            <hr class="border-gray-100 my-8 sm:my-12">
+
+            <!-- Vendor Terms & Conditions -->
+            <section class="policy-card bg-white rounded-xl border border-gray-100 shadow-sm p-5 sm:p-8 mb-8 sm:mb-12">
+                <h2 class="PFDI text-xl sm:text-2xl text-gray-900 mb-4">Vendor Terms &amp; Conditions</h2>
+                <ul class="space-y-1">
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Vendors must provide <strong>accurate and complete account information</strong>.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Vendors may sell only <strong>legal and approved products</strong>.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Selling <strong>illegal drugs, addictive substances, controlled substances, or prohibited products</strong> is strictly forbidden. Any violation may result in <strong>immediate account suspension or termination</strong>.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Vendors are responsible for the <strong>quality, authenticity, and accuracy of their product descriptions</strong>.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Vendors must not list <strong>wrong, fake, counterfeit, or misleading products</strong>.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Vendors must <strong>process and ship orders within the required time</strong>.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>If a return or replacement is caused by a <strong>Vendor error</strong>, the applicable courier charges will be paid by the Vendor.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span><strong>MJ CHEEZAIN will charge no commission on your sales for the first 3 months.</strong> After the first 3 months, the applicable commission will be charged according to our Vendor Commission Policy.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Vendors must not <strong>force or encourage customers to make payments or communicate outside the MJ CHEEZAIN platform</strong>.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>If a Vendor violates marketplace policies, MJ CHEEZAIN may <strong>remove listings, restrict, suspend, or terminate the Vendor account</strong>.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span>Vendors must follow <strong>MJ CHEEZAIN&rsquo;s privacy policies, marketplace policies, and all applicable laws and regulations</strong>.</span>
+                    </li>
+                    <li class="flex items-start text-base text-gray-700 mb-3">
+                        <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0 font-bold" style="color:#FF7DA0;">&#8226;</span>
+                        <span><strong>Vendor payments will remain on hold until the applicable return period for the order has been completed.</strong> After the return period ends, the eligible amount may be released according to the payout schedule. The held amount will remain visible in the Vendor Portal until it is released.</span>
+                    </li>
+                </ul>
             </section>
 
             <hr class="border-gray-100 my-8 sm:my-12">

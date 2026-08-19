@@ -236,6 +236,7 @@ class HomeController extends Controller
             'privacy-policy'  => 'footer/privacy-policy',
             'cookie-policy'   => 'footer/privacy-policy',
             'disclaimer'      => 'footer/privacy-policy',
+            'return-replacement' => 'footer/return-replacement',
         ];
 
         abort_unless(isset($views[$page]), 404);

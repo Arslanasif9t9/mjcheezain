@@ -34,10 +34,13 @@
                             <div class="brand-divider brand-divider-left"></div>
                         </div>
                         <p class="text-base leading-relaxed text-gray-700">
-                            MJCheezain was officially launched on August 1, 2025, with a clear vision to revolutionize the e-commerce landscape. We began our journey by focusing on the <strong class="text-gray-900">automotive sector</strong>, offering a wide range of high-quality auto parts and accessories.
+                            MJ CHEEZAIN has been operating since <strong class="text-gray-900">1 August 2025</strong>, dedicating over a year to developing, improving, and refining our marketplace system. Our official multi-vendor marketplace will launch on <strong class="text-gray-900">6 September 2026</strong> with a complete and professionally developed system.
                         </p>
                         <p class="text-base leading-relaxed text-gray-700">
-                            Our commitment to quality, affordability, and customer satisfaction quickly set us apart, establishing a strong foundation for future growth and allowing us to expand into lifestyle essentials. We believe in providing value that lasts.
+                            Customers can search for any product they want, or simply ask <strong class="text-gray-900">MJ GUIDER</strong> for assistance, and it will help find products according to their needs and situation. Customers can also ask questions about the MJ CHEEZAIN marketplace and its features for a more convenient shopping experience.
+                        </p>
+                        <p class="text-base leading-relaxed text-gray-700">
+                            Our main brand focus is <strong class="text-gray-900">MJ Fragrance &amp; Scents</strong> &mdash; discover your fragrance, buy, experience, and enjoy.
                         </p>
                     </div>
 
@@ -82,15 +85,18 @@
                     <div class="order-1 lg:order-2 space-y-6">
                         <div>
                             <h2 class="PFDI text-3xl sm:text-5xl font-display font-medium leading-tight tracking-wide text-gray-900">
-                                Expanding Beyond Auto Parts
+                                Our Core &mdash; MJ Fragrance &amp; Scents
                             </h2>
                             <div class="brand-divider brand-divider-left"></div>
                         </div>
                         <p class="text-base leading-relaxed text-gray-700">
-                            While automotive products remain at our core, we recognized the growing need for a comprehensive online marketplace that caters to all aspects of our customers' lives. This led us to expand our offerings into diverse categories, transforming MJCheezain into a versatile multi-vendor platform.
+                            At the heart of MJ CHEEZAIN is <strong class="text-gray-900">MJ Fragrance &amp; Scents</strong>, our core brand and a key part of our international identity.
                         </p>
                         <p class="text-base leading-relaxed text-gray-700">
-                            Our commitment is to curate high-quality goods across <strong class="text-gray-900">electronics, home decor, fashion, and fitness</strong>, ensuring the same standards of excellence that our auto-parts customers rely on.
+                            We aim to build a fragrance brand that represents Pakistan on the global stage, bringing premium scents and a distinctive experience to customers worldwide.
+                        </p>
+                        <p class="text-base leading-relaxed text-gray-700">
+                            And with your support, we aim to make MJ CHEEZAIN <strong class="text-gray-900">a new benchmark for multi-vendor e-commerce in Pakistan &mdash; and beyond.</strong> Buy. Experience. Enjoy the Fragrance.
                         </p>
                     </div>
                 </div>
@@ -109,44 +115,51 @@
                     <!-- Category Card Template -->
                     <div class="p-6 sm:p-8 bg-white rounded-xl border border-gray-100 shadow-md card-hover-glow cursor-pointer flex flex-col items-center justify-center min-h-[140px] sm:min-h-[160px]">
                         <span class="w-12 h-12 mb-3 rounded-full flex items-center justify-center" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);">
-                            <i data-lucide="wrench" class="w-6 h-6 text-white stroke-[1.5]"></i>
+                            <i data-lucide="briefcase" class="w-6 h-6 text-white stroke-[1.5]"></i>
                         </span>
-                        <span class="text-base sm:text-lg font-medium text-gray-700">Auto Parts & Accessories</span>
-                    </div>
-
-                    <div class="p-6 sm:p-8 bg-white rounded-xl border border-gray-100 shadow-md card-hover-glow cursor-pointer flex flex-col items-center justify-center min-h-[140px] sm:min-h-[160px]">
-                        <span class="w-12 h-12 mb-3 rounded-full flex items-center justify-center" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);">
-                            <i data-lucide="home" class="w-6 h-6 text-white stroke-[1.5]"></i>
-                        </span>
-                        <span class="text-base sm:text-lg font-medium text-gray-700">Home & Living</span>
-                    </div>
-
-                    <div class="p-6 sm:p-8 bg-white rounded-xl border border-gray-100 shadow-md card-hover-glow cursor-pointer flex flex-col items-center justify-center min-h-[140px] sm:min-h-[160px]">
-                        <span class="w-12 h-12 mb-3 rounded-full flex items-center justify-center" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);">
-                            <i data-lucide="shirt" class="w-6 h-6 text-white stroke-[1.5]"></i>
-                        </span>
-                        <span class="text-base sm:text-lg font-medium text-gray-700">Fashion & Apparel</span>
+                        <span class="text-base sm:text-lg font-medium text-gray-700">Bags &amp; Luggage</span>
                     </div>
 
                     <div class="p-6 sm:p-8 bg-white rounded-xl border border-gray-100 shadow-md card-hover-glow cursor-pointer flex flex-col items-center justify-center min-h-[140px] sm:min-h-[160px]">
                         <span class="w-12 h-12 mb-3 rounded-full flex items-center justify-center" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);">
                             <i data-lucide="laptop" class="w-6 h-6 text-white stroke-[1.5]"></i>
                         </span>
-                        <span class="text-base sm:text-lg font-medium text-gray-700">Electronics & Gadgets</span>
+                        <span class="text-base sm:text-lg font-medium text-gray-700">Smart Home &amp; Gadgets</span>
+                    </div>
+
+                    <div class="p-6 sm:p-8 bg-white rounded-xl border border-gray-100 shadow-md card-hover-glow cursor-pointer flex flex-col items-center justify-center min-h-[140px] sm:min-h-[160px]">
+                        <span class="w-12 h-12 mb-3 rounded-full flex items-center justify-center" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);">
+                            <i data-lucide="sparkles" class="w-6 h-6 text-white stroke-[1.5]"></i>
+                        </span>
+                        <span class="text-base sm:text-lg font-medium text-gray-700">Fragrance &amp; Scents</span>
                     </div>
 
                     <div class="p-6 sm:p-8 bg-white rounded-xl border border-gray-100 shadow-md card-hover-glow cursor-pointer flex flex-col items-center justify-center min-h-[140px] sm:min-h-[160px]">
                         <span class="w-12 h-12 mb-3 rounded-full flex items-center justify-center" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);">
                             <i data-lucide="utensils-crossed" class="w-6 h-6 text-white stroke-[1.5]"></i>
                         </span>
-                        <span class="text-base sm:text-lg font-medium text-gray-700">Kitchen & Dining</span>
+                        <span class="text-base sm:text-lg font-medium text-gray-700">Kitchen &amp; Dining</span>
+                    </div>
+
+                    <div class="p-6 sm:p-8 bg-white rounded-xl border border-gray-100 shadow-md card-hover-glow cursor-pointer flex flex-col items-center justify-center min-h-[140px] sm:min-h-[160px]">
+                        <span class="w-12 h-12 mb-3 rounded-full flex items-center justify-center" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);">
+                            <i data-lucide="shirt" class="w-6 h-6 text-white stroke-[1.5]"></i>
+                        </span>
+                        <span class="text-base sm:text-lg font-medium text-gray-700">Fashion &amp; Clothing</span>
                     </div>
 
                     <div class="p-6 sm:p-8 bg-white rounded-xl border border-gray-100 shadow-md card-hover-glow cursor-pointer flex flex-col items-center justify-center min-h-[140px] sm:min-h-[160px]">
                         <span class="w-12 h-12 mb-3 rounded-full flex items-center justify-center" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);">
                             <i data-lucide="heart-handshake" class="w-6 h-6 text-white stroke-[1.5]"></i>
                         </span>
-                        <span class="text-base sm:text-lg font-medium text-gray-700">Health & Beauty</span>
+                        <span class="text-base sm:text-lg font-medium text-gray-700">Personal Care &amp; Daily Essentials</span>
+                    </div>
+
+                    <div class="p-6 sm:p-8 rounded-xl border border-gray-100 shadow-md card-hover-glow cursor-pointer flex flex-col items-center justify-center min-h-[140px] sm:min-h-[160px]" style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%);">
+                        <span class="w-12 h-12 mb-3 rounded-full flex items-center justify-center bg-white/20">
+                            <i data-lucide="plus" class="w-6 h-6 text-white stroke-[1.5]"></i>
+                        </span>
+                        <span class="text-base sm:text-lg font-medium text-white">And Many More</span>
                     </div>
 
                 </div>
@@ -160,8 +173,17 @@
                 <h2 class="PFDI text-3xl sm:text-5xl font-display font-medium tracking-wide text-white mb-5">
                     Global Expansion Vision
                 </h2>
-                <p class="text-base sm:text-lg text-white/95 max-w-3xl mx-auto leading-relaxed">
-                    MJCheezain aims to become a leading international e-commerce platform, connecting vendors and customers from all corners of the globe. We are actively working to expand our presence in key markets, bringing our diverse product range and exceptional service to a worldwide audience.
+                <p class="text-base sm:text-lg text-white/95 max-w-3xl mx-auto leading-relaxed italic">
+                    MJ CHEEZAIN aims to become a leading international e-commerce platform.
+                </p>
+                <p class="text-base sm:text-lg text-white/95 max-w-3xl mx-auto leading-relaxed mt-4">
+                    Our challenge is to make MJ CHEEZAIN <strong class="text-white">Pakistan's #1 multi-vendor marketplace by 6 September 2027</strong>, earning the highest level of customer trust and building exceptional marketplace value.
+                </p>
+                <p class="text-base sm:text-lg text-white/95 max-w-3xl mx-auto leading-relaxed mt-4 italic">
+                    We aim to build one of Pakistan's best multi-vendor marketplaces and then take MJ CHEEZAIN to the international market.
+                </p>
+                <p class="text-base sm:text-lg text-white/95 max-w-3xl mx-auto leading-relaxed mt-4 italic">
+                    InshaAllah, 6 September 2027 will mark a new milestone in the MJ CHEEZAIN journey.
                 </p>
             </div>
         </section>
@@ -181,7 +203,7 @@
                             Affordable Pricing
                         </h3>
                         <p class="text-sm text-gray-600 max-w-xs">
-                            We work directly with vendors to ensure competitive prices without compromising quality.
+                            We work directly with vendors to offer competitive prices without compromising on quality.
                         </p>
                     </div>
 
@@ -192,10 +214,10 @@
                             <i data-lucide="layout-grid" class="w-6 h-6 text-white stroke-[1.5]"></i>
                         </div>
                         <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
-                            Diverse Selection
+                            Wide Selection
                         </h3>
                         <p class="text-sm text-gray-600 max-w-xs">
-                            From auto parts to everyday essentials, we're constantly expanding our product range.
+                            From Fragrance &amp; Scents to everyday products, we are continuously adding more products.
                         </p>
                     </div>
 
@@ -206,10 +228,10 @@
                             <i data-lucide="code" class="w-6 h-6 text-white stroke-[1.5]"></i>
                         </div>
                         <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
-                            Smooth Experience
+                            Easy Shopping
                         </h3>
                         <p class="text-sm text-gray-600 max-w-xs">
-                            Intuitive interface, secure payments, and reliable customer support.
+                            An easy-to-use website, secure payments, and helpful customer support.
                         </p>
                     </div>
 
@@ -271,8 +293,9 @@
 
         <!-- 8. TAGLINE DIVIDER -->
         <div class="text-center py-8 sm:py-10 px-4">
+            <span class="section-kicker justify-center mb-2">Bottom Line</span>
             <p class="PFDI text-lg sm:text-xl font-display italic text-gray-600">
-                MJ CHEEZAIN — Redefining Global Shopping with Trust, Quality & Style.
+                Our goal is to build customer trust in MJ CHEEZAIN.
             </p>
         </div>
 

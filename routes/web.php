@@ -125,7 +125,7 @@ Route::get('/vendor-products/{id}', [HomeController::class, 'vendorProducts']);
 // Footer pages go through the controller so the shared site header
 // gets the logged-in user's data (profile image, dashboard link).
 Route::get('/{page}', [HomeController::class, 'footerPage'])
-    ->where('page', 'about|future-vision|contact-us|FAQs|vendor-zone|legal-policies|privacy-policy|cookie-policy|disclaimer');
+    ->where('page', 'about|future-vision|contact-us|FAQs|vendor-zone|legal-policies|privacy-policy|cookie-policy|disclaimer|return-replacement');
 
 
 

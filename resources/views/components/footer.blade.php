@@ -59,6 +59,7 @@
                     <h3 class="footer-heading text-base sm:text-xl font-serif font-bold text-gray-900 mb-3 sm:mb-6 mt-0">Legal & Policies</h3>
                     <ul class="space-y-3">
                         <li><a href="/legal-policies" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">Terms & Conditions</a></li>
+                        <li><a href="/return-replacement" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">Return &amp; Replacement</a></li>
                         <li><a href="/privacy-policy" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">Privacy Policy</a></li>
                         <li><a href="/cookie-policy" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">Cookie Policy</a></li>
                         <li><a href="/disclaimer" class="text-gray-600 hover:text-pink-600 hover:pl-1 transition-all duration-200 text-sm inline-block">Disclaimer</a></li>
@@ -72,20 +73,20 @@
                     <!-- Social Icons (Using SVG placeholders for Instagram, Facebook, etc.) -->
                     <div class="flex space-x-3 mb-8">
                         <!-- Instagram -->
-                        <a href="#" class="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-700 hover:text-white hover:border-transparent hover:bg-gradient-to-r hover:from-[#FF7DA0] hover:to-[#FFC275] transition duration-200">
+                        <a href="https://www.instagram.com/mjcheezain?igsh=Nmh2ZnFwdm93Mjg5" target="_blank" rel="noopener" class="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-700 hover:text-white hover:border-transparent hover:bg-gradient-to-r hover:from-[#FF7DA0] hover:to-[#FFC275] transition duration-200">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14v6m0-6V4m0 10h6m-6 0H6m0 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         </a>
                         <!-- Facebook -->
-                        <a href="#" class="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-700 hover:text-white hover:border-transparent hover:bg-gradient-to-r hover:from-[#FF7DA0] hover:to-[#FFC275] transition duration-200">
+                        <a href="https://www.facebook.com/share/1QqziUcixy/" target="_blank" rel="noopener" class="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-700 hover:text-white hover:border-transparent hover:bg-gradient-to-r hover:from-[#FF7DA0] hover:to-[#FFC275] transition duration-200">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.875v-6.987H8.252V12h2.186V9.465c0-2.031 1.237-3.136 3.053-3.136.877 0 1.637.155 1.867.224v2.103h-1.246c-1.218 0-1.45.578-1.45 1.419V12h2.597l-.42 2.788h-2.177v7.26C18.343 21.128 22 16.991 22 12z"></path></svg>
                         </a>
                         <!-- Youtube (Simulated) -->
                         <a href="#" class="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-700 hover:text-white hover:border-transparent hover:bg-gradient-to-r hover:from-[#FF7DA0] hover:to-[#FFC275] transition duration-200">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M20.8 5.6c-.3-.9-1-1.6-1.9-1.9C17.2 3 12 3 12 3s-5.2 0-6.9.7c-.9.3-1.6 1-1.9 1.9C3 7 3 12 3 12s0 5.2.7 6.9c.3.9 1 1.6 1.9 1.9C6.8 21 12 21 12 21s5.2 0 6.9-.7c.9-.3 1.6-1 1.9-1.9.7-1.7.7-6.9.7-6.9s0-5.2-.7-6.9zM10 16.5V7.5L16 12l-6 4.5z"></path></svg>
                         </a>
-                        <!-- Placeholder icon for another social site (e.g., Pinterest/TikTok) -->
-                        <a href="#" class="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-700 hover:text-white hover:border-transparent hover:bg-gradient-to-r hover:from-[#FF7DA0] hover:to-[#FFC275] transition duration-200">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm0-4h-2V7h2v8z"></path></svg>
+                        <!-- TikTok -->
+                        <a href="https://www.tiktok.com/@mj.cheezain?_r=1&_t=ZS-98vtBYXFNXM" target="_blank" rel="noopener" class="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-700 hover:text-white hover:border-transparent hover:bg-gradient-to-r hover:from-[#FF7DA0] hover:to-[#FFC275] transition duration-200">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0115.54 3h-3.09v12.4a2.59 2.59 0 01-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 004.3 1.38V7.3s-1.88.09-3.24-1.48z"></path></svg>
                         </a>
                     </div>
 
@@ -156,7 +157,7 @@
         <div class="mt-12 pt-8 border-t border-gray-200">
             <p class="text-center text-gray-500 text-xs">
                 &copy; {{ date('Y') }} MJ Cheezain. All rights reserved. | Developed by
-                <span class="text-custom-gold font-medium">Arslan Asif</span>.
+                <a href="https://www.facebook.com/arslan.asif.70412" target="_blank" rel="noopener" class="text-custom-gold font-medium hover:underline">Arslan Ahmad</a>.
             </p>
         </div>
 
