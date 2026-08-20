@@ -140,10 +140,13 @@ class HomeController extends Controller
         $reviewCount = (int) ($ratingStats->review_count ?? 0);
         $avgRating = $ratingStats->avg_rating ?? null;
 
+        // Fetch product faults
+        $faults = VendorProductFault::where('product_id', $product->id)->get();
+
         return view('product', compact(
             'user', 'profile', 'dashboardPage', 'imgPath',
             'product', 'vendor', 'imageMain', 'images', 'vendorUser',
-            'reviews', 'reviewCount', 'avgRating', 'isOwnerPreview'
+            'reviews', 'reviewCount', 'avgRating', 'isOwnerPreview', 'faults'
         ));
     }
 
