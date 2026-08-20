@@ -734,6 +734,12 @@
                             class="tab-button flex-shrink-0 border-b-2 border-transparent px-1 pb-3 transition duration-150 hover:text-gray-900">
                         Specifications
                     </button>
+                    @if($faults->count() > 0)
+                    <button id="tab-faults-btn" onclick="switchTab('faults')"
+                            class="tab-button flex-shrink-0 border-b-2 border-transparent px-1 pb-3 transition duration-150 hover:text-gray-900 text-red-600">
+                        <i class="fas fa-exclamation-triangle mr-1"></i> Faults ({{ $faults->count() }})
+                    </button>
+                    @endif
                     <button id="tab-reviews-btn" onclick="switchTab('reviews')"
                             class="tab-button flex-shrink-0 border-b-2 border-transparent px-1 pb-3 transition duration-150 hover:text-gray-900">
                         Reviews
@@ -905,6 +911,47 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Tab 5: Faults Content -->
+                    @if($faults->count() > 0)
+                    <div id="content-faults" class="tab-content hidden">
+                        <h3 class="text-xl font-semibold mb-4 text-red-600 flex items-center">
+                            <i class="fas fa-exclamation-triangle mr-2"></i> Known Faults
+                        </h3>
+                        <p class="text-sm text-gray-600 mb-6">
+                            The vendor has disclosed the following known issues with this product. Please review carefully before purchasing.
+                        </p>
+                        <div class="space-y-4">
+                            @foreach($faults as $fault)
+                            <div class="border border-red-200 bg-red-50 rounded-lg p-4">
+                                @if($fault->fault_image)
+                                <div class="mb-3">
+                                    <img src="{{ asset('storage/vendor/products/faults/'.$fault->fault_image) }}"
+                                         alt="Fault image"
+                                         class="max-w-full h-auto rounded-lg border border-red-300"
+                                         style="max-height: 300px; object-fit: contain;">
+                                </div>
+                                @endif
+                                <div class="relative">
+                                    <p class="text-gray-800 font-medium">{{ $fault->fault_description }}</p>
+                                    <!-- Pencil icon for vendor to mark/underline fault location -->
+                                    <div class="absolute top-0 right-0 mt-1 mr-1 flex items-center gap-1">
+                                        <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">Fault Location</span>
+                                        <button type="button"
+                                                class="p-1 text-gray-400 hover:text-red-600 transition"
+                                                title="Mark fault location (pencil/underline)"
+                                                onclick="markFaultLocation(this)">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
 
@@ -1129,5 +1176,25 @@
                     });
             });
         }
+
+    // Mark fault location - pencil/underline toggle
+    function markFaultLocation(btn) {
+        const desc = btn.closest('.relative').querySelector('p');
+        if (desc) {
+            const isUnderlined = desc.style.textDecoration === 'underline red 2px';
+            desc.style.textDecoration = isUnderlined ? 'none' : 'underline red 2px';
+            // Toggle pencil icon state
+            const svg = btn.querySelector('svg');
+            if (!isUnderlined) {
+                svg.classList.add('text-red-600');
+                svg.classList.remove('text-gray-400');
+                btn.title = 'Remove fault location mark';
+            } else {
+                svg.classList.add('text-gray-400');
+                svg.classList.remove('text-red-600');
+                btn.title = 'Mark fault location (pencil/underline)';
+            }
+        }
+    }
     </script>
 @endsection
