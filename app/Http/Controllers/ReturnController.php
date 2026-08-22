@@ -115,7 +115,14 @@ class ReturnController extends Controller
                 ->first();
             
             $refundAmount = $cart->price * $request->quantity;
-            
+
+            // Courier cost attribution, derived from the return reason (owner policy):
+            // reasons pointing at the vendor's fault (wrong/damaged/defective/not as described)
+            // -> vendor pays the return courier; reasons that are the customer's own choice
+            // (size/color preference, or "other") -> customer pays.
+            $vendorFaultReasons = ['damaged', 'wrong_item', 'defective', 'not_as_described'];
+            $courierPaidBy = in_array($request->reason, $vendorFaultReasons, true) ? 'vendor' : 'customer';
+
             // Create return request
             $returnId = DB::table('return_requests')->insertGetId([
                 'order_id' => $request->order_id,
@@ -126,6 +133,7 @@ class ReturnController extends Controller
                 'reason' => $request->reason,
                 'details' => $request->details,
                 'refund_amount' => $refundAmount,
+                'courier_paid_by' => $courierPaidBy,
                 'status' => 'pending',
                 'created_at' => now(),
                 'updated_at' => now()

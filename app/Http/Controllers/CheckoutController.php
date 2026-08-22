@@ -86,9 +86,8 @@ class CheckoutController extends Controller
         });
 
         $shipping = 2.50; // Fixed shipping for now
-        $tax = $subtotal * 0.00; // 5% tax
-        $discount = 0.00; // Fixed discount for now
-        $total = $subtotal + $shipping + $tax - $discount;
+        $tax = round($subtotal * 0.025, 2); // Fixed 2.5% tax (payment processor fee)
+        $total = $subtotal + $shipping + $tax;
         // dd($cartItems);
 
         if(!$user) {
@@ -99,7 +98,7 @@ class CheckoutController extends Controller
             if (!AccessControl::loginAllowed('customer')) {
                 return redirect('/cart');
             }
-            return redirect('/login-user?type=customer-login&page=checkout');
+            return redirect('/login-user?type=customer-login&page=%2Fcheckout');
         }
         return view('checkout', compact(
             'user', 'profile', 'dashboardPage', 'imgPath',
@@ -108,7 +107,6 @@ class CheckoutController extends Controller
             'subtotal',
             'shipping',
             'tax',
-            'discount',
             'total'
         ));
     }
@@ -120,7 +118,7 @@ class CheckoutController extends Controller
                 'success' => false,
                 'login_required' => true,
                 'redirect' => AccessControl::loginAllowed('customer')
-                    ? '/login-user?type=customer-login&page=checkout'
+                    ? '/login-user?type=customer-login&page=%2Fcheckout'
                     : '/cart',
                 'message' => 'Please log in to place your order.'
             ], 401);
@@ -161,23 +159,17 @@ class CheckoutController extends Controller
             ->whereNull('order_id')
             ->count();
 
-        // Real money math — mirrors the checkout view:
-        //  - cart flow (CheckoutController::checkout): shipping 2.50, tax 0%, discount 0
-        //  - buy-now flow (CartController::buy):       shipping 2.50, tax 5%, discount 15
+        // Real money math — mirrors the checkout view: shipping 2.50, tax 2.5%
+        // flat (money owed to the payment processor) for both the cart flow
+        // and the buy-now flow. No discount/coupon mechanism at checkout.
         $subtotal = (float) DB::table('carts')
             ->where('user_id', $userId)
             ->whereNull('order_id')
             ->sum(DB::raw('price * quantity'));
 
         $shipping = 2.50;
-        if ($request->input('single_buy')) {
-            $tax = $subtotal * 0.05;
-            $discount = 15.00;
-        } else {
-            $tax = $subtotal * 0.00;
-            $discount = 0.00;
-        }
-        $totalAmount = round($subtotal + $shipping + $tax - $discount, 2);
+        $tax = round($subtotal * 0.025, 2);
+        $totalAmount = round($subtotal + $shipping + $tax, 2);
 
         $orderId = DB::table('orders')->insertGetId([
             'user_id' => $userId,

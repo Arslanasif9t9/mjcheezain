@@ -120,19 +120,21 @@ class VendorReturnController extends Controller
         return view('vendor.returns.show', compact('user', 'return', 'tracking', 'images'));
     }
     
-    // Update return status
+    // Vendor comment on a return request.
+    //
+    // Policy: the vendor is NOT allowed to unilaterally approve/reject/refund/complete a
+    // return — only Admin (AdminOpsController::updateReturnStatus) can set that final
+    // decision. The vendor's role here is limited to giving their opinion on the request
+    // (e.g. "this is not our fault, customer opened the seal"). Submitting a comment moves
+    // a still-pending request to 'vendor_reviewed' so Admin knows the vendor has responded;
+    // it never sets approved/rejected/processing/refunded/completed.
     public function updateStatus(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'return_id' => 'required|integer|exists:return_requests,id',
-            'status' => 'required|in:pending,approved,rejected,processing,refunded,completed',
-            'step' => 'nullable|string|max:50',
-            'tracking_number' => 'nullable|string|max:100',
-            'pickup_date' => 'nullable|date',
-            'refund_method' => 'nullable|in:original_payment,wallet,store_credit',
-            'notes' => 'nullable|string|max:500'
+            'comment' => 'required|string|max:1000',
         ]);
-        
+
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
@@ -140,116 +142,63 @@ class VendorReturnController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
-        
+
         try {
             DB::beginTransaction();
-            
+
             $vendorId = Auth::id();
-            
+
             // Verify vendor owns this product
             $return = DB::table('return_requests as rr')
                 ->join('vendor_products as vp', 'rr.product_id', '=', 'vp.id')
                 ->where('rr.id', $request->return_id)
                 ->where('vp.user_id', $vendorId)
                 ->first();
-            
+
             if (!$return) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Return request not found or access denied'
                 ], 404);
             }
-            
-            // Prepare update data
-            $statusToStep = [
-                'pending'    => 'request_submitted',
-                'approved'   => 'approved',
-                'processing' => 'item_received',
-                'refunded'   => 'refunded',
-                'completed'  => 'completed',
-                'rejected'   => 'request_submitted',
-            ];
-
-            $autoStep = $statusToStep[$request->status] ?? 'request_submitted';
 
             $updateData = [
-                'status'     => $request->status,
-                'updated_at' => now()
+                'vendor_comment' => $request->comment,
+                'vendor_commented_at' => now(),
+                'updated_at' => now(),
             ];
-            
-            if ($request->filled('tracking_number')) {
-                $updateData['tracking_number'] = $request->tracking_number;
+
+            // Only nudge the status forward if Admin hasn't already made a final decision.
+            // The vendor can comment again later without overriding Admin's approved/rejected call.
+            if ($return->status === 'pending') {
+                $updateData['status'] = 'vendor_reviewed';
             }
-            
-            if ($request->filled('pickup_date')) {
-                if ($request->step === 'pickup_scheduled') {
-                    $updateData['pickup_scheduled_date'] = $request->pickup_date;
-                } elseif ($request->step === 'pickup_completed') {
-                    $updateData['pickup_completed_date'] = $request->pickup_date;
-                } elseif ($request->step === 'item_received') {
-                    $updateData['item_received_date'] = $request->pickup_date;
-                }
-            }
-            
-            if ($request->filled('refund_method')) {
-                $updateData['refund_method'] = $request->refund_method;
-            }
-            
-            if ($request->status === 'refunded') {
-                $updateData['refund_processed_date'] = now();
-            }
-            
-            // Update return
+
             DB::table('return_requests')
                 ->where('id', $request->return_id)
                 ->update($updateData);
-            
-            // Add to tracking
-            $stepDescription = $this->getStepDescription($autoStep, $request->notes);
 
             DB::table('return_tracking')->insert([
                 'return_id' => $request->return_id,
-                'step' => $autoStep,
+                'step' => 'vendor_commented',
                 'status' => 'completed',
-                'description' => $stepDescription,
+                'description' => 'Vendor commented: ' . $request->comment,
                 'created_at' => now()
             ]);
 
-            // Notify the customer about the return status change (best-effort)
-            try {
-                $rr = DB::table('return_requests')->where('id', $request->return_id)->first();
-                if ($rr && $rr->customer_id) {
-                    $productName = DB::table('vendor_products')->where('id', $rr->product_id)->value('name') ?? 'Product';
-                    DB::table('notifications')->insert([
-                        'user_id' => $rr->customer_id,
-                        'title' => 'Return update',
-                        'message' => "Your return request for \"{$productName}\" is now: " . ucwords($request->status) . ".",
-                        // notifications.type is an enum('shipping','payment','offer','loyalty','order','message','alert')
-                        'type' => 'order',
-                        'icon_class' => 'fas fa-bell',
-                        'icon_color' => 'bg-pink-100 text-[#E85D85]',
-                        'dot_color' => 'bg-[#FF7DA0]',
-                        'is_read' => 0,
-                        'created_at' => now(),
-                    ]);
-                }
-            } catch (\Throwable $e) {
-                \Log::warning('return status notify failed: ' . $e->getMessage());
-            }
-
             DB::commit();
-            
+
             return response()->json([
                 'success' => true,
-                'message' => 'Return status updated successfully'
+                'message' => 'Comment submitted. Admin will make the final decision.'
             ]);
-            
+
         } catch (\Exception $e) {
             DB::rollBack();
-            
+
             return response()->json([
                 'success' => false,
-                'message' => \App\Support\ErrorReason::friendly($e, 'Error updating status')
+                'message' => \App\Support\ErrorReason::friendly($e, 'Error submitting comment')
             ], 500);
         }
     }

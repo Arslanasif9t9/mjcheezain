@@ -213,9 +213,8 @@ class CartController extends Controller
         });
 
         $shipping = 2.50; // Fixed shipping for now
-        $tax = $subtotal * 0.05; // 5% tax
-        $discount = 15.00; // Fixed discount for now
-        $total = $subtotal + $shipping + $tax - $discount;
+        $tax = round($subtotal * 0.025, 2); // Fixed 2.5% tax (payment processor fee)
+        $total = $subtotal + $shipping + $tax;
 
         if(!$user) {
             // Guest "Buy Now" — send to login, then return to this buy URL.
@@ -224,7 +223,7 @@ class CartController extends Controller
             if (!AccessControl::loginAllowed('customer')) {
                 return redirect('/cart');
             }
-            return redirect('/login-user?type=customer-login&page=' . urlencode("product/{$product_id}/buy/{$quantity}"));
+            return redirect('/login-user?type=customer-login&page=' . urlencode("/product/{$product_id}/buy/{$quantity}"));
         }
         return view('checkout', compact(
             'user', 'profile', 'dashboardPage', 'imgPath',
@@ -233,7 +232,6 @@ class CartController extends Controller
             'subtotal',
             'shipping',
             'tax',
-            'discount',
             'total'
         ));
     }

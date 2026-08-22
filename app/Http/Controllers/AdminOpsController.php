@@ -168,7 +168,7 @@ class AdminOpsController extends Controller
 
         $stats = [
             'total' => $rows->count(),
-            'pending' => $rows->where('status', 'pending')->count(),
+            'pending' => $rows->whereIn('status', ['pending', 'vendor_reviewed'])->count(),
             'approved' => $rows->where('status', 'approved')->count(),
             'rejected' => $rows->where('status', 'rejected')->count(),
             'refunded' => $rows->whereIn('status', ['refunded', 'completed'])->count(),
@@ -177,18 +177,39 @@ class AdminOpsController extends Controller
         return view('Admin.returns', compact('rows', 'stats'));
     }
 
+    // Only Admin can set a final decision on a return (approve/reject) or move it through
+    // the post-approval flow. The vendor can only leave a comment (see
+    // VendorReturnController::updateStatus) — they never reach this endpoint.
     public function updateReturnStatus(Request $request, $id)
     {
-        $request->validate(['status' => 'required|in:pending,approved,rejected,processing,refunded,completed']);
+        $request->validate(['status' => 'required|in:pending,vendor_reviewed,approved,rejected,processing,refunded,completed']);
 
         $r = DB::table('return_requests')->where('id', $id)->first();
         if (!$r) return response()->json(['success' => false, 'message' => 'Return request not found.'], 404);
+
+        // A rejected (or still undecided) return must never slide into the refund/processing/
+        // completed pipeline — Admin has to explicitly approve it first. This is what keeps
+        // "reject = no refund, no return proceeds" true regardless of what gets posted here.
+        $postApprovalStates = ['processing', 'refunded', 'completed'];
+        if (in_array($request->status, $postApprovalStates, true) && !in_array($r->status, array_merge(['approved'], $postApprovalStates), true)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This return must be approved before it can move to "' . $request->status . '".'
+            ], 422);
+        }
+        if ($r->status === 'rejected' && $request->status !== 'rejected') {
+            return response()->json([
+                'success' => false,
+                'message' => 'This return was already rejected and cannot be reopened.'
+            ], 422);
+        }
 
         DB::table('return_requests')->where('id', $id)->update(['status' => $request->status, 'updated_at' => now()]);
 
         try {
             $stepMap = [
                 'pending' => 'under_review',
+                'vendor_reviewed' => 'under_review',
                 'approved' => 'approved',
                 'rejected' => 'rejected',
                 'processing' => 'refund_processing',
@@ -197,7 +218,7 @@ class AdminOpsController extends Controller
             ];
             DB::table('return_tracking')->insert([
                 'return_id' => $id,
-                'step' => $stepMap[$request->status],
+                'step' => $stepMap[$request->status] ?? 'under_review',
                 'status' => 'completed',
                 'description' => 'Updated by admin',
                 'created_at' => now(),

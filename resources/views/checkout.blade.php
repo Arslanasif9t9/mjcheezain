@@ -355,12 +355,8 @@
                                 <span class="text-gray-800 font-medium">Rs. {{ number_format($shipping, 2) }}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-500">Tax</span>
+                                <span class="text-gray-500">Tax (2.5%)</span>
                                 <span class="text-gray-800 font-medium">Rs. {{ number_format($tax, 2) }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-500">Discount</span>
-                                <span class="text-green-600 font-medium">-Rs. {{ number_format($discount, 2) }}</span>
                             </div>
                             <div class="border-t border-pink-50 pt-2.5">
                                 <div class="flex justify-between text-base font-bold">
