@@ -240,9 +240,49 @@
                                     <label class="text-sm text-gray-500">Details</label>
                                     <p class="font-medium">{{ $return->details ?? 'No additional details' }}</p>
                                 </div>
+                                <div>
+                                    <label class="text-sm text-gray-500">Return Courier Cost</label>
+                                    <p class="font-medium">
+                                        @if($return->courier_paid_by === 'vendor')
+                                            <span class="text-red-600">Vendor pays</span>
+                                        @elseif($return->courier_paid_by === 'customer')
+                                            <span class="text-green-600">Customer pays</span>
+                                        @else
+                                            <span class="text-gray-400">Not determined</span>
+                                        @endif
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <!-- Vendor Comment -->
+                <div class="card app-card bg-white p-5 md:p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <i class="fas fa-comment text-orange-600"></i>
+                        Your Comment
+                    </h2>
+                    <p class="text-xs text-gray-500 mb-3">
+                        You can only share your opinion on this request — MJ Cheezain Admin sees your
+                        comment together with the customer's request and makes the final approve/reject decision.
+                    </p>
+                    @if($return->vendor_comment)
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-gray-800">{{ $return->vendor_comment }}</p>
+                            @if($return->vendor_commented_at)
+                                <p class="text-xs text-gray-400 mt-2">
+                                    Commented on {{ \Carbon\Carbon::parse($return->vendor_commented_at)->format('M d, Y h:i A') }}
+                                </p>
+                            @endif
+                        </div>
+                    @else
+                        <p class="text-gray-400 text-sm">You haven't commented on this return yet.</p>
+                    @endif
+                    <button onclick="window.location.href='{{ route('vendor.returns.index') }}?update={{ $return->id }}'"
+                            class="mt-4 px-5 py-2.5 brand-gradient brand-shadow text-white rounded-full font-semibold hover:opacity-90 transition flex items-center gap-2 border-0">
+                        <i class="fas fa-edit"></i> {{ $return->vendor_comment ? 'Update Comment' : 'Add Comment' }}
+                    </button>
                 </div>
 
                 <!-- Return Images -->
@@ -303,6 +343,7 @@
                         @php
                             $statusColors = [
                                 'pending' => 'bg-yellow-500',
+                                'vendor_reviewed' => 'bg-blue-500',
                                 'approved' => 'bg-green-500',
                                 'processing' => 'bg-pink-500',
                                 'refunded' => 'bg-teal-500',
@@ -325,7 +366,7 @@
                     <div class="space-y-3">
                         <button onclick="window.location.href='{{ route('vendor.returns.index') }}?update={{ $return->id }}'"
                                 class="w-full py-3 brand-gradient brand-shadow text-white rounded-full font-semibold hover:opacity-90 transition flex items-center justify-center gap-2 border-0">
-                            <i class="fas fa-edit"></i> Update Status
+                            <i class="fas fa-comment"></i> Add Comment
                         </button>
                         <button onclick="contactCustomer()"
                                 class="w-full py-3 bg-[#E85D85] text-white rounded-full font-semibold hover:bg-[#C94A72] transition flex items-center justify-center gap-2 border-0">

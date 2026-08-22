@@ -72,6 +72,8 @@
                             <th class="px-5 py-3.5">Vendor</th>
                             <th class="px-5 py-3.5">Reason</th>
                             <th class="px-5 py-3.5">Details</th>
+                            <th class="px-5 py-3.5">Vendor Comment</th>
+                            <th class="px-5 py-3.5">Courier Cost</th>
                             <th class="px-5 py-3.5">Refund</th>
                             <th class="px-5 py-3.5">Date</th>
                             <th class="px-5 py-3.5">Status</th>
@@ -97,6 +99,22 @@
                                         <span class="text-gray-300">—</span>
                                     @endif
                                 </td>
+                                <td class="px-5 py-3.5 text-gray-500 max-w-[200px]">
+                                    @if(!empty($r->vendor_comment))
+                                        <span class="block truncate" title="{{ $r->vendor_comment }}">{{ $r->vendor_comment }}</span>
+                                    @else
+                                        <span class="text-gray-300 italic">No comment yet</span>
+                                    @endif
+                                </td>
+                                <td class="px-5 py-3.5 whitespace-nowrap">
+                                    @if($r->courier_paid_by === 'vendor')
+                                        <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-red-50 text-red-600">Vendor pays</span>
+                                    @elseif($r->courier_paid_by === 'customer')
+                                        <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-green-50 text-green-600">Customer pays</span>
+                                    @else
+                                        <span class="text-gray-300">—</span>
+                                    @endif
+                                </td>
                                 <td class="px-5 py-3.5 font-semibold text-gray-800 whitespace-nowrap">
                                     {{ isset($r->refund_amount) && $r->refund_amount !== null ? 'Rs. ' . number_format($r->refund_amount) : '—' }}
                                 </td>
@@ -107,14 +125,14 @@
                                     <select class="status-select text-xs font-semibold rounded-full px-3 py-1.5 border cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand/40"
                                             data-id="{{ $r->id }}" data-prev="{{ $st }}"
                                             onchange="changeStatus(this)">
-                                        @foreach(['pending', 'approved', 'rejected', 'processing', 'refunded', 'completed'] as $s)
+                                        @foreach(['pending', 'vendor_reviewed', 'approved', 'rejected', 'processing', 'refunded', 'completed'] as $s)
                                             <option value="{{ $s }}" {{ $st === $s ? 'selected' : '' }}>{{ ucfirst($s) }}</option>
                                         @endforeach
                                     </select>
                                 </td>
                             </tr>
                         @empty
-                            <tr><td colspan="9" class="px-5 py-12 text-center text-gray-400">
+                            <tr><td colspan="11" class="px-5 py-12 text-center text-gray-400">
                                 <i class="fas fa-inbox text-3xl mb-2 block text-gray-300"></i>No return requests yet.
                             </td></tr>
                         @endforelse
@@ -152,6 +170,7 @@
 
     const STATUS_STYLE = {
         'pending':    ['#FEF3C7', '#B45309', '#FDE68A'],
+        'vendor_reviewed': ['#DBEAFE', '#1D4ED8', '#BFDBFE'],
         'approved':   ['#DBEAFE', '#1D4ED8', '#BFDBFE'],
         'rejected':   ['#FEE2E2', '#B91C1C', '#FECACA'],
         'processing': ['#EDE9FE', '#6D28D9', '#DDD6FE'],

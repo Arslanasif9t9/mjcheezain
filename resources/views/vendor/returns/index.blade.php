@@ -598,6 +598,7 @@
                                 @php
                                     $statusColors = [
                                         'pending' => 'bg-yellow-500',
+                                        'vendor_reviewed' => 'bg-blue-500',
                                         'approved' => 'bg-green-500',
                                         'processing' => 'bg-pink-500',
                                         'refunded' => 'bg-teal-500',
@@ -686,7 +687,7 @@
                                             
                                             <button onclick="openStatusModal('{{ $return->id }}', '{{ $return->status }}')"
                                                     class="action-btn bg-green-100 text-green-700 hover:bg-green-200">
-                                                <i class="fas fa-edit"></i> Update
+                                                <i class="fas fa-comment"></i> Comment
                                             </button>
                                         </div>
                                     </td>
@@ -728,10 +729,10 @@
         </button>
         
         <div class="status-dropdown-header">
-            <h3 class="text-xl font-bold mb-1">Update Return Status</h3>
+            <h3 class="text-xl font-bold mb-1">Comment on Return</h3>
             <p class="opacity-90">Request: <span id="modalRequestId" class="font-semibold"></span></p>
         </div>
-        
+
         <div class="status-dropdown-body">
             <!-- Current Status Info -->
             <div id="currentStatusInfo" class="mb-6 p-4 bg-orange-50 rounded-lg">
@@ -741,79 +742,21 @@
                     <span id="currentStatusBadge" class="badge"></span>
                 </div>
             </div>
-            
-            <!-- Status Options -->
+
+            <!-- Vendor Comment -->
             <div class="mb-6">
-                <h4 class="font-semibold text-gray-700 mb-3">Update Status</h4>
-                <div class="space-y-2">
-                    <div class="status-option" data-status="pending" onclick="selectStatus('pending')">
-                        <div class="flex items-center">
-                            <span class="badge bg-yellow-500 text-white mr-3">Pending</span>
-                            <div>
-                                <span class="font-medium">Pending Review</span>
-                                <div class="text-xs text-gray-500">Review customer's request</div>
-                            </div>
-                        </div>
-                        <i class="fas fa-check text-green-500 hidden selected-icon"></i>
-                    </div>
-                    
-                    <div class="status-option" data-status="approved" onclick="selectStatus('approved')">
-                        <div class="flex items-center">
-                            <span class="badge bg-green-500 text-white mr-3">Approved</span>
-                            <div>
-                                <span class="font-medium">Approve Request</span>
-                                <div class="text-xs text-gray-500">Approve the return</div>
-                            </div>
-                        </div>
-                        <i class="fas fa-check text-green-500 hidden selected-icon"></i>
-                    </div>
-                    
-                    <div class="status-option" data-status="processing" onclick="selectStatus('processing')">
-                        <div class="flex items-center">
-                            <span class="badge bg-pink-500 text-white mr-3">Processing</span>
-                            <div>
-                                <span class="font-medium">Processing</span>
-                                <div class="text-xs text-gray-500">Processing return item</div>
-                            </div>
-                        </div>
-                        <i class="fas fa-check text-green-500 hidden selected-icon"></i>
-                    </div>
-                    
-                    <div class="status-option" data-status="refunded" onclick="selectStatus('refunded')">
-                        <div class="flex items-center">
-                            <span class="badge bg-teal-500 text-white mr-3">Refunded</span>
-                            <div>
-                                <span class="font-medium">Refunded</span>
-                                <div class="text-xs text-gray-500">Refund completed</div>
-                            </div>
-                        </div>
-                        <i class="fas fa-check text-green-500 hidden selected-icon"></i>
-                    </div>
-                    
-                    <div class="status-option" data-status="completed" onclick="selectStatus('completed')">
-                        <div class="flex items-center">
-                            <span class="badge bg-green-600 text-white mr-3">Completed</span>
-                            <div>
-                                <span class="font-medium">Completed</span>
-                                <div class="text-xs text-gray-500">Return process completed</div>
-                            </div>
-                        </div>
-                        <i class="fas fa-check text-green-500 hidden selected-icon"></i>
-                    </div>
-                    
-                    <div class="status-option" data-status="rejected" onclick="selectStatus('rejected')">
-                        <div class="flex items-center">
-                            <span class="badge bg-red-500 text-white mr-3">Rejected</span>
-                            <div>
-                                <span class="font-medium">Reject Request</span>
-                                <div class="text-xs text-gray-500">Reject the return request</div>
-                            </div>
-                        </div>
-                        <i class="fas fa-check text-green-500 hidden selected-icon"></i>
-                    </div>
-                </div>
+                <h4 class="font-semibold text-gray-700 mb-2">Your Comment</h4>
+                <p class="text-xs text-gray-500 mb-3">
+                    Vendors can only share an opinion on the request (e.g. "this is not our fault,
+                    customer opened the seal" or "yes, we sent the wrong item"). MJ Cheezain Admin
+                    reviews your comment together with the customer's request and makes the final
+                    approve/reject decision.
+                </p>
+                <textarea id="vendorCommentInput" rows="4" maxlength="1000"
+                          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                          placeholder="Add your comment about this return request..."></textarea>
             </div>
-            
+
             <!-- Additional Options -->
             {{-- <div id="additionalOptions" class="mb-6">
                 <h4 class="font-semibold text-gray-700 mb-3">Additional Information</h4>
@@ -878,7 +821,7 @@
                 <button id="updateStatusBtn" onclick="updateReturnStatus()"
                         class="w-full py-3.5 brand-gradient brand-shadow text-white rounded-full font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed border-0"
                         disabled>
-                    Update Status
+                    Submit Comment
                 </button>
                 <button onclick="closeStatusModal()"
                         class="w-full py-3.5 bg-gray-100 text-gray-700 rounded-full font-semibold hover:bg-gray-200 transition mt-3 border-0">
@@ -990,29 +933,13 @@
             document.getElementById('currentStatusBadge').innerHTML = currentStatus.charAt(0).toUpperCase() + currentStatus.slice(1);
             document.getElementById('currentStatusBadge').className = `badge ${getStatusColor(currentStatus)} text-white`;
             
-            // Reset selection
-            document.querySelectorAll('.status-option').forEach(option => {
-                option.classList.remove('selected');
-                option.querySelector('.selected-icon').classList.add('hidden');
-            });
-            
-            // Highlight current status
-            const currentOption = document.querySelector(`.status-option[data-status="${currentStatus}"]`);
-            if (currentOption) {
-                currentOption.classList.add('selected');
-                currentOption.querySelector('.selected-icon').classList.remove('hidden');
-            }
-            
-            // Reset additional options
-            // document.getElementById('stepSelect').value = '';
-            // document.getElementById('trackingNumber').value = '';
-            // document.getElementById('pickupDate').value = '';
-            // document.getElementById('refundMethod').value = '';
-            // document.getElementById('statusNotes').value = '';
-            
-            // Disable update button initially
+            // Reset the comment box
+            const commentInput = document.getElementById('vendorCommentInput');
+            if (commentInput) commentInput.value = '';
+
+            // Disable update button initially (enabled once a comment is typed)
             document.getElementById('updateStatusBtn').disabled = true;
-            
+
             // Show modal
             document.getElementById('statusModalOverlay').classList.add('open');
             document.getElementById('statusModal').classList.add('open');
@@ -1023,6 +950,7 @@
         function getStatusColor(status) {
             const colors = {
                 'pending': 'bg-yellow-500',
+                'vendor_reviewed': 'bg-blue-500',
                 'approved': 'bg-green-500',
                 'processing': 'bg-pink-500',
                 'refunded': 'bg-teal-500',
@@ -1043,60 +971,35 @@
             selectedStatus = null;
         }
         
-        // Select status option
-        function selectStatus(status) {
-            selectedStatus = status;
-            
-            // Update UI
-            document.querySelectorAll('.status-option').forEach(option => {
-                option.classList.remove('selected');
-                option.querySelector('.selected-icon').classList.add('hidden');
-            });
-            
-            const selectedOption = document.querySelector(`.status-option[data-status="${status}"]`);
-            if (selectedOption) {
-                selectedOption.classList.add('selected');
-                selectedOption.querySelector('.selected-icon').classList.remove('hidden');
+        // Enable the submit button once the vendor types a comment
+        document.addEventListener('input', function(e) {
+            if (e.target && e.target.id === 'vendorCommentInput') {
+                document.getElementById('updateStatusBtn').disabled = e.target.value.trim().length === 0;
             }
-            
-            // Enable/disable update button
-            const updateBtn = document.getElementById('updateStatusBtn');
-            if (status === currentReturnStatus) {
-                updateBtn.disabled = true;
-                updateBtn.textContent = 'Update Status';
-            } else {
-                updateBtn.disabled = false;
-                updateBtn.textContent = `Update to ${status.charAt(0).toUpperCase() + status.slice(1)}`;
-            }
-        }
-        
-        // Update return status
+        });
+
+        // Submit the vendor's comment (opinion only — no status/decision change)
         async function updateReturnStatus() {
-            if (!currentReturnId || !selectedStatus || selectedStatus === currentReturnStatus) {
+            const commentInput = document.getElementById('vendorCommentInput');
+            const comment = commentInput ? commentInput.value.trim() : '';
+            if (!currentReturnId || !comment) {
                 return;
             }
-            
-            // Desktop table badge AND mobile card badge share data-return-id — update all
-            const badges = document.querySelectorAll(`.status-badge[data-return-id="${currentReturnId}"]`);
+
             const updateBtn = document.getElementById('updateStatusBtn');
-            
+
             // Show loading state
             const originalText = updateBtn.innerHTML;
-            updateBtn.innerHTML = '<i class="fas fa-spinner spinner mr-2"></i> Updating...';
+            updateBtn.innerHTML = '<i class="fas fa-spinner spinner mr-2"></i> Submitting...';
             updateBtn.disabled = true;
-            
+
             // Prepare data
             const data = {
                 return_id: currentReturnId,
-                status: selectedStatus,
-                step: '',
-                tracking_number: '',
-                pickup_date: '',
-                refund_method: '',
-                notes: '',
+                comment: comment,
                 _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             };
-            
+
             try {
                 const response = await fetch("{{ route('vendor.returns.update-status') }}", {
                     method: 'POST',
@@ -1107,20 +1010,12 @@
                     },
                     body: JSON.stringify(data)
                 });
-                
+
                 const result = await response.json();
-                
+
                 if (result.success) {
-                    // Update UI immediately
-                    badges.forEach(badge => {
-                        badge.className = `badge ${getStatusColor(selectedStatus)} text-white cursor-pointer status-badge`;
-                        badge.innerHTML = `${selectedStatus.charAt(0).toUpperCase() + selectedStatus.slice(1)} <i class="fas fa-chevron-down ml-1 text-xs"></i>`;
-                        badge.setAttribute('data-current-status', selectedStatus);
-                        badge.setAttribute('onclick', `openStatusModal('${currentReturnId}', '${selectedStatus}')`);
-                    });
-                    
-                    showNotification('Status updated successfully!', 'success');
-                    
+                    showNotification('Comment submitted — Admin will make the final decision.', 'success');
+
                     // Close modal after delay
                     setTimeout(() => {
                         closeStatusModal();
@@ -1255,7 +1150,7 @@
                             </button>
                             <button onclick="openStatusModal('${esc(id)}', '${esc(status)}')"
                                     class="flex-1 py-2.5 rounded-full text-xs font-semibold brand-gradient-soft text-[#E85D85] border border-[#E85D85]/20 active:scale-[0.98] transition">
-                                <i class="fas fa-edit mr-1"></i> Update
+                                <i class="fas fa-comment mr-1"></i> Comment
                             </button>
                         </div>
                     </div>`;
