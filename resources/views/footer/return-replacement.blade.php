@@ -59,31 +59,31 @@
                         <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0" style="color:#FF7DA0;">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
                         </span>
-                        If the Vendor sent a <strong>wrong, incorrect, or different product</strong>, the Vendor will be responsible for the return courier charges.
+                        <span>If the Vendor sent a <strong>wrong, incorrect, or different product</strong>, the Vendor will be responsible for the return courier charges.</span>
                     </li>
                     <li class="flex items-start text-base text-gray-700">
                         <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0" style="color:#FF7DA0;">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
                         </span>
-                        If you want to return a product <strong>by your own choice</strong>, you can request a return if it meets our return conditions, but <strong>you will pay the full return courier charges</strong>.
+                        <span>If you want to return a product <strong>by your own choice</strong>, you can request a return if it meets our return conditions, but <strong>you will pay the full return courier charges</strong>.</span>
                     </li>
                     <li class="flex items-start text-base text-gray-700">
                         <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0" style="color:#FF7DA0;">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
                         </span>
-                        Some products cannot be returned once they have been <strong>opened or unsealed</strong>. These products will be clearly mentioned as <strong>Non-Returnable</strong> on the product page.
+                        <span>Some products cannot be returned once they have been <strong>opened or unsealed</strong>. These products will be clearly mentioned as <strong>Non-Returnable</strong> on the product page.</span>
                     </li>
                     <li class="flex items-start text-base text-gray-700">
                         <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0" style="color:#FF7DA0;">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
                         </span>
-                        If your return request is rejected, the product will not be returned and no refund will be issued.
+                        <span>If your return request is rejected, the product will not be returned and no refund will be issued.</span>
                     </li>
                     <li class="flex items-start text-base text-gray-700">
                         <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0" style="color:#FF7DA0;">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
                         </span>
-                        If your return is approved, the product will be returned to the Vendor.
+                        <span>If your return is approved, the product will be returned to the Vendor.</span>
                     </li>
                 </ul>
                 <p class="font-bold text-gray-900 mb-4">Please check the product's return conditions before opening or using it.</p>
@@ -111,49 +111,49 @@
                         <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0" style="color:#FF7DA0;">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
                         </span>
-                        You can request a replacement <strong>within 7 days of receiving your order</strong>. After 7 days, replacement will not be available.
+                        <span>You can request a replacement <strong>within 7 days of receiving your order</strong>. After 7 days, replacement will not be available.</span>
                     </li>
                     <li class="flex items-start text-base text-gray-700">
                         <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0" style="color:#FF7DA0;">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
                         </span>
-                        Replacement is available <strong>only from the same store</strong> where you originally purchased the product.
+                        <span>Replacement is available <strong>only from the same store</strong> where you originally purchased the product.</span>
                     </li>
                     <li class="flex items-start text-base text-gray-700">
                         <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0" style="color:#FF7DA0;">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
                         </span>
-                        You can choose another product from the same store <strong>at the same price or a higher price</strong> than your original product.
+                        <span>You can choose another product from the same store <strong>at the same price or a higher price</strong> than your original product.</span>
                     </li>
                     <li class="flex items-start text-base text-gray-700">
                         <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0" style="color:#FF7DA0;">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
                         </span>
-                        If you choose a higher-priced product, you will pay the <strong>additional price difference</strong>.
+                        <span>If you choose a higher-priced product, you will pay the <strong>additional price difference</strong>.</span>
                     </li>
                     <li class="flex items-start text-base text-gray-700">
                         <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0" style="color:#FF7DA0;">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
                         </span>
-                        <strong>No refund will be provided under the replacement option.</strong>
+                        <span><strong>No refund will be provided under the replacement option.</strong></span>
                     </li>
                     <li class="flex items-start text-base text-gray-700">
                         <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0" style="color:#FF7DA0;">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
                         </span>
-                        If the replacement is needed because the Vendor sent a <strong>wrong, incorrect, or different product</strong>, the Vendor will pay the replacement courier charges.
+                        <span>If the replacement is needed because the Vendor sent a <strong>wrong, incorrect, or different product</strong>, the Vendor will pay the replacement courier charges.</span>
                     </li>
                     <li class="flex items-start text-base text-gray-700">
                         <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0" style="color:#FF7DA0;">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
                         </span>
-                        If you want a replacement <strong>by your own choice</strong>, you will pay the full replacement courier charges.
+                        <span>If you want a replacement <strong>by your own choice</strong>, you will pay the full replacement courier charges.</span>
                     </li>
                     <li class="flex items-start text-base text-gray-700">
                         <span class="text-pink-600 mr-3 mt-0.5 flex-shrink-0" style="color:#FF7DA0;">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
                         </span>
-                        Products that are <strong>opened, unsealed, activated, or used</strong> may not be eligible for replacement, according to the product's return conditions.
+                        <span>Products that are <strong>opened, unsealed, activated, or used</strong> may not be eligible for replacement, according to the product's return conditions.</span>
                     </li>
                 </ul>
                 <p class="text-sm italic text-gray-600">All replacement requests will be reviewed by the Return Manager, who will make the final decision.</p>
