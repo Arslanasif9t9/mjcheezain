@@ -718,6 +718,16 @@
                 billingSection.classList.add('hidden');
             }
         });
+
+        // Cart/address/total state here is rendered server-side. If the
+        // browser restores this page from its back-forward cache (e.g. the
+        // user places an order, or edits the cart, then presses Back) the
+        // summary can go stale. Force a fresh load in that one case.
+        window.addEventListener('pageshow', function (e) {
+            if (e.persisted) {
+                location.reload();
+            }
+        });
     </script>
 </body>
 </html>

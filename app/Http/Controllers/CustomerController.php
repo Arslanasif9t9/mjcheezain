@@ -38,8 +38,15 @@ class CustomerController extends Controller
         // Example: Fetch customer orders
         $orders = DB::table('orders')->where('user_id', $user->user_id)->count();
 
+        // Items still sitting in the cart (not yet turned into an order) —
+        // lets the profile page offer a "Back to Checkout" shortcut.
+        $pendingCartCount = DB::table('carts')
+            ->where('user_id', $user->user_id)
+            ->whereNull('order_id')
+            ->count();
+
         return view('customer.profile', compact([
-            'basic_info', 'bannerImage'
+            'basic_info', 'bannerImage', 'pendingCartCount'
         ]));
     }
 

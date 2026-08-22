@@ -134,7 +134,12 @@
                                 </div>
                             </div>
                             
-                            <div class="mt-4 md:mt-0 w-full md:w-auto text-center md:text-right">
+                            <div class="mt-4 md:mt-0 w-full md:w-auto flex flex-col sm:flex-row gap-2 justify-center md:justify-end text-center md:text-right">
+                                @if(($pendingCartCount ?? 0) > 0)
+                                    <a href="/checkout" class="inline-block w-full md:w-auto px-5 py-2.5 bg-white border border-pink-200 text-brand rounded-full text-sm font-semibold hover:bg-pink-50 focus:outline-none">
+                                        <i class="fas fa-arrow-rotate-right mr-2"></i>Back to Checkout
+                                    </a>
+                                @endif
                                 <a href="/customer/profile/edit" class="inline-block w-full md:w-auto px-5 py-2.5 brand-gradient brand-shadow text-white rounded-full text-sm font-semibold hover:opacity-90 focus:outline-none">
                                     <i class="fas fa-user-edit mr-2"></i>Edit Profile
                                 </a>
@@ -739,6 +744,19 @@
                 notification.remove();
             }, 5000);
         }
+
+        // Server-rendered state here (e.g. the "Back to Checkout" button,
+        // whose visibility depends on whether the cart still has pending
+        // items) can go stale when the browser restores this page from its
+        // back-forward cache instead of re-requesting it — e.g. after
+        // completing checkout and then pressing Back. Force a fresh load in
+        // that one case so the page always reflects the current state
+        // without the user needing to manually refresh.
+        window.addEventListener('pageshow', function (e) {
+            if (e.persisted) {
+                location.reload();
+            }
+        });
     </script>
 
     <!-- Notification  -->
