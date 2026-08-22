@@ -195,22 +195,34 @@
                 checkoutBtn.disabled = true;
             } else {
                 subtotalElement.textContent = `Rs. ${cartState.totals.subtotal.toFixed(2)}`;
-                shippingFeeElement.textContent = `Rs. ${cartState.totals.shipping_fee.toFixed(2)}`;
+                if (cartState.totals.free_delivery || cartState.totals.shipping_fee === 0) {
+                    shippingFeeElement.textContent = 'Free Delivery';
+                    shippingFeeElement.classList.add('text-green-600');
+                } else {
+                    shippingFeeElement.textContent = `Rs. ${Number(cartState.totals.shipping_fee).toFixed(2)}`;
+                    shippingFeeElement.classList.remove('text-green-600');
+                }
                 totalAmountElement.textContent = `Rs. ${cartState.totals.total.toFixed(2)}`;
                 checkoutBtn.disabled = false;
             }
         }
 
         // Function to calculate totals from items
+        // Shipping rule (mirrors CartController::getCartItems() /
+        // CheckoutController::checkout()): flat Rs 300 per order, unless
+        // EVERY item in the cart is vendor-marked free_delivery, in which
+        // case the whole order ships free (Rs 0). Not prorated per item.
         function calculateTotalsFromState() {
             const subtotal = cartState.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            
-            // Calculate shipping fee (example: $5 per item, max $50)
-            const shippingFee = Math.min(cartState.items.length * 5, 50);
-            
+
+            const allFreeDelivery = cartState.items.length > 0 &&
+                cartState.items.every(item => !!item.free_delivery);
+            const shippingFee = allFreeDelivery ? 0 : 300;
+
             cartState.totals = {
                 subtotal: subtotal,
                 shipping_fee: shippingFee,
+                free_delivery: allFreeDelivery,
                 total: subtotal + shippingFee
             };
         }

@@ -1463,6 +1463,14 @@
                                     <div class="error-message hidden" id="deliveryChargesError"></div>
                                 </div>
 
+                                <!-- Free Delivery -->
+                                <div class="flex items-center gap-2 pt-6">
+                                    <input type="checkbox" id="freeDelivery" name="free_delivery" value="1"
+                                        {{ isset($product) && $product->free_delivery ? 'checked' : '' }}
+                                        class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500" />
+                                    <label for="freeDelivery" class="form-label !mb-0">Offer Free Delivery on this product</label>
+                                </div>
+
                                 <!-- Quantity -->
                                 <div>
                                     <label class="form-label">Quantity in Stock*</label>

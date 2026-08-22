@@ -352,7 +352,11 @@
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-500">Shipping</span>
-                                <span class="text-gray-800 font-medium">Rs. {{ number_format($shipping, 2) }}</span>
+                                @if($shipping == 0)
+                                    <span class="text-green-600 font-semibold">Free Delivery</span>
+                                @else
+                                    <span class="text-gray-800 font-medium">Rs. {{ number_format($shipping, 2) }}</span>
+                                @endif
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-500">Tax (2.5%)</span>

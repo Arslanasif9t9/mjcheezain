@@ -212,7 +212,13 @@ class CartController extends Controller
             return $item->cq * $item->selling_price * 1.17;
         });
 
-        $shipping = 2.50; // Fixed shipping for now
+        // Same flat-per-order shipping rule as CheckoutController::checkout():
+        // Rs 300 unless every item is vendor-marked free_delivery (Buy Now is
+        // almost always a single item, but keep the same "any paid item ->
+        // full flat fee" rule for consistency if that ever changes).
+        $shipping = $cartItems->isEmpty()
+            ? 0
+            : ($cartItems->contains(fn($item) => !$item->free_delivery) ? 300 : 0);
         $tax = round($subtotal * 0.025, 2); // Fixed 2.5% tax (payment processor fee)
         $total = $subtotal + $shipping + $tax;
 
@@ -296,6 +302,7 @@ class CartController extends Controller
             'vendor_products.name as product_name',
             'vendor_products.selling_price',
             'vendor_products.mrp',
+            'vendor_products.free_delivery',
             'vendor_product_images.image_path'
         )
         ->whereNull('order_id')
@@ -320,7 +327,13 @@ class CartController extends Controller
             return $item->price * $item->quantity;
         });
 
-        $shippingFee = 300; // Fixed shipping fee or calculate based on your logic
+        // Flat Rs 300 shipping per order — Rs 0 only if every item in the cart
+        // is vendor-marked free_delivery (see CheckoutController::checkout()
+        // for the same rule applied at the checkout page/order placement).
+        $allFreeDelivery = $cartItems->every(function ($item) {
+            return (bool) $item->free_delivery;
+        });
+        $shippingFee = $allFreeDelivery ? 0 : 300;
         $total = $subtotal + $shippingFee;
 
         return response()->json([
@@ -329,6 +342,7 @@ class CartController extends Controller
             'totals' => [
                 'subtotal' => $subtotal,
                 'shipping_fee' => $shippingFee,
+                'free_delivery' => $allFreeDelivery,
                 'total' => $total
             ]
         ]);

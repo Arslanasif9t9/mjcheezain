@@ -20,6 +20,7 @@ class VendorProduct extends Model
         'pcondition',
         'original_price',
         'delivery_charges',
+        'free_delivery',
         'selling_price',
         'mrp',
         'shipping_method',
@@ -45,6 +46,7 @@ class VendorProduct extends Model
     // TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories
     protected $casts = [
         'fashion_attributes' => 'array',
+        'free_delivery' => 'boolean',
     ];
 
     public function user()

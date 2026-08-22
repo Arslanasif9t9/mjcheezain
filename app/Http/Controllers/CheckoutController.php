@@ -85,7 +85,15 @@ class CheckoutController extends Controller
             return $item->cq * $item->price;
         });
 
-        $shipping = 2.50; // Fixed shipping for now
+        // Shipping rule: flat Rs 300 per order (not per item/vendor — there is
+        // no per-vendor split anywhere else in this checkout flow, so we keep
+        // it a single order-level fee). If every item in the cart is marked
+        // free_delivery by its vendor, the whole order ships free (Rs 0). If
+        // even one item is NOT free-delivery, the full flat Rs 300 applies —
+        // it is not prorated per item.
+        $shipping = $cartItems->isEmpty()
+            ? 0
+            : ($cartItems->contains(fn($item) => !$item->free_delivery) ? 300 : 0);
         $tax = round($subtotal * 0.025, 2); // Fixed 2.5% tax (payment processor fee)
         $total = $subtotal + $shipping + $tax;
         // dd($cartItems);
@@ -159,7 +167,8 @@ class CheckoutController extends Controller
             ->whereNull('order_id')
             ->count();
 
-        // Real money math — mirrors the checkout view: shipping 2.50, tax 2.5%
+        // Real money math — mirrors the checkout view: flat Rs 300 shipping
+        // (Rs 0 if every cart item is vendor-marked free_delivery), tax 2.5%
         // flat (money owed to the payment processor) for both the cart flow
         // and the buy-now flow. No discount/coupon mechanism at checkout.
         $subtotal = (float) DB::table('carts')
@@ -167,7 +176,17 @@ class CheckoutController extends Controller
             ->whereNull('order_id')
             ->sum(DB::raw('price * quantity'));
 
-        $shipping = 2.50;
+        // Same flat-per-order shipping rule as CheckoutController::checkout():
+        // Rs 300 unless every item in the cart has free_delivery = true.
+        $hasPaidShippingItem = DB::table('carts as c')
+            ->join('vendor_products as vp', 'c.product_id', '=', 'vp.id')
+            ->where('c.user_id', $userId)
+            ->whereNull('c.order_id')
+            ->where(function ($q) {
+                $q->where('vp.free_delivery', 0)->orWhereNull('vp.free_delivery');
+            })
+            ->exists();
+        $shipping = $hasPaidShippingItem ? 300 : 0;
         $tax = round($subtotal * 0.025, 2);
         $totalAmount = round($subtotal + $shipping + $tax, 2);
 
