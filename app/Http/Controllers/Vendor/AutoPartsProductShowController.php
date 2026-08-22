@@ -486,7 +486,7 @@ class AutoPartsProductShowController extends Controller
                 ->map(function($fault) {
                     return [
                         'description' => $fault->fault_description,
-                        'image' => $fault->fault_image ? asset($fault->fault_image) : null
+                        'image' => $fault->fault_image ? asset('storage/' . $fault->fault_image) : null
                     ];
                 });
 

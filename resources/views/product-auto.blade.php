@@ -736,10 +736,16 @@
                             class="tab-button border-b-2 border-transparent px-1 pb-3 transition duration-150 hover:text-gray-900">
                         Reviews
                     </button>
-                    <button id="tab-vendorinfo-btn" onclick="switchTab('vendorinfo')" 
+                    <button id="tab-vendorinfo-btn" onclick="switchTab('vendorinfo')"
                             class="tab-button border-b-2 border-transparent px-1 pb-3 transition duration-150 hover:text-gray-900">
                         Vendor Info
                     </button>
+                    @if(count($productFaults))
+                    <button id="tab-faults-btn" onclick="switchTab('faults')"
+                            class="tab-button border-b-2 border-transparent px-1 pb-3 transition duration-150 hover:text-gray-900">
+                        Faults / Known Issues
+                    </button>
+                    @endif
                 </div>
 
                 <!-- Tab Content Panels -->
@@ -903,6 +909,25 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Tab 5: Faults / Known Issues Content -->
+                    @if(count($productFaults))
+                    <div id="content-faults" class="tab-content hidden">
+                        <h3 class="text-xl font-semibold mb-4">Faults / Known Issues</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            @foreach($productFaults as $fault)
+                            <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                                @if($fault['image'])
+                                <img src="{{ $fault['image'] }}" alt="Fault image" class="w-full h-48 object-cover">
+                                @endif
+                                <div class="p-3">
+                                    <p class="text-gray-700 text-sm">{{ $fault['description'] }}</p>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
 
