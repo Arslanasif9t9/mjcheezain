@@ -140,10 +140,44 @@ class HomeController extends Controller
         $reviewCount = (int) ($ratingStats->review_count ?? 0);
         $avgRating = $ratingStats->avg_rating ?? null;
 
+        // Faults: general (non-auto-parts) products keep their fault rows in
+        // vendor_product_faults, keyed by this vendor_products.id directly.
+        $faults = DB::table('vendor_product_faults')
+            ->where('product_id', $product->id)
+            ->get()
+            ->map(function ($fault) {
+                return [
+                    'description' => $fault->fault_description,
+                    'image' => $fault->fault_image ? asset('storage/vendor/products/faults/' . $fault->fault_image) : null,
+                ];
+            });
+
+        // Auto-parts products are dual-written: the same product also gets a
+        // row in auto_parts_products (linked back via vendor_product_id), and
+        // ITS faults live in auto_parts_product_faults keyed by that row's id
+        // — not by $product->id. Pull those in too when they exist.
+        $autoPartsProduct = DB::table('auto_parts_products')
+            ->where('vendor_product_id', $product->id)
+            ->first();
+
+        if ($autoPartsProduct) {
+            $autoFaults = DB::table('auto_parts_product_faults')
+                ->where('product_id', $autoPartsProduct->id)
+                ->get()
+                ->map(function ($fault) {
+                    return [
+                        'description' => $fault->fault_description,
+                        'image' => $fault->fault_image ? asset('storage/' . $fault->fault_image) : null,
+                    ];
+                });
+
+            $faults = $faults->concat($autoFaults);
+        }
+
         return view('product', compact(
             'user', 'profile', 'dashboardPage', 'imgPath',
             'product', 'vendor', 'imageMain', 'images', 'vendorUser',
-            'reviews', 'reviewCount', 'avgRating', 'isOwnerPreview'
+            'reviews', 'reviewCount', 'avgRating', 'isOwnerPreview', 'faults'
         ));
     }
 
