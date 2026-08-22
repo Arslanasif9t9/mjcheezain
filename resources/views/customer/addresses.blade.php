@@ -105,26 +105,24 @@
                             
                             <div>
                                 <label for="state" class="block text-sm font-medium text-gray-700 mb-1">State/Province</label>
-                                <input type="text" id="state" name="state" class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300" >
+                                <select id="state" name="state" class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300" >
+                                    <option value="">Select Province</option>
+                                    <option value="Punjab">Punjab</option>
+                                    <option value="Sindh">Sindh</option>
+                                    <option value="Khyber Pakhtunkhwa">Khyber Pakhtunkhwa</option>
+                                    <option value="Balochistan">Balochistan</option>
+                                </select>
                             </div>
-                            
+
                             <div>
                                 <label for="zip-code" class="block text-sm font-medium text-gray-700 mb-1">ZIP/Postal Code</label>
                                 <input type="text" id="zip-code" name="zip-code" class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300" >
                             </div>
-                            
+
                             <div>
-                                <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
-                                <select id="country" name="country" class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300" >
-                                    <option value="">Select Country</option>
-                                    <option value="PK" selected>Pakistan</option>
-                                    <option value="US">United States</option>
-                                    <option value="CA">Canada</option>
-                                    <option value="UK">United Kingdom</option>
-                                    <option value="AU">Australia</option>
-                                    <option value="IN">India</option>
-                                    <!-- More countries would be added here -->
-                                </select>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                                <input type="text" value="Pakistan" disabled class="w-full px-4 py-2 border border-pink-100 rounded-xl bg-gray-100 text-gray-500 cursor-not-allowed">
+                                <input type="hidden" id="country" name="country" value="Pakistan">
                             </div>
                         </div>
                         

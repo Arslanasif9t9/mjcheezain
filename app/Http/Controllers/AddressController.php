@@ -17,9 +17,9 @@ class AddressController extends Controller
                 'phone' => 'required|string|max:20',
                 'address_line1' => 'required|string|max:255',
                 'city' => 'required|string|max:255',
-                'state' => 'required|string|max:255',
+                'state' => 'required|string|in:Punjab,Sindh,Khyber Pakhtunkhwa,Balochistan',
                 'zip_code' => 'required|string|max:20',
-                'country' => 'required|string|max:255',
+                'country' => 'required|string|in:Pakistan',
                 'address_type' => 'required|string|max:255'
             ]);
 
