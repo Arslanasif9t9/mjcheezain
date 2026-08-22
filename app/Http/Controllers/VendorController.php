@@ -538,6 +538,8 @@ class VendorController extends Controller
         // TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories
         $faAttrs = [];
         $faSizes = [];
+        // Jewellery & Accessories prefill data.
+        $jaAttrs = [];
 
         // If editing, get product data
         if ($id) {
@@ -565,6 +567,11 @@ class VendorController extends Controller
                     unset($decoded['sizes']);
                     $faAttrs = $decoded;
                 }
+
+                // Decode jewelry_attributes JSON for the form to prefill.
+                if (!empty($product->jewelry_attributes)) {
+                    $jaAttrs = json_decode($product->jewelry_attributes, true) ?: [];
+                }
             }
         }
 
@@ -576,7 +583,8 @@ class VendorController extends Controller
             'productImages',
             'productFaults',
             'faAttrs',
-            'faSizes'
+            'faSizes',
+            'jaAttrs'
         ));
     }
 
@@ -630,6 +638,10 @@ class VendorController extends Controller
         // TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories
         $fashionAttributes = $this->buildFashionAttributes($request, $validated);
 
+        // Jewellery & Accessories: collect the common + subcategory-specific
+        // fields into one JSON blob (vendor_products.jewelry_attributes).
+        $jewelryAttributes = $this->buildJewelryAttributes($request, $validated);
+
         $validated['product_name'] = ucwords(trim($validated['product_name'] ?? ''));
         $validated['brand'] = ucwords(trim($validated['brand'] ?? ''));
         $validated['model'] = ucwords(trim($validated['model'] ?? ''));
@@ -665,6 +677,7 @@ class VendorController extends Controller
             'position' => $isDraft ? 'draft' : 'pending',
             'part_type' => $validated['part_type'] ?? null,
             'fashion_attributes' => $fashionAttributes,
+            'jewelry_attributes' => $jewelryAttributes,
         ]);
 
         if ($customCategory) {
@@ -850,6 +863,124 @@ class VendorController extends Controller
         $product->update(['fashion_attributes' => $attrs]);
     }
 
+    /**
+     * Jewellery & Accessories: collect the common + subcategory-specific
+     * fields into one array to be stored as vendor_products.jewelry_attributes
+     * (JSON). Returns null for every other category so their product
+     * creation/update is unaffected. Same pattern as buildFashionAttributes().
+     */
+    private function buildJewelryAttributes(Request $request, array $validated): ?array
+    {
+        if (($validated['category'] ?? '') !== 'Jewellery & Accessories') {
+            return null;
+        }
+
+        $yesNo = fn ($input) => $input === 'Yes' ? 'Yes' : 'No';
+
+        $attrs = [
+            // Common jewellery fields (shared across all subcategories)
+            'material' => $request->input('jw_material') ?: null,
+            'purity' => $request->input('jw_purity') ?: null,
+            'weight' => trim((string) $request->input('jw_weight', '')) ?: null,
+            'color' => trim((string) $request->input('jw_color', '')) ?: null,
+            'gender' => $request->input('jw_gender') ?: null,
+            'warranty' => $yesNo($request->input('jw_warranty')),
+            'warranty_duration' => $request->input('jw_warranty') === 'Yes'
+                ? (trim((string) $request->input('jw_warranty_duration', '')) ?: null)
+                : null,
+        ];
+
+        $subcategory = $validated['subcategory'] ?? '';
+
+        switch ($subcategory) {
+            case 'Rings':
+                $attrs['ring_size'] = trim((string) $request->input('jws_ring_size', '')) ?: null;
+                $attrs['ring_stone_included'] = $yesNo($request->input('jws_ring_stone_included'));
+                $attrs['ring_stone_type'] = $attrs['ring_stone_included'] === 'Yes'
+                    ? ($request->input('jws_ring_stone_type') ?: null)
+                    : null;
+                break;
+
+            case 'Necklace':
+                $attrs['necklace_length'] = trim((string) $request->input('jws_necklace_length', '')) ?: null;
+                $attrs['necklace_pendant_included'] = $yesNo($request->input('jws_necklace_pendant_included'));
+                $attrs['necklace_pendant_type'] = $attrs['necklace_pendant_included'] === 'Yes'
+                    ? ($request->input('jws_necklace_pendant_type') ?: null)
+                    : null;
+                $attrs['necklace_stone_included'] = $yesNo($request->input('jws_necklace_stone_included'));
+                $attrs['necklace_stone_type'] = $attrs['necklace_stone_included'] === 'Yes'
+                    ? ($request->input('jws_necklace_stone_type') ?: null)
+                    : null;
+                break;
+
+            case 'Earrings':
+                $attrs['earring_type'] = $request->input('jws_earring_type') ?: null;
+                $attrs['earring_color'] = $request->input('jws_earring_color') ?: null;
+                $attrs['earring_stone_included'] = $yesNo($request->input('jws_earring_stone_included'));
+                $attrs['earring_stone_type'] = $attrs['earring_stone_included'] === 'Yes'
+                    ? ($request->input('jws_earring_stone_type') ?: null)
+                    : null;
+                $attrs['earring_stone_color'] = $attrs['earring_stone_included'] === 'Yes'
+                    ? ($request->input('jws_earring_stone_color') ?: null)
+                    : null;
+                break;
+
+            case 'Bangles':
+                $attrs['bangle_size'] = trim((string) $request->input('jws_bangle_size', '')) ?: null;
+                $attrs['bangle_qty'] = $request->input('jws_bangle_qty') ?: null;
+                break;
+
+            case 'Chain':
+                $attrs['chain_length'] = $request->input('jws_chain_length') ?: null;
+                $attrs['chain_style'] = $request->input('jws_chain_style') ?: null;
+                break;
+
+            case 'Pendants':
+                $attrs['pendant_shape'] = trim((string) $request->input('jws_pendant_shape', '')) ?: null;
+                $attrs['pendant_theme'] = $request->input('jws_pendant_theme') ?: null;
+                $attrs['pendant_stone_type'] = $request->input('jws_pendant_stone_type') ?: null;
+                $attrs['pendant_chain_included'] = $yesNo($request->input('jws_pendant_chain_included'));
+                break;
+
+            case 'Anklets':
+                $attrs['anklet_length'] = trim((string) $request->input('jws_anklet_length', '')) ?: null;
+                $attrs['anklet_qty'] = $request->input('jws_anklet_qty') ?: null;
+                $attrs['anklet_stone_type'] = $request->input('jws_anklet_stone_type') ?: null;
+                break;
+
+            case 'Nose Pins':
+                $attrs['nosepin_type'] = $request->input('jws_nosepin_type') ?: null;
+                $attrs['nosepin_stone_type'] = $request->input('jws_nosepin_stone_type') ?: null;
+                break;
+
+            case 'Brooches':
+                $attrs['brooch_shape'] = trim((string) $request->input('jws_brooch_shape', '')) ?: null;
+                $attrs['brooch_stone_type'] = $request->input('jws_brooch_stone_type') ?: null;
+                break;
+
+            case 'Charms':
+                $attrs['charm_type'] = $request->input('jws_charm_type') ?: null;
+                $attrs['charm_compatible'] = array_values(array_filter((array) $request->input('jws_charm_compatible', [])));
+                $attrs['charm_stone_included'] = $yesNo($request->input('jws_charm_stone_included'));
+                $attrs['charm_stone_type'] = $attrs['charm_stone_included'] === 'Yes'
+                    ? ($request->input('jws_charm_stone_type') ?: null)
+                    : null;
+                break;
+
+            case 'Jewelry Sets':
+                $attrs['set_includes'] = array_values(array_filter((array) $request->input('jws_set_includes', [])));
+                $attrs['set_pieces'] = $request->input('jws_set_pieces') !== null && $request->input('jws_set_pieces') !== ''
+                    ? (int) $request->input('jws_set_pieces')
+                    : null;
+                $attrs['set_stone_type'] = $request->input('jws_set_stone_type') ?: null;
+                $attrs['set_occasion'] = $request->input('jws_set_occasion') ?: null;
+                $attrs['set_certification'] = trim((string) $request->input('jws_set_certification', '')) ?: null;
+                break;
+        }
+
+        return $attrs;
+    }
+
     /** Queue a vendor-suggested category for admin review (deduped per vendor+name). */
     private function queueCategorySuggestion(array $validated, $productId)
     {
@@ -953,6 +1084,9 @@ class VendorController extends Controller
             $fashionAttributes['size_guide'] = $request->input('fa_size_guide_existing');
         }
 
+        // Jewellery & Accessories: rebuild jewelry_attributes from the submitted form.
+        $jewelryAttributes = $this->buildJewelryAttributes($request, $validated);
+
         // Update the product (drafts may have empty fields — keep old values as fallback)
         $product->update([
             'name' => ucwords(trim($validated['product_name'] ?? '')) ?: $product->name,
@@ -975,6 +1109,7 @@ class VendorController extends Controller
             'return_policy' => $validated['return_policy'] ?? null,
             'status' => $isDraft ? 'draft' : 'pending',
             'fashion_attributes' => $fashionAttributes ?: $product->fashion_attributes,
+            'jewelry_attributes' => $jewelryAttributes ?: $product->jewelry_attributes,
         ]);
 
         // Men's Fashion: size guide/chart image (fashion_attributes.size_guide)

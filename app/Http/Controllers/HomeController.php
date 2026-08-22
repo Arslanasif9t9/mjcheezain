@@ -183,11 +183,18 @@ class HomeController extends Controller
             $fashionAttrs = json_decode($product->fashion_attributes, true) ?: [];
         }
 
+        // Jewellery & Accessories: decode jewelry_attributes JSON for the
+        // "Specifications" tab, same pattern as fashionAttrs above.
+        $jewelryAttrs = [];
+        if (!empty($product->jewelry_attributes)) {
+            $jewelryAttrs = json_decode($product->jewelry_attributes, true) ?: [];
+        }
+
         return view('product', compact(
             'user', 'profile', 'dashboardPage', 'imgPath',
             'product', 'vendor', 'imageMain', 'images', 'vendorUser',
             'reviews', 'reviewCount', 'avgRating', 'isOwnerPreview', 'faults',
-            'fashionAttrs'
+            'fashionAttrs', 'jewelryAttrs'
         ));
     }
 

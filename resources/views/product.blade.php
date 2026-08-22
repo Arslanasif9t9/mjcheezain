@@ -839,7 +839,7 @@
                                 <th class="py-2 text-gray-500 font-normal w-1/4">Condition</th>
                                 <td class="py-2">{{ $product->pcondition }}</td>
                             </tr>
-                            <tr @if(!empty($fashionAttrs)) class="border-b" @endif>
+                            <tr @if(!empty($fashionAttrs) || !empty($jewelryAttrs)) class="border-b" @endif>
                                 <th class="py-2 text-gray-500 font-normal w-1/4">Made In</th>
                                 <td class="py-2">{{ $product->made_in }}</td>
                             </tr>
@@ -915,6 +915,95 @@
                                         </td>
                                     </tr>
                                 @endif
+                            @endif
+                            {{--
+                                Jewellery & Accessories "Product Details" — common + subcategory-specific
+                                fields decoded from jewelry_attributes (HomeController::product()).
+                                Empty/null fields are skipped; the whole block simply doesn't render
+                                for older products or any other category.
+                            --}}
+                            @if(!empty($jewelryAttrs))
+                                @php
+                                    $jaLabels = [
+                                        'material' => 'Material',
+                                        'purity' => 'Purity',
+                                        'weight' => 'Weight (grams)',
+                                        'color' => 'Color',
+                                        'gender' => 'Gender',
+                                        // Rings
+                                        'ring_size' => 'Ring Size',
+                                        'ring_stone_type' => 'Stone Type',
+                                        // Necklace
+                                        'necklace_length' => 'Necklace Length (cm)',
+                                        'necklace_pendant_type' => 'Pendant Type',
+                                        'necklace_stone_type' => 'Stone Type',
+                                        // Earrings
+                                        'earring_type' => 'Earring Type',
+                                        'earring_color' => 'Color',
+                                        'earring_stone_type' => 'Stone Type',
+                                        'earring_stone_color' => 'Stone Color',
+                                        // Bangles
+                                        'bangle_size' => 'Bangle Size',
+                                        'bangle_qty' => 'Quantity',
+                                        // Chain
+                                        'chain_length' => 'Chain Length',
+                                        'chain_style' => 'Chain Style',
+                                        // Pendants
+                                        'pendant_shape' => 'Pendant Shape',
+                                        'pendant_theme' => 'Pendant Theme',
+                                        'pendant_stone_type' => 'Stone Type',
+                                        // Anklets
+                                        'anklet_length' => 'Anklet Length',
+                                        'anklet_qty' => 'Quantity',
+                                        'anklet_stone_type' => 'Stone Type',
+                                        // Nose Pins
+                                        'nosepin_type' => 'Nose Pin Type',
+                                        'nosepin_stone_type' => 'Stone Type',
+                                        // Brooches
+                                        'brooch_shape' => 'Brooch Shape',
+                                        'brooch_stone_type' => 'Stone Type',
+                                        // Charms
+                                        'charm_type' => 'Charm Type',
+                                        'charm_stone_type' => 'Stone Type',
+                                        // Jewelry Sets
+                                        'set_pieces' => 'Number of Pieces',
+                                        'set_stone_type' => 'Stone Type',
+                                        'set_occasion' => 'Occasion',
+                                        'set_certification' => 'Certification',
+                                    ];
+                                    $jaRows = collect($jaLabels)
+                                        ->map(fn ($label, $key) => ['label' => $label, 'value' => $jewelryAttrs[$key] ?? null])
+                                        ->filter(fn ($row, $key) => $row['value'] !== null && $row['value'] !== '' && $row['value'] !== 'None');
+
+                                    $jaWarrantyValue = ($jewelryAttrs['warranty'] ?? 'No') === 'Yes'
+                                        ? 'Yes' . (!empty($jewelryAttrs['warranty_duration']) ? ' (' . $jewelryAttrs['warranty_duration'] . ')' : '')
+                                        : 'No';
+
+                                    $jaCharmCompatible = collect($jewelryAttrs['charm_compatible'] ?? [])->filter()->implode(', ');
+                                    $jaSetIncludes = collect($jewelryAttrs['set_includes'] ?? [])->filter()->implode(', ');
+                                @endphp
+                                @foreach($jaRows as $row)
+                                    <tr class="border-b">
+                                        <th class="py-2 text-gray-500 font-normal w-1/4">{{ $row['label'] }}</th>
+                                        <td class="py-2">{{ $row['value'] }}</td>
+                                    </tr>
+                                @endforeach
+                                @if($jaCharmCompatible !== '')
+                                    <tr class="border-b">
+                                        <th class="py-2 text-gray-500 font-normal w-1/4">Compatible With</th>
+                                        <td class="py-2">{{ $jaCharmCompatible }}</td>
+                                    </tr>
+                                @endif
+                                @if($jaSetIncludes !== '')
+                                    <tr class="border-b">
+                                        <th class="py-2 text-gray-500 font-normal w-1/4">Set Includes</th>
+                                        <td class="py-2">{{ $jaSetIncludes }}</td>
+                                    </tr>
+                                @endif
+                                <tr>
+                                    <th class="py-2 text-gray-500 font-normal w-1/4">Warranty</th>
+                                    <td class="py-2">{{ $jaWarrantyValue }}</td>
+                                </tr>
                             @endif
                         </table>
                     </div>

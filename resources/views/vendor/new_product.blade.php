@@ -1319,6 +1319,55 @@
                             @include('vendor.partials.mens_fashion_fields', ['fa' => $faAttrs ?? [], 'faSizes' => $faSizes ?? []])
                         </div>
 
+                        <!-- ============ Jewellery & Accessories-only fields ============
+                             Shown only when category = "Jewellery & Accessories" (toggled by
+                             toggleJewelryFields() below). Stored in jewelry_attributes (JSON).
+                             The per-subcategory block (11 partials) is toggled a second level
+                             deep by toggleJewelrySubFields(), keyed off the subcategory select. -->
+                        <!-- ============================================================== -->
+                        <div id="jewelryFieldsWrap" class="hidden">
+                            @include('vendor.partials.jewelry_common_fields', ['ja' => $jaAttrs ?? []])
+
+                            <div class="form-section">
+                                <h2>Subcategory-Specific Details</h2>
+
+                                <div id="jwSub_Rings" class="hidden">
+                                    @include('vendor.partials.jewelry.rings', ['ja' => $jaAttrs ?? []])
+                                </div>
+                                <div id="jwSub_Necklace" class="hidden">
+                                    @include('vendor.partials.jewelry.necklace', ['ja' => $jaAttrs ?? []])
+                                </div>
+                                <div id="jwSub_Earrings" class="hidden">
+                                    @include('vendor.partials.jewelry.earrings', ['ja' => $jaAttrs ?? []])
+                                </div>
+                                <div id="jwSub_Bangles" class="hidden">
+                                    @include('vendor.partials.jewelry.bangles', ['ja' => $jaAttrs ?? []])
+                                </div>
+                                <div id="jwSub_Chain" class="hidden">
+                                    @include('vendor.partials.jewelry.chain', ['ja' => $jaAttrs ?? []])
+                                </div>
+                                <div id="jwSub_Pendants" class="hidden">
+                                    @include('vendor.partials.jewelry.pendants', ['ja' => $jaAttrs ?? []])
+                                </div>
+                                <div id="jwSub_Anklets" class="hidden">
+                                    @include('vendor.partials.jewelry.anklets', ['ja' => $jaAttrs ?? []])
+                                </div>
+                                <div id="jwSub_NosePins" class="hidden">
+                                    @include('vendor.partials.jewelry.nose_pins', ['ja' => $jaAttrs ?? []])
+                                </div>
+                                <div id="jwSub_Brooches" class="hidden">
+                                    @include('vendor.partials.jewelry.brooches', ['ja' => $jaAttrs ?? []])
+                                </div>
+                                <div id="jwSub_Charms" class="hidden">
+                                    @include('vendor.partials.jewelry.charms', ['ja' => $jaAttrs ?? []])
+                                </div>
+                                <div id="jwSub_Sets" class="hidden">
+                                    @include('vendor.partials.jewelry.jewelry_sets', ['ja' => $jaAttrs ?? []])
+                                </div>
+                                <p id="jwSubNone" class="text-sm text-gray-500">Select a subcategory above to see its specific fields.</p>
+                            </div>
+                        </div>
+
                         <!-- Step 1 Nav -->
                         <div class="wizard-nav">
                             <button type="button" class="save-draft-btn"><i class="fas fa-save mr-2"></i><span class="draft-btn-text">Save as Draft</span></button>
@@ -2434,6 +2483,7 @@
                         if (subcatValue) {
                             subCategory.value = subcatValue;
                         }
+                        toggleJewelrySubFields(subCategory.value);
                     }, 100);
                 }
             } else {
@@ -2442,6 +2492,8 @@
             }
 
             toggleFashionFields(mainCategory.value);
+            toggleJewelryFields(mainCategory.value);
+            toggleJewelrySubFields(subCategory.value);
         }
 
         // Categories that use the fashion_attributes JSON block.
@@ -2456,6 +2508,76 @@
                 wrap.classList.remove('hidden');
             } else {
                 wrap.classList.add('hidden');
+            }
+        }
+
+        // Category that uses the jewelry_attributes JSON block (two-level
+        // conditional: category shows the common jewellery fields + the
+        // subcategory picker below decides which of the 11 small partials show).
+        const JEWELRY_CATEGORIES = ["Jewellery & Accessories"];
+
+        function toggleJewelryFields(categoryValue) {
+            const wrap = document.getElementById('jewelryFieldsWrap');
+            if (!wrap) return;
+            if (JEWELRY_CATEGORIES.includes(categoryValue)) {
+                wrap.classList.remove('hidden');
+            } else {
+                wrap.classList.add('hidden');
+            }
+        }
+
+        // Subcategory name -> its jewelry partial wrap id.
+        const JEWELRY_SUB_WRAP_IDS = {
+            'Rings': 'jwSub_Rings',
+            'Necklace': 'jwSub_Necklace',
+            'Earrings': 'jwSub_Earrings',
+            'Bangles': 'jwSub_Bangles',
+            'Chain': 'jwSub_Chain',
+            'Pendants': 'jwSub_Pendants',
+            'Anklets': 'jwSub_Anklets',
+            'Nose Pins': 'jwSub_NosePins',
+            'Brooches': 'jwSub_Brooches',
+            'Charms': 'jwSub_Charms',
+            'Jewelry Sets': 'jwSub_Sets',
+        };
+
+        function toggleJewelrySubFields(subcategoryValue) {
+            const noneMsg = document.getElementById('jwSubNone');
+            const matchedId = JEWELRY_SUB_WRAP_IDS[subcategoryValue];
+            Object.values(JEWELRY_SUB_WRAP_IDS).forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.classList.toggle('hidden', id !== matchedId);
+            });
+            if (noneMsg) {
+                noneMsg.classList.toggle('hidden', !!matchedId);
+            }
+        }
+
+        // Jewellery Material -> Purity (Gold/Silver only) conditional options
+        const JEWELRY_PURITY_OPTIONS = {
+            'Gold': ['10K', '14K', '18K', '21K', '22K', '24K'],
+            'Silver': ['925 Silver (Sterling Silver)', '999 Silver (Fine Silver)'],
+        };
+
+        function updateJewelryPurity(preserveExisting) {
+            const materialSelect = document.getElementById('jw_material');
+            const wrap = document.getElementById('jw_purity_wrap');
+            const puritySelect = document.getElementById('jw_purity');
+            if (!materialSelect || !wrap || !puritySelect) return;
+
+            const options = JEWELRY_PURITY_OPTIONS[materialSelect.value];
+            if (options) {
+                const prefill = preserveExisting ? (puritySelect.dataset.prefill || '') : '';
+                puritySelect.innerHTML = '<option value="">Select purity</option>' +
+                    options.map(o => `<option value="${o}">${o}</option>`).join('');
+                if (prefill) {
+                    puritySelect.value = prefill;
+                }
+                wrap.classList.remove('hidden');
+            } else {
+                wrap.classList.add('hidden');
+                puritySelect.innerHTML = '<option value="">Select purity</option>';
             }
         }
 
@@ -2502,6 +2624,43 @@
             // Initial show/hide on page load (covers edit mode where the
             // category select is pre-selected before any 'change' event fires)
             toggleFashionFields(document.getElementById('mainCategory')?.value);
+            toggleJewelryFields(document.getElementById('mainCategory')?.value);
+            toggleJewelrySubFields(document.getElementById('subCategory')?.value);
+        });
+
+        // Jewellery & Accessories: subcategory-level toggle + Material/Purity +
+        // every "Stone Included (Yes/No) -> Stone Type" conditional pair.
+        document.addEventListener('DOMContentLoaded', function () {
+            const subCategory = document.getElementById('subCategory');
+            if (subCategory) {
+                subCategory.addEventListener('change', function () {
+                    toggleJewelrySubFields(this.value);
+                });
+            }
+
+            const materialSelect = document.getElementById('jw_material');
+            if (materialSelect) {
+                materialSelect.addEventListener('change', () => updateJewelryPurity(false));
+                // Prefill (edit mode): rebuild options once for the current material,
+                // preserving the saved purity value.
+                updateJewelryPurity(true);
+            }
+
+            function wireYesNoToggle(selectId, wrapId) {
+                const select = document.getElementById(selectId);
+                const wrap = document.getElementById(wrapId);
+                if (!select || !wrap) return;
+                const update = () => wrap.classList.toggle('hidden', select.value !== 'Yes');
+                select.addEventListener('change', update);
+                update();
+            }
+
+            wireYesNoToggle('jws_ring_stone_included', 'jws_ring_stone_type_wrap');
+            wireYesNoToggle('jws_necklace_pendant_included', 'jws_necklace_pendant_type_wrap');
+            wireYesNoToggle('jws_necklace_stone_included', 'jws_necklace_stone_type_wrap');
+            wireYesNoToggle('jws_earring_stone_included', 'jws_earring_stone_type_wrap');
+            wireYesNoToggle('jws_earring_stone_included', 'jws_earring_stone_color_wrap');
+            wireYesNoToggle('jws_charm_stone_included', 'jws_charm_stone_type_wrap');
         });
 
         // Setup video upload
