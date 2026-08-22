@@ -123,6 +123,9 @@ class CategoryCatalog
             // Men's-Fashion-only attribute handling and resources/views/vendor/new_product.blade.php.
             // TODO: pattern for remaining 4 fashion categories (Women's Fashion clothing, Kids & Baby, Footwear, Fashion Accessories & Bags)
             ["Men's Fashion", '👔', true, false, ['Shirt', 'T-Shirt', 'Jeans', 'Pants', 'Shalwar Kameez', 'Kurta', 'Suit', 'Jacket', 'Coat', 'Hoodie', 'Sweater', 'Shorts', 'Underwear', 'Nightwear']],
+            // Own top-level category, same pattern as Men's Fashion — see buildJewelryAttributes()
+            // in VendorController and resources/views/vendor/partials/jewelry_common_fields.blade.php.
+            ['Jewellery & Accessories', '💍', true, false, ['Rings', 'Necklace', 'Earrings', 'Bangles', 'Chain', 'Pendants', 'Anklets', 'Nose Pins', 'Brooches', 'Charms', 'Jewelry Sets']],
             ['Mobile Accessories', '📱', true, false, ['Mobile Covers', 'Chargers', 'Handsfree & Earphones', 'Power Banks', 'Screen Protectors']],
             ['Home & Living', '🏠', true, false, ['Decoration Items', 'LED Lights', 'Clocks', 'Wall Frames', 'Artificial Flowers']],
             ['Gifts & General Items', '🎁', true, false, ['Keychains', 'Mugs', 'Gift Boxes', 'Custom Printed Items', 'Souvenirs']],

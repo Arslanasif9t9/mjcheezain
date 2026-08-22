@@ -38,14 +38,18 @@ class VendorProduct extends Model
         'approved_at',
         'video',
         'part_type',
-        'fashion_attributes'
+        'fashion_attributes',
+        'jewelry_attributes'
     ];
 
     // fashion_attributes: category-specific fields stored as JSON (currently
     // only Men's Fashion; see storeProduct() in VendorController).
     // TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories
+    // jewelry_attributes: same pattern for Jewellery & Accessories (own bucket,
+    // not reused from fashion_attributes; see buildJewelryAttributes() in VendorController).
     protected $casts = [
         'fashion_attributes' => 'array',
+        'jewelry_attributes' => 'array',
         'free_delivery' => 'boolean',
     ];
 
