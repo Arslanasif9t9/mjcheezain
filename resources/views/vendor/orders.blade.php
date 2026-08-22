@@ -465,9 +465,9 @@
                                         ->first();
                                 @endphp
                                 
-                                <tr class="order-row hover:bg-gray-50" data-order-id="{{ $order->id }}">
+                                <tr class="order-row hover:bg-gray-50" data-order-id="{{ $order->id }}" data-order-ref="{{ $order->order_id ? \App\Support\RefId::order($order->order_id) : '—' }}">
                                     <td class="whitespace-nowrap px-6 py-4 font-medium text-black">
-                                        ORD-{{ str_pad($order->id, 6, '0', STR_PAD_LEFT) }}-{{ \Carbon\Carbon::parse($order->updated_at)->format('y') }}
+                                        {{ $order->order_id ? \App\Support\RefId::order($order->order_id) : '—' }}
                                     </td>
                                     <td class="whitespacenowrap px-6 py-4 max-w-28">
                                         @if($product)
@@ -680,8 +680,9 @@
             currentOrderStatus = currentStatus;
             selectedStatus = null;
             
-            // Set order ID in modal
-            document.getElementById('modalOrderId').textContent = `ORD-${orderId}`;
+            // Set order ID in modal (show the real MJ-ORD-###### reference, not the internal line-item id)
+            const statusRow = document.querySelector(`tr[data-order-id="${orderId}"]`);
+            document.getElementById('modalOrderId').textContent = statusRow ? statusRow.getAttribute('data-order-ref') : `ORD-${orderId}`;
             
             // Reset selection
             document.querySelectorAll('.status-option').forEach(option => {
@@ -843,17 +844,17 @@
         // Open print label modal
         function openPrintLabelModal(orderId) {
             currentLabelOrderId = orderId;
-            
-            // Set order ID in modal
-            document.getElementById('labelOrderId').textContent = `ORD-${orderId}`;
-            
+
             // Get order data from the table row
             const row = document.querySelector(`tr[data-order-id="${orderId}"]`);
             if (!row) {
                 showNotification('Order data not found', 'error');
                 return;
             }
-            
+
+            // Set order ID in modal (real MJ-ORD-###### reference, matches customer view & label body)
+            document.getElementById('labelOrderId').textContent = row.getAttribute('data-order-ref');
+
             // Extract data from the table row
             const orderNumber = row.cells[0].textContent.trim();
             const productName = row.cells[1].querySelector('.font-medium')?.textContent || row.cells[1].textContent.trim();

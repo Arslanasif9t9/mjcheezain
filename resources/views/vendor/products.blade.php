@@ -156,7 +156,7 @@
                                 $m_status_class = 'bg-red-100 text-red-700';
                                 $m_status_text = 'Out of Stock';
                             }
-                            $m_prd_code = 'PRD-' . str_pad($product->id, 6, '0', STR_PAD_LEFT) . '-' . \Carbon\Carbon::parse($product->updated_at)->format('y');
+                            $m_prd_code = \App\Support\RefId::product($product->id);
                         @endphp
                         <div class="product-card-m app-card p-3"
                              data-position="{{ $product->position ?? 'all' }}"

@@ -429,7 +429,7 @@
                                             <i class="fas fa-box text-brand text-sm"></i>
                                         </div>
                                         <div class="min-w-0">
-                                            <h3 class="text-sm md:text-lg font-bold text-gray-900 truncate">#ORD-{{ $order->id }}</h3>
+                                            <h3 class="text-sm md:text-lg font-bold text-gray-900 truncate">{{ \App\Support\RefId::order($order->id) }}</h3>
                                             <p class="text-[11px] md:text-sm text-gray-400">{{ date('M d, Y', strtotime($order->order_date)) }} · {{ $order->quantity }} item(s)</p>
                                         </div>
                                     </div>
@@ -632,7 +632,7 @@
                                                             <!-- For non-delivered products -->
                                                             <button 
                                                                 class="px-4 py-2 bg-white border border-pink-200 rounded-xl text-sm font-semibold text-brand hover:bg-pink-50 transition flex items-center justify-center track-order-btn w-full sm:w-auto"
-                                                                data-order-id="ORD-{{ $order->id }}"
+                                                                data-order-id="{{ \App\Support\RefId::order($order->id) }}"
                                                                 data-order-status="{{ $timelineStatus }}"
                                                             >
                                                                 <i class="fas fa-truck mr-2"></i>Track

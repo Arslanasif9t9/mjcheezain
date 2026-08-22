@@ -256,7 +256,7 @@
                                         @endphp
 
                                         <tr id="vendor-row-{{ $userId }}">
-                                            <td class="text-nowrap">USR-{{ str_pad($vendor->user_id, 6, '0', STR_PAD_LEFT) }}-{{ \Carbon\Carbon::parse($vendor->created_at)->format('y') }}</td>
+                                            <td class="text-nowrap">{{ \App\Support\RefId::vendor($userId) }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <img src="{{ asset('storage/vendor/profile/' . ($vendorBasic->profile_picture ?? 'default_profile.webp')) }}"

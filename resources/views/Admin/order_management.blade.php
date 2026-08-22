@@ -98,7 +98,7 @@
                         @forelse($orders as $o)
                             @php $st = $o->status ?: 'order placed'; @endphp
                             <tr class="order-row hover:bg-[#FFF6F0]/50 transition" data-status="{{ $st }}">
-                                <td class="px-5 py-3.5 font-semibold text-gray-700 whitespace-nowrap">#{{ $o->order_id }}</td>
+                                <td class="px-5 py-3.5 font-semibold text-gray-700 whitespace-nowrap">{{ \App\Support\RefId::order($o->order_id) }}</td>
                                 <td class="px-5 py-3.5">
                                     <div class="flex items-center gap-3 min-w-[180px]">
                                         <img src="/storage/vendor/products/images/{{ $o->product_image }}" alt=""

@@ -252,7 +252,7 @@
                                 @if(count($autoProducts) > 0)
                                     @foreach($autoProducts as $product)
                                         <tr>
-                                            <td>{{ $product->id }}</td>
+                                            <td>{{ \App\Support\RefId::product($product->id) }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <span>{{ $product->product_name }}</span>
@@ -335,7 +335,7 @@
                                     @foreach($products as $product)
                                         @php $isDraft = ($product->position === 'draft'); @endphp
                                         <tr>
-                                            <td>{{ $product->id }}</td>
+                                            <td>{{ \App\Support\RefId::product($product->id) }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <span>{{ $product->name }}</span>

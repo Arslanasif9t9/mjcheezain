@@ -77,6 +77,7 @@
                 <table class="w-full text-sm min-w-[800px]">
                     <thead>
                         <tr class="text-left text-[11px] uppercase tracking-wide text-gray-500 bg-[#FFF6F0]/70">
+                            <th class="px-5 py-3.5">ID</th>
                             <th class="px-5 py-3.5">Customer</th>
                             <th class="px-5 py-3.5">Email</th>
                             <th class="px-5 py-3.5">Phone</th>
@@ -87,6 +88,7 @@
                     <tbody class="divide-y divide-gray-100">
                         @forelse($rows as $r)
                             <tr class="customer-row hover:bg-[#FFF6F0]/50 transition">
+                                <td class="px-5 py-3.5 font-semibold text-gray-700 whitespace-nowrap">{{ \App\Support\RefId::customer($r->user_id) }}</td>
                                 <td class="px-5 py-3.5">
                                     <div class="flex items-center gap-3">
                                         @if(!empty($r->profile_image))
@@ -118,7 +120,7 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr><td colspan="5" class="px-5 py-12 text-center text-gray-400">
+                            <tr><td colspan="6" class="px-5 py-12 text-center text-gray-400">
                                 <i class="fas fa-inbox text-3xl mb-2 block text-gray-300"></i>No customers yet.
                             </td></tr>
                         @endforelse
