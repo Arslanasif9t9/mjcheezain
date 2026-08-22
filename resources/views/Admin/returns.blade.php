@@ -125,10 +125,22 @@
                                     <select class="status-select text-xs font-semibold rounded-full px-3 py-1.5 border cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand/40"
                                             data-id="{{ $r->id }}" data-prev="{{ $st }}"
                                             onchange="changeStatus(this)">
-                                        @foreach(['pending', 'vendor_reviewed', 'approved', 'rejected', 'processing', 'refunded', 'completed'] as $s)
-                                            <option value="{{ $s }}" {{ $st === $s ? 'selected' : '' }}>{{ ucfirst($s) }}</option>
+                                        @foreach(['pending', 'vendor_reviewed', 'approved', 'rejected', 'processing', 'received', 'qc_failed', 'refunded', 'completed'] as $s)
+                                            <option value="{{ $s }}" {{ $st === $s ? 'selected' : '' }}>{{ ucwords(str_replace('_', ' ', $s)) }}</option>
                                         @endforeach
                                     </select>
+                                    @if($st === 'received')
+                                        <div class="flex gap-1.5 mt-2">
+                                            <button type="button" onclick="qualityCheck({{ $r->id }}, 'refunded')"
+                                                    class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-green-100 text-green-700 hover:bg-green-200">
+                                                <i class="fas fa-check mr-0.5"></i> QC Pass
+                                            </button>
+                                            <button type="button" onclick="qualityCheck({{ $r->id }}, 'qc_failed')"
+                                                    class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-red-100 text-red-700 hover:bg-red-200">
+                                                <i class="fas fa-times mr-0.5"></i> QC Fail
+                                            </button>
+                                        </div>
+                                    @endif
                                 </td>
                             </tr>
                         @empty
@@ -174,6 +186,8 @@
         'approved':   ['#DBEAFE', '#1D4ED8', '#BFDBFE'],
         'rejected':   ['#FEE2E2', '#B91C1C', '#FECACA'],
         'processing': ['#EDE9FE', '#6D28D9', '#DDD6FE'],
+        'received':   ['#FFEDD5', '#C2410C', '#FED7AA'],
+        'qc_failed':  ['#FEE2E2', '#B91C1C', '#FECACA'],
         'refunded':   ['#DCFCE7', '#15803D', '#BBF7D0'],
         'completed':  ['#D1FAE5', '#047857', '#A7F3D0'],
     };
@@ -193,9 +207,21 @@
             sel.dataset.prev = next;
             paintSelect(sel);
             toast(res.message || 'Return status updated.');
+            if (next === 'received' || prev === 'received') location.reload();
         } else {
             sel.value = prev;
             paintSelect(sel);
+            toast(res.message || 'Update failed.', false);
+        }
+    }
+
+    // Quick Quality Check action shown once a return is marked "received".
+    async function qualityCheck(id, verdictStatus) {
+        const res = await post('/admin/returns/' + id + '/status', { status: verdictStatus });
+        if (res.success) {
+            toast(res.message || (verdictStatus === 'refunded' ? 'Quality check passed — refund recorded.' : 'Quality check failed — return rejected.'));
+            location.reload();
+        } else {
             toast(res.message || 'Update failed.', false);
         }
     }

@@ -45,7 +45,7 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                         <h1 class="text-2xl font-bold mb-2">Track Return Request</h1>
-                        <p class="opacity-90">Return ID: RET-{{ str_pad($return->id, 6, '0', STR_PAD_LEFT) }}</p>
+                        <p class="opacity-90">Return ID: {{ $return->return_number ?? ('RET-' . str_pad($return->id, 6, '0', STR_PAD_LEFT)) }}</p>
                     </div>
                     <a href="{{ route('customer.returns.index') }}" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg w-full sm:w-auto text-center">
                         <i class="fas fa-arrow-left mr-2"></i> Back to Returns
@@ -54,11 +54,26 @@
             </div>
 
             <div class="p-4 sm:p-8">
+                @php
+                    $statusLabels = [
+                        'pending' => 'Pending',
+                        'vendor_reviewed' => 'Vendor Reviewed',
+                        'approved' => 'Approved',
+                        'rejected' => 'Rejected',
+                        'processing' => 'Return / Pickup In Progress',
+                        'received' => 'Product Received — Under Quality Check',
+                        'qc_failed' => 'Quality Check Failed — Product Being Returned To You',
+                        'refunded' => 'Refund Processed',
+                        'completed' => 'Completed',
+                        'cancelled' => 'Cancelled',
+                    ];
+                @endphp
+
                 <!-- Status Summary -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <div class="brand-gradient-soft rounded-xl p-5 border border-pink-100">
                         <p class="text-sm text-brand mb-1 font-semibold">Current Status</p>
-                        <p class="text-xl font-bold text-gray-800 capitalize">{{ $return->status }}</p>
+                        <p class="text-xl font-bold text-gray-800">{{ $statusLabels[$return->status] ?? ucfirst($return->status) }}</p>
                     </div>
                     <div class="bg-green-50 rounded-xl p-5">
                         <p class="text-sm text-green-600 mb-1">Refund Amount</p>
@@ -74,6 +89,24 @@
                     </div>
                 </div>
 
+                <!-- Quality-check / refund banner -->
+                @if($return->status === 'received')
+                    <div class="mb-8 bg-orange-50 border border-orange-200 rounded-xl p-4 sm:p-6">
+                        <h3 class="font-bold text-orange-800 mb-1"><i class="fas fa-magnifying-glass mr-2"></i> Product Received — Under Quality Check</h3>
+                        <p class="text-orange-700 text-sm">We've received your returned item and our team is inspecting it. You'll be notified as soon as the quality check is complete.</p>
+                    </div>
+                @elseif($return->status === 'qc_failed')
+                    <div class="mb-8 bg-red-50 border border-red-200 rounded-xl p-4 sm:p-6">
+                        <h3 class="font-bold text-red-800 mb-1"><i class="fas fa-triangle-exclamation mr-2"></i> Quality Check Failed — Product Being Returned To You</h3>
+                        <p class="text-red-700 text-sm">Our team inspected the returned item and it didn't pass quality check, so this return has been rejected — no refund will be issued and the product is being sent back to you.</p>
+                    </div>
+                @elseif(in_array($return->status, ['refunded', 'completed']))
+                    <div class="mb-8 bg-green-50 border border-green-200 rounded-xl p-4 sm:p-6">
+                        <h3 class="font-bold text-green-800 mb-1"><i class="fas fa-circle-check mr-2"></i> Refund Processed</h3>
+                        <p class="text-green-700 text-sm">Your refund has been processed. It may take a few business days to reflect depending on your payment method.</p>
+                    </div>
+                @endif
+
                 <!-- Progress Timeline -->
                 <div class="mb-12">
                     <h2 class="text-xl font-bold text-gray-800 mb-6">Return Process</h2>
@@ -81,20 +114,27 @@
                     @php
                         $steps = [
                             'request_submitted' => ['Request Submitted', 'Your return request has been submitted'],
-                            'under_review' => ['Under Review', 'Vendor is reviewing your request'],
-                            'approved' => ['Request Approved', 'Return request approved by vendor'],
+                            'under_review' => ['Under Review', 'Vendor/Admin is reviewing your request'],
+                            'approved' => ['Request Approved', 'Return request approved by admin'],
                             'pickup_scheduled' => ['Pickup Scheduled', 'Pickup has been scheduled'],
                             'pickup_completed' => ['Pickup Completed', 'Item picked up for return'],
-                            'item_received' => ['Item Received', 'Vendor received the returned item'],
-                            'quality_check' => ['Quality Check', 'Item undergoing quality inspection'],
-                            'refund_processing' => ['Refund Processing', 'Refund being processed'],
-                            'refunded' => ['Refunded', 'Refund completed successfully'],
-                            'completed' => ['Completed', 'Return process completed']
+                            'item_received' => ['Product Received — Under Quality Check', 'We received your item and it is being inspected'],
                         ];
-                        
+
+                        // The outcome after quality check branches: pass -> refunded, fail ->
+                        // qc_failed. Only the branch that actually happened is shown, so the
+                        // timeline never shows both a refund and a rejection for the same return.
+                        if ($return->status === 'qc_failed') {
+                            $steps['qc_failed'] = ['Quality Check Failed', 'Product is being sent back to you — no refund'];
+                        } else {
+                            $steps['refund_processing'] = ['Refund Processing', 'Refund being processed'];
+                            $steps['refunded'] = ['Refunded', 'Refund completed successfully'];
+                            $steps['completed'] = ['Completed', 'Return process completed'];
+                        }
+
                         $currentStep = 'request_submitted';
                         $stepKeys = array_keys($steps);
-                        
+
                         // Find current step from tracking
                         foreach ($tracking as $track) {
                             if ($track->step === 'request_submitted') $currentStep = 'request_submitted';
@@ -103,13 +143,15 @@
                             if ($track->step === 'pickup_scheduled') $currentStep = 'pickup_scheduled';
                             if ($track->step === 'pickup_completed') $currentStep = 'pickup_completed';
                             if ($track->step === 'item_received') $currentStep = 'item_received';
-                            if ($track->step === 'quality_check') $currentStep = 'quality_check';
+                            if ($track->step === 'qc_failed') $currentStep = 'qc_failed';
+                            if ($track->step === 'quality_check') $currentStep = 'item_received';
                             if ($track->step === 'refund_processing') $currentStep = 'refund_processing';
                             if ($track->step === 'refunded') $currentStep = 'refunded';
                             if ($track->step === 'completed') $currentStep = 'completed';
                         }
-                        
+
                         $currentIndex = array_search($currentStep, $stepKeys);
+                        if ($currentIndex === false) $currentIndex = 0;
                     @endphp
                     
                     <div class="relative">
@@ -154,6 +196,16 @@
                                  onclick="openImageModal(this.src)">
                         @endforeach
                     </div>
+                </div>
+                @endif
+
+                <!-- Video Section -->
+                @if(!empty($return->return_video))
+                <div class="mb-8">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Uploaded Video</h2>
+                    <video controls class="w-full max-w-md rounded-lg border border-gray-200">
+                        <source src="{{ asset('storage/' . $return->return_video) }}">
+                    </video>
                 </div>
                 @endif
 

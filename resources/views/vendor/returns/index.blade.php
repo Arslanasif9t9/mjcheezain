@@ -744,17 +744,49 @@
             </div>
 
             <!-- Vendor Comment -->
-            <div class="mb-6">
-                <h4 class="font-semibold text-gray-700 mb-2">Your Comment</h4>
+            <div class="mb-6 app-card p-4" style="border:1px solid rgba(232,93,133,0.12);">
+                <h4 class="font-semibold text-gray-800 mb-1 flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs" style="background:linear-gradient(115deg,#FF7DA0,#FFC275)">
+                        <i class="fas fa-comment-dots"></i>
+                    </span>
+                    Your Comment
+                </h4>
                 <p class="text-xs text-gray-500 mb-3">
                     Vendors can only share an opinion on the request (e.g. "this is not our fault,
                     customer opened the seal" or "yes, we sent the wrong item"). MJ Cheezain Admin
                     reviews your comment together with the customer's request and makes the final
                     approve/reject decision.
                 </p>
+
+                <!-- Quick-select reason chips: purely to speed up typing, they just prefill/append
+                     text into the comment box below — the free-text comment is still what's saved. -->
+                <div class="mb-3">
+                    <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wide mb-2">Quick reasons (optional)</p>
+                    <div class="flex flex-wrap gap-2" id="reasonChips">
+                        <button type="button" class="reason-chip px-3 py-1.5 rounded-full text-xs font-semibold border transition"
+                                style="border-color:#E85D85;color:#E85D85;background:#fff;" data-text="This is not our fault.">
+                            <i class="fas fa-shield-halved mr-1"></i> Not our fault
+                        </button>
+                        <button type="button" class="reason-chip px-3 py-1.5 rounded-full text-xs font-semibold border transition"
+                                style="border-color:#E85D85;color:#E85D85;background:#fff;" data-text="Item was fine and checked when it was shipped.">
+                            <i class="fas fa-box-check mr-1"></i> Item was fine when shipped
+                        </button>
+                        <button type="button" class="reason-chip px-3 py-1.5 rounded-full text-xs font-semibold border transition"
+                                style="border-color:#E85D85;color:#E85D85;background:#fff;" data-text="This looks like the customer changed their mind, not a product issue.">
+                            <i class="fas fa-user-clock mr-1"></i> Customer changed mind
+                        </button>
+                        <button type="button" class="reason-chip px-3 py-1.5 rounded-full text-xs font-semibold border transition"
+                                style="border-color:#E85D85;color:#E85D85;background:#fff;" data-text="Yes, we agree there was an issue with this item.">
+                            <i class="fas fa-check mr-1"></i> We agree, issue confirmed
+                        </button>
+                    </div>
+                </div>
+
                 <textarea id="vendorCommentInput" rows="4" maxlength="1000"
-                          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-2 focus:outline-none transition"
+                          style="--tw-ring-color:#FFC1D3;"
                           placeholder="Add your comment about this return request..."></textarea>
+                <p class="text-right text-[11px] text-gray-400 mt-1"><span id="vendorCommentCount">0</span>/1000</p>
             </div>
 
             <!-- Additional Options -->
@@ -933,9 +965,16 @@
             document.getElementById('currentStatusBadge').innerHTML = currentStatus.charAt(0).toUpperCase() + currentStatus.slice(1);
             document.getElementById('currentStatusBadge').className = `badge ${getStatusColor(currentStatus)} text-white`;
             
-            // Reset the comment box
+            // Reset the comment box and quick-reason chips
             const commentInput = document.getElementById('vendorCommentInput');
             if (commentInput) commentInput.value = '';
+            const commentCounter = document.getElementById('vendorCommentCount');
+            if (commentCounter) commentCounter.textContent = '0';
+            document.querySelectorAll('.reason-chip').forEach(function (chip) {
+                chip.classList.remove('is-active');
+                chip.style.background = '#fff';
+                chip.style.color = '#E85D85';
+            });
 
             // Disable update button initially (enabled once a comment is typed)
             document.getElementById('updateStatusBtn').disabled = true;
@@ -971,11 +1010,38 @@
             selectedStatus = null;
         }
         
-        // Enable the submit button once the vendor types a comment
+        // Enable the submit button once the vendor types a comment, and keep the char counter live
         document.addEventListener('input', function(e) {
             if (e.target && e.target.id === 'vendorCommentInput') {
                 document.getElementById('updateStatusBtn').disabled = e.target.value.trim().length === 0;
+                const counter = document.getElementById('vendorCommentCount');
+                if (counter) counter.textContent = e.target.value.length;
             }
+        });
+
+        // Quick reason chips: append (or toggle off) their text into the comment box.
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.reason-chip').forEach(function (chip) {
+                chip.addEventListener('click', function () {
+                    const textarea = document.getElementById('vendorCommentInput');
+                    const phrase = chip.getAttribute('data-text');
+                    const isActive = chip.classList.contains('is-active');
+
+                    if (isActive) {
+                        textarea.value = textarea.value.split(phrase).join('').replace(/\s{2,}/g, ' ').trim();
+                        chip.classList.remove('is-active');
+                        chip.style.background = '#fff';
+                        chip.style.color = '#E85D85';
+                    } else {
+                        textarea.value = (textarea.value.trim() ? textarea.value.trim() + ' ' : '') + phrase;
+                        chip.classList.add('is-active');
+                        chip.style.background = 'linear-gradient(115deg,#FF7DA0,#FFC275)';
+                        chip.style.color = '#fff';
+                    }
+
+                    textarea.dispatchEvent(new Event('input', { bubbles: true }));
+                });
+            });
         });
 
         // Submit the vendor's comment (opinion only — no status/decision change)

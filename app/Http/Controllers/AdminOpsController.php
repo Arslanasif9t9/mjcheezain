@@ -180,27 +180,46 @@ class AdminOpsController extends Controller
     // Only Admin can set a final decision on a return (approve/reject) or move it through
     // the post-approval flow. The vendor can only leave a comment (see
     // VendorReturnController::updateStatus) — they never reach this endpoint.
+    //
+    // Full flow: pending/vendor_reviewed -> approved -> processing (pickup/courier in
+    // progress) -> received (product physically back) -> Quality Check:
+    //   Pass -> refunded (terminal, customer refunded)
+    //   Fail -> qc_failed (terminal, no refund, product goes back to the customer)
+    // rejected and qc_failed are both terminal "no refund" outcomes and can never be reopened
+    // or slide into the refund pipeline.
     public function updateReturnStatus(Request $request, $id)
     {
-        $request->validate(['status' => 'required|in:pending,vendor_reviewed,approved,rejected,processing,refunded,completed']);
+        $request->validate(['status' => 'required|in:pending,vendor_reviewed,approved,rejected,processing,received,qc_failed,refunded,completed']);
 
         $r = DB::table('return_requests')->where('id', $id)->first();
         if (!$r) return response()->json(['success' => false, 'message' => 'Return request not found.'], 404);
 
-        // A rejected (or still undecided) return must never slide into the refund/processing/
-        // completed pipeline — Admin has to explicitly approve it first. This is what keeps
-        // "reject = no refund, no return proceeds" true regardless of what gets posted here.
-        $postApprovalStates = ['processing', 'refunded', 'completed'];
+        // Terminal "no refund" outcomes must never be reopened.
+        $terminal = ['rejected', 'qc_failed'];
+        if (in_array($r->status, $terminal, true) && $request->status !== $r->status) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This return was already ' . str_replace('_', ' ', $r->status) . ' and cannot be reopened.'
+            ], 422);
+        }
+
+        // A rejected (or still undecided) return must never slide into the pickup/received/
+        // refund/completed pipeline — Admin has to explicitly approve it first. This is what
+        // keeps "reject = no refund, no return proceeds" true regardless of what gets posted here.
+        $postApprovalStates = ['processing', 'received', 'refunded', 'completed', 'qc_failed'];
         if (in_array($request->status, $postApprovalStates, true) && !in_array($r->status, array_merge(['approved'], $postApprovalStates), true)) {
             return response()->json([
                 'success' => false,
                 'message' => 'This return must be approved before it can move to "' . $request->status . '".'
             ], 422);
         }
-        if ($r->status === 'rejected' && $request->status !== 'rejected') {
+
+        // The Quality Check verdict (pass -> refunded, fail -> qc_failed) can only be recorded
+        // once the product has been marked physically received back.
+        if (in_array($request->status, ['refunded', 'qc_failed'], true) && !in_array($r->status, ['received', 'refunded', 'qc_failed', 'completed'], true)) {
             return response()->json([
                 'success' => false,
-                'message' => 'This return was already rejected and cannot be reopened.'
+                'message' => 'Mark this return "received" first, then record the quality-check result.'
             ], 422);
         }
 
@@ -213,14 +232,21 @@ class AdminOpsController extends Controller
                 'approved' => 'approved',
                 'rejected' => 'rejected',
                 'processing' => 'refund_processing',
+                'received' => 'item_received',
+                'qc_failed' => 'qc_failed',
                 'refunded' => 'refunded',
                 'completed' => 'completed',
+            ];
+            $descriptions = [
+                'received' => 'Product received back — under quality check.',
+                'qc_failed' => 'Quality check failed — return rejected, product is being sent back to the customer.',
+                'refunded' => 'Quality check passed — refund processed.',
             ];
             DB::table('return_tracking')->insert([
                 'return_id' => $id,
                 'step' => $stepMap[$request->status] ?? 'under_review',
                 'status' => 'completed',
-                'description' => 'Updated by admin',
+                'description' => $descriptions[$request->status] ?? 'Updated by admin',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -228,7 +254,17 @@ class AdminOpsController extends Controller
             \Log::warning('return_tracking insert (admin) failed: ' . $e->getMessage());
         }
 
-        $this->notify($r->customer_id, 'Return update', 'Aapki return request ka status ab: ' . ucfirst($request->status) . ' (admin review).', 'return');
+        $notifyMessages = [
+            'received' => 'Aapka return item humein mil gaya hai — ab quality check ho raha hai.',
+            'qc_failed' => 'Quality check mein return item pass nahi hua — refund nahi hoga, item aapko wapas bheja ja raha hai.',
+            'refunded' => 'Quality check pass ho gaya — aapka refund process kar diya gaya hai.',
+        ];
+        $this->notify(
+            $r->customer_id,
+            'Return update',
+            $notifyMessages[$request->status] ?? ('Aapki return request ka status ab: ' . ucfirst($request->status) . ' (admin review).'),
+            'return'
+        );
 
         return response()->json(['success' => true, 'message' => 'Return status updated.']);
     }

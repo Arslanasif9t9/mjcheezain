@@ -57,7 +57,7 @@
                                     <div class="flex-1 min-w-0">
                                         <div class="flex flex-wrap items-center gap-2 mb-1">
                                             <span class="text-xs font-bold text-[#E85D85] tracking-wide">
-                                                RET-{{ str_pad($return->id, 6, '0', STR_PAD_LEFT) }}
+                                                {{ $return->return_number ?? ('RET-' . str_pad($return->id, 6, '0', STR_PAD_LEFT)) }}
                                             </span>
                                             <span class="px-3 py-0.5 rounded-full text-xs font-semibold capitalize {{ $statusStyle }}">
                                                 {{ $return->status }}
