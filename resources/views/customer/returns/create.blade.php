@@ -7,6 +7,7 @@
     <title>Return Item | MJ Cheezain</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <x-customer.theme />
+    <script src="{{ asset('js/fault-annotator.js') }}"></script>
     <style>
         .dropzone { border: 2px dashed #FFC1D3; border-radius: 14px; background: #fff; }
         .dropzone.active { border-color: #E85D85; background-color: #FFF1F5; }
@@ -144,16 +145,47 @@
                 <!-- Image Upload -->
                 <div class="mb-8">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Upload Images (Optional)</label>
-                    <p class="text-sm text-gray-500 mb-4">Upload photos to help us understand the issue better</p>
-                    
+                    <p class="text-sm text-gray-500 mb-4">Upload photos to help us understand the issue better. Tap the <i class="fas fa-pencil-alt"></i> pencil on an uploaded photo to circle or mark exactly where the problem is.</p>
+
                     <div id="dropzone" class="dropzone p-8 text-center">
                         <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
                         <p class="text-gray-600 mb-2">Drag & drop images here or click to browse</p>
                         <p class="text-sm text-gray-500">Maximum 5 images, 2MB each</p>
-                        <input type="file" id="imageInput" name="images[]" multiple accept="image/*" class="hidden">
+                        {{-- No `name` attribute: the selected files are appended to the form
+                             manually at submit time (from `uploadedImages`), so annotated
+                             replacements are sent instead of duplicating the original file. --}}
+                        <input type="file" id="imageInput" multiple accept="image/*" class="hidden">
                     </div>
-                    
+
                     <div id="imagePreview" class="mt-4 grid grid-cols-2 md:grid-cols-5 gap-3"></div>
+                </div>
+
+                <!-- Video Upload -->
+                <div class="mb-8">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Upload a Video (Optional)</label>
+                    <p class="text-sm text-gray-500 mb-4">A short video helps our team see the issue in motion.</p>
+
+                    <div id="videoDropzone" class="dropzone p-8 text-center">
+                        <i class="fas fa-video text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-600 mb-2">Click to select a video, or drag & drop it here</p>
+                        <p class="text-sm text-gray-500">MP4, MOV, AVI or WebM — max 50MB</p>
+                        <input type="file" id="videoInput" name="video" accept="video/*" class="hidden">
+                    </div>
+
+                    <p class="text-sm text-gray-500 mt-3">
+                        <i class="fas fa-circle-info mr-1 text-[#E85D85]"></i>
+                        <em>Please record a short video explaining (out loud) why you're returning this product — this helps our team review your request faster.</em>
+                    </p>
+
+                    <div id="videoPreview" class="mt-4 hidden">
+                        <div class="relative inline-block">
+                            <video id="videoPreviewPlayer" controls class="w-full max-w-sm rounded-lg border border-gray-200"></video>
+                            <button type="button" id="removeVideoBtn"
+                                    class="absolute -top-2 -right-2 bg-red-500 text-white w-7 h-7 rounded-full flex items-center justify-center shadow hover:bg-red-600">
+                                <i class="fas fa-times text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Return Policy -->
@@ -240,7 +272,7 @@
                     }
                 }
             }
-            
+
             function updatePreview() {
                 imagePreview.innerHTML = '';
                 uploadedImages.forEach((img, index) => {
@@ -248,19 +280,103 @@
                     div.className = 'relative group';
                     div.innerHTML = `
                         <img src="${img.data}" class="w-full h-32 object-cover rounded-lg border border-gray-200">
-                        <button type="button" onclick="removeImage(${index})" 
+                        <button type="button" onclick="removeImage(${index})"
                                 class="absolute top-2 right-2 bg-red-500 text-white w-6 h-6 rounded-full opacity-0 group-hover:opacity-100 transition">
                             <i class="fas fa-times text-xs"></i>
                         </button>
                     `;
                     imagePreview.appendChild(div);
+
+                    // Pencil annotation: give this photo its own single-file input holding the
+                    // same file, so FaultAnnotator (same tool vendors use on fault photos) can
+                    // attach its badge and swap in the annotated version when saved.
+                    if (window.FaultAnnotator) {
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'file';
+                        hiddenInput.accept = 'image/*';
+                        hiddenInput.className = 'hidden';
+                        const dt = new DataTransfer();
+                        dt.items.add(img.file);
+                        hiddenInput.files = dt.files;
+                        div.appendChild(hiddenInput);
+
+                        hiddenInput.addEventListener('change', () => {
+                            const annotatedFile = hiddenInput.files && hiddenInput.files[0];
+                            if (!annotatedFile) return;
+                            uploadedImages[index].file = annotatedFile;
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                                uploadedImages[index].data = e.target.result;
+                                div.querySelector('img').src = e.target.result;
+                            };
+                            reader.readAsDataURL(annotatedFile);
+                        });
+
+                        window.FaultAnnotator.attachBadge(div, hiddenInput);
+                    }
                 });
             }
-            
+
             window.removeImage = function(index) {
                 uploadedImages.splice(index, 1);
                 updatePreview();
             };
+
+            // Video upload
+            const videoDropzone = document.getElementById('videoDropzone');
+            const videoInput = document.getElementById('videoInput');
+            const videoPreview = document.getElementById('videoPreview');
+            const videoPreviewPlayer = document.getElementById('videoPreviewPlayer');
+            const removeVideoBtn = document.getElementById('removeVideoBtn');
+            let selectedVideo = null;
+
+            videoDropzone.addEventListener('click', () => videoInput.click());
+
+            videoDropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                videoDropzone.classList.add('active');
+            });
+
+            videoDropzone.addEventListener('dragleave', () => {
+                videoDropzone.classList.remove('active');
+            });
+
+            videoDropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                videoDropzone.classList.remove('active');
+                handleVideoFile(e.dataTransfer.files[0]);
+            });
+
+            videoInput.addEventListener('change', (e) => {
+                handleVideoFile(e.target.files[0]);
+            });
+
+            function handleVideoFile(file) {
+                if (!file) return;
+                if (!file.type.startsWith('video/')) {
+                    alert('Please upload a video file');
+                    return;
+                }
+                if (file.size > 50 * 1024 * 1024) {
+                    alert('Video must be 50MB or smaller');
+                    return;
+                }
+                selectedVideo = file;
+                videoPreviewPlayer.src = URL.createObjectURL(file);
+                videoPreview.classList.remove('hidden');
+
+                // Keep the real <input type="file"> in sync so the dropped file gets submitted too.
+                const dt = new DataTransfer();
+                dt.items.add(file);
+                videoInput.files = dt.files;
+            }
+
+            removeVideoBtn.addEventListener('click', () => {
+                selectedVideo = null;
+                videoInput.value = '';
+                videoPreviewPlayer.src = '';
+                videoPreview.classList.add('hidden');
+            });
             
             // Form submission
             form.addEventListener('submit', async function(e) {
@@ -299,7 +415,7 @@
                     const result = await response.json();
                     
                     if (result.success) {
-                        alert('Return request submitted successfully!');
+                        alert('Return request submitted successfully!\nYour Return ID: ' + (result.return_number || ('#' + result.return_id)) + '\nPlease save this ID for reference.');
                         window.location.href = result.redirect;
                     } else {
                         throw new Error(result.message || 'Submission failed');

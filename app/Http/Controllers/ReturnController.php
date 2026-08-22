@@ -65,7 +65,8 @@ class ReturnController extends Controller
             'quantity' => 'required|integer|min:1',
             'reason' => 'required|in:damaged,wrong_item,defective,size_issue,color_issue,not_as_described,other',
             'details' => 'nullable|string|max:1000',
-            'images.*' => 'nullable|image|max:2048'
+            'images.*' => 'nullable|image|max:2048',
+            'video' => 'nullable|file|mimes:mp4,mov,avi,webm|max:51200'
         ]);
         
         if ($validator->fails()) {
@@ -138,7 +139,12 @@ class ReturnController extends Controller
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
-            
+
+            // Human-readable reference the customer can quote to support: RET-YYYYMMDD-0000
+            // (zero-padded to 4 digits using the row's own id, so it's guaranteed unique).
+            $returnNumber = 'RET-' . now()->format('Ymd') . '-' . str_pad($returnId, 4, '0', STR_PAD_LEFT);
+            DB::table('return_requests')->where('id', $returnId)->update(['return_number' => $returnNumber]);
+
             // Add initial tracking
             DB::table('return_tracking')->insert([
                 'return_id' => $returnId,
@@ -152,7 +158,7 @@ class ReturnController extends Controller
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
                     $path = $image->store('returns/images', 'public');
-                    
+
                     DB::table('return_images')->insert([
                         'return_id' => $returnId,
                         'image_path' => $path,
@@ -160,13 +166,35 @@ class ReturnController extends Controller
                     ]);
                 }
             }
-            
+
+            // Handle the optional explanation video (mirrors VendorController's product-video
+            // handling: write via the storage disk AND copy straight into public/storage as a
+            // fallback for hosts where the storage symlink isn't reliably live).
+            if ($request->hasFile('video')) {
+                $video = $request->file('video');
+                $extension = $video->getClientOriginalExtension();
+                $filename = 'return_' . $returnId . '_' . time() . '.' . $extension;
+
+                $video->storeAs('returns/videos', $filename, 'public');
+
+                $destinationPath = public_path('storage/returns/videos');
+                if (!is_dir($destinationPath)) {
+                    @mkdir($destinationPath, 0755, true);
+                }
+                $video->move($destinationPath, $filename);
+
+                DB::table('return_requests')->where('id', $returnId)->update([
+                    'return_video' => 'returns/videos/' . $filename,
+                ]);
+            }
+
             DB::commit();
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Return request submitted successfully!',
                 'return_id' => $returnId,
+                'return_number' => $returnNumber,
                 'redirect' => route('customer.returns.track', $returnId)
             ]);
             
