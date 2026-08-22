@@ -590,33 +590,31 @@
                                     
                                     <td class="table-cell">
                                         <div class="relative inline-block">
-                                            <span class="badge {{ $statusColor }} text-white cursor-pointer status-badge"
+                                            <span class="badge {{ $statusColor }} text-white status-badge"
                                                   data-replacement-id="{{ $replacement->id }}"
-                                                  data-current-status="{{ $replacement->status }}"
-                                                  onclick="openStatusModal('{{ $replacement->id }}', '{{ $replacement->status }}')">
+                                                  data-current-status="{{ $replacement->status }}">
                                                 {{ ucfirst($replacement->status) }}
-                                                <i class="fas fa-chevron-down ml-1 text-xs"></i>
                                             </span>
                                         </div>
                                     </td>
-                                    
+
                                     <td class="table-cell text-gray-600">
                                         {{ \Carbon\Carbon::parse($replacement->created_at)->format('M d, Y') }}
                                         <div class="text-xs text-gray-400">
                                             {{ \Carbon\Carbon::parse($replacement->created_at)->format('h:i A') }}
                                         </div>
                                     </td>
-                                    
+
                                     <td class="table-cell">
                                         <div class="flex gap-2">
                                             <button onclick="viewReplacement({{ $replacement->id }})"
                                                     class="action-btn bg-pink-100 text-[#C94A72] hover:bg-pink-200">
                                                 <i class="fas fa-eye"></i> View
                                             </button>
-                                            
+
                                             <button onclick="openStatusModal('{{ $replacement->id }}', '{{ $replacement->status }}')"
                                                     class="action-btn bg-green-100 text-green-700 hover:bg-green-200">
-                                                <i class="fas fa-edit"></i> Update
+                                                <i class="fas fa-comment"></i> Comment
                                             </button>
                                         </div>
                                     </td>
@@ -658,12 +656,12 @@
         </button>
         
         <div class="status-dropdown-header">
-            <h3 class="text-xl font-bold mb-1">Update Replacement Status</h3>
+            <h3 class="text-xl font-bold mb-1">Comment on Replacement</h3>
             <p class="opacity-90">Request: <span id="modalRequestId" class="font-semibold"></span></p>
         </div>
-        
+
         <div class="status-dropdown-body">
-            <!-- Current Step Info -->
+            <!-- Current Status Info -->
             <div id="currentStepInfo" class="mb-6 p-4 bg-pink-50 rounded-lg">
                 <h4 class="font-semibold text-[#C94A72] mb-2">Current Status</h4>
                 <div class="flex items-center justify-between">
@@ -671,123 +669,26 @@
                     <span id="currentStepBadge" class="badge"></span>
                 </div>
             </div>
-            
-            <!-- Status Options -->
+
+            <!-- Vendor Comment -->
             <div class="mb-6">
-                <h4 class="font-semibold text-gray-700 mb-3">Update Status</h4>
-                <div class="space-y-2">
-                    <div class="status-option" data-status="pending" onclick="selectStatus('pending')">
-                        <div class="flex items-center">
-                            <span class="badge bg-yellow-500 text-white mr-3">Pending</span>
-                            <div>
-                                <span class="font-medium">Pending Review</span>
-                                <div class="text-xs text-gray-500">Review customer's request</div>
-                            </div>
-                        </div>
-                        <i class="fas fa-check text-green-500 hidden selected-icon"></i>
-                    </div>
-                    
-                    <div class="status-option" data-status="approved" onclick="selectStatus('approved')">
-                        <div class="flex items-center">
-                            <span class="badge bg-green-500 text-white mr-3">Approved</span>
-                            <div>
-                                <span class="font-medium">Approve Request</span>
-                                <div class="text-xs text-gray-500">Approve the replacement</div>
-                            </div>
-                        </div>
-                        <i class="fas fa-check text-green-500 hidden selected-icon"></i>
-                    </div>
-                    
-                    <div class="status-option" data-status="processing" onclick="selectStatus('processing')">
-                        <div class="flex items-center">
-                            <span class="badge bg-purple-500 text-white mr-3">Processing</span>
-                            <div>
-                                <span class="font-medium">Processing</span>
-                                <div class="text-xs text-gray-500">Processing replacement item</div>
-                            </div>
-                        </div>
-                        <i class="fas fa-check text-green-500 hidden selected-icon"></i>
-                    </div>
-                    
-                    <div class="status-option" data-status="completed" onclick="selectStatus('completed')">
-                        <div class="flex items-center">
-                            <span class="badge bg-teal-500 text-white mr-3">Completed</span>
-                            <div>
-                                <span class="font-medium">Completed</span>
-                                <div class="text-xs text-gray-500">Replacement completed</div>
-                            </div>
-                        </div>
-                        <i class="fas fa-check text-green-500 hidden selected-icon"></i>
-                    </div>
-                    
-                    <div class="status-option" data-status="rejected" onclick="selectStatus('rejected')">
-                        <div class="flex items-center">
-                            <span class="badge bg-red-500 text-white mr-3">Rejected</span>
-                            <div>
-                                <span class="font-medium">Reject Request</span>
-                                <div class="text-xs text-gray-500">Reject the replacement request</div>
-                            </div>
-                        </div>
-                        <i class="fas fa-check text-green-500 hidden selected-icon"></i>
-                    </div>
-                    
-                    <div class="status-option" data-status="cancelled" onclick="selectStatus('cancelled')">
-                        <div class="flex items-center">
-                            <span class="badge bg-red-500 text-white mr-3">Cancelled</span>
-                            <div>
-                                <span class="font-medium">Cancelled</span>
-                                <div class="text-xs text-gray-500">Cancel the request</div>
-                            </div>
-                        </div>
-                        <i class="fas fa-check text-green-500 hidden selected-icon"></i>
-                    </div>
-                </div>
+                <h4 class="font-semibold text-gray-700 mb-2">Your Comment</h4>
+                <p class="text-xs text-gray-500 mb-3">
+                    Vendors can only share an opinion on this request — MJ Cheezain Admin sees your
+                    comment together with the customer's request and makes the final approve/reject
+                    decision.
+                </p>
+                <textarea id="vendorCommentInput" rows="4" maxlength="1000"
+                          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-300 focus:border-[#E85D85]"
+                          placeholder="Add your comment about this replacement request..."></textarea>
             </div>
-            
-            <!-- Additional Options -->
-            {{-- <div id="additionalOptions" class="mb-6 hidden">
-                <h4 class="font-semibold text-gray-700 mb-3">Additional Information</h4>
-                
-                <!-- Step Selection -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Current Step</label>
-                    <select id="stepSelect" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-300 focus:border-[#E85D85]">
-                        <option value="">Select Step</option>
-                        <option value="request_submitted">Request Submitted</option>
-                        <option value="approved">Approved</option>
-                        <option value="shipped_to_vendor">Original Shipped to Vendor</option>
-                        <option value="received_by_vendor">Received by Vendor</option>
-                        <option value="replacement_verified">Replacement Verified</option>
-                        <option value="replacement_processing">Processing Replacement</option>
-                        <option value="replacement_shipped">Replacement Shipped</option>
-                        <option value="replacement_delivered">Replacement Delivered</option>
-                    </select>
-                </div>
-                
-                <!-- Tracking Number -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Tracking Number</label>
-                    <input type="text" id="trackingNumber" 
-                           class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-300 focus:border-[#E85D85]" 
-                           placeholder="Enter tracking number">
-                </div>
-                
-                <!-- Notes -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
-                    <textarea id="statusNotes" 
-                              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-300 focus:border-[#E85D85]" 
-                              rows="3" 
-                              placeholder="Add any notes about this status update..."></textarea>
-                </div>
-            </div> --}}
-            
+
             <!-- Action Buttons -->
             <div class="pt-4 border-t border-gray-200">
                 <button id="updateStatusBtn" onclick="updateReplacementStatus()"
                         class="w-full py-3.5 brand-gradient brand-shadow text-white rounded-full font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed border-0"
                         disabled>
-                    Update Status
+                    Submit Comment
                 </button>
                 <button onclick="closeStatusModal()"
                         class="w-full py-3.5 bg-gray-100 text-gray-700 rounded-full font-semibold hover:bg-gray-200 transition mt-3 border-0">
@@ -899,29 +800,14 @@
             document.getElementById('currentStepText').textContent = currentStep.trim();
             document.getElementById('currentStepBadge').innerHTML = currentStatus.charAt(0).toUpperCase() + currentStatus.slice(1);
             document.getElementById('currentStepBadge').className = `badge ${getStatusColor(currentStatus)} text-white`;
-            
-            // Reset selection
-            document.querySelectorAll('.status-option').forEach(option => {
-                option.classList.remove('selected');
-                option.querySelector('.selected-icon').classList.add('hidden');
-            });
-            
-            // Highlight current status
-            const currentOption = document.querySelector(`.status-option[data-status="${currentStatus}"]`);
-            if (currentOption) {
-                currentOption.classList.add('selected');
-                currentOption.querySelector('.selected-icon').classList.remove('hidden');
-            }
-            
-            // Reset additional options
-            // document.getElementById('stepSelect').value = '';
-            // document.getElementById('trackingNumber').value = '';
-            // document.getElementById('statusNotes').value = '';
-            // document.getElementById('additionalOptions').classList.add('hidden');
-            
-            // Disable update button initially
+
+            // Reset the comment box
+            const commentInput = document.getElementById('vendorCommentInput');
+            if (commentInput) commentInput.value = '';
+
+            // Disable update button initially (enabled once a comment is typed)
             document.getElementById('updateStatusBtn').disabled = true;
-            
+
             // Show modal
             document.getElementById('statusModalOverlay').classList.add('open');
             document.getElementById('statusModal').classList.add('open');
@@ -952,67 +838,35 @@
             selectedStatus = null;
         }
         
-        // Select status option
-        function selectStatus(status) {
-            selectedStatus = status;
-            
-            // Update UI
-            document.querySelectorAll('.status-option').forEach(option => {
-                option.classList.remove('selected');
-                option.querySelector('.selected-icon').classList.add('hidden');
-            });
-            
-            const selectedOption = document.querySelector(`.status-option[data-status="${status}"]`);
-            if (selectedOption) {
-                selectedOption.classList.add('selected');
-                selectedOption.querySelector('.selected-icon').classList.remove('hidden');
+        // Enable the submit button once the vendor types a comment
+        document.addEventListener('input', function(e) {
+            if (e.target && e.target.id === 'vendorCommentInput') {
+                document.getElementById('updateStatusBtn').disabled = e.target.value.trim().length === 0;
             }
-            
-            // Show/hide additional options based on status
-            // const additionalOptions = document.getElementById('additionalOptions');
-            // if (['approved', 'processing', 'completed'].includes(status)) {
-            //     additionalOptions.classList.remove('hidden');
-            // } else {
-            //     additionalOptions.classList.add('hidden');
-            // }
-            
-            // Enable/disable update button
-            const updateBtn = document.getElementById('updateStatusBtn');
-            if (status === currentReplacementStatus) {
-                updateBtn.disabled = true;
-                updateBtn.textContent = 'Update Status';
-            } else {
-                updateBtn.disabled = false;
-                updateBtn.textContent = `Update to ${status.charAt(0).toUpperCase() + status.slice(1)}`;
-            }
-        }
-        
-        // Update replacement status
+        });
+
+        // Submit the vendor's comment (opinion only — no status/decision change)
         async function updateReplacementStatus() {
-            if (!currentReplacementId || !selectedStatus || selectedStatus === currentReplacementStatus) {
+            const commentInput = document.getElementById('vendorCommentInput');
+            const comment = commentInput ? commentInput.value.trim() : '';
+            if (!currentReplacementId || !comment) {
                 return;
             }
-            
-            // Desktop table badge AND mobile card badge share data-replacement-id — update all
-            const badges = document.querySelectorAll(`.status-badge[data-replacement-id="${currentReplacementId}"]`);
-            const stepBadge = document.querySelector(`[data-replacement-id="${currentReplacementId}"] .step-badge`);
+
             const updateBtn = document.getElementById('updateStatusBtn');
-            
+
             // Show loading state
             const originalText = updateBtn.innerHTML;
-            updateBtn.innerHTML = '<i class="fas fa-spinner spinner mr-2"></i> Updating...';
+            updateBtn.innerHTML = '<i class="fas fa-spinner spinner mr-2"></i> Submitting...';
             updateBtn.disabled = true;
-            
+
             // Prepare data
             const data = {
                 replacement_id: currentReplacementId,
-                status: selectedStatus,
-                current_step: '',
-                tracking_number: '',
-                notes: '',
+                comment: comment,
                 _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             };
-            
+
             try {
                 const response = await fetch("{{ route('vendor.replacements.update-status') }}", {
                     method: 'POST',
@@ -1023,26 +877,12 @@
                     },
                     body: JSON.stringify(data)
                 });
-                
+
                 const result = await response.json();
-                
+
                 if (result.success) {
-                    // Update UI immediately
-                    badges.forEach(badge => {
-                        badge.className = `badge ${getStatusColor(selectedStatus)} text-white cursor-pointer status-badge`;
-                        badge.innerHTML = `${selectedStatus.charAt(0).toUpperCase() + selectedStatus.slice(1)} <i class="fas fa-chevron-down ml-1 text-xs"></i>`;
-                        badge.setAttribute('data-current-status', selectedStatus);
-                        badge.setAttribute('onclick', `openStatusModal('${currentReplacementId}', '${selectedStatus}')`);
-                    });
-                    
-                    if (stepBadge && data.current_step) {
-                        const stepText = data.current_step.replace(/_/g, ' ');
-                        stepBadge.innerHTML = `<i class="fas fa-check-circle"></i> ${stepText.charAt(0).toUpperCase() + stepText.slice(1)}`;
-                        stepBadge.className = `step-badge completed text-xs`;
-                    }
-                    
-                    showNotification('Status updated successfully!', 'success');
-                    
+                    showNotification('Comment submitted — Admin will make the final decision.', 'success');
+
                     // Close modal after delay
                     setTimeout(() => {
                         closeStatusModal();
@@ -1052,7 +892,7 @@
                 }
             } catch (error) {
                 console.error('Error:', error);
-                showNotification('Failed to update status. Please try again.', 'error');
+                showNotification('Failed to submit comment. Please try again.', 'error');
                 updateBtn.innerHTML = originalText;
                 updateBtn.disabled = false;
             }
@@ -1179,7 +1019,7 @@
                             </button>
                             <button onclick="openStatusModal('${esc(id)}', '${esc(status)}')"
                                     class="flex-1 py-2.5 rounded-full text-xs font-semibold brand-gradient-soft text-[#E85D85] border border-[#E85D85]/20 active:scale-[0.98] transition">
-                                <i class="fas fa-edit mr-1"></i> Update
+                                <i class="fas fa-comment mr-1"></i> Comment
                             </button>
                         </div>
                     </div>`;

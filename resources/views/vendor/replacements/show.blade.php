@@ -105,15 +105,56 @@
                                         <p class="text-sm text-gray-500">Request Date</p>
                                         <p class="font-medium">{{ \Carbon\Carbon::parse($replacement->created_at)->format('M d, Y h:i A') }}</p>
                                     </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Replacement Courier Cost</p>
+                                        <p class="font-medium">
+                                            @if($replacement->courier_paid_by === 'vendor')
+                                                <span class="text-red-600">Vendor pays</span>
+                                            @elseif($replacement->courier_paid_by === 'customer')
+                                                <span class="text-green-600">Customer pays</span>
+                                            @else
+                                                <span class="text-gray-400">Not determined</span>
+                                            @endif
+                                        </p>
+                                    </div>
+                                    @if($replacement->total_amount_payable)
+                                    <div>
+                                        <p class="text-sm text-gray-500">Total Payable by Customer</p>
+                                        <p class="font-medium text-[#E85D85]">Rs. {{ number_format($replacement->total_amount_payable, 2) }}</p>
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
-                        
+
                         @if($replacement->details)
                         <div class="mt-4 pt-4 border-t border-gray-200">
                             <p class="text-sm text-gray-500 mb-2">Customer's Notes</p>
                             <p class="text-gray-700 bg-gray-50 p-4 rounded-lg">{{ $replacement->details }}</p>
                         </div>
+                        @endif
+                    </div>
+
+                    <!-- Vendor Comment -->
+                    <div class="app-card bg-white p-5 md:p-6">
+                        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-comment text-[#E85D85]"></i> Your Comment
+                        </h2>
+                        <p class="text-xs text-gray-500 mb-3">
+                            You can only share your opinion on this request — MJ Cheezain Admin sees your
+                            comment together with the customer's request and makes the final approve/reject decision.
+                        </p>
+                        @if($replacement->vendor_comment)
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <p class="text-gray-800">{{ $replacement->vendor_comment }}</p>
+                                @if($replacement->vendor_commented_at)
+                                    <p class="text-xs text-gray-400 mt-2">
+                                        Commented on {{ \Carbon\Carbon::parse($replacement->vendor_commented_at)->format('M d, Y h:i A') }}
+                                    </p>
+                                @endif
+                            </div>
+                        @else
+                            <p class="text-gray-400 text-sm">You haven't commented on this replacement yet.</p>
                         @endif
                     </div>
 
@@ -197,7 +238,7 @@
                         <div class="space-y-3">
                             <button onclick="updateStatus()"
                                     class="w-full px-4 py-3 brand-gradient brand-shadow text-white rounded-full font-semibold hover:opacity-90 flex items-center justify-center gap-2 border-0">
-                                <i class="fas fa-edit"></i> Update Status
+                                <i class="fas fa-comment"></i> Add Comment
                             </button>
 
                             <a href="mailto:{{ $replacement->customer_email }}"

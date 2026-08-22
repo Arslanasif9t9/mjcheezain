@@ -612,7 +612,8 @@
                                                                 
                                                                 <button class="px-4 py-2 bg-gradient-to-r from-amber-400 to-orange-400 text-white border-0 rounded-xl text-sm font-semibold shadow-lg shadow-orange-200 hover:opacity-90 transition flex items-center justify-center replace-product-btn w-full sm:w-auto"
                                                                         data-product-id="{{ $cart->product_id }}"
-                                                                        data-order-id="{{ $order->id }}">
+                                                                        data-order-id="{{ $order->id }}"
+                                                                        data-cart-id="{{ $cart->id }}">
                                                                     <i class="fas fa-exchange-alt mr-2"></i>Replace
                                                                 </button>
                                                                 
@@ -875,9 +876,9 @@
             
             if (e.target.closest('.replace-product-btn')) {
                 const button = e.target.closest('.replace-product-btn');
-                const productId = button.getAttribute('data-product-id');
                 const orderId = button.getAttribute('data-order-id');
-                showReplaceForm(productId, orderId);
+                const cartId = button.getAttribute('data-cart-id');
+                window.open('/customer/replacements/create/' + orderId + '/' + cartId, '_blank');
             }
             
             if (e.target.closest('.return-product-btn')) {

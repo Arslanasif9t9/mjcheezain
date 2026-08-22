@@ -72,6 +72,9 @@
                             <th class="px-5 py-3.5">Vendor</th>
                             <th class="px-5 py-3.5">Reason</th>
                             <th class="px-5 py-3.5">Details</th>
+                            <th class="px-5 py-3.5">Vendor Comment</th>
+                            <th class="px-5 py-3.5">Courier Cost</th>
+                            <th class="px-5 py-3.5">Total Payable</th>
                             <th class="px-5 py-3.5">Current Step</th>
                             <th class="px-5 py-3.5">Date</th>
                             <th class="px-5 py-3.5">Status</th>
@@ -97,6 +100,25 @@
                                         <span class="text-gray-300">—</span>
                                     @endif
                                 </td>
+                                <td class="px-5 py-3.5 text-gray-500 max-w-[200px]">
+                                    @if(!empty($r->vendor_comment))
+                                        <span class="block truncate" title="{{ $r->vendor_comment }}">{{ $r->vendor_comment }}</span>
+                                    @else
+                                        <span class="text-gray-300 italic">No comment yet</span>
+                                    @endif
+                                </td>
+                                <td class="px-5 py-3.5 whitespace-nowrap">
+                                    @if($r->courier_paid_by === 'vendor')
+                                        <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-red-50 text-red-600">Vendor pays</span>
+                                    @elseif($r->courier_paid_by === 'customer')
+                                        <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-green-50 text-green-600">Customer pays</span>
+                                    @else
+                                        <span class="text-gray-300">—</span>
+                                    @endif
+                                </td>
+                                <td class="px-5 py-3.5 font-semibold text-gray-800 whitespace-nowrap">
+                                    {{ isset($r->total_amount_payable) && $r->total_amount_payable !== null ? 'Rs. ' . number_format($r->total_amount_payable, 2) : '—' }}
+                                </td>
                                 <td class="px-5 py-3.5">
                                     @if(!empty($r->current_step))
                                         <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-purple-50 text-purple-600 whitespace-nowrap">
@@ -120,7 +142,7 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr><td colspan="9" class="px-5 py-12 text-center text-gray-400">
+                            <tr><td colspan="12" class="px-5 py-12 text-center text-gray-400">
                                 <i class="fas fa-inbox text-3xl mb-2 block text-gray-300"></i>No replacement requests yet.
                             </td></tr>
                         @endforelse

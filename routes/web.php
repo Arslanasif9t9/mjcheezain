@@ -17,6 +17,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductRatingController;
 use App\Http\Controllers\VendorReplacementController;
 use App\Http\Controllers\ReturnController;
+use App\Http\Controllers\ReplacementController;
 use App\Http\Controllers\VendorReturnController;
 use App\Http\Controllers\ProfileImageController;
 use App\Http\Controllers\Vendor\AutoPartsProductController;
@@ -275,6 +276,13 @@ Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(functi
     Route::post('/returns', [ReturnController::class, 'store'])->name('returns.store');
     Route::get('/returns/track/{returnId}', [ReturnController::class, 'track'])->name('returns.track');
     Route::post('/returns/cancel/{returnId}', [ReturnController::class, 'cancel'])->name('returns.cancel');
+});
+
+// Customer Replacement Routes (genuine "Request Replacement" flow — see ReplacementController)
+Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(function () {
+    Route::get('/replacements/create/{orderId}/{cartId}', [ReplacementController::class, 'create'])->name('replacements.create');
+    Route::get('/replacements/products/{orderId}/{cartId}', [ReplacementController::class, 'products'])->name('replacements.products');
+    Route::post('/replacements', [ReplacementController::class, 'store'])->name('replacements.store');
 });
 
 
