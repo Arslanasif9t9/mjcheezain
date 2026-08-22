@@ -174,10 +174,20 @@ class HomeController extends Controller
             $faults = $faults->concat($autoFaults);
         }
 
+        // Men's Fashion: decode fashion_attributes JSON for the "Specifications"
+        // tab. Empty for older products / any other category — the view
+        // just skips the extra rows when this is empty.
+        // TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories
+        $fashionAttrs = [];
+        if (!empty($product->fashion_attributes)) {
+            $fashionAttrs = json_decode($product->fashion_attributes, true) ?: [];
+        }
+
         return view('product', compact(
             'user', 'profile', 'dashboardPage', 'imgPath',
             'product', 'vendor', 'imageMain', 'images', 'vendorUser',
-            'reviews', 'reviewCount', 'avgRating', 'isOwnerPreview', 'faults'
+            'reviews', 'reviewCount', 'avgRating', 'isOwnerPreview', 'faults',
+            'fashionAttrs'
         ));
     }
 

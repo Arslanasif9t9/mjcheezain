@@ -119,6 +119,10 @@ class CategoryCatalog
             ["Women's Fashion", '👜', true, false, ['Handbags', 'Clutches & Wallets', 'Shoulder Bags', 'Crossbody Bags', 'Women Jewelry', 'Scarves & Shawls', 'Hair Accessories']],
             ["Men's Accessories", '👔', true, false, ['Watches', 'Bracelets', 'Chains', 'Rings', 'Sunglasses', 'Wallets']],
             ['Clothing & Apparel', '👕', true, false, ['Men Clothing', 'Women Clothing', 'Kids Clothing', 'Footwear']],
+            // Own top-level fashion category (not a subcategory of Clothing & Apparel) — see storeProduct()'s
+            // Men's-Fashion-only attribute handling and resources/views/vendor/new_product.blade.php.
+            // TODO: pattern for remaining 4 fashion categories (Women's Fashion clothing, Kids & Baby, Footwear, Fashion Accessories & Bags)
+            ["Men's Fashion", '👔', true, false, ['Shirt', 'T-Shirt', 'Jeans', 'Pants', 'Shalwar Kameez', 'Kurta', 'Suit', 'Jacket', 'Coat', 'Hoodie', 'Sweater', 'Shorts', 'Underwear', 'Nightwear']],
             ['Mobile Accessories', '📱', true, false, ['Mobile Covers', 'Chargers', 'Handsfree & Earphones', 'Power Banks', 'Screen Protectors']],
             ['Home & Living', '🏠', true, false, ['Decoration Items', 'LED Lights', 'Clocks', 'Wall Frames', 'Artificial Flowers']],
             ['Gifts & General Items', '🎁', true, false, ['Keychains', 'Mugs', 'Gift Boxes', 'Custom Printed Items', 'Souvenirs']],

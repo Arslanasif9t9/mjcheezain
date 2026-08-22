@@ -534,6 +534,10 @@ class VendorController extends Controller
         $product = null;
         $productImages = [];
         $productFaults = [];
+        // Men's Fashion (and later, the other fashion categories) prefill data.
+        // TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories
+        $faAttrs = [];
+        $faSizes = [];
 
         // If editing, get product data
         if ($id) {
@@ -552,16 +556,27 @@ class VendorController extends Controller
                 $productFaults = DB::table('vendor_product_faults')
                     ->where('product_id', $id)
                     ->get();
+
+                // Decode fashion_attributes JSON for the form to prefill (raw
+                // DB::table() query, so no Eloquent cast applies here).
+                if (!empty($product->fashion_attributes)) {
+                    $decoded = json_decode($product->fashion_attributes, true) ?: [];
+                    $faSizes = $decoded['sizes'] ?? [];
+                    unset($decoded['sizes']);
+                    $faAttrs = $decoded;
+                }
             }
         }
-        
+
 
         return view('vendor.new_product', compact(
             'user',
             'vendorBasicInfo',
             'product',
             'productImages',
-            'productFaults'
+            'productFaults',
+            'faAttrs',
+            'faSizes'
         ));
     }
 
@@ -609,6 +624,12 @@ class VendorController extends Controller
         // "Other" category: use the vendor-typed value and queue it for admin review
         $customCategory = $this->resolveCustomCategory($request, $validated);
 
+        // Men's Fashion: collect the common + category-specific fields into
+        // one JSON blob (vendor_products.fashion_attributes). Other
+        // categories are unaffected.
+        // TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories
+        $fashionAttributes = $this->buildFashionAttributes($request, $validated);
+
         $validated['product_name'] = ucwords(trim($validated['product_name'] ?? ''));
         $validated['brand'] = ucwords(trim($validated['brand'] ?? ''));
         $validated['model'] = ucwords(trim($validated['model'] ?? ''));
@@ -641,12 +662,16 @@ class VendorController extends Controller
             'return_policy' => $validated['return_policy'] ?? null,
             'status' => $isDraft ? 'draft' : 'pending',
             'position' => $isDraft ? 'draft' : 'pending',
-            'part_type' => $validated['part_type'] ?? null
+            'part_type' => $validated['part_type'] ?? null,
+            'fashion_attributes' => $fashionAttributes,
         ]);
 
         if ($customCategory) {
             $this->queueCategorySuggestion($validated, $product->id);
         }
+
+        // Men's Fashion: size guide/chart image (fashion_attributes.size_guide)
+        $this->storeSizeGuideUpload($request, $product);
 
         // return $request->input('productImages');
         // Handle product images
@@ -736,6 +761,92 @@ class VendorController extends Controller
         $validated['subcategory'] = $customSub !== '' ? $customSub : 'General';
 
         return $validated['category'];
+    }
+
+    /**
+     * Men's Fashion: collect the common + category-specific fields (that
+     * don't already have a real vendor_products column) into one array to
+     * be stored as vendor_products.fashion_attributes (JSON). Returns null
+     * for every other category so their product creation is unaffected.
+     * TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories
+     */
+    private function buildFashionAttributes(Request $request, array $validated): ?array
+    {
+        if (($validated['category'] ?? '') !== "Men's Fashion") {
+            return null;
+        }
+
+        $attrs = [
+            // Common fashion fields (step 3 of the task: fields with no existing column)
+            'sku' => trim((string) $request->input('fa_sku', '')) ?: null,
+            'material' => trim((string) $request->input('fa_material', '')) ?: null,
+            'color' => trim((string) $request->input('fa_color', '')) ?: null,
+            'pattern' => trim((string) $request->input('fa_pattern', '')) ?: null,
+            'availability' => $request->input('fa_availability') === 'Out of Stock' ? 'Out of Stock' : 'In Stock',
+            'weight' => trim((string) $request->input('fa_weight', '')) ?: null,
+            'warranty' => $request->input('fa_warranty') === 'Yes' ? 'Yes' : 'No',
+            'warranty_duration' => $request->input('fa_warranty') === 'Yes'
+                ? (trim((string) $request->input('fa_warranty_duration', '')) ?: null)
+                : null,
+            'returnable' => $request->input('fa_returnable') === 'No' ? 'No' : 'Yes',
+            'return_exchange_policy' => $request->input('fa_returnable') !== 'No'
+                ? (trim((string) $request->input('fa_return_exchange_policy', '')) ?: null)
+                : null,
+            'shipping_info' => trim((string) $request->input('fa_shipping_info', '')) ?: null,
+            'tags' => trim((string) $request->input('fa_tags', '')) ?: null,
+            'care_instructions' => trim((string) $request->input('fa_care_instructions', '')) ?: null,
+
+            // Men's Fashion category-specific fields (step 4 of the task)
+            'clothing_type' => $request->input('fa_clothing_type') ?: null,
+            'fit' => $request->input('fa_fit') ?: null,
+            'sleeve_type' => $request->input('fa_sleeve_type') ?: null,
+            'neck_type' => $request->input('fa_neck_type') ?: null,
+            'clothing_length' => $request->input('fa_clothing_length') ?: null,
+            'season' => $request->input('fa_season') ?: null,
+            'gender' => 'Men', // implied by category, still stored explicitly
+            'occasion' => $request->input('fa_occasion') ?: null,
+        ];
+
+        // Size + stock repeater — parallel arrays fa_size_name[] / fa_size_stock[]
+        $sizeNames = (array) $request->input('fa_size_name', []);
+        $sizeStocks = (array) $request->input('fa_size_stock', []);
+        $sizes = [];
+        foreach ($sizeNames as $i => $size) {
+            $size = trim((string) $size);
+            if ($size === '') {
+                continue;
+            }
+            $sizes[] = [
+                'size' => $size,
+                'stock' => (int) ($sizeStocks[$i] ?? 0),
+            ];
+        }
+        $attrs['sizes'] = $sizes;
+
+        return $attrs;
+    }
+
+    /**
+     * Men's Fashion: optional size guide/chart image upload, stored under
+     * fashion_attributes.size_guide (filename only, mirrors how product
+     * video/images are stored). Safe no-op for non-Men's-Fashion products
+     * or when no file was submitted.
+     */
+    private function storeSizeGuideUpload(Request $request, VendorProduct $product): void
+    {
+        if (!$request->hasFile('fa_size_guide')) {
+            return;
+        }
+
+        $file = $request->file('fa_size_guide');
+        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->storeAs('vendor/products/size_guides', $filename, 'public');
+        $destinationPath = public_path('storage/vendor/products/size_guides');
+        $file->move($destinationPath, $filename);
+
+        $attrs = $product->fashion_attributes ?? [];
+        $attrs['size_guide'] = $filename;
+        $product->update(['fashion_attributes' => $attrs]);
     }
 
     /** Queue a vendor-suggested category for admin review (deduped per vendor+name). */
@@ -832,6 +943,15 @@ class VendorController extends Controller
         // "Other" category: use the vendor-typed value and queue it for admin review
         $customCategory = $this->resolveCustomCategory($request, $validated);
 
+        // Men's Fashion: rebuild fashion_attributes from the submitted form.
+        // Preserve the existing size_guide filename unless a new one is uploaded
+        // (the form sends fa_size_guide_existing as a hidden field for that).
+        // TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories
+        $fashionAttributes = $this->buildFashionAttributes($request, $validated);
+        if ($fashionAttributes && !$request->hasFile('fa_size_guide') && $request->filled('fa_size_guide_existing')) {
+            $fashionAttributes['size_guide'] = $request->input('fa_size_guide_existing');
+        }
+
         // Update the product (drafts may have empty fields — keep old values as fallback)
         $product->update([
             'name' => ucwords(trim($validated['product_name'] ?? '')) ?: $product->name,
@@ -852,7 +972,11 @@ class VendorController extends Controller
             'made_in' => $validated['made_in'] ?? $product->made_in,
             'return_policy' => $validated['return_policy'] ?? null,
             'status' => $isDraft ? 'draft' : 'pending',
+            'fashion_attributes' => $fashionAttributes ?: $product->fashion_attributes,
         ]);
+
+        // Men's Fashion: size guide/chart image (fashion_attributes.size_guide)
+        $this->storeSizeGuideUpload($request, $product);
 
         if ($isDraft) {
             // Stays hidden from storefront + admin moderation queue

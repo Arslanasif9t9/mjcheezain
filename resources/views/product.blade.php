@@ -839,10 +839,83 @@
                                 <th class="py-2 text-gray-500 font-normal w-1/4">Condition</th>
                                 <td class="py-2">{{ $product->pcondition }}</td>
                             </tr>
-                            <tr>
+                            <tr @if(!empty($fashionAttrs)) class="border-b" @endif>
                                 <th class="py-2 text-gray-500 font-normal w-1/4">Made In</th>
                                 <td class="py-2">{{ $product->made_in }}</td>
                             </tr>
+                            {{--
+                                Men's Fashion "Product Details" — common + category-specific
+                                fields decoded from fashion_attributes (HomeController::product()).
+                                Empty/null fields are skipped; the whole block simply doesn't
+                                render for older products or any other category.
+                                TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories
+                            --}}
+                            @if(!empty($fashionAttrs))
+                                @php
+                                    $faLabels = [
+                                        'sku' => 'SKU / Product Code',
+                                        'material' => 'Material / Fabric',
+                                        'color' => 'Color',
+                                        'pattern' => 'Pattern / Design',
+                                        'availability' => 'Availability',
+                                        'weight' => 'Weight',
+                                        'shipping_info' => 'Shipping Information',
+                                        'tags' => 'Tags / Keywords',
+                                        'care_instructions' => 'Care Instructions',
+                                        'clothing_type' => 'Clothing Type',
+                                        'fit' => 'Fit',
+                                        'sleeve_type' => 'Sleeve Type',
+                                        'neck_type' => 'Neck Type',
+                                        'clothing_length' => 'Clothing Length',
+                                        'season' => 'Season',
+                                        'gender' => 'Gender',
+                                        'occasion' => 'Occasion',
+                                    ];
+                                    $faRows = collect($faLabels)
+                                        ->map(fn ($label, $key) => ['label' => $label, 'value' => $fashionAttrs[$key] ?? null])
+                                        ->filter(fn ($row) => $row['value'] !== null && $row['value'] !== '');
+
+                                    $warrantyValue = ($fashionAttrs['warranty'] ?? 'No') === 'Yes'
+                                        ? 'Yes' . (!empty($fashionAttrs['warranty_duration']) ? ' (' . $fashionAttrs['warranty_duration'] . ')' : '')
+                                        : 'No';
+                                    $returnableValue = ($fashionAttrs['returnable'] ?? 'Yes') === 'No'
+                                        ? 'No'
+                                        : 'Yes' . (!empty($fashionAttrs['return_exchange_policy']) ? ' — ' . $fashionAttrs['return_exchange_policy'] : '');
+
+                                    $sizes = collect($fashionAttrs['sizes'] ?? [])
+                                        ->filter(fn ($s) => !empty($s['size']))
+                                        ->map(fn ($s) => $s['size'] . ' (' . (int) ($s['stock'] ?? 0) . ' in stock)')
+                                        ->implode(', ');
+                                @endphp
+                                @foreach($faRows as $row)
+                                    <tr class="border-b">
+                                        <th class="py-2 text-gray-500 font-normal w-1/4">{{ $row['label'] }}</th>
+                                        <td class="py-2">{{ $row['value'] }}</td>
+                                    </tr>
+                                @endforeach
+                                @if($sizes !== '')
+                                    <tr class="border-b">
+                                        <th class="py-2 text-gray-500 font-normal w-1/4">Sizes &amp; Stock</th>
+                                        <td class="py-2">{{ $sizes }}</td>
+                                    </tr>
+                                @endif
+                                <tr class="border-b">
+                                    <th class="py-2 text-gray-500 font-normal w-1/4">Warranty</th>
+                                    <td class="py-2">{{ $warrantyValue }}</td>
+                                </tr>
+                                <tr @if(!empty($fashionAttrs['size_guide'])) class="border-b" @endif>
+                                    <th class="py-2 text-gray-500 font-normal w-1/4">Returnable</th>
+                                    <td class="py-2">{{ $returnableValue }}</td>
+                                </tr>
+                                @if(!empty($fashionAttrs['size_guide']))
+                                    <tr>
+                                        <th class="py-2 text-gray-500 font-normal w-1/4">Size Guide</th>
+                                        <td class="py-2">
+                                            <a href="{{ asset('storage/vendor/products/size_guides/' . $fashionAttrs['size_guide']) }}" target="_blank" class="text-[#E85D85] underline">View size chart</a>
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endif
                         </table>
                     </div>
 

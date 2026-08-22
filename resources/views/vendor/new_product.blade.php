@@ -1308,6 +1308,16 @@
                             <div class="error-message hidden" id="conditionError"></div>
                         </div>
 
+                        <!-- ============ Fashion-category-only fields ============
+                             Shown only when category = "Men's Fashion" (toggled by
+                             toggleFashionFields() below). Stored in fashion_attributes (JSON).
+                             TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories -->
+                        <!-- ======================================================== -->
+                        <div id="fashionFieldsWrap" class="hidden">
+                            @include('vendor.partials.fashion_common_fields', ['fa' => $faAttrs ?? []])
+                            @include('vendor.partials.mens_fashion_fields', ['fa' => $faAttrs ?? [], 'faSizes' => $faSizes ?? []])
+                        </div>
+
                         <!-- Step 1 Nav -->
                         <div class="wizard-nav">
                             <button type="button" class="save-draft-btn"><i class="fas fa-save mr-2"></i><span class="draft-btn-text">Save as Draft</span></button>
@@ -2421,7 +2431,69 @@
                 subCategory.disabled = true;
                 subCategory.classList.add('bg-gray-100');
             }
+
+            toggleFashionFields(mainCategory.value);
         }
+
+        // Categories that use the fashion_attributes JSON block.
+        // TODO: add the other 4 fashion categories here once they're built
+        // (Women's Fashion clothing, Kids & Baby, Footwear, Fashion Accessories & Bags)
+        const FASHION_CATEGORIES = ["Men's Fashion"];
+
+        function toggleFashionFields(categoryValue) {
+            const wrap = document.getElementById('fashionFieldsWrap');
+            if (!wrap) return;
+            if (FASHION_CATEGORIES.includes(categoryValue)) {
+                wrap.classList.remove('hidden');
+            } else {
+                wrap.classList.add('hidden');
+            }
+        }
+
+        // Warranty / Returnable conditional sub-fields + size repeater
+        document.addEventListener('DOMContentLoaded', function () {
+            const warrantySelect = document.getElementById('fa_warranty');
+            const warrantyWrap = document.getElementById('fa_warranty_duration_wrap');
+            if (warrantySelect && warrantyWrap) {
+                warrantySelect.addEventListener('change', function () {
+                    warrantyWrap.classList.toggle('hidden', this.value !== 'Yes');
+                });
+            }
+
+            const returnableSelect = document.getElementById('fa_returnable');
+            const returnPolicyWrap = document.getElementById('fa_return_policy_wrap');
+            if (returnableSelect && returnPolicyWrap) {
+                returnableSelect.addEventListener('change', function () {
+                    returnPolicyWrap.classList.toggle('hidden', this.value !== 'Yes');
+                });
+            }
+
+            const addSizeBtn = document.getElementById('faAddSizeBtn');
+            const sizeRows = document.getElementById('faSizeRows');
+            const sizeRowTemplate = document.getElementById('faSizeRowTemplate');
+            if (addSizeBtn && sizeRows && sizeRowTemplate) {
+                addSizeBtn.addEventListener('click', function () {
+                    sizeRows.appendChild(sizeRowTemplate.content.cloneNode(true));
+                });
+                // At least one row to start with when there's none prefilled (new product)
+                if (sizeRows.children.length === 0) {
+                    sizeRows.appendChild(sizeRowTemplate.content.cloneNode(true));
+                }
+                sizeRows.addEventListener('click', function (e) {
+                    const btn = e.target.closest('.fa-remove-size-btn');
+                    if (!btn) return;
+                    const row = btn.closest('.fa-size-row');
+                    // Always keep at least one row so the repeater doesn't disappear entirely
+                    if (sizeRows.querySelectorAll('.fa-size-row').length > 1 && row) {
+                        row.remove();
+                    }
+                });
+            }
+
+            // Initial show/hide on page load (covers edit mode where the
+            // category select is pre-selected before any 'change' event fires)
+            toggleFashionFields(document.getElementById('mainCategory')?.value);
+        });
 
         // Setup video upload
         function setupVideoUpload() {
