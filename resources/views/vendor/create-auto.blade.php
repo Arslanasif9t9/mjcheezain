@@ -3,6 +3,7 @@
 <head>
     <script src="{{ asset('js/page-loader.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('js/img-fallback.js') }}"></script>
+    <script src="{{ asset('js/fault-annotator.js') }}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Auto Parts Product</title>
@@ -1429,6 +1430,12 @@
             const descriptionTextarea = clone.querySelector('textarea');
             const charCount = clone.querySelector('.char-count');
             const removeFaultBtn = clone.querySelector('.remove-fault');
+
+            // Freehand pencil annotation: lets the vendor mark/underline damage
+            // directly on the fault photo before it's uploaded.
+            if (window.FaultAnnotator && imageContainer) {
+                window.FaultAnnotator.attachBadge(imageContainer, fileInput);
+            }
 
             fileInput.addEventListener('change', function(e) {
                 const file = e.target.files[0];
