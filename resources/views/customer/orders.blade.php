@@ -670,9 +670,9 @@
                 
                 <!-- Timeline -->
                 <div class="space-y-6">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-0">
+                    <div id="orderTrackingSteps" class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-0">
                         <!-- Order Placed Step -->
-                        <div class="flex md:flex-col items-center text-left md:text-center w-full md:w-auto">
+                        <div class="tracking-step flex md:flex-col items-center text-left md:text-center w-full md:w-auto">
                             <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mb-0 md:mb-2 mr-3 md:mr-0 flex-shrink-0">
                                 <i class="fas fa-shopping-cart text-gray-500"></i>
                             </div>
@@ -680,11 +680,11 @@
                                 <p class="text-sm font-medium text-gray-600">Order Placed</p>
                             </div>
                         </div>
-                        
-                        <div class="hidden md:block h-1 flex-1 bg-gray-300 mx-2"></div>
-                        
+
+                        <div class="tracking-connector hidden md:block h-1 flex-1 bg-gray-300 mx-2"></div>
+
                         <!-- Processing Step -->
-                        <div class="flex md:flex-col items-center text-left md:text-center w-full md:w-auto">
+                        <div class="tracking-step flex md:flex-col items-center text-left md:text-center w-full md:w-auto">
                             <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mb-0 md:mb-2 mr-3 md:mr-0 flex-shrink-0">
                                 <i class="fas fa-cog text-gray-500"></i>
                             </div>
@@ -692,11 +692,11 @@
                                 <p class="text-sm font-medium text-gray-600">Processing</p>
                             </div>
                         </div>
-                        
-                        <div class="hidden md:block h-1 flex-1 bg-gray-300 mx-2"></div>
-                        
+
+                        <div class="tracking-connector hidden md:block h-1 flex-1 bg-gray-300 mx-2"></div>
+
                         <!-- Shipped Step -->
-                        <div class="flex md:flex-col items-center text-left md:text-center w-full md:w-auto">
+                        <div class="tracking-step flex md:flex-col items-center text-left md:text-center w-full md:w-auto">
                             <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mb-0 md:mb-2 mr-3 md:mr-0 flex-shrink-0">
                                 <i class="fas fa-truck text-gray-500"></i>
                             </div>
@@ -704,11 +704,11 @@
                                 <p class="text-sm font-medium text-gray-600">Shipped</p>
                             </div>
                         </div>
-                        
-                        <div class="hidden md:block h-1 flex-1 bg-gray-300 mx-2"></div>
-                        
+
+                        <div class="tracking-connector hidden md:block h-1 flex-1 bg-gray-300 mx-2"></div>
+
                         <!-- Delivered Step -->
-                        <div class="flex md:flex-col items-center text-left md:text-center w-full md:w-auto">
+                        <div class="tracking-step flex md:flex-col items-center text-left md:text-center w-full md:w-auto">
                             <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mb-0 md:mb-2 mr-3 md:mr-0 flex-shrink-0">
                                 <i class="fas fa-check text-gray-500"></i>
                             </div>
@@ -2407,9 +2407,9 @@ if (activeIndex === -1) activeIndex = 0;
 
 const color = colorMap[matchedStatus] || 'bg-[#FF7DA0]';
 
-    // Grab the 4 step containers inside the flex row
-    const stepDivs = document.querySelectorAll('#trackingModal .flex.items-center.justify-between > .text-center');
-    const lines    = document.querySelectorAll('#trackingModal .flex.items-center.justify-between > .h-1');
+    // Grab the 4 step containers inside the timeline row
+    const stepDivs = document.querySelectorAll('#orderTrackingSteps .tracking-step');
+    const lines    = document.querySelectorAll('#orderTrackingSteps .tracking-connector');
 
     stepDivs.forEach((stepEl, i) => {
         const dot  = stepEl.querySelector('div');   // the circle
@@ -2446,9 +2446,9 @@ const color = colorMap[matchedStatus] || 'bg-[#FF7DA0]';
     // Estimated delivery
     const daysMap = { 'Order Placed': 7, 'Processing': 5, 'Shipped': 3, 'Delivered': 0 };
     const deliveryDate = new Date();
-    deliveryDate.setDate(deliveryDate.getDate() + (daysMap[orderStatus] ?? 7));
+    deliveryDate.setDate(deliveryDate.getDate() + (daysMap[matchedStatus] ?? 7));
     document.getElementById('estimatedDelivery').textContent =
-        deliveryDate.setDate(deliveryDate.getDate() + (daysMap[matchedStatus] ?? 7));
+        deliveryDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
     modal.classList.remove('hidden');
 }
