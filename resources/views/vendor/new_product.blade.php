@@ -1310,13 +1310,36 @@
                         </div>
 
                         <!-- ============ Fashion-category-only fields ============
-                             Shown only when category = "Men's Fashion" (toggled by
-                             toggleFashionFields() below). Stored in fashion_attributes (JSON).
-                             TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories -->
+                             Shown when category is one of the 5 fashion categories
+                             (Men's Fashion / Women's Fashion / Kids & Baby Fashion /
+                             Footwear / Fashion Accessories & Bags), toggled by
+                             toggleFashionFields() below. Stored in fashion_attributes
+                             (JSON). Common fields always show; exactly one of the 5
+                             category-specific partials shows underneath, picked by
+                             toggleFashionCategoryFields() keyed off the category
+                             itself (these are 5 sibling top-level categories, not
+                             subcategories of one parent, so — unlike Jewellery's
+                             subcategory-keyed toggle — the discriminator here is the
+                             mainCategory select). -->
                         <!-- ======================================================== -->
                         <div id="fashionFieldsWrap" class="hidden">
                             @include('vendor.partials.fashion_common_fields', ['fa' => $faAttrs ?? []])
-                            @include('vendor.partials.mens_fashion_fields', ['fa' => $faAttrs ?? [], 'faSizes' => $faSizes ?? []])
+
+                            <div id="faCat_MensFashion" class="hidden">
+                                @include('vendor.partials.mens_fashion_fields', ['fa' => $faAttrs ?? [], 'faSizes' => $faSizes ?? []])
+                            </div>
+                            <div id="faCat_WomensFashion" class="hidden">
+                                @include('vendor.partials.womens_fashion_fields', ['fa' => $faAttrs ?? [], 'faSizes' => $faSizes ?? []])
+                            </div>
+                            <div id="faCat_KidsFashion" class="hidden">
+                                @include('vendor.partials.kids_fashion_fields', ['fa' => $faAttrs ?? []])
+                            </div>
+                            <div id="faCat_Footwear" class="hidden">
+                                @include('vendor.partials.footwear_fields', ['fa' => $faAttrs ?? []])
+                            </div>
+                            <div id="faCat_FashionAccessories" class="hidden">
+                                @include('vendor.partials.fashion_accessories_fields', ['fa' => $faAttrs ?? []])
+                            </div>
                         </div>
 
                         <!-- ============ Jewellery & Accessories-only fields ============
@@ -2555,10 +2578,16 @@
             toggleSimpleCategoryFields(mainCategory.value);
         }
 
-        // Categories that use the fashion_attributes JSON block.
-        // TODO: add the other 4 fashion categories here once they're built
-        // (Women's Fashion clothing, Kids & Baby, Footwear, Fashion Accessories & Bags)
-        const FASHION_CATEGORIES = ["Men's Fashion"];
+        // Categories that use the fashion_attributes JSON block — 5 sibling
+        // top-level categories, each with its own category-specific partial
+        // (mapped below in FASHION_CATEGORY_WRAP_IDS).
+        const FASHION_CATEGORIES = [
+            "Men's Fashion",
+            "Women's Fashion",
+            "Kids & Baby Fashion",
+            "Footwear",
+            "Fashion Accessories & Bags",
+        ];
 
         function toggleFashionFields(categoryValue) {
             const wrap = document.getElementById('fashionFieldsWrap');
@@ -2568,6 +2597,56 @@
             } else {
                 wrap.classList.add('hidden');
             }
+            toggleFashionCategoryFields(categoryValue);
+        }
+
+        // Category name -> its fashion category-specific partial wrap id.
+        // Fashion's "second level" is the category itself (5 sibling
+        // top-level categories), unlike Jewellery/Fragrance where it's the
+        // subcategory select under one shared parent category.
+        const FASHION_CATEGORY_WRAP_IDS = {
+            "Men's Fashion": 'faCat_MensFashion',
+            "Women's Fashion": 'faCat_WomensFashion',
+            "Kids & Baby Fashion": 'faCat_KidsFashion',
+            "Footwear": 'faCat_Footwear',
+            "Fashion Accessories & Bags": 'faCat_FashionAccessories',
+        };
+
+        function toggleFashionCategoryFields(categoryValue) {
+            const matchedId = FASHION_CATEGORY_WRAP_IDS[categoryValue];
+            Object.values(FASHION_CATEGORY_WRAP_IDS).forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.classList.toggle('hidden', id !== matchedId);
+            });
+        }
+
+        // Shared "add another size / remove size" repeater wiring, used by
+        // both Men's Fashion (fa_* prefix) and Women's Fashion (faw_* prefix)
+        // — the only 2 of the 5 fashion categories with a Sizes & Stock
+        // repeater (Kids & Baby uses a single Size field instead).
+        function wireFashionSizeRepeater(addBtnId, rowsId, templateId, removeBtnClass, rowClass) {
+            const addSizeBtn = document.getElementById(addBtnId);
+            const sizeRows = document.getElementById(rowsId);
+            const sizeRowTemplate = document.getElementById(templateId);
+            if (!addSizeBtn || !sizeRows || !sizeRowTemplate) return;
+
+            addSizeBtn.addEventListener('click', function () {
+                sizeRows.appendChild(sizeRowTemplate.content.cloneNode(true));
+            });
+            // At least one row to start with when there's none prefilled (new product)
+            if (sizeRows.children.length === 0) {
+                sizeRows.appendChild(sizeRowTemplate.content.cloneNode(true));
+            }
+            sizeRows.addEventListener('click', function (e) {
+                const btn = e.target.closest('.' + removeBtnClass);
+                if (!btn) return;
+                const row = btn.closest('.' + rowClass);
+                // Always keep at least one row so the repeater doesn't disappear entirely
+                if (sizeRows.querySelectorAll('.' + rowClass).length > 1 && row) {
+                    row.remove();
+                }
+            });
         }
 
         // Category that uses the jewelry_attributes JSON block (two-level
@@ -2725,27 +2804,10 @@
                 });
             }
 
-            const addSizeBtn = document.getElementById('faAddSizeBtn');
-            const sizeRows = document.getElementById('faSizeRows');
-            const sizeRowTemplate = document.getElementById('faSizeRowTemplate');
-            if (addSizeBtn && sizeRows && sizeRowTemplate) {
-                addSizeBtn.addEventListener('click', function () {
-                    sizeRows.appendChild(sizeRowTemplate.content.cloneNode(true));
-                });
-                // At least one row to start with when there's none prefilled (new product)
-                if (sizeRows.children.length === 0) {
-                    sizeRows.appendChild(sizeRowTemplate.content.cloneNode(true));
-                }
-                sizeRows.addEventListener('click', function (e) {
-                    const btn = e.target.closest('.fa-remove-size-btn');
-                    if (!btn) return;
-                    const row = btn.closest('.fa-size-row');
-                    // Always keep at least one row so the repeater doesn't disappear entirely
-                    if (sizeRows.querySelectorAll('.fa-size-row').length > 1 && row) {
-                        row.remove();
-                    }
-                });
-            }
+            // Men's Fashion size+stock repeater (fa_* prefix, unchanged).
+            wireFashionSizeRepeater('faAddSizeBtn', 'faSizeRows', 'faSizeRowTemplate', 'fa-remove-size-btn', 'fa-size-row');
+            // Women's Fashion size+stock repeater (faw_* prefix, same pattern).
+            wireFashionSizeRepeater('fawAddSizeBtn', 'fawSizeRows', 'fawSizeRowTemplate', 'faw-remove-size-btn', 'faw-size-row');
 
             // Initial show/hide on page load (covers edit mode where the
             // category select is pre-selected before any 'change' event fires)
