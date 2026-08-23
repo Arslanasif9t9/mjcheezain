@@ -1216,6 +1216,7 @@
             </div>
 
             <!-- Video Element - Autoplay, loop, and muted are mandatory for background videos -->
+            @if(!empty($product->video))
             <div class="w-full flex justify-center items-center py-6 sm:py-10 bg-gradient-to-b from-pink50 to-white">
                 <div class="relative w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl border-4 border-pink-200 hover:border-pink-400 transition-all duration-300">
                     <video
@@ -1225,13 +1226,6 @@
                         <source src="{{ asset('storage/vendor/products/videos/'.$product->video) }}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
-                    {{-- <video
-                        controls
-                        poster="{{ asset('img/default_img.png') }}"
-                        class="w-full rounded-2xl object-cover h-[366px]">
-                        <source src="{{ asset('video/cosmetics.mp4') }}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video> --}}
 
                     <!-- Optional overlay label -->
                     <div class="absolute top-3 left-3 bg-pink-600 text-white text-sm font-semibold px-3 py-1 rounded-full shadow-md">
@@ -1239,6 +1233,7 @@
                     </div>
                 </div>
             </div>
+            @endif
 
         </div>
 
