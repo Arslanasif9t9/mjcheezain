@@ -68,8 +68,8 @@
 <meta property="og:type" content="{{ $__ogType }}">
 <meta property="og:image" content="{{ $__ogImage }}">
 
-<!-- Twitter Card (mirrors the OG values above unless a page explicitly
-     overrides @section('twitter_title'|'twitter_description'|'twitter_image', ...)) -->
+<!-- Twitter Card (mirrors the OG values above unless a page explicitly sets
+     its own twitter_title / twitter_description / twitter_image section) -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ trim($__env->yieldContent('twitter_title', $__ogTitle)) ?: $__ogTitle }}">
 <meta name="twitter:description" content="{{ trim($__env->yieldContent('twitter_description', $__ogDescription)) ?: $__ogDescription }}">
@@ -87,7 +87,7 @@
      so it is intentionally omitted here rather than inventing one. --}}
 <script type="application/ld+json">
 {!! json_encode([
-    '@context' => 'https://schema.org',
+    '@@context' => 'https://schema.org',
     '@graph' => [
         [
             '@type' => 'Organization',
