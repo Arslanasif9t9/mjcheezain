@@ -39,7 +39,13 @@ class VendorProduct extends Model
         'video',
         'part_type',
         'fashion_attributes',
-        'jewelry_attributes'
+        'jewelry_attributes',
+        'fragrance_attributes',
+        'bags_attributes',
+        'gym_attributes',
+        'kitchen_attributes',
+        'smarthome_attributes',
+        'personalcare_attributes'
     ];
 
     // fashion_attributes: category-specific fields stored as JSON (currently
@@ -47,9 +53,19 @@ class VendorProduct extends Model
     // TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories
     // jewelry_attributes: same pattern for Jewellery & Accessories (own bucket,
     // not reused from fashion_attributes; see buildJewelryAttributes() in VendorController).
+    // fragrance_attributes / bags_attributes / gym_attributes / kitchen_attributes /
+    // smarthome_attributes / personalcare_attributes: same pattern, one own bucket
+    // per category — see buildFragranceAttributes() / buildSharedCategoryAttributes()
+    // in VendorController.
     protected $casts = [
         'fashion_attributes' => 'array',
         'jewelry_attributes' => 'array',
+        'fragrance_attributes' => 'array',
+        'bags_attributes' => 'array',
+        'gym_attributes' => 'array',
+        'kitchen_attributes' => 'array',
+        'smarthome_attributes' => 'array',
+        'personalcare_attributes' => 'array',
         'free_delivery' => 'boolean',
     ];
 

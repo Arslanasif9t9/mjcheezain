@@ -126,6 +126,18 @@ class CategoryCatalog
             // Own top-level category, same pattern as Men's Fashion — see buildJewelryAttributes()
             // in VendorController and resources/views/vendor/partials/jewelry_common_fields.blade.php.
             ['Jewellery & Accessories', '💍', true, false, ['Rings', 'Necklace', 'Earrings', 'Bangles', 'Chain', 'Pendants', 'Anklets', 'Nose Pins', 'Brooches', 'Charms', 'Jewelry Sets']],
+            // Same pattern, see buildFragranceAttributes() in VendorController.
+            ['Fragrance & Scents', '🌸', true, false, ['Perfumes', 'Attars', 'Body Mists', 'Deodorants', 'Perfume Oils', 'Gift Sets']],
+            // Same pattern, see buildSharedCategoryAttributes() in VendorController.
+            ['Bags & Luggage', '🧳', true, false, ['Handbags', 'Laptop Bags', 'Shoulder Bags', 'Crossbody Bags', 'Tote Bags', 'Clutches', 'Wallets', 'Backpacks', 'Travel Bags']],
+            // Named "Personal Gym Accessories" (not "Gym Accessories") to avoid colliding
+            // with the pre-existing "Gym Accessories" row above (different subcategories).
+            ['Personal Gym Accessories', '🏋️', true, false, ['Gym Gloves', 'Weight Belts', 'Lifting Straps', 'Wrist Wraps', 'Knee Sleeves', 'Resistance Bands', 'Skipping Ropes', 'Yoga Mats', 'Gym Bag']],
+            ['Kitchen & Dining', '🍽️', true, false, ['Cooking Essentials', 'Baking Essentials', 'Dining Essentials', 'Drinkware', 'Food Storage', 'Kitchen Appliances', 'Kitchen Tools & Gadgets', 'Serving & Tableware', 'Kitchen Accessories']],
+            ['Smart Home & Gadgets', '🏠', true, false, ['Home Organization & Storage', 'Cleaning & Hygiene Gadgets', 'Smart & Electrical Gadgets', 'Kitchen Utility Gadgets', 'Home Convenience Gadgets']],
+            ['Personal Care & Daily Essentials', '🧴', true, false, ["Men's Essentials", "Women's Essentials", 'Couple Essentials', 'Baby & Kids Essentials', 'Senior Care Essentials', 'Family Essentials']],
+            // Category-only: no form/JSON column, uses base product fields.
+            ['Electronic Accessories', '🔌', true, false, ['General']],
             ['Mobile Accessories', '📱', true, false, ['Mobile Covers', 'Chargers', 'Handsfree & Earphones', 'Power Banks', 'Screen Protectors']],
             ['Home & Living', '🏠', true, false, ['Decoration Items', 'LED Lights', 'Clocks', 'Wall Frames', 'Artificial Flowers']],
             ['Gifts & General Items', '🎁', true, false, ['Keychains', 'Mugs', 'Gift Boxes', 'Custom Printed Items', 'Souvenirs']],
