@@ -1368,6 +1368,61 @@
                             </div>
                         </div>
 
+                        <!-- ============ Fragrance & Scents-only fields ============
+                             Shown only when category = "Fragrance & Scents" (toggled by
+                             toggleFragranceFields() below). Stored in fragrance_attributes
+                             (JSON). 4 of the 6 subcategories have one extra conditional
+                             field/block, toggled a second level deep by
+                             toggleFragranceSubFields() — Attars and Perfume Oils SHARE the
+                             "Alcohol Free" field/partial; Body Mists has no extra field. -->
+                        <!-- ========================================================== -->
+                        <div id="fragranceFieldsWrap" class="hidden">
+                            @include('vendor.partials.fragrance_common_fields', ['fr' => $frAttrs ?? []])
+
+                            <div class="form-section">
+                                <h2>Subcategory-Specific Details</h2>
+
+                                <div id="frSub_Perfumes" class="hidden">
+                                    @include('vendor.partials.fragrance.perfumes', ['fr' => $frAttrs ?? []])
+                                </div>
+                                <div id="frSub_AttarsOils" class="hidden">
+                                    @include('vendor.partials.fragrance.attars_oils', ['fr' => $frAttrs ?? []])
+                                </div>
+                                <div id="frSub_Deodorants" class="hidden">
+                                    @include('vendor.partials.fragrance.deodorants', ['fr' => $frAttrs ?? []])
+                                </div>
+                                <div id="frSub_GiftSets" class="hidden">
+                                    @include('vendor.partials.fragrance.gift_sets', ['fr' => $frAttrs ?? []])
+                                </div>
+                                <p id="frSubNone" class="text-sm text-gray-500">Body Mists (and no selection) have no extra fields beyond the common ones above.</p>
+                            </div>
+                        </div>
+
+                        <!-- ============ Bags & Luggage-only fields ============ -->
+                        <div id="bagsFieldsWrap" class="hidden">
+                            @include('vendor.partials.bags_common_fields', ['bg' => $bgAttrs ?? []])
+                        </div>
+
+                        <!-- ============ Personal Gym Accessories-only fields ============ -->
+                        <div id="gymFieldsWrap" class="hidden">
+                            @include('vendor.partials.gym_common_fields', ['gm' => $gmAttrs ?? []])
+                        </div>
+
+                        <!-- ============ Kitchen & Dining-only fields ============ -->
+                        <div id="kitchenFieldsWrap" class="hidden">
+                            @include('vendor.partials.kitchen_common_fields', ['kt' => $ktAttrs ?? []])
+                        </div>
+
+                        <!-- ============ Smart Home & Gadgets-only fields ============ -->
+                        <div id="smarthomeFieldsWrap" class="hidden">
+                            @include('vendor.partials.smarthome_common_fields', ['sm' => $smAttrs ?? []])
+                        </div>
+
+                        <!-- ============ Personal Care & Daily Essentials-only fields ============ -->
+                        <div id="personalcareFieldsWrap" class="hidden">
+                            @include('vendor.partials.personalcare_common_fields', ['pc' => $pcAttrs ?? []])
+                        </div>
+
                         <!-- Step 1 Nav -->
                         <div class="wizard-nav">
                             <button type="button" class="save-draft-btn"><i class="fas fa-save mr-2"></i><span class="draft-btn-text">Save as Draft</span></button>
@@ -2484,6 +2539,7 @@
                             subCategory.value = subcatValue;
                         }
                         toggleJewelrySubFields(subCategory.value);
+                        toggleFragranceSubFields(subCategory.value);
                     }, 100);
                 }
             } else {
@@ -2494,6 +2550,9 @@
             toggleFashionFields(mainCategory.value);
             toggleJewelryFields(mainCategory.value);
             toggleJewelrySubFields(subCategory.value);
+            toggleFragranceFields(mainCategory.value);
+            toggleFragranceSubFields(subCategory.value);
+            toggleSimpleCategoryFields(mainCategory.value);
         }
 
         // Categories that use the fashion_attributes JSON block.
@@ -2552,6 +2611,73 @@
             if (noneMsg) {
                 noneMsg.classList.toggle('hidden', !!matchedId);
             }
+        }
+
+        // Category that uses the fragrance_attributes JSON block (two-level
+        // conditional, same shape as jewellery: common fields always show,
+        // then 4 of the 6 subcategories reveal one extra small block).
+        const FRAGRANCE_CATEGORIES = ["Fragrance & Scents"];
+
+        function toggleFragranceFields(categoryValue) {
+            const wrap = document.getElementById('fragranceFieldsWrap');
+            if (!wrap) return;
+            wrap.classList.toggle('hidden', !FRAGRANCE_CATEGORIES.includes(categoryValue));
+        }
+
+        // Subcategory name -> its fragrance partial wrap id. Attars and Perfume
+        // Oils intentionally map to the SAME wrap id (they share one field).
+        // Body Mists (and no selection) have no entry -> no extra block shows.
+        const FRAGRANCE_SUB_WRAP_IDS = {
+            'Perfumes': 'frSub_Perfumes',
+            'Attars': 'frSub_AttarsOils',
+            'Perfume Oils': 'frSub_AttarsOils',
+            'Deodorants': 'frSub_Deodorants',
+            'Gift Sets': 'frSub_GiftSets',
+        };
+
+        function toggleFragranceSubFields(subcategoryValue) {
+            const noneMsg = document.getElementById('frSubNone');
+            const matchedId = FRAGRANCE_SUB_WRAP_IDS[subcategoryValue];
+            const uniqueIds = [...new Set(Object.values(FRAGRANCE_SUB_WRAP_IDS))];
+            uniqueIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.classList.toggle('hidden', id !== matchedId);
+            });
+            if (noneMsg) {
+                noneMsg.classList.toggle('hidden', !!matchedId);
+            }
+        }
+
+        // Bags & Luggage / Personal Gym Accessories / Kitchen & Dining / Smart
+        // Home & Gadgets / Personal Care & Daily Essentials: each is a single
+        // common-fields block with no per-subcategory forms, so one shared
+        // config-driven helper covers all 5 (avoids 5 near-identical functions).
+        const SIMPLE_CATEGORY_FIELD_CONFIGS = [
+            { category: 'Bags & Luggage', wrapId: 'bagsFieldsWrap' },
+            { category: 'Personal Gym Accessories', wrapId: 'gymFieldsWrap' },
+            { category: 'Kitchen & Dining', wrapId: 'kitchenFieldsWrap' },
+            { category: 'Smart Home & Gadgets', wrapId: 'smarthomeFieldsWrap' },
+            { category: 'Personal Care & Daily Essentials', wrapId: 'personalcareFieldsWrap' },
+        ];
+
+        function toggleSimpleCategoryFields(categoryValue) {
+            SIMPLE_CATEGORY_FIELD_CONFIGS.forEach(cfg => {
+                const wrap = document.getElementById(cfg.wrapId);
+                if (!wrap) return;
+                wrap.classList.toggle('hidden', categoryValue !== cfg.category);
+            });
+        }
+
+        // Generic "select value === 'Yes' -> reveal wrap" helper, shared by every
+        // Yes/No conditional field across jewellery/fragrance/etc partials.
+        function wireYesNoToggle(selectId, wrapId) {
+            const select = document.getElementById(selectId);
+            const wrap = document.getElementById(wrapId);
+            if (!select || !wrap) return;
+            const update = () => wrap.classList.toggle('hidden', select.value !== 'Yes');
+            select.addEventListener('change', update);
+            update();
         }
 
         // Jewellery Material -> Purity (Gold/Silver only) conditional options
@@ -2626,6 +2752,9 @@
             toggleFashionFields(document.getElementById('mainCategory')?.value);
             toggleJewelryFields(document.getElementById('mainCategory')?.value);
             toggleJewelrySubFields(document.getElementById('subCategory')?.value);
+            toggleFragranceFields(document.getElementById('mainCategory')?.value);
+            toggleFragranceSubFields(document.getElementById('subCategory')?.value);
+            toggleSimpleCategoryFields(document.getElementById('mainCategory')?.value);
         });
 
         // Jewellery & Accessories: subcategory-level toggle + Material/Purity +
@@ -2646,21 +2775,37 @@
                 updateJewelryPurity(true);
             }
 
-            function wireYesNoToggle(selectId, wrapId) {
-                const select = document.getElementById(selectId);
-                const wrap = document.getElementById(wrapId);
-                if (!select || !wrap) return;
-                const update = () => wrap.classList.toggle('hidden', select.value !== 'Yes');
-                select.addEventListener('change', update);
-                update();
-            }
-
             wireYesNoToggle('jws_ring_stone_included', 'jws_ring_stone_type_wrap');
             wireYesNoToggle('jws_necklace_pendant_included', 'jws_necklace_pendant_type_wrap');
             wireYesNoToggle('jws_necklace_stone_included', 'jws_necklace_stone_type_wrap');
             wireYesNoToggle('jws_earring_stone_included', 'jws_earring_stone_type_wrap');
             wireYesNoToggle('jws_earring_stone_included', 'jws_earring_stone_color_wrap');
             wireYesNoToggle('jws_charm_stone_included', 'jws_charm_stone_type_wrap');
+        });
+
+        // Fragrance & Scents: subcategory-level toggle + every "X Yes/No ->
+        // duration/extra field" conditional pair across the common + 4
+        // subcategory-specific partials.
+        document.addEventListener('DOMContentLoaded', function () {
+            const subCategory = document.getElementById('subCategory');
+            if (subCategory) {
+                subCategory.addEventListener('change', function () {
+                    toggleFragranceSubFields(this.value);
+                });
+            }
+
+            wireYesNoToggle('fr_warranty', 'fr_warranty_duration_wrap');
+        });
+
+        // Bags & Luggage / Personal Gym Accessories / Kitchen & Dining / Smart
+        // Home & Gadgets / Personal Care & Daily Essentials: each category's
+        // own "Warranty Yes/No -> duration" pair.
+        document.addEventListener('DOMContentLoaded', function () {
+            wireYesNoToggle('bg_warranty', 'bg_warranty_duration_wrap');
+            wireYesNoToggle('gm_warranty', 'gm_warranty_duration_wrap');
+            wireYesNoToggle('kt_warranty', 'kt_warranty_duration_wrap');
+            wireYesNoToggle('sm_warranty', 'sm_warranty_duration_wrap');
+            wireYesNoToggle('pc_warranty', 'pc_warranty_duration_wrap');
         });
 
         // Setup video upload
