@@ -11,9 +11,23 @@
 @php
     $__seoSuffix = ' — Buy Online in Pakistan | MJCheezain';
     $__seoMaxNameLen = 60 - mb_strlen($__seoSuffix);
-    $__seoProductName = mb_strlen($productData['name']) > $__seoMaxNameLen
-        ? \Illuminate\Support\Str::words($productData['name'], 8, '')
-        : $productData['name'];
+    if (mb_strlen($productData['name']) <= $__seoMaxNameLen) {
+        $__seoProductName = $productData['name'];
+    } else {
+        // Word-boundary truncation to the char budget — see product.blade.php
+        // for the same logic with more explanation.
+        $__seoProductName = '';
+        foreach (explode(' ', $productData['name']) as $__seoWord) {
+            $__seoCandidate = trim($__seoProductName . ' ' . $__seoWord);
+            if (mb_strlen($__seoCandidate) > $__seoMaxNameLen) {
+                break;
+            }
+            $__seoProductName = $__seoCandidate;
+        }
+        if ($__seoProductName === '') {
+            $__seoProductName = mb_substr($productData['name'], 0, $__seoMaxNameLen);
+        }
+    }
     $__seoTitle = trim($__seoProductName) . $__seoSuffix;
 
     $__seoCleanDescription = trim(strip_tags($productData['description'] ?? ''));
@@ -34,7 +48,7 @@
 @section('structured_data')
     <script type="application/ld+json">
     {!! json_encode(array_filter([
-        '@context' => 'https://schema.org',
+        '@@context' => 'https://schema.org',
         '@type' => 'Product',
         'name' => $productData['name'],
         'image' => $__seoImageUrls ?: [$__seoImage],
@@ -57,7 +71,7 @@
 
     <script type="application/ld+json">
     {!! json_encode([
-        '@context' => 'https://schema.org',
+        '@@context' => 'https://schema.org',
         '@type' => 'BreadcrumbList',
         'itemListElement' => [
             [

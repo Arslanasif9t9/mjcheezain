@@ -13,9 +13,24 @@
     // without cutting a word in half.
     $__seoSuffix = ' — Buy Online in Pakistan | MJCheezain';
     $__seoMaxNameLen = 60 - mb_strlen($__seoSuffix);
-    $__seoProductName = mb_strlen($product->name) > $__seoMaxNameLen
-        ? \Illuminate\Support\Str::words($product->name, 8, '')
-        : $product->name;
+    if (mb_strlen($product->name) <= $__seoMaxNameLen) {
+        $__seoProductName = $product->name;
+    } else {
+        // Word-boundary truncation to the char budget (not a fixed word
+        // count — a "hard-truncate mid-word" is worse than going a little
+        // over budget on a single very long word, hence the final fallback).
+        $__seoProductName = '';
+        foreach (explode(' ', $product->name) as $__seoWord) {
+            $__seoCandidate = trim($__seoProductName . ' ' . $__seoWord);
+            if (mb_strlen($__seoCandidate) > $__seoMaxNameLen) {
+                break;
+            }
+            $__seoProductName = $__seoCandidate;
+        }
+        if ($__seoProductName === '') {
+            $__seoProductName = mb_substr($product->name, 0, $__seoMaxNameLen);
+        }
+    }
     $__seoTitle = trim($__seoProductName) . $__seoSuffix;
 
     // Description: strip any HTML the vendor may have pasted into the
@@ -47,7 +62,7 @@
 @section('structured_data')
     <script type="application/ld+json">
     {!! json_encode(array_filter([
-        '@context' => 'https://schema.org',
+        '@@context' => 'https://schema.org',
         '@type' => 'Product',
         'name' => $product->name,
         'image' => $__seoImages,
@@ -77,7 +92,7 @@
 
     <script type="application/ld+json">
     {!! json_encode([
-        '@context' => 'https://schema.org',
+        '@@context' => 'https://schema.org',
         '@type' => 'BreadcrumbList',
         'itemListElement' => [
             [
