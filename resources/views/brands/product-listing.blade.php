@@ -1,5 +1,31 @@
 @extends('layouts.structure')
-@section('title', 'Product Listing | MJ Cheezain')
+
+{{--
+    SEO: this template serves both /product-listing (no filter) and
+    /products/all-page?category=... (the JS-driven filtered listing —
+    HomeController::productList doesn't receive the category itself, the
+    front-end JS reads it and calls the /products/all-page /products/category
+    JSON APIs), so the title/description are built here straight from the
+    query string via request(), which is always available regardless of
+    what the controller passed in.
+--}}
+@php
+    $__seoCategory = trim((string) request()->query('category', ''));
+    $__seoTitle = $__seoCategory !== ''
+        ? "{$__seoCategory} Products | MJCheezain"
+        : 'All Products | MJCheezain';
+    $__seoDescription = $__seoCategory !== ''
+        ? "Browse {$__seoCategory} products from trusted vendors on MJCheezain — quality items, competitive prices, fast delivery across Pakistan."
+        : 'Browse all products from trusted vendors on MJCheezain — fashion, cosmetics, accessories, and more, with quality items and fast delivery across Pakistan.';
+@endphp
+
+@section('title', $__seoTitle)
+@section('meta_description', $__seoDescription)
+{{-- Strip any extra query-string params (referrer tags, etc.) down to just
+     the ?category= filter that actually changes the page's content. --}}
+@section('canonical', $__seoCategory !== ''
+    ? url('/products/all-page') . '?category=' . urlencode($__seoCategory)
+    : url('/product-listing'))
 
 @section('style')
     <style>

@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('title', 'MJCheezain — Shop Fashion, Beauty, Auto Parts & More Online in Pakistan')
+@section('meta_description', 'Shop quality fashion, cosmetics, auto parts, accessories and more on MJCheezain — Pakistan\'s online marketplace with trusted vendors and fast delivery.')
+@section('canonical', url('/a456'))
+
 @section('content')
     <!-- Search Results Section -->
     <section id="searchResults" class="bg-white p-4 m-auto mt-4 hidden">
