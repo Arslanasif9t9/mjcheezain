@@ -48,9 +48,9 @@ class VendorProduct extends Model
         'personalcare_attributes'
     ];
 
-    // fashion_attributes: category-specific fields stored as JSON (currently
-    // only Men's Fashion; see storeProduct() in VendorController).
-    // TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories
+    // fashion_attributes: category-specific fields stored as JSON, shared by
+    // all 5 fashion categories (Men's/Women's/Kids & Baby/Footwear/Fashion
+    // Accessories & Bags — see buildFashionAttributes() in VendorController).
     // jewelry_attributes: same pattern for Jewellery & Accessories (own bucket,
     // not reused from fashion_attributes; see buildJewelryAttributes() in VendorController).
     // fragrance_attributes / bags_attributes / gym_attributes / kitchen_attributes /

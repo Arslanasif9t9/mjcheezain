@@ -844,11 +844,16 @@
                                 <td class="py-2">{{ $product->made_in }}</td>
                             </tr>
                             {{--
-                                Men's Fashion "Product Details" — common + category-specific
-                                fields decoded from fashion_attributes (HomeController::product()).
-                                Empty/null fields are skipped; the whole block simply doesn't
-                                render for older products or any other category.
-                                TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories
+                                Fashion "Product Details" — common + category-specific fields
+                                decoded from fashion_attributes (HomeController::product()),
+                                shared by all 5 fashion categories (Men's/Women's/Kids &
+                                Baby/Footwear/Fashion Accessories & Bags — each writes a
+                                different subset of these keys into the same JSON bucket, see
+                                VendorController::buildFashionAttributes()). $faLabels is the
+                                union of every category's label set; empty/null fields are
+                                skipped either way, so only the keys the product's own
+                                category actually wrote ever render. The whole block simply
+                                doesn't render for older products or any other category.
                             --}}
                             @if(!empty($fashionAttrs))
                                 @php
@@ -862,14 +867,46 @@
                                         'shipping_info' => 'Shipping Information',
                                         'tags' => 'Tags / Keywords',
                                         'care_instructions' => 'Care Instructions',
+                                        // Men's / Women's Fashion (clothing)
                                         'clothing_type' => 'Clothing Type',
                                         'fit' => 'Fit',
                                         'sleeve_type' => 'Sleeve Type',
                                         'neck_type' => 'Neck Type',
                                         'clothing_length' => 'Clothing Length',
+                                        'dress_length' => 'Dress Length',
                                         'season' => 'Season',
                                         'gender' => 'Gender',
                                         'occasion' => 'Occasion',
+                                        'embroidery' => 'Embroidery',
+                                        'lining' => 'Lining',
+                                        // Kids & Baby Fashion
+                                        'age_group' => 'Age Group',
+                                        'size' => 'Size',
+                                        'height_range' => 'Height Range',
+                                        'weight_range' => 'Weight Range',
+                                        'safety_material' => 'Safety / Baby-Friendly Material',
+                                        'pack_quantity' => 'Pack Quantity',
+                                        // Footwear
+                                        'footwear_type' => 'Footwear Type',
+                                        'shoe_size_system' => 'Shoe Size System',
+                                        'shoe_size' => 'Size Number',
+                                        'upper_material' => 'Upper Material',
+                                        'sole_material' => 'Sole Material',
+                                        'heel_height' => 'Heel Height',
+                                        'closure_type' => 'Closure Type',
+                                        'toe_shape' => 'Toe Shape',
+                                        'footwear_width' => 'Footwear Width',
+                                        'waterproof' => 'Waterproof',
+                                        // Fashion Accessories & Bags
+                                        'product_type' => 'Product Type',
+                                        'size_dimensions' => 'Size / Dimensions',
+                                        'strap_type' => 'Strap Type',
+                                        'compartments' => 'Number of Compartments',
+                                        'adjustable_strap' => 'Adjustable Strap',
+                                        'capacity' => 'Capacity',
+                                        'laptop_size_compatibility' => 'Laptop Size Compatibility',
+                                        'hardware_material' => 'Hardware Material',
+                                        'pattern_design' => 'Pattern / Design',
                                     ];
                                     $faRows = collect($faLabels)
                                         ->map(fn ($label, $key) => ['label' => $label, 'value' => $fashionAttrs[$key] ?? null])

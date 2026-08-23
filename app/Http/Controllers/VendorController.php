@@ -534,8 +534,8 @@ class VendorController extends Controller
         $product = null;
         $productImages = [];
         $productFaults = [];
-        // Men's Fashion (and later, the other fashion categories) prefill data.
-        // TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories
+        // All 5 fashion categories (Men's/Women's/Kids & Baby/Footwear/
+        // Fashion Accessories & Bags) share this one prefill decode.
         $faAttrs = [];
         $faSizes = [];
         // Jewellery & Accessories prefill data.
@@ -668,10 +668,9 @@ class VendorController extends Controller
         // "Other" category: use the vendor-typed value and queue it for admin review
         $customCategory = $this->resolveCustomCategory($request, $validated);
 
-        // Men's Fashion: collect the common + category-specific fields into
-        // one JSON blob (vendor_products.fashion_attributes). Other
-        // categories are unaffected.
-        // TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories
+        // All 5 fashion categories: collect the common + category-specific
+        // fields into one JSON blob (vendor_products.fashion_attributes).
+        // Other categories are unaffected.
         $fashionAttributes = $this->buildFashionAttributes($request, $validated);
 
         // Jewellery & Accessories: collect the common + subcategory-specific
@@ -833,20 +832,45 @@ class VendorController extends Controller
     }
 
     /**
-     * Men's Fashion: collect the common + category-specific fields (that
-     * don't already have a real vendor_products column) into one array to
-     * be stored as vendor_products.fashion_attributes (JSON). Returns null
-     * for every other category so their product creation is unaffected.
-     * TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories
+     * The 5 fashion categories (own top-level site_categories rows, see
+     * 2026_08_22_000002_add_mens_fashion_category.php + 2026_08_23_000001_
+     * add_remaining_fashion_categories.php) all share ONE JSON bucket,
+     * vendor_products.fashion_attributes. Dispatches to the category's own
+     * builder — each returns the common fields (shared name/shape across all
+     * 5, read from the un-prefixed fa_* inputs shown by
+     * fashion_common_fields.blade.php) merged with that category's
+     * specific fields. Returns null for every other category so their
+     * product creation/update is unaffected.
      */
     private function buildFashionAttributes(Request $request, array $validated): ?array
     {
-        if (($validated['category'] ?? '') !== "Men's Fashion") {
-            return null;
-        }
+        $category = $validated['category'] ?? '';
 
-        $attrs = [
-            // Common fashion fields (step 3 of the task: fields with no existing column)
+        switch ($category) {
+            case "Men's Fashion":
+                return $this->buildMensFashionAttributes($request);
+            case "Women's Fashion":
+                return $this->buildWomensFashionAttributes($request);
+            case 'Kids & Baby Fashion':
+                return $this->buildKidsFashionAttributes($request);
+            case 'Footwear':
+                return $this->buildFootwearAttributes($request);
+            case 'Fashion Accessories & Bags':
+                return $this->buildFashionAccessoriesAttributes($request);
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Common fashion fields shared by all 5 fashion categories (fields with
+     * no existing vendor_products column). Read from the un-prefixed fa_*
+     * inputs (fashion_common_fields.blade.php, included once for every
+     * fashion category).
+     */
+    private function buildFashionCommonAttributes(Request $request): array
+    {
+        return [
             'sku' => trim((string) $request->input('fa_sku', '')) ?: null,
             'material' => trim((string) $request->input('fa_material', '')) ?: null,
             'color' => trim((string) $request->input('fa_color', '')) ?: null,
@@ -864,21 +888,18 @@ class VendorController extends Controller
             'shipping_info' => trim((string) $request->input('fa_shipping_info', '')) ?: null,
             'tags' => trim((string) $request->input('fa_tags', '')) ?: null,
             'care_instructions' => trim((string) $request->input('fa_care_instructions', '')) ?: null,
-
-            // Men's Fashion category-specific fields (step 4 of the task)
-            'clothing_type' => $request->input('fa_clothing_type') ?: null,
-            'fit' => $request->input('fa_fit') ?: null,
-            'sleeve_type' => $request->input('fa_sleeve_type') ?: null,
-            'neck_type' => $request->input('fa_neck_type') ?: null,
-            'clothing_length' => $request->input('fa_clothing_length') ?: null,
-            'season' => $request->input('fa_season') ?: null,
-            'gender' => 'Men', // implied by category, still stored explicitly
-            'occasion' => $request->input('fa_occasion') ?: null,
         ];
+    }
 
-        // Size + stock repeater — parallel arrays fa_size_name[] / fa_size_stock[]
-        $sizeNames = (array) $request->input('fa_size_name', []);
-        $sizeStocks = (array) $request->input('fa_size_stock', []);
+    /**
+     * Parses a "size name / stock" parallel-array repeater into
+     * [['size' => ..., 'stock' => int], ...], skipping blank rows. Shared by
+     * Men's ($namesField='fa_size_name') and Women's ('faw_size_name').
+     */
+    private function parseSizeStockRepeater(Request $request, string $namesField, string $stocksField): array
+    {
+        $sizeNames = (array) $request->input($namesField, []);
+        $sizeStocks = (array) $request->input($stocksField, []);
         $sizes = [];
         foreach ($sizeNames as $i => $size) {
             $size = trim((string) $size);
@@ -890,7 +911,111 @@ class VendorController extends Controller
                 'stock' => (int) ($sizeStocks[$i] ?? 0),
             ];
         }
-        $attrs['sizes'] = $sizes;
+        return $sizes;
+    }
+
+    /** Men's Fashion category-specific fields (fa_* prefix — unchanged from the original implementation). */
+    private function buildMensFashionAttributes(Request $request): array
+    {
+        $attrs = $this->buildFashionCommonAttributes($request);
+
+        $attrs['clothing_type'] = $request->input('fa_clothing_type') ?: null;
+        $attrs['fit'] = $request->input('fa_fit') ?: null;
+        $attrs['sleeve_type'] = $request->input('fa_sleeve_type') ?: null;
+        $attrs['neck_type'] = $request->input('fa_neck_type') ?: null;
+        $attrs['clothing_length'] = $request->input('fa_clothing_length') ?: null;
+        $attrs['season'] = $request->input('fa_season') ?: null;
+        $attrs['gender'] = 'Men'; // implied by category, still stored explicitly
+        $attrs['occasion'] = $request->input('fa_occasion') ?: null;
+        $attrs['sizes'] = $this->parseSizeStockRepeater($request, 'fa_size_name', 'fa_size_stock');
+
+        return $attrs;
+    }
+
+    /** Women's Fashion category-specific fields (faw_* prefix). */
+    private function buildWomensFashionAttributes(Request $request): array
+    {
+        $attrs = $this->buildFashionCommonAttributes($request);
+
+        $attrs['clothing_type'] = $request->input('faw_clothing_type') ?: null;
+        $attrs['fit'] = $request->input('faw_fit') ?: null;
+        $attrs['sleeve_type'] = $request->input('faw_sleeve_type') ?: null;
+        $attrs['neck_type'] = $request->input('faw_neck_type') ?: null;
+        $attrs['dress_length'] = $request->input('faw_dress_length') ?: null;
+        $attrs['season'] = $request->input('faw_season') ?: null;
+        $attrs['occasion'] = $request->input('faw_occasion') ?: null;
+        $attrs['embroidery'] = $request->input('faw_embroidery') === 'Yes' ? 'Yes' : 'No';
+        $attrs['lining'] = $request->input('faw_lining') === 'Yes' ? 'Yes' : 'No';
+        $attrs['gender'] = 'Women'; // implied by category, still stored explicitly
+        $attrs['sizes'] = $this->parseSizeStockRepeater($request, 'faw_size_name', 'faw_size_stock');
+
+        return $attrs;
+    }
+
+    /** Kids & Baby Fashion category-specific fields (fak_* prefix). */
+    private function buildKidsFashionAttributes(Request $request): array
+    {
+        $attrs = $this->buildFashionCommonAttributes($request);
+
+        $attrs['clothing_type'] = $request->input('fak_clothing_type') ?: null;
+        $attrs['age_group'] = $request->input('fak_age_group') ?: null;
+        $attrs['size'] = $request->input('fak_size') ?: null;
+        $attrs['gender'] = $request->input('fak_gender') ?: null;
+        $attrs['height_range'] = trim((string) $request->input('fak_height_range', '')) ?: null;
+        $attrs['weight_range'] = trim((string) $request->input('fak_weight_range', '')) ?: null;
+        $attrs['season'] = $request->input('fak_season') ?: null;
+        $attrs['occasion'] = $request->input('fak_occasion') ?: null;
+        $attrs['safety_material'] = trim((string) $request->input('fak_safety_material', '')) ?: null;
+        $attrs['pack_quantity'] = $request->input('fak_pack_quantity') !== null && $request->input('fak_pack_quantity') !== ''
+            ? (int) $request->input('fak_pack_quantity')
+            : null;
+
+        return $attrs;
+    }
+
+    /** Footwear category-specific fields (faf_* prefix). */
+    private function buildFootwearAttributes(Request $request): array
+    {
+        $attrs = $this->buildFashionCommonAttributes($request);
+
+        $attrs['footwear_type'] = $request->input('faf_footwear_type') ?: null;
+        $attrs['gender'] = $request->input('faf_gender') ?: null;
+        $attrs['shoe_size_system'] = $request->input('faf_shoe_size_system') ?: null;
+        $attrs['shoe_size'] = trim((string) $request->input('faf_shoe_size', '')) ?: null;
+        $attrs['upper_material'] = $request->input('faf_upper_material') ?: null;
+        $attrs['sole_material'] = trim((string) $request->input('faf_sole_material', '')) ?: null;
+        $attrs['heel_height'] = trim((string) $request->input('faf_heel_height', '')) ?: null;
+        $attrs['closure_type'] = $request->input('faf_closure_type') ?: null;
+        $attrs['toe_shape'] = $request->input('faf_toe_shape') ?: null;
+        $attrs['footwear_width'] = $request->input('faf_footwear_width') ?: null;
+        $attrs['season'] = $request->input('faf_season') ?: null;
+        $attrs['occasion'] = $request->input('faf_occasion') ?: null;
+        $attrs['waterproof'] = $request->input('faf_waterproof') === 'Yes' ? 'Yes' : 'No';
+
+        return $attrs;
+    }
+
+    /** Fashion Accessories & Bags category-specific fields (faa_* prefix). */
+    private function buildFashionAccessoriesAttributes(Request $request): array
+    {
+        $attrs = $this->buildFashionCommonAttributes($request);
+
+        $attrs['product_type'] = $request->input('faa_product_type') ?: null;
+        $attrs['gender'] = $request->input('faa_gender') ?: null;
+        $attrs['size_dimensions'] = trim((string) $request->input('faa_size_dimensions', '')) ?: null;
+        $attrs['material'] = trim((string) $request->input('faa_material', '')) ?: null;
+        $attrs['closure_type'] = trim((string) $request->input('faa_closure_type', '')) ?: null;
+        $attrs['strap_type'] = trim((string) $request->input('faa_strap_type', '')) ?: null;
+        $attrs['compartments'] = $request->input('faa_compartments') !== null && $request->input('faa_compartments') !== ''
+            ? (int) $request->input('faa_compartments')
+            : null;
+        $attrs['adjustable_strap'] = $request->input('faa_adjustable_strap') === 'Yes' ? 'Yes' : 'No';
+        $attrs['capacity'] = trim((string) $request->input('faa_capacity', '')) ?: null;
+        $attrs['laptop_size_compatibility'] = trim((string) $request->input('faa_laptop_size_compatibility', '')) ?: null;
+        $attrs['waterproof'] = $request->input('faa_waterproof') === 'Yes' ? 'Yes' : 'No';
+        $attrs['hardware_material'] = trim((string) $request->input('faa_hardware_material', '')) ?: null;
+        $attrs['occasion'] = $request->input('faa_occasion') ?: null;
+        $attrs['pattern_design'] = trim((string) $request->input('faa_pattern_design', '')) ?: null;
 
         return $attrs;
     }
@@ -1216,10 +1341,10 @@ class VendorController extends Controller
         // "Other" category: use the vendor-typed value and queue it for admin review
         $customCategory = $this->resolveCustomCategory($request, $validated);
 
-        // Men's Fashion: rebuild fashion_attributes from the submitted form.
-        // Preserve the existing size_guide filename unless a new one is uploaded
-        // (the form sends fa_size_guide_existing as a hidden field for that).
-        // TODO: same pattern for Women's Fashion / Kids & Baby / Footwear / Bags & Accessories
+        // All 5 fashion categories: rebuild fashion_attributes from the
+        // submitted form. Preserve the existing size_guide filename unless a
+        // new one is uploaded (the form sends fa_size_guide_existing as a
+        // hidden field for that — shared by all 5, from the common partial).
         $fashionAttributes = $this->buildFashionAttributes($request, $validated);
         if ($fashionAttributes && !$request->hasFile('fa_size_guide') && $request->filled('fa_size_guide_existing')) {
             $fashionAttributes['size_guide'] = $request->input('fa_size_guide_existing');
