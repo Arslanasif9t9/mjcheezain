@@ -342,6 +342,9 @@ Route::prefix('admin')->group(function () {
 Route::prefix('admin')->middleware('admin.auth')->group(function () {
     Route::get('/dashboard', [AdminAuthController::class, 'dashboard']);
     Route::get('/sales-data', [SalesController::class, 'getSalesData']);
+    Route::get('/report', function () {
+        return view('Admin.report');
+    })->name('admin.report');
 
     Route::get('/vendors', [AdminAuthController::class, 'vendors']);
     Route::post('/vendor/status', [VendorController::class, 'updateStatus'])->name('admin.vendor.status');
