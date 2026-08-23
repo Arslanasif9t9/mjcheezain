@@ -116,13 +116,20 @@ class CategoryCatalog
             ['Fitness & Gym Equipment', '🏋️', true, false, ['Dumbbells & Weights', 'Barbells & Weight Plates', 'Kettlebells', 'Weight Benches', 'Power Racks & Squat Racks', 'Treadmills', 'Exercise Bikes', 'Cross Trainers / Ellipticals', 'Rowing Machines', 'Steppers', 'Multi Gym Machines', 'Smith Machines', 'Cable Machines', 'Resistance Bands', 'Battle Ropes', 'Medicine Balls', 'Slam Balls', 'Pull-Up Bars', 'Push-Up Bars', 'Ab Rollers', 'Gym Rings', 'Yoga Mats', 'Yoga Blocks', 'Yoga Straps', 'Foam Rollers', 'Punching Bags', 'Boxing Gloves', 'Hand Wraps', 'Skipping Ropes', 'Gym Gloves', 'Weightlifting Belts', 'Wrist / Knee / Elbow Supports', 'Lifting Straps']],
             ['Supplements', '💊', true, false, ['Protein Supplements', 'Mass Gainers', 'Creatine', 'Pre-Workout Supplements', 'Vitamins & Minerals']],
             ['Gym Accessories', '🎽', true, false, ['Water Bottles', 'Shakers', 'Gym Bags', 'Gym Towels']],
-            ["Women's Fashion", '👜', true, false, ['Handbags', 'Clutches & Wallets', 'Shoulder Bags', 'Crossbody Bags', 'Women Jewelry', 'Scarves & Shawls', 'Hair Accessories']],
+            // Repurposed 2026-08-23 from a bags/accessories-for-women category (0
+            // products used it) into the women's-CLOTHING fashion category — own
+            // top-level category, own fashion_attributes bucket, same pattern as
+            // Men's Fashion. See 2026_08_23_000001_add_remaining_fashion_categories.php.
+            ["Women's Fashion", '👗', true, false, ['Dress', 'Kurti', 'Saree', 'Shalwar Kameez', 'Abaya', 'Hijab', 'Top', 'Shirt', 'Trousers', 'Skirt', 'Lehenga', 'Gown', 'Jacket', 'Nightwear']],
             ["Men's Accessories", '👔', true, false, ['Watches', 'Bracelets', 'Chains', 'Rings', 'Sunglasses', 'Wallets']],
             ['Clothing & Apparel', '👕', true, false, ['Men Clothing', 'Women Clothing', 'Kids Clothing', 'Footwear']],
             // Own top-level fashion category (not a subcategory of Clothing & Apparel) — see storeProduct()'s
             // Men's-Fashion-only attribute handling and resources/views/vendor/new_product.blade.php.
-            // TODO: pattern for remaining 4 fashion categories (Women's Fashion clothing, Kids & Baby, Footwear, Fashion Accessories & Bags)
             ["Men's Fashion", '👔', true, false, ['Shirt', 'T-Shirt', 'Jeans', 'Pants', 'Shalwar Kameez', 'Kurta', 'Suit', 'Jacket', 'Coat', 'Hoodie', 'Sweater', 'Shorts', 'Underwear', 'Nightwear']],
+            // Same pattern as Men's Fashion — see buildFashionAttributes() in VendorController.
+            ['Kids & Baby Fashion', '🧸', true, false, ['Baby Dress', 'Boys Clothing', 'Girls Clothing', 'T-Shirt', 'Pants', 'Frock', 'Kurta', 'Shalwar Kameez', 'School Wear', 'Jacket', 'Sweater', 'Nightwear']],
+            ['Footwear', '👟', true, false, ['Sneakers', 'Formal Shoes', 'Boots', 'Sandals', 'Slippers', 'Heels', 'Flats', 'Sports Shoes', 'School Shoes', 'Loafers', 'Khussa']],
+            ['Fashion Accessories & Bags', '👜', true, false, ['Handbag', 'Shoulder Bag', 'Crossbody', 'Tote', 'Clutch', 'Backpack', 'Wallet', 'Travel Bag', 'Laptop Bag', 'Belt', 'Cap', 'Hat', 'Scarf', 'Gloves', 'Tie', 'Sunglasses', 'Fashion Jewelry', 'Hair Accessories', 'Other Fashion Accessories']],
             // Own top-level category, same pattern as Men's Fashion — see buildJewelryAttributes()
             // in VendorController and resources/views/vendor/partials/jewelry_common_fields.blade.php.
             ['Jewellery & Accessories', '💍', true, false, ['Rings', 'Necklace', 'Earrings', 'Bangles', 'Chain', 'Pendants', 'Anklets', 'Nose Pins', 'Brooches', 'Charms', 'Jewelry Sets']],
