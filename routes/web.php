@@ -29,6 +29,7 @@ use App\Http\Controllers\JapanController;
 use App\Http\Controllers\JapanAdminController;
 use App\Http\Controllers\AdminControlsController;
 use App\Http\Controllers\AuthPageController;
+use App\Http\Controllers\SitemapController;
 
 Route::prefix('japan')->name('japan.')->group(function () {
     Route::get('/', [JapanController::class, 'index'])->name('index');
@@ -77,6 +78,7 @@ Route::middleware(['auth'])->prefix('vendor/products/autoparts')->name('vendor.p
 // Add this route
 Route::get('/api/search', [SearchController::class, 'searchProducts']);
 Route::view('/comming', 'comming-soon');
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::post('/subscribe', [HomeController::class, 'subscribe']);
 
 // Dev-only utilities: never exposed in production
