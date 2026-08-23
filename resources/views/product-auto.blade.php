@@ -1,5 +1,88 @@
 @extends('layouts.structure')
-@section('title', 'product')
+
+{{--
+    SEO: same treatment as resources/views/product.blade.php, adapted to this
+    page's data shape — the controller (App\Http\Controllers\Vendor\AutoPartsProductShowController::singleShow)
+    passes a flat $productData array instead of a Product model. $productData
+    is available from the top of the compiled view (came in via compact()),
+    so it's safe to use before @section('body') (which does its own, separate
+    extraction of the same array into loose variables for the page markup).
+--}}
+@php
+    $__seoSuffix = ' — Buy Online in Pakistan | MJCheezain';
+    $__seoMaxNameLen = 60 - mb_strlen($__seoSuffix);
+    $__seoProductName = mb_strlen($productData['name']) > $__seoMaxNameLen
+        ? \Illuminate\Support\Str::words($productData['name'], 8, '')
+        : $productData['name'];
+    $__seoTitle = trim($__seoProductName) . $__seoSuffix;
+
+    $__seoCleanDescription = trim(strip_tags($productData['description'] ?? ''));
+    $__seoDescription = $__seoCleanDescription !== ''
+        ? \Illuminate\Support\Str::limit($__seoCleanDescription, 150)
+        : "Buy {$productData['name']} online in {$productData['category']} at MJCheezain. Quality products with excellent customer support.";
+
+    // Reuse the same "first image" resolution the page body uses for its main photo.
+    $__seoImageUrls = collect($productData['images'] ?? [])->pluck('url')->values()->all();
+    $__seoImage = $__seoImageUrls[0] ?? asset('img/default_img.png');
+@endphp
+
+@section('title', $__seoTitle)
+@section('meta_description', $__seoDescription)
+@section('canonical', url('/auto/' . $productData['id']))
+@section('og_image', $__seoImage)
+
+@section('structured_data')
+    <script type="application/ld+json">
+    {!! json_encode(array_filter([
+        '@context' => 'https://schema.org',
+        '@type' => 'Product',
+        'name' => $productData['name'],
+        'image' => $__seoImageUrls ?: [$__seoImage],
+        'description' => $__seoCleanDescription !== '' ? \Illuminate\Support\Str::limit($__seoCleanDescription, 500) : $__seoDescription,
+        'brand' => $productData['brand'] ? [
+            '@type' => 'Brand',
+            'name' => $productData['brand'],
+        ] : null,
+        'offers' => [
+            '@type' => 'Offer',
+            'url' => url('/auto/' . $productData['id']),
+            'priceCurrency' => 'PKR',
+            'price' => (string) $productData['price'],
+            'availability' => ($productData['quantity'] ?? 0) > 0
+                ? 'https://schema.org/InStock'
+                : 'https://schema.org/OutOfStock',
+        ],
+    ]), JSON_UNESCAPED_SLASHES) !!}
+    </script>
+
+    <script type="application/ld+json">
+    {!! json_encode([
+        '@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => [
+            [
+                '@type' => 'ListItem',
+                'position' => 1,
+                'name' => 'Home',
+                'item' => url('/'),
+            ],
+            [
+                '@type' => 'ListItem',
+                'position' => 2,
+                'name' => $productData['category'],
+                'item' => url('/auto-parts') . '?category_id=' . urlencode((string) $productData['category_id']),
+            ],
+            [
+                '@type' => 'ListItem',
+                'position' => 3,
+                'name' => $productData['name'],
+                'item' => url('/auto/' . $productData['id']),
+            ],
+        ],
+    ], JSON_UNESCAPED_SLASHES) !!}
+    </script>
+@endsection
+
 @section('style')
     <style>
         /* Custom scrollbar for webkit browsers */

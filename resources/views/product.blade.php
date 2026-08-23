@@ -1,5 +1,108 @@
 @extends('layouts.structure')
-@section('title', 'product')
+
+{{--
+    SEO: title/description/canonical/OG-image/structured-data are all built
+    here from the $product (+ $vendor/$imageMain/$avgRating/$reviewCount)
+    data the controller already passes in — see App\Http\Controllers\HomeController::product().
+    These variables are available from the very top of the compiled view
+    (they came in via compact()), so it's safe to use them before @section('body').
+--}}
+@php
+    // Title: "Product Name — Buy Online in Pakistan | MJCheezain", truncated
+    // on a word boundary so it stays close to the ~60 char SEO sweet spot
+    // without cutting a word in half.
+    $__seoSuffix = ' — Buy Online in Pakistan | MJCheezain';
+    $__seoMaxNameLen = 60 - mb_strlen($__seoSuffix);
+    $__seoProductName = mb_strlen($product->name) > $__seoMaxNameLen
+        ? \Illuminate\Support\Str::words($product->name, 8, '')
+        : $product->name;
+    $__seoTitle = trim($__seoProductName) . $__seoSuffix;
+
+    // Description: strip any HTML the vendor may have pasted into the
+    // description field, then fall back to a hand-built sentence if that
+    // leaves nothing useful.
+    $__seoCleanDescription = trim(strip_tags($product->description ?? ''));
+    $__seoDescription = $__seoCleanDescription !== ''
+        ? \Illuminate\Support\Str::limit($__seoCleanDescription, 150)
+        : "Buy {$product->name} online in {$product->category} at MJCheezain. Quality products with excellent customer support.";
+
+    // OG image: reuse the exact same primary-image resolution logic the
+    // page itself uses for the main product photo (see the <img id="main-image">
+    // below), so structured data and social previews always match what's on the page.
+    $__seoImage = $imageMain
+        ? asset('storage/vendor/products/images/' . $imageMain->image_path)
+        : asset('img/default_img.png');
+
+    // All product images (for the Product JSON-LD "image" array).
+    $__seoImages = $images->isNotEmpty()
+        ? $images->map(fn ($path) => asset('storage/vendor/products/images/' . $path))->values()->all()
+        : [$__seoImage];
+@endphp
+
+@section('title', $__seoTitle)
+@section('meta_description', $__seoDescription)
+@section('canonical', url('/product/' . $product->id))
+@section('og_image', $__seoImage)
+
+@section('structured_data')
+    <script type="application/ld+json">
+    {!! json_encode(array_filter([
+        '@context' => 'https://schema.org',
+        '@type' => 'Product',
+        'name' => $product->name,
+        'image' => $__seoImages,
+        'description' => $__seoCleanDescription !== '' ? \Illuminate\Support\Str::limit($__seoCleanDescription, 500) : $__seoDescription,
+        'brand' => $product->brand ? [
+            '@type' => 'Brand',
+            'name' => $product->brand,
+        ] : null,
+        'offers' => [
+            '@type' => 'Offer',
+            'url' => url('/product/' . $product->id),
+            'priceCurrency' => 'PKR',
+            'price' => (string) $product->selling_price,
+            'availability' => ($product->quantity ?? 0) > 0
+                ? 'https://schema.org/InStock'
+                : 'https://schema.org/OutOfStock',
+        ],
+        // Only present when there are real reviews behind it — omit entirely
+        // on 0 reviews rather than shipping empty/fake ratings markup.
+        'aggregateRating' => ($reviewCount ?? 0) > 0 ? [
+            '@type' => 'AggregateRating',
+            'ratingValue' => round((float) $avgRating, 1),
+            'reviewCount' => (int) $reviewCount,
+        ] : null,
+    ]), JSON_UNESCAPED_SLASHES) !!}
+    </script>
+
+    <script type="application/ld+json">
+    {!! json_encode([
+        '@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => [
+            [
+                '@type' => 'ListItem',
+                'position' => 1,
+                'name' => 'Home',
+                'item' => url('/'),
+            ],
+            [
+                '@type' => 'ListItem',
+                'position' => 2,
+                'name' => $product->category,
+                'item' => url('/products/all-page') . '?category=' . urlencode($product->category),
+            ],
+            [
+                '@type' => 'ListItem',
+                'position' => 3,
+                'name' => $product->name,
+                'item' => url('/product/' . $product->id),
+            ],
+        ],
+    ], JSON_UNESCAPED_SLASHES) !!}
+    </script>
+@endsection
+
 @section('style')
     <style>
         /* Custom scrollbar for webkit browsers */
