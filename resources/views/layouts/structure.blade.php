@@ -6,20 +6,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        @yield('title')
+        @yield('title', 'MJCheezain — Your Online Marketplace for Quality Products in Pakistan')
     </title>
 
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="MJCheezain.com – Discover unique and quality products with excellent customer support. Visit our online store today.">
-    <meta name="keywords" content="MJCheezain, mjcheezain.com, online store, unique items">
-    <meta name="author" content="MJCheezain">
-    <meta property="og:title" content="MJCheezain – Unique Items">
-    <meta property="og:description" content="Discover great products only at MJCheezain.com.">
-    <meta property="og:url" content="{{ url('/') }}">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="{{ asset('img/short_logo.jpeg') }}">
-    <link rel="icon" type="image/jpeg" href="{{ asset('img/short_logo.jpeg') }}">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- SEO meta tags, OG/Twitter cards, canonical, robots, and sitewide
+         Organization+WebSite JSON-LD. See resources/views/partials/seo-meta.blade.php
+         for the full list of @yield sections a page can override. --}}
+    @include('partials.seo-meta')
 
     <!-- Tailwind: one prebuilt stylesheet. (Was previously TWO frameworks at
          once — a static v2.2.19 build AND the Play CDN, which compiles Tailwind
