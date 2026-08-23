@@ -1,2 +1,40 @@
 User-agent: *
-Disallow:
+Allow: /$
+Allow: /a456
+Allow: /cosmetics
+Allow: /product/
+Allow: /product-listing
+Allow: /products/all-page
+Allow: /products/all
+Allow: /products/savings
+Allow: /products/category
+Allow: /vendor-products/
+Allow: /about
+Allow: /future-vision
+Allow: /contact-us
+Allow: /FAQs
+Allow: /vendor-zone
+Allow: /legal-policies
+Allow: /privacy-policy
+Allow: /cookie-policy
+Allow: /disclaimer
+Allow: /return-replacement
+Allow: /japan
+Allow: /auto-parts
+Allow: /auto/
+
+Disallow: /admin/
+Disallow: /japanadmin/
+Disallow: /vendor/
+Disallow: /customer/
+Disallow: /cart
+Disallow: /checkout
+Disallow: /login
+Disallow: /login-user
+Disallow: /signup
+Disallow: /vendor-forgot-password
+Disallow: /customer-forgot-password
+Disallow: /api/
+Disallow: /comming
+
+Sitemap: https://mjcheezain.com/sitemap.xml
