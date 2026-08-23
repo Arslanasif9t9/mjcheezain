@@ -839,7 +839,7 @@
                                 <th class="py-2 text-gray-500 font-normal w-1/4">Condition</th>
                                 <td class="py-2">{{ $product->pcondition }}</td>
                             </tr>
-                            <tr @if(!empty($fashionAttrs) || !empty($jewelryAttrs)) class="border-b" @endif>
+                            <tr @if(!empty($fashionAttrs) || !empty($jewelryAttrs) || !empty($fragranceAttrs ?? []) || !empty($bagsAttrs ?? []) || !empty($gymAttrs ?? []) || !empty($kitchenAttrs ?? []) || !empty($smarthomeAttrs ?? []) || !empty($personalcareAttrs ?? [])) class="border-b" @endif>
                                 <th class="py-2 text-gray-500 font-normal w-1/4">Made In</th>
                                 <td class="py-2">{{ $product->made_in }}</td>
                             </tr>
@@ -1005,6 +1005,89 @@
                                     <td class="py-2">{{ $jaWarrantyValue }}</td>
                                 </tr>
                             @endif
+                            {{--
+                                Fragrance & Scents "Product Details" — common + subcategory-specific
+                                fields decoded from fragrance_attributes (HomeController::product()).
+                                Same pattern as the Jewellery block above.
+                            --}}
+                            @if(!empty($fragranceAttrs ?? []))
+                                @php
+                                    $frLabels = [
+                                        'volume' => 'Volume',
+                                        'gender' => 'Gender',
+                                        'fragrance_type' => 'Fragrance Type',
+                                        'alcohol_free' => 'Alcohol Free',
+                                        'deodorant_type' => 'Deodorant Type',
+                                        'number_of_items' => 'Number of Items',
+                                    ];
+                                    $frRows = collect($frLabels)
+                                        ->map(fn ($label, $key) => ['label' => $label, 'value' => $fragranceAttrs[$key] ?? null])
+                                        ->filter(fn ($row) => $row['value'] !== null && $row['value'] !== '' && $row['value'] !== 'None');
+                                    $frWarrantyValue = ($fragranceAttrs['warranty'] ?? 'No') === 'Yes'
+                                        ? 'Yes' . (!empty($fragranceAttrs['warranty_duration']) ? ' (' . $fragranceAttrs['warranty_duration'] . ')' : '')
+                                        : 'No';
+                                    $frIncludedItems = collect($fragranceAttrs['included_items'] ?? [])->filter()->implode(', ');
+                                @endphp
+                                @foreach($frRows as $row)
+                                    <tr class="border-b">
+                                        <th class="py-2 text-gray-500 font-normal w-1/4">{{ $row['label'] }}</th>
+                                        <td class="py-2">{{ $row['value'] }}</td>
+                                    </tr>
+                                @endforeach
+                                @if($frIncludedItems !== '')
+                                    <tr class="border-b">
+                                        <th class="py-2 text-gray-500 font-normal w-1/4">Included Items</th>
+                                        <td class="py-2">{{ $frIncludedItems }}</td>
+                                    </tr>
+                                @endif
+                                <tr>
+                                    <th class="py-2 text-gray-500 font-normal w-1/4">Warranty</th>
+                                    <td class="py-2">{{ $frWarrantyValue }}</td>
+                                </tr>
+                            @endif
+                            {{--
+                                Bags & Luggage / Personal Gym Accessories / Kitchen & Dining / Smart
+                                Home & Gadgets / Personal Care & Daily Essentials "Product Details" —
+                                each is the same field shape (material, color, size, warranty, plus
+                                either gender or weight), so one shared loop renders all 5 instead of
+                                5 near-identical blocks. Decoded from their own *_attributes column
+                                (HomeController::product()).
+                            --}}
+                            @php
+                                $simpleCategorySections = [
+                                    ['attrs' => $bagsAttrs ?? [], 'extra_key' => 'gender', 'extra_label' => 'Gender', 'size_label' => 'Size'],
+                                    ['attrs' => $gymAttrs ?? [], 'extra_key' => 'weight', 'extra_label' => 'Weight', 'size_label' => 'Size'],
+                                    ['attrs' => $kitchenAttrs ?? [], 'extra_key' => 'weight', 'extra_label' => 'Weight', 'size_label' => 'Capacity / Size'],
+                                    ['attrs' => $smarthomeAttrs ?? [], 'extra_key' => 'weight', 'extra_label' => 'Weight', 'size_label' => 'Size / Dimensions'],
+                                    ['attrs' => $personalcareAttrs ?? [], 'extra_key' => 'weight', 'extra_label' => 'Weight', 'size_label' => 'Size'],
+                                ];
+                            @endphp
+                            @foreach($simpleCategorySections as $sec)
+                                @continue(empty($sec['attrs']))
+                                @php
+                                    $scAttrs = $sec['attrs'];
+                                    $scRows = [
+                                        ['label' => 'Material', 'value' => $scAttrs['material'] ?? null],
+                                        ['label' => 'Color', 'value' => $scAttrs['color'] ?? null],
+                                        ['label' => $sec['size_label'], 'value' => $scAttrs['size'] ?? null],
+                                        ['label' => $sec['extra_label'], 'value' => $scAttrs[$sec['extra_key']] ?? null],
+                                    ];
+                                    $scWarrantyValue = ($scAttrs['warranty'] ?? 'No') === 'Yes'
+                                        ? 'Yes' . (!empty($scAttrs['warranty_duration']) ? ' (' . $scAttrs['warranty_duration'] . ')' : '')
+                                        : 'No';
+                                @endphp
+                                @foreach($scRows as $row)
+                                    @continue($row['value'] === null || $row['value'] === '' || $row['value'] === 'None')
+                                    <tr class="border-b">
+                                        <th class="py-2 text-gray-500 font-normal w-1/4">{{ $row['label'] }}</th>
+                                        <td class="py-2">{{ $row['value'] }}</td>
+                                    </tr>
+                                @endforeach
+                                <tr>
+                                    <th class="py-2 text-gray-500 font-normal w-1/4">Warranty</th>
+                                    <td class="py-2">{{ $scWarrantyValue }}</td>
+                                </tr>
+                            @endforeach
                         </table>
                     </div>
 

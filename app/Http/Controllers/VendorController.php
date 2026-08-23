@@ -540,6 +540,15 @@ class VendorController extends Controller
         $faSizes = [];
         // Jewellery & Accessories prefill data.
         $jaAttrs = [];
+        // Fragrance & Scents / Bags & Luggage / Personal Gym Accessories /
+        // Kitchen & Dining / Smart Home & Gadgets / Personal Care & Daily
+        // Essentials prefill data.
+        $frAttrs = [];
+        $bgAttrs = [];
+        $gmAttrs = [];
+        $ktAttrs = [];
+        $smAttrs = [];
+        $pcAttrs = [];
 
         // If editing, get product data
         if ($id) {
@@ -572,6 +581,27 @@ class VendorController extends Controller
                 if (!empty($product->jewelry_attributes)) {
                     $jaAttrs = json_decode($product->jewelry_attributes, true) ?: [];
                 }
+
+                // Decode the 6 new categories' JSON attribute columns for the
+                // form to prefill (same pattern as jewelry_attributes above).
+                if (!empty($product->fragrance_attributes)) {
+                    $frAttrs = json_decode($product->fragrance_attributes, true) ?: [];
+                }
+                if (!empty($product->bags_attributes)) {
+                    $bgAttrs = json_decode($product->bags_attributes, true) ?: [];
+                }
+                if (!empty($product->gym_attributes)) {
+                    $gmAttrs = json_decode($product->gym_attributes, true) ?: [];
+                }
+                if (!empty($product->kitchen_attributes)) {
+                    $ktAttrs = json_decode($product->kitchen_attributes, true) ?: [];
+                }
+                if (!empty($product->smarthome_attributes)) {
+                    $smAttrs = json_decode($product->smarthome_attributes, true) ?: [];
+                }
+                if (!empty($product->personalcare_attributes)) {
+                    $pcAttrs = json_decode($product->personalcare_attributes, true) ?: [];
+                }
             }
         }
 
@@ -584,7 +614,13 @@ class VendorController extends Controller
             'productFaults',
             'faAttrs',
             'faSizes',
-            'jaAttrs'
+            'jaAttrs',
+            'frAttrs',
+            'bgAttrs',
+            'gmAttrs',
+            'ktAttrs',
+            'smAttrs',
+            'pcAttrs'
         ));
     }
 
@@ -642,6 +678,19 @@ class VendorController extends Controller
         // fields into one JSON blob (vendor_products.jewelry_attributes).
         $jewelryAttributes = $this->buildJewelryAttributes($request, $validated);
 
+        // Fragrance & Scents: common + subcategory-specific fields.
+        $fragranceAttributes = $this->buildFragranceAttributes($request, $validated);
+
+        // Bags & Luggage / Personal Gym Accessories / Kitchen & Dining / Smart
+        // Home & Gadgets / Personal Care & Daily Essentials: each is a single
+        // common-fields block, built by one shared helper. Only the call whose
+        // category matches $validated['category'] returns non-null.
+        $bagsAttributes = $this->buildSharedCategoryAttributes($request, $validated, 'Bags & Luggage', 'bg', 'gender');
+        $gymAttributes = $this->buildSharedCategoryAttributes($request, $validated, 'Personal Gym Accessories', 'gm', 'weight');
+        $kitchenAttributes = $this->buildSharedCategoryAttributes($request, $validated, 'Kitchen & Dining', 'kt', 'weight');
+        $smarthomeAttributes = $this->buildSharedCategoryAttributes($request, $validated, 'Smart Home & Gadgets', 'sm', 'weight');
+        $personalcareAttributes = $this->buildSharedCategoryAttributes($request, $validated, 'Personal Care & Daily Essentials', 'pc', 'weight');
+
         $validated['product_name'] = ucwords(trim($validated['product_name'] ?? ''));
         $validated['brand'] = ucwords(trim($validated['brand'] ?? ''));
         $validated['model'] = ucwords(trim($validated['model'] ?? ''));
@@ -678,6 +727,12 @@ class VendorController extends Controller
             'part_type' => $validated['part_type'] ?? null,
             'fashion_attributes' => $fashionAttributes,
             'jewelry_attributes' => $jewelryAttributes,
+            'fragrance_attributes' => $fragranceAttributes,
+            'bags_attributes' => $bagsAttributes,
+            'gym_attributes' => $gymAttributes,
+            'kitchen_attributes' => $kitchenAttributes,
+            'smarthome_attributes' => $smarthomeAttributes,
+            'personalcare_attributes' => $personalcareAttributes,
         ]);
 
         if ($customCategory) {
@@ -981,6 +1036,92 @@ class VendorController extends Controller
         return $attrs;
     }
 
+    /**
+     * Fragrance & Scents: collect the common + subcategory-specific fields
+     * into one array to be stored as vendor_products.fragrance_attributes
+     * (JSON). Returns null for every other category. Same pattern as
+     * buildJewelryAttributes() — 4 of the 6 subcategories add one extra
+     * field/pair on top of the common fields; Attars and Perfume Oils SHARE
+     * the "Alcohol Free" field; Body Mists has no extra field.
+     */
+    private function buildFragranceAttributes(Request $request, array $validated): ?array
+    {
+        if (($validated['category'] ?? '') !== 'Fragrance & Scents') {
+            return null;
+        }
+
+        $attrs = [
+            // Common fragrance fields (shared across all subcategories)
+            'volume' => trim((string) $request->input('fr_volume', '')) ?: null,
+            'gender' => $request->input('fr_gender') ?: null,
+            'warranty' => $request->input('fr_warranty') === 'Yes' ? 'Yes' : 'No',
+            'warranty_duration' => $request->input('fr_warranty') === 'Yes'
+                ? (trim((string) $request->input('fr_warranty_duration', '')) ?: null)
+                : null,
+        ];
+
+        switch ($validated['subcategory'] ?? '') {
+            case 'Perfumes':
+                $attrs['fragrance_type'] = $request->input('frs_fragrance_type') ?: null;
+                break;
+
+            case 'Attars':
+            case 'Perfume Oils':
+                $attrs['alcohol_free'] = $request->input('frs_alcohol_free') === 'Yes' ? 'Yes' : 'No';
+                break;
+
+            case 'Deodorants':
+                $attrs['deodorant_type'] = $request->input('frs_deodorant_type') ?: null;
+                break;
+
+            case 'Gift Sets':
+                $attrs['included_items'] = array_values(array_filter((array) $request->input('frs_included_items', [])));
+                $attrs['number_of_items'] = $request->input('frs_number_of_items') ?: null;
+                break;
+
+            // Body Mists: no extra field beyond the common ones above.
+        }
+
+        return $attrs;
+    }
+
+    /**
+     * Shared builder for the 5 categories that only need one common-fields
+     * block (no per-subcategory forms): Bags & Luggage, Personal Gym
+     * Accessories, Kitchen & Dining, Smart Home & Gadgets, Personal Care &
+     * Daily Essentials. Each has the same field shape (material, color,
+     * size, warranty) plus either "gender" (Bags) or "weight" (the other 4),
+     * so one config-driven helper replaces 5 near-identical build*Attributes()
+     * methods. Returns null unless $validated['category'] matches $category.
+     *
+     * @param string $prefix Form field name prefix, e.g. "bg" for bg_material.
+     * @param string $extraField Either 'gender' or 'weight'.
+     */
+    private function buildSharedCategoryAttributes(Request $request, array $validated, string $category, string $prefix, string $extraField): ?array
+    {
+        if (($validated['category'] ?? '') !== $category) {
+            return null;
+        }
+
+        $attrs = [
+            'material' => $request->input("{$prefix}_material") ?: null,
+            'color' => trim((string) $request->input("{$prefix}_color", '')) ?: null,
+            'size' => trim((string) $request->input("{$prefix}_size", '')) ?: null,
+            'warranty' => $request->input("{$prefix}_warranty") === 'Yes' ? 'Yes' : 'No',
+            'warranty_duration' => $request->input("{$prefix}_warranty") === 'Yes'
+                ? (trim((string) $request->input("{$prefix}_warranty_duration", '')) ?: null)
+                : null,
+        ];
+
+        if ($extraField === 'gender') {
+            $attrs['gender'] = $request->input("{$prefix}_gender") ?: null;
+        } else {
+            $attrs['weight'] = trim((string) $request->input("{$prefix}_weight", '')) ?: null;
+        }
+
+        return $attrs;
+    }
+
     /** Queue a vendor-suggested category for admin review (deduped per vendor+name). */
     private function queueCategorySuggestion(array $validated, $productId)
     {
@@ -1087,6 +1228,15 @@ class VendorController extends Controller
         // Jewellery & Accessories: rebuild jewelry_attributes from the submitted form.
         $jewelryAttributes = $this->buildJewelryAttributes($request, $validated);
 
+        // Fragrance & Scents + the 5 shared-common-fields categories: rebuild
+        // from the submitted form (same pattern as jewelry_attributes above).
+        $fragranceAttributes = $this->buildFragranceAttributes($request, $validated);
+        $bagsAttributes = $this->buildSharedCategoryAttributes($request, $validated, 'Bags & Luggage', 'bg', 'gender');
+        $gymAttributes = $this->buildSharedCategoryAttributes($request, $validated, 'Personal Gym Accessories', 'gm', 'weight');
+        $kitchenAttributes = $this->buildSharedCategoryAttributes($request, $validated, 'Kitchen & Dining', 'kt', 'weight');
+        $smarthomeAttributes = $this->buildSharedCategoryAttributes($request, $validated, 'Smart Home & Gadgets', 'sm', 'weight');
+        $personalcareAttributes = $this->buildSharedCategoryAttributes($request, $validated, 'Personal Care & Daily Essentials', 'pc', 'weight');
+
         // Update the product (drafts may have empty fields — keep old values as fallback)
         $product->update([
             'name' => ucwords(trim($validated['product_name'] ?? '')) ?: $product->name,
@@ -1110,6 +1260,12 @@ class VendorController extends Controller
             'status' => $isDraft ? 'draft' : 'pending',
             'fashion_attributes' => $fashionAttributes ?: $product->fashion_attributes,
             'jewelry_attributes' => $jewelryAttributes ?: $product->jewelry_attributes,
+            'fragrance_attributes' => $fragranceAttributes ?: $product->fragrance_attributes,
+            'bags_attributes' => $bagsAttributes ?: $product->bags_attributes,
+            'gym_attributes' => $gymAttributes ?: $product->gym_attributes,
+            'kitchen_attributes' => $kitchenAttributes ?: $product->kitchen_attributes,
+            'smarthome_attributes' => $smarthomeAttributes ?: $product->smarthome_attributes,
+            'personalcare_attributes' => $personalcareAttributes ?: $product->personalcare_attributes,
         ]);
 
         // Men's Fashion: size guide/chart image (fashion_attributes.size_guide)

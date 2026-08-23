@@ -190,11 +190,41 @@ class HomeController extends Controller
             $jewelryAttrs = json_decode($product->jewelry_attributes, true) ?: [];
         }
 
+        // Fragrance & Scents / Bags & Luggage / Personal Gym Accessories /
+        // Kitchen & Dining / Smart Home & Gadgets / Personal Care & Daily
+        // Essentials: decode each JSON column for the "Specifications" tab,
+        // same pattern as fashionAttrs/jewelryAttrs above.
+        $fragranceAttrs = [];
+        if (!empty($product->fragrance_attributes)) {
+            $fragranceAttrs = json_decode($product->fragrance_attributes, true) ?: [];
+        }
+        $bagsAttrs = [];
+        if (!empty($product->bags_attributes)) {
+            $bagsAttrs = json_decode($product->bags_attributes, true) ?: [];
+        }
+        $gymAttrs = [];
+        if (!empty($product->gym_attributes)) {
+            $gymAttrs = json_decode($product->gym_attributes, true) ?: [];
+        }
+        $kitchenAttrs = [];
+        if (!empty($product->kitchen_attributes)) {
+            $kitchenAttrs = json_decode($product->kitchen_attributes, true) ?: [];
+        }
+        $smarthomeAttrs = [];
+        if (!empty($product->smarthome_attributes)) {
+            $smarthomeAttrs = json_decode($product->smarthome_attributes, true) ?: [];
+        }
+        $personalcareAttrs = [];
+        if (!empty($product->personalcare_attributes)) {
+            $personalcareAttrs = json_decode($product->personalcare_attributes, true) ?: [];
+        }
+
         return view('product', compact(
             'user', 'profile', 'dashboardPage', 'imgPath',
             'product', 'vendor', 'imageMain', 'images', 'vendorUser',
             'reviews', 'reviewCount', 'avgRating', 'isOwnerPreview', 'faults',
-            'fashionAttrs', 'jewelryAttrs'
+            'fashionAttrs', 'jewelryAttrs',
+            'fragranceAttrs', 'bagsAttrs', 'gymAttrs', 'kitchenAttrs', 'smarthomeAttrs', 'personalcareAttrs'
         ));
     }
 
