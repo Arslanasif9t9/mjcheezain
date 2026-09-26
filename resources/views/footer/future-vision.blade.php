@@ -1,5 +1,18 @@
 @extends('layouts.structure')
 @section('title', 'Future Vision')
+@section('meta_description', 'MJCheezain\'s roadmap to becoming Pakistan\'s #1 multi-vendor marketplace by 2027 — in-house brands, faster logistics, and global expansion plans.')
+@section('structured_data')
+<script type="application/ld+json">
+{!! json_encode([
+    '@@context' => 'https://schema.org',
+    '@type' => 'BreadcrumbList',
+    'itemListElement' => [
+        ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => url('/')],
+        ['@type' => 'ListItem', 'position' => 2, 'name' => 'Future Vision', 'item' => url()->current()],
+    ],
+], JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endsection
 @section('body')
     <x-cosmetics.header :user="$user ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
 

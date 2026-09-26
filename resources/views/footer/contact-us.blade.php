@@ -1,5 +1,18 @@
 @extends('layouts.structure')
-@section('title', 'Contact Us')
+@section('title', 'Contact Us | MJCheezain Support')
+@section('meta_description', 'Get in touch with MJCheezain via MJ Guider live chat, email, or WhatsApp for order help, seller registration, or general inquiries.')
+@section('structured_data')
+<script type="application/ld+json">
+{!! json_encode([
+    '@@context' => 'https://schema.org',
+    '@type' => 'BreadcrumbList',
+    'itemListElement' => [
+        ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => url('/')],
+        ['@type' => 'ListItem', 'position' => 2, 'name' => 'Contact Us', 'item' => url()->current()],
+    ],
+], JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endsection
 @section('style')
     <style>
         .contact-card {
@@ -33,9 +46,9 @@
             <div class="mx-auto px-4 sm:px-6 lg:px-8" style="max-width: 70rem;">
                 <div class="text-center mb-8 sm:mb-12">
                     <span class="section-kicker justify-center">Contact Us</span>
-                    <h2 class="PFDI text-3xl sm:text-5xl font-display font-bold tracking-wide text-gray-900 mt-3 mb-4">
+                    <h1 class="PFDI text-3xl sm:text-5xl font-display font-bold tracking-wide text-gray-900 mt-3 mb-4">
                         We're Here to Help
-                    </h2>
+                    </h1>
                     <div class="brand-divider mx-auto mb-5"></div>
                     <p class="text-gray-600 max-w-2xl mx-auto">We value every customer, vendor, and visitor. If you have questions, feedback, or need help with orders or seller registration — our support team is ready to assist you.</p>
                 </div>

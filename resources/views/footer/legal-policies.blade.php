@@ -1,5 +1,18 @@
 @extends('layouts.structure')
 @section('title', 'Legal Policies - MJCheezain')
+@section('meta_description', 'MJCheezain\'s Terms & Conditions for customers and vendors, plus our Cookie Policy — covering accounts, orders, returns, commissions, and marketplace conduct.')
+@section('structured_data')
+<script type="application/ld+json">
+{!! json_encode([
+    '@@context' => 'https://schema.org',
+    '@type' => 'BreadcrumbList',
+    'itemListElement' => [
+        ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => url('/')],
+        ['@type' => 'ListItem', 'position' => 2, 'name' => 'Legal Policies', 'item' => url()->current()],
+    ],
+], JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endsection
 @section('style')
     <style>
         /* Policy card left-border accent on hover */

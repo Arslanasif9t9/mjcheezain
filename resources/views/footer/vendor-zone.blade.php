@@ -1,5 +1,18 @@
 @extends('layouts.structure')
-@section('title', 'Vendor Zone')
+@section('title', 'Vendor Zone | Sell on MJCheezain')
+@section('meta_description', 'Everything sellers need to know about becoming an MJCheezain vendor: registration, the vendor dashboard, commission policy, and product guidelines.')
+@section('structured_data')
+<script type="application/ld+json">
+{!! json_encode([
+    '@@context' => 'https://schema.org',
+    '@type' => 'BreadcrumbList',
+    'itemListElement' => [
+        ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => url('/')],
+        ['@type' => 'ListItem', 'position' => 2, 'name' => 'Vendor Zone', 'item' => url()->current()],
+    ],
+], JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endsection
 @section('style')
     <style>
         /* Accordion content, initially collapsed */

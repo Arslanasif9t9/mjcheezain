@@ -1,5 +1,18 @@
 @extends('layouts.structure')
 @section('title', 'Return & Replacement Policy - MJCheezain')
+@section('meta_description', 'MJCheezain\'s return and replacement policy: 7-day return window, courier charge responsibility, non-returnable sealed items, and how replacements work.')
+@section('structured_data')
+<script type="application/ld+json">
+{!! json_encode([
+    '@@context' => 'https://schema.org',
+    '@type' => 'BreadcrumbList',
+    'itemListElement' => [
+        ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => url('/')],
+        ['@type' => 'ListItem', 'position' => 2, 'name' => 'Return & Replacement', 'item' => url()->current()],
+    ],
+], JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endsection
 @section('style')
     <style>
         .policy-card {

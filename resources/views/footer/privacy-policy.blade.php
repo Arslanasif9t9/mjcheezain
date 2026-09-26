@@ -1,5 +1,18 @@
 @extends('layouts.structure')
 @section('title', 'Privacy & Policy - MJCheezain | Your Data Protection')
+@section('meta_description', 'How MJCheezain collects, uses, and protects customer and vendor data, including our cookie policy and disclaimer for marketplace vendor listings.')
+@section('structured_data')
+<script type="application/ld+json">
+{!! json_encode([
+    '@@context' => 'https://schema.org',
+    '@type' => 'BreadcrumbList',
+    'itemListElement' => [
+        ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => url('/')],
+        ['@type' => 'ListItem', 'position' => 2, 'name' => 'Privacy Policy', 'item' => url()->current()],
+    ],
+], JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endsection
 @section('style')
     <style>
         /* Policy card left-border accent on hover */

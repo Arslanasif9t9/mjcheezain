@@ -1,5 +1,18 @@
 @extends('layouts.structure')
-@section('title', 'About')
+@section('title', 'About Us | MJCheezain — Pakistan\'s Multi-Vendor Marketplace')
+@section('meta_description', 'Learn about MJCheezain, a growing multi-vendor marketplace in Pakistan built around MJ Fragrance & Scents, with plans to launch fully on 6 September 2026.')
+@section('structured_data')
+<script type="application/ld+json">
+{!! json_encode([
+    '@@context' => 'https://schema.org',
+    '@type' => 'BreadcrumbList',
+    'itemListElement' => [
+        ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => url('/')],
+        ['@type' => 'ListItem', 'position' => 2, 'name' => 'About', 'item' => url()->current()],
+    ],
+], JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endsection
 @section('body')
     <x-cosmetics.header :user="$user ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
 
@@ -74,6 +87,7 @@
                                 src="https://images.unsplash.com/photo-1549490382-b13c19e5d429?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8ZWNvbW1lcmNlLHdvbWFuLGxpZmVzdHlsZXx8fHx8fDE2NzM0MTI3NTg&ixlib=rb-4.0.3&q=80&w=1080"
                                 alt="Woman viewing e-commerce site on tablet surrounded by plants, symbolizing expansion into lifestyle."
                                 class="w-full h-full object-cover"
+                                loading="lazy"
                                 onerror="this.onerror=null;this.src='https://placehold.co/1080x960/FFF3F0/FF7DA0?text=Lifestyle+Image+Placeholder'"
                             >
                             <!-- Subtle border to lift it off the background -->
