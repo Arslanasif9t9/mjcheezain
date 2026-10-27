@@ -45,38 +45,41 @@
 <div id="video-hero" class="relative w-full min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden">
 
     <!-- Video Element -->
-    <video id="background-video" autoplay loop muted playsinline
+    <!-- <video id="background-video" autoplay loop muted playsinline
            class="absolute inset-0 w-full h-full object-cover z-0">
         <source src="{{ asset('video/cosmetics.mp4') }}" type="video/mp4">
         Your browser does not support the video tag.
-    </video>
+    </video> -->
+    <div class="absolute inset-0 w-full h-full object-cover z-0">
+        <img src="{{ asset('img/hero-1.jpeg') }}" alt="">
+    </div>
 
     <!-- Video Overlay -->
-    <div class="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/35 to-black/55"></div>
+    <!-- <div class="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/35 to-black/55"></div> -->
 
     <!-- Hero Content: one centered composition, well clear of the fixed header -->
     <div class="relative z-20 text-center px-4 pt-24 pb-16 sm:pt-20 max-w-3xl mx-auto text-white flex flex-col items-center">
 
-        <span class="mj-wordmark text-7xl sm:text-9xl hero-fade-up">MJ</span>
+        <!-- <span class="mj-wordmark text-7xl sm:text-9xl hero-fade-up">MJ</span> -->
 
-        <p class="mt-4 text-[0.65rem] sm:text-sm uppercase tracking-[0.4em] text-white/85 font-light hero-fade-up hero-fade-up-1">
-            Cosmetics &amp; Beauty
+        <p class="mt-4 text-[0.65rem] sm:text-sm font-bold uppercase tracking-[0.4em] text-white font-light hero-fade-up hero-fade-up-1">
+            COMING SOON
         </p>
 
         <div class="gold-divider w-40 sm:w-56 mt-5 mb-6 hero-fade-up hero-fade-up-1"></div>
 
-        <p class="text-sm sm:text-lg text-gray-200 mb-9 max-w-xl mx-auto drop-shadow-md font-light leading-relaxed hero-fade-up hero-fade-up-2">
+        <!-- <p class="text-sm sm:text-lg text-gray-200 mb-9 max-w-xl mx-auto drop-shadow-md font-light leading-relaxed hero-fade-up hero-fade-up-2">
             Elegance in every choice. Discover our exclusive collection of premium whitening creams, makeup, and organic skincare essentials.
-        </p>
+        </p> -->
 
-        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center hero-fade-up hero-fade-up-3">
+        <!-- <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center hero-fade-up hero-fade-up-3">
             <a href="#perfumes-products-section" class="px-8 py-3 bg-white text-gray-900 hover:bg-gray-100 font-semibold rounded-full transition duration-300 shadow-lg text-center text-sm sm:text-base cursor-pointer">
                 Shop Collection
             </a>
             <a href="/product-listing" class="px-8 py-3 bg-white/15 hover:bg-white/25 text-white font-semibold rounded-full transition duration-300 backdrop-blur-sm border border-white/30 text-center text-sm sm:text-base">
                 Browse Listings
             </a>
-        </div>
+        </div> -->
     </div>
 
     <!-- Scroll-down hint -->

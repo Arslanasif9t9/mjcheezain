@@ -898,25 +898,47 @@
                 </div>
             </div>
 
-            <!-- Video Element -->
+            
+            <!-- Product Video -->
             @if($productVideo)
-            <div class="w-full flex justify-center items-center py-10 bg-gradient-to-b from-pink50 to-white">
-                <div class="relative w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl border-4 border-pink-200 hover:border-pink-400 transition-all duration-300">
-                    <video
-                        controls
-                        poster="{{ asset('img/default_img.png') }}"
-                        class="w-full rounded-2xl h-[366px]">
-                        <source src="{{ $productVideo }}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
+                <div class="w-full flex justify-center items-center py-10 bg-gradient-to-b from-pink-50 to-white">
+                    <div class="relative w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl border-4 border-pink-200 hover:border-pink-400 transition-all duration-300">
 
-                    <!-- Optional overlay label -->
-                    <div class="absolute top-3 left-3 bg-pink-600 text-white text-sm font-semibold px-3 py-1 rounded-full shadow-md">
-                        Watch Now
+                        <video
+                            id="product-video"
+                            controls
+                            preload="auto"
+                            playsinline
+                            class="w-full rounded-2xl h-[366px] object-contain bg-black"
+                            poster="{{ asset('img/default_img.png') }}">
+
+                            <source src="{{ $productVideo }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+
+                        <!-- Optional overlay label -->
+                        <div class="absolute top-3 left-3 bg-pink-600 text-white text-sm font-semibold px-3 py-1 rounded-full shadow-md pointer-events-none">
+                            Watch Now
+                        </div>
                     </div>
                 </div>
-            </div>
+                <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const video = document.getElementById('product-video');
+
+                    if (!video) return;
+
+                    video.addEventListener('loadeddata', function () {
+                        if (video.currentTime === 0) {
+                            video.pause();
+                        }
+                    }, { once: true });
+
+                    video.load();
+                });
+                </script>
             @endif
+
 
         </div>
 

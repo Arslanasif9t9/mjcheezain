@@ -15,6 +15,16 @@
         'Fragrances'            => 'img/categories/fragrances.webp',
         'Perfumes & Fragrances' => 'img/categories/fragrances.webp',
         'Accessories'           => 'img/categories/accessories.webp',
+        'Jewelry & Accessories' => 'img/categories/jwellary.jpeg',
+        'Kitchen & Dining'      => 'img/categories/Kitchen & Dining.jpeg',
+        'Bags & Luggage'        => 'img/categories/Bags & Luggage.jpeg',
+        'Personal Care & Daily Essentials'      => 'img/categories/Personal Care & Daily Essentials.jpeg',
+        'Fashion & Clothing'    => 'img/categories/Fashion & Clothing.jpeg',
+        'Smart Home & Gadgets'  => 'img/categories/Smart Home & Gadgets.jpeg',
+        'Fragrances & Scents'   => 'img/categories/Fragrances & Scents.jpeg',
+        'Fitness & Gym Equipment'   => 'img/categories/Fitness & Gym Equipment.jpeg',
+        'Gym Accessories'   => 'img/categories/Gym Accessories.jpeg'
+
     ];
 @endphp
 
@@ -23,7 +33,7 @@
         <div class="mx-auto text-center">
 
             <!-- Heading -->
-            <span class="section-kicker justify-center">Curated For You</span>
+            <!-- <span class="section-kicker justify-center">Curated For You</span> -->
             <h2 class="font-serif text-3xl md:text-5xl font-extrabold text-gray-900 mb-2">
                 Shop by Category
             </h2>
@@ -33,7 +43,6 @@
             <p class="text-sm sm:text-lg text-gray-600 mt-4 mb-8 sm:mb-12">
                 Explore our selected collections from premium local and global brands.
             </p>
-
             <!-- Category Grid (LOCKED: stays a grid, never a slider) -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 px-1 md:px-0">
 
@@ -48,19 +57,19 @@
                                  alt="{{ $cat->name }}"
                                  width="600" height="600" loading="lazy" decoding="async"
                                  class="w-full h-full object-cover absolute inset-0
-                                        opacity-60
+                                        opacity-100
                                         transition duration-500 ease-in-out
-                                        group-hover:scale-110 group-hover:opacity-75">
+                                        group-hover:scale-110 group-hover:opacity-100">
                         @else
                             <div class="absolute inset-0 flex items-center justify-center"
-                                 style="background: linear-gradient(160deg, #23232b 0%, #15151b 100%);">
+                                 style="background: linear-gradient(160deg, #555560 0%, #30303a 100%);">
                                 <span class="flex items-center justify-center w-16 h-16 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full text-3xl sm:text-5xl md:text-6xl shadow-lg
                                              transition duration-500 ease-in-out group-hover:scale-110"
                                       style="background: linear-gradient(115deg, #FF7DA0, #FFC275);">{{ $cat->emoji }}</span>
                             </div>
                         @endif
 
-                        <div class="absolute inset-0 flex flex-col justify-end p-3 sm:p-4 text-left bg-gradient-to-t from-black/85 via-black/20 to-transparent">
+                        <div class="absolute inset-0 flex flex-col justify-end p-3 sm:p-4 text-left">
                             <h3 class="text-xs sm:text-base font-bold text-white tracking-wide m-0 drop-shadow-md truncate">{{ $cat->name }}</h3>
                             <span class="hidden sm:flex items-center gap-1 text-[11px] font-semibold text-white/0 group-hover:text-white/90 mt-1 transition-all duration-300 -translate-x-1 group-hover:translate-x-0">
                                 Shop now <i class="fa-solid fa-arrow-right text-[10px]"></i>

@@ -177,7 +177,7 @@
 {{-- COMING SOON MODE: original body tag was <body class="min-h-screen"> — restore it when re-enabling the page --}}
 <body class="h-screen overflow-hidden flex flex-col">
     <!-- Header -->
-    <x-cosmetics.header :user="$user ?? null" :vendor="$vendor ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
+    <x-auto.transparent-header :user="$user ?? null" :vendor="$vendor ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
 
     <!-- Hero Section -->
     <x-auto.hero-video />
