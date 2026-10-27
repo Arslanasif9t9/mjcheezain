@@ -36,7 +36,8 @@
                      alt="Luxury Fragrance" class="w-full h-full object-cover brightness-95 group-hover:scale-110 transition duration-500">
 
                 <!-- Content Overlay -->
-                <div class="absolute inset-0 flex flex-col justify-end p-6 sm:p-8 bg-gradient-to-t from-black/60 via-black/20 to-transparent">
+                <!-- <div class="absolute inset-0 flex flex-col justify-end p-6 sm:p-8 bg-gradient-to-t from-black/60 via-black/20 to-transparent"> -->
+                <div class="absolute inset-0 flex flex-col justify-end p-6 sm:p-8">
                     <h2 class="text-2xl sm:text-4xl font-light text-white mb-3 tracking-wide drop-shadow-lg">
                         Indulge in Elegance!
                     </h2>

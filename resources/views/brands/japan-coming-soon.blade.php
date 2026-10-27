@@ -3,8 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coming Soon - MJ Cheezain</title>
-<meta name="description" content="MJ Cheezain — top-quality products coming soon. Flat 40% off on perfumes at launch.">
+<!-- <title>Coming Soon - MJ Cheezain</title> -->
+<!-- <meta name="description" content="MJ Cheezain — top-quality products coming soon. Flat 40% off on perfumes at launch."> -->
+ 
+<title>MJ Cheezain | Official Website - mjcheezain.com</title>
+<meta name="description" content="Welcome to MJ Cheezain, the official mjcheezain.com website. Discover our upcoming collection of perfumes and quality products. Stay tuned for launch offers.">
+
+<link rel="canonical" href="https://mjcheezain.com/">
+<meta name="robots" content="index, follow">
+<meta name="application-name" content="MJ Cheezain">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MJ Cheezain">
+<meta property="og:title" content="MJ Cheezain | Official Website">
+<meta property="og:description" content="Discover MJ Cheezain's upcoming collection of perfumes and quality products.">
+<meta property="og:url" content="https://mjcheezain.com/">
+
+<script type="application/ld+json">
+{
+  "context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "MJ Cheezain",
+  "alternateName": "mjcheezain",
+  "url": "https://mjcheezain.com/"
+}
+</script>
+
 <link rel="icon" href="{{ asset('favicon.ico') }}">
 <link rel="stylesheet" href="{{ asset('css/tailwind.css') }}?v={{ @filemtime(public_path('css/tailwind.css')) ?: 1 }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -47,8 +71,12 @@
             <i class="fa-solid fa-hourglass-half"></i> Launching Soon
         </div>
 
-        <h1 class="text-3xl md:text-6xl font-extrabold text-gray-800 leading-tight mb-4">
+        <!-- <h1 class="text-3xl md:text-6xl font-extrabold text-gray-800 leading-tight mb-4">
             Something <span class="brand-text-gradient">Beautiful</span><br class="hidden md:block"> Is On The Way
+        </h1> -->
+        <h1 class="text-3xl md:text-6xl font-extrabold text-gray-800 leading-tight mb-4">
+            MJ Cheezain <span class="brand-text-gradient">Something Beautiful</span><br class="hidden md:block">
+            Is On The Way
         </h1>
 
         <p class="text-sm md:text-lg text-gray-500 max-w-xl mb-8">
