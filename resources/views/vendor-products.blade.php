@@ -4,10 +4,10 @@
 @section('body')
     <x-cosmetics.header :user="$user ?? null" :profile="$profile ?? null" :dashboardPage="$dashboardPage ?? null" :imgPath="$imgPath ?? null" />
 
-    <main class="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
+    <main class="container mx-auto px-3 sm:px-4 py-4 sm:py-8 grid justify-center">
         <!-- Vendor Store Hero (brand gradient banner) -->
         <section class="rounded-2xl sm:rounded-3xl overflow-hidden mb-6 sm:mb-8 relative"
-                 style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 10px 30px rgba(255, 125, 160, 0.25);">
+                 style="background: linear-gradient(115deg, #FF7DA0 0%, #FFC275 100%); box-shadow: 0 10px 30px rgba(255, 125, 160, 0.25); maxwidth: 95vw">
             <!-- Decorative circles -->
             <div class="absolute -top-12 -right-12 w-44 h-44 bg-white/10 rounded-full pointer-events-none"></div>
             <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full pointer-events-none"></div>
@@ -39,14 +39,14 @@
         </section>
 
         <!-- Products Section - List View -->
-        <section id="vendor-products-section" class="py-8">
+        <section id="vendor-products-section" class="py-8" style="max-width: 95vw">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">All Products ({{ $products->count() }})</h2>
             </div>
 
             @if($products->count() > 0)
                 <!-- Products Grid (ss10-style cards, same size as every other section) -->
-                <div id="vendor-product-list" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
+                <div id="vendor-product-list" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-5">
                     @foreach($products as $product)
                         @php
                             $cardPrice = $product->selling_price * 1.17;

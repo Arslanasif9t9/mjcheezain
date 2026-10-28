@@ -59,7 +59,8 @@
                                  class="w-full h-full object-cover absolute inset-0
                                         opacity-100
                                         transition duration-500 ease-in-out
-                                        group-hover:scale-110 group-hover:opacity-100">
+                                        group-hover:scale-110 group-hover:opacity-100" 
+                                        style="display: block;">
                         @else
                             <div class="absolute inset-0 flex items-center justify-center"
                                  style="background: linear-gradient(160deg, #555560 0%, #30303a 100%);">
@@ -69,7 +70,7 @@
                             </div>
                         @endif
 
-                        <div class="absolute inset-0 flex flex-col justify-end p-3 sm:p-4 text-left">
+                        <div class="absolute inset-0 flex flex-col justify-end p-3 sm:p-4 text-left" style="display: inline-flex;">
                             <h3 class="text-xs sm:text-base font-bold text-white tracking-wide m-0 drop-shadow-md truncate">{{ $cat->name }}</h3>
                             <span class="hidden sm:flex items-center gap-1 text-[11px] font-semibold text-white/0 group-hover:text-white/90 mt-1 transition-all duration-300 -translate-x-1 group-hover:translate-x-0">
                                 Shop now <i class="fa-solid fa-arrow-right text-[10px]"></i>

@@ -910,7 +910,7 @@
                             preload="auto"
                             playsinline
                             class="w-full rounded-2xl h-[366px] object-contain bg-black"
-                            poster="{{ asset('img/default_img.png') }}">
+                            poster="{{ asset('img/black-screen.png') }}">
 
                             <source src="{{ $productVideo }}" type="video/mp4">
                             Your browser does not support the video tag.

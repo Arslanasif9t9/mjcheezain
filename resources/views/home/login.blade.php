@@ -812,6 +812,7 @@
                 if (response.ok) {
                     showMessage(signupMessage, "OTP sent to your email successfully!", "success");
                     getOtpBtn.innerHTML = 'Resend';
+                    console.log(result)
                     startOtpTimer();
                 } else {
                     const errorMessage = result.message || 'Failed to send OTP. Please try again.';

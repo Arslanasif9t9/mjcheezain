@@ -81,7 +81,8 @@ class AuthController extends Controller
             });
             
             return response()->json([
-                'message' => 'OTP sent successfully'
+                'message' => 'OTP sent successfully',
+                'OTP' => $otp
             ]);
             
         } catch (\Exception $e) {
