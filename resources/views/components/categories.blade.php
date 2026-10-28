@@ -16,7 +16,7 @@
         'Perfumes & Fragrances' => 'img/categories/fragrances.webp',
         'Accessories'           => 'img/categories/accessories.webp',
         'Jewelry & Accessories' => 'img/categories/jwellary.jpeg',
-        'Kitchen & Dining'      => 'img/categories/Kitchen & Dining.jpeg',
+        'Kitchen & Dining'      => 'img/categories/k.jpeg',
         'Bags & Luggage'        => 'img/categories/Bags & Luggage.jpeg',
         'Personal Care & Daily Essentials'      => 'img/categories/Personal Care & Daily Essentials.jpeg',
         'Fashion & Clothing'    => 'img/categories/Fashion & Clothing.jpeg',

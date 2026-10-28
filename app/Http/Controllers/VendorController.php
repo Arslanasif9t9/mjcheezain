@@ -1383,14 +1383,14 @@ class VendorController extends Controller
             'made_in' => $validated['made_in'] ?? $product->made_in,
             'return_policy' => $validated['return_policy'] ?? null,
             'status' => $isDraft ? 'draft' : 'pending',
-            'fashion_attributes' => $fashionAttributes ?: $product->fashion_attributes,
-            'jewelry_attributes' => $jewelryAttributes ?: $product->jewelry_attributes,
-            'fragrance_attributes' => $fragranceAttributes ?: $product->fragrance_attributes,
-            'bags_attributes' => $bagsAttributes ?: $product->bags_attributes,
-            'gym_attributes' => $gymAttributes ?: $product->gym_attributes,
-            'kitchen_attributes' => $kitchenAttributes ?: $product->kitchen_attributes,
-            'smarthome_attributes' => $smarthomeAttributes ?: $product->smarthome_attributes,
-            'personalcare_attributes' => $personalcareAttributes ?: $product->personalcare_attributes,
+            // 'fashion_attributes' => $fashionAttributes ?: $product->fashion_attributes,
+            // 'jewelry_attributes' => $jewelryAttributes ?: $product->jewelry_attributes,
+            // 'fragrance_attributes' => $fragranceAttributes ?: $product->fragrance_attributes,
+            // 'bags_attributes' => $bagsAttributes ?: $product->bags_attributes,
+            // 'gym_attributes' => $gymAttributes ?: $product->gym_attributes,
+            // 'kitchen_attributes' => $kitchenAttributes ?: $product->kitchen_attributes,
+            // 'smarthome_attributes' => $smarthomeAttributes ?: $product->smarthome_attributes,
+            // 'personalcare_attributes' => $personalcareAttributes ?: $product->personalcare_attributes,
         ]);
 
         // Men's Fashion: size guide/chart image (fashion_attributes.size_guide)

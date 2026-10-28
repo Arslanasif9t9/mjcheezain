@@ -51,7 +51,7 @@
             <div class="lg:col-span-1 flex overflow-x-auto gap-4 scrollbar-none snap-x snap-mandatory lg:grid lg:grid-cols-1 lg:overflow-x-visible lg:gap-6 py-2 px-1" id="mobile-scroll-container">
 
                 <!-- Top Small Card: Lipstick (tall Amazon-style card on mobile, whole card clickable) -->
-                <a href="/products/all-page?category={{ urlencode('Cosmetics') }}" class="block scroll-animate opacity-0 translate-y-12 transition-all duration-700 ease-out relative h-[430px] sm:h-[480px] lg:h-[240px] w-[80vw] lg:w-auto flex-shrink-0 snap-start rounded-2xl overflow-hidden shadow-lg group cursor-pointer">
+                <a href="/products/all-page?category=Jewelry+%26+Accessories" class="block scroll-animate opacity-0 translate-y-12 transition-all duration-700 ease-out relative h-[430px] sm:h-[480px] lg:h-[240px] w-[80vw] lg:w-auto flex-shrink-0 snap-start rounded-2xl overflow-hidden shadow-lg group cursor-pointer">
                     <img src="{{ asset('img/hero-2.jpeg') }}"
                          alt="Red Lipstick" class="w-full h-full object-cover brightness-95 group-hover:scale-110 transition duration-500">
                     <div class="absolute top-0 left-0 p-4">
