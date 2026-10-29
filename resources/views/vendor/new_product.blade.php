@@ -1483,6 +1483,15 @@
                         <div class="form-section" id="productImagesSection">
                             <h2>Product Images</h2>
                             <p class="text-sm text-gray-500 mb-4">Minimum 5, Maximum 10 images required</p>
+
+                            <!-- Bulk picker: ek click me multiple images -->
+                            <div class="mb-4">
+                                <input type="file" id="bulkImagePicker" accept="image/jpeg,image/png,image/jpg,image/webp" multiple class="hidden" />
+                                <button type="button" id="bulkImagePickBtn" class="btn-primary">
+                                    <i class="fas fa-images mr-2"></i> Select Multiple Images
+                                </button>
+                                <p class="text-xs text-gray-500 mt-2">Ek hi baar me 5 ya zyada photos select karein, ya neeche box-by-box bhi add kar sakte hain</p>
+                            </div>
                             
                             <!-- Required Images Grid -->
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6" id="requiredImagesContainer">
@@ -4043,6 +4052,51 @@
         if (form) {
             form.addEventListener('submit', handleFormSubmit);
         }
+
+        // Bulk image picker: selected files ko existing boxes (productImages[]) me bhar deta hai
+        document.addEventListener('DOMContentLoaded', function () {
+            const picker = document.getElementById('bulkImagePicker');
+            const pickBtn = document.getElementById('bulkImagePickBtn');
+            if (!picker || !pickBtn) return;
+
+            pickBtn.addEventListener('click', () => picker.click());
+
+            picker.addEventListener('change', function () {
+                const files = Array.from(this.files);
+                if (!files.length) return;
+
+                const getAllInputs = () => Array.from(document.querySelectorAll('input[name="productImages[]"]'));
+                const getEmptyInputs = () => getAllInputs().filter(i => i.files.length === 0);
+
+                const existingCount = document.querySelectorAll('input[name="existing_images[]"]').length;
+                const filledCount = getAllInputs().filter(i => i.files.length > 0).length;
+                const slotsLeft = Math.max(0, state.maxImages - existingCount - filledCount);
+
+                const valid = files.filter(f => validateImageFile(f));
+                const toAdd = valid.slice(0, slotsLeft);
+
+                if (valid.length > toAdd.length) {
+                    showError(`Maximum ${state.maxImages} images allowed. Extra images ignore kar di gayi.`);
+                }
+
+                toAdd.forEach(file => {
+                    let empty = getEmptyInputs();
+                    if (empty.length === 0) {
+                        document.getElementById('addMoreImagesBtn')?.click();
+                        empty = getEmptyInputs();
+                    }
+                    const input = empty[0];
+                    if (!input) return;
+
+                    const dt = new DataTransfer();
+                    dt.items.add(file);
+                    input.files = dt.files;
+                    input.dispatchEvent(new Event('change', { bubbles: true }));
+                });
+
+                this.value = '';
+            });
+        });
 
         // Add slide animations
         const style = document.createElement('style');
