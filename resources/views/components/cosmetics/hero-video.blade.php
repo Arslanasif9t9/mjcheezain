@@ -51,7 +51,7 @@
         Your browser does not support the video tag.
     </video> -->
     <div class="absolute inset-0 w-full h-full object-cover z-0">
-        <img src="{{ asset('img/hero-1.jpeg') }}" alt="">
+        <img src="{{ asset('img/hero-1.jpeg') }}" alt="" style="width: 99vw; height: 100vh; object-fit: cover;">
     </div>
 
     <!-- Video Overlay -->

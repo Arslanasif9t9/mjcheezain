@@ -90,7 +90,7 @@
                 <svg class="w-5 h-5 text-gray-500 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </div>
 
-            <h1 class="text-white" style="font-size: 62px; line-height: 5px; font-family: 'Playfair Display', serif; font-weight: 600;">MJ</h1>
+            <h1 class="hidden md:block text-white" style="font-size: 62px; line-height: 5px; font-family: 'Playfair Display', serif; font-weight: 600;">MJ</h1>
 
             <!-- Desktop Links & Auth (Right) -->
             <div class="hidden md:flex items-center space-x-3 mlauto">
@@ -163,7 +163,7 @@
                 <!-- Top Row: Hamburger + Brand Name + Auth Links.
                      All items are direct flex children so CSS `order` can move
                      the hamburger to the right side in the compact (scrolled) state. -->
-                <div class="flex items-center w-full px-1 gap-1.5">
+                <div class="flex items-center w-full px-1 gap-1.5 relative">
                     <!-- Back Button (mobile only; revealed by JS when there is history and we're not on home) -->
                     <button id="mobile-back-btn" onclick="history.back()"
                             class="hidden md:hidden items-center justify-center w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm text-[#000000] flex-shrink-0 focus:outline-none hover:bg-white/30 transition-colors"
@@ -175,6 +175,10 @@
                     <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-[#000000] focus:outline-none p-1 hover:opacity-75 transition-colors" aria-label="Toggle Menu">
                         <i class="fa-solid fa-bars text-xl"></i>
                     </button>
+
+                    <!-- <h1 class="text-white text-center" style="font-size: 62px; line-height: 5px; font-family: 'Playfair Display', serif; font-weight: 600;">MJ</h1> -->
+                     <h1 id="mobile-mj-logo" class="text-white text-center"
+                        style="font-size: 62px; line-height: 5px; font-family: 'Playfair Display', serif; font-weight: 600; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); transition: left .3s ease, transform .3s ease; pointer-events: none;">MJ</h1>
 
                     <!-- Brand Text: hidden by default, sits flush left on scroll -->
                     <div id="mobile-brand-wrapper" class="flex items-center transition-all duration-300 opacity-0 max-w-0 overflow-hidden pointer-events-none">
